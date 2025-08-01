@@ -1,0 +1,30 @@
+@Clinic_Api_Host = http://localhost:5044
+
+### Register
+POST {{Clinic_Api_Host}}/api/user/register
+Content-Type: application/json
+
+{
+  "email": "test@example.com",
+  "password": "123456",
+  "firstName": "John",
+  "lastName": "Doe",
+  "roleId": 1
+}
+
+### Login
+POST {{Clinic_Api_Host}}/api/user/login
+Content-Type: application/json
+
+{
+  "email": "test@example.com",
+  "password": "123456"
+}
+
+### Get All (requires JWT)
+GET {{Clinic_Api_Host}}/api/user
+Authorization: Bearer {{JWT_TOKEN}}
+
+### Get By ID
+GET {{Clinic_Api_Host}}/api/user/1
+Authorization: Bearer {{JWT_TOKEN}}
