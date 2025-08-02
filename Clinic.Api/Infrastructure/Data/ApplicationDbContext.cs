@@ -12,6 +12,7 @@ namespace Clinic.Api.Infrastructure.Data
         public DbSet<UserPhonesContext> UserPhonesContexts { get; set; }
         public DbSet<RoleContext> Roles { get; set; }
         public DbSet<RolesContext> RolesCtx { get; set; }
+        public DbSet<UserAppointmentsContext> UserAppointment { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
