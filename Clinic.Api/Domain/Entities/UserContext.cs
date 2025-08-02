@@ -1,4 +1,6 @@
-﻿namespace Clinic.Api.Domain.Entities
+﻿using System.Data;
+
+namespace Clinic.Api.Domain.Entities
 {
     public class UserContext
     {
@@ -26,5 +28,6 @@
         public bool CanChangeOldTreatment { get; set; }
         public bool CanConfirmInvoice { get; set; }
         public int OutOfRange { get; set; }
+        public RoleContext? Role { get; set; }
     }
 }

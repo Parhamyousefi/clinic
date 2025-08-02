@@ -28,3 +28,46 @@ Authorization: Bearer {{JWT_TOKEN}}
 ### Get By ID
 GET {{Clinic_Api_Host}}/api/user/1
 Authorization: Bearer {{JWT_TOKEN}}
+
+### Get All Roles
+GET http://localhost:5044/api/role
+Authorization: Bearer {{JWT}}
+
+### Get Role By Id
+GET http://localhost:5044/api/role/1
+Authorization: Bearer {{JWT}}
+
+### Create Role
+POST http://localhost:5044/api/role
+Content-Type: application/json
+Authorization: Bearer {{JWT}}
+
+{
+  "name": "Reception",
+  "description": "Receptionist Role"
+}
+
+### Update Role
+PUT http://localhost:5044/api/role
+Content-Type: application/json
+Authorization: Bearer {{JWT}}
+
+{
+  "id": 2,
+  "name": "Practitioner",
+  "description": "Updated Practitioner Role"
+}
+
+### Delete Role
+DELETE http://localhost:5044/api/role/3
+Authorization: Bearer {{JWT}}
+
+### Assign Role to User
+PUT http://localhost:5044/api/user/assign-role
+Content-Type: application/json
+Authorization: Bearer {{JWT}}
+
+{
+  "userId": 1,
+  "roleId": 2
+}

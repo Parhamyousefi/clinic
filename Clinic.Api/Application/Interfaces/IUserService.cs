@@ -1,4 +1,5 @@
-﻿using Clinic.Api.Application.DTOs;
+﻿using Clinic.Api.Application.DTOs.UserDto.UserDto;
+using Clinic.Api.Application.DTOs.Users;
 
 namespace Clinic.Api.Application.Interfaces
 {
@@ -8,5 +9,6 @@ namespace Clinic.Api.Application.Interfaces
         Task<UserDto?> GetByIdAsync(int id);
         Task<int> RegisterAsync(RegisterUserDto dto);
         Task<string?> LoginAsync(LoginUserDto dto);
+        Task<bool> AssignRoleAsync(int userId, int roleId);
     }
 }
