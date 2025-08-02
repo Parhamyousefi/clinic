@@ -30,6 +30,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(opt =>
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<IRoleService, RoleService>();
 
 // Auth & JWT
 var jwt = builder.Configuration.GetSection("JwtSettings").Get<JwtSettings>();

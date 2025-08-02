@@ -1,4 +1,5 @@
-﻿using Clinic.Api.Application.DTOs;
+﻿using Clinic.Api.Application.DTOs.UserDto.UserDto;
+using Clinic.Api.Application.DTOs.Users;
 using Clinic.Api.Application.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -34,13 +35,20 @@ public class UserController : ControllerBase
         return u is null ? NotFound() : Ok(u);
     }
 
-    [Authorize(Roles = "1")] // example: roleId = 1 is admin
+    [Authorize(Roles = "Admin")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {
         var user = await _svc.GetByIdAsync(id);
         if (user is null) return NotFound();
-        // additional delete logic if implemented
         return NoContent();
+    }
+
+    [HttpPut("assign-role")]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> AssignRoleToUser(AssignRoleDto dto)
+    {
+        var result = await _svc.AssignRoleAsync(dto.UserId, dto.RoleId);
+        return result ? Ok("Role assigned successfully.") : NotFound("User not found.");
     }
 }
