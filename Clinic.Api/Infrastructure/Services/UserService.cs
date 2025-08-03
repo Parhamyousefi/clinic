@@ -1,5 +1,4 @@
-﻿using Clinic.Api.Application.DTOs.UserDto.UserDto;
-using Clinic.Api.Application.DTOs.Users;
+﻿using Clinic.Api.Application.DTOs.Users;
 using Clinic.Api.Application.Interfaces;
 using Clinic.Api.Domain.Entities;
 

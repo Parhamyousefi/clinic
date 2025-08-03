@@ -5,7 +5,6 @@ using Clinic.Api.JwtAuth.Helpers;
 using Clinic.Api.Mappings;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
@@ -30,7 +29,6 @@ builder.Services.AddDbContext<ApplicationDbContext>(opt =>
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
-builder.Services.AddScoped<IRoleService, RoleService>();
 
 // Auth & JWT
 var jwt = builder.Configuration.GetSection("JwtSettings").Get<JwtSettings>();
