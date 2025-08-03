@@ -1,4 +1,4 @@
-﻿namespace Clinic.Api.Application.DTOs.UserDto.UserDto
+﻿namespace Clinic.Api.Application.DTOs.Users
 {
     public class RegisterUserDto
     {

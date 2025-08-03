@@ -1,6 +1,5 @@
 ﻿using Clinic.Api.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
-using System.Data;
 
 namespace Clinic.Api.Infrastructure.Data
 {
@@ -18,14 +17,12 @@ namespace Clinic.Api.Infrastructure.Data
         public DbSet<WaitListBusinessesContext> WaitListBusinesses { get; set; }
         public DbSet<WaitListPractitionersContext> WaitListPractitioners { get; set; }
         public DbSet<WaitListsContext> WaitLists { get; set; }
+        public DbSet<TimeExceptionsContext> TimeExceptions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<RoleContext>().HasData(
-       new RoleContext { Id = 1, Name = "Admin", Description = "System Administrator" }
-      );
         }
     }
 }
