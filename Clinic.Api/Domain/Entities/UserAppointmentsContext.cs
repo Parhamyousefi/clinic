@@ -9,6 +9,12 @@
         public int? DefaultAppointmentTypeId { get; set; }
         public int? ModifierId { get; set; }
         public DateTime CreatedOn { get; set; }
-
+        public DateTime? LastUpdated { get; set; }
+        public int? TimeSlotSize { get; set; }
+        public int? CalendarTimeFrom { get; set; }
+        public int? CalendarTimeTo { get; set; }
+        public int? CreatorId { get; set; }
+        public int? NewPatientAppointmentTypeId { get; set; }
+        public bool MultipleAppointment { get; set; }
     }
 }
