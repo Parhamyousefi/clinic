@@ -28,6 +28,5 @@ namespace Clinic.Api.Domain.Entities
         public bool CanChangeOldTreatment { get; set; }
         public bool CanConfirmInvoice { get; set; }
         public int OutOfRange { get; set; }
-        public RoleContext? Role { get; set; }
     }
 }

@@ -19,15 +19,22 @@ public class UserController : ControllerBase
     [HttpPost("login")]
     public async Task<IActionResult> Login(LoginUserDto dto)
     {
-        var token = await _svc.LoginAsync(dto);
-        return token is null ? Unauthorized() : Ok(token);
+        try
+        {
+            var token = await _svc.LoginAsync(dto);
+            return Ok(new { Token = token });
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            return Unauthorized(new { Message = ex.Message });
+        }
     }
 
     [Authorize]
-    [HttpGet] public async Task<IActionResult> GetAll() => Ok(await _svc.GetAllAsync());
+    [HttpGet("getAll")] public async Task<IActionResult> GetAll() => Ok(await _svc.GetAllAsync());
 
     [Authorize]
-    [HttpGet("{id}")]
+    [HttpGet("getById/{id}")]
     public async Task<IActionResult> GetById(int id)
     {
         var u = await _svc.GetByIdAsync(id);
@@ -35,11 +42,39 @@ public class UserController : ControllerBase
     }
 
     [Authorize(Roles = "Admin")]
-    [HttpDelete("{id}")]
+    [HttpDelete("deleteUser/{id}")]
     public async Task<IActionResult> Delete(int id)
     {
-        var user = await _svc.GetByIdAsync(id);
-        if (user is null) return NotFound();
+        var result = await _svc.DeleteAsync(id);
+        if (!result)
+            return NotFound();
+
+        return NoContent();
+    }
+
+    [Authorize(Roles = "Admin")]
+    [HttpPost("create")]
+    public async Task<IActionResult> CreateUser(CreateUserDto dto)
+    {
+        try
+        {
+            var userId = await _svc.CreateUserAsync(dto);
+            return Ok(new { UserId = userId });
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(new { Message = ex.Message });
+        }
+    }
+
+    [Authorize(Roles = "Admin")]
+    [HttpPut("update")]
+    public async Task<IActionResult> UpdateUser([FromBody] UpdateUserDto dto)
+    {
+        var result = await _svc.UpdateUserAsync(dto);
+        if (!result)
+            return NotFound("User not found.");
+
         return NoContent();
     }
 

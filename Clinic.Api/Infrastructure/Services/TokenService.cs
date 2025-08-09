@@ -1,6 +1,7 @@
 ﻿using Clinic.Api.Application.Interfaces;
 using Clinic.Api.Domain.Entities;
 using Clinic.Api.JwtAuth.Helpers;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -14,13 +15,14 @@ namespace Clinic.Api.Infrastructure.Services
         private readonly JwtSettings _settings;
         public TokenService(IOptions<JwtSettings> opts) => _settings = opts.Value;
 
-        public string CreateToken(UserContext user)
+        public string CreateToken(UserContext user, string roleName)
         {
             var claims = new[]
             {
-            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-            new Claim(ClaimTypes.Role, user.RoleId?.ToString() ?? string.Empty)
-        };
+        new Claim("userId", user.Id.ToString()),
+        new Claim("username", user.Email ?? ""),
+        new Claim("role", roleName)
+    };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_settings.Key));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);

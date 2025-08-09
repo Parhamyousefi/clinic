@@ -4,6 +4,6 @@ namespace Clinic.Api.Application.Interfaces
 {
     public interface ITokenService
     {
-        string CreateToken(UserContext user);
+        string CreateToken(UserContext user, string roleName);
     }
 }
