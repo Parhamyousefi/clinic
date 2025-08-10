@@ -12,10 +12,6 @@ public class UserController : ControllerBase
     private readonly IUserService _svc;
     public UserController(IUserService svc) => _svc = svc;
 
-    [HttpPost("register")]
-    public async Task<IActionResult> Register(RegisterUserDto dto) =>
-        Ok(await _svc.RegisterAsync(dto));
-
     [HttpPost("login")]
     public async Task<IActionResult> Login(LoginUserDto dto)
     {
@@ -31,10 +27,11 @@ public class UserController : ControllerBase
     }
 
     [Authorize]
-    [HttpGet("getAll")] public async Task<IActionResult> GetAll() => Ok(await _svc.GetAllAsync());
+    [HttpGet("getAllUsers")] 
+    public async Task<IActionResult> GetAll() => Ok(await _svc.GetAllAsync());
 
     [Authorize]
-    [HttpGet("getById/{id}")]
+    [HttpGet("getUserById/{id}")]
     public async Task<IActionResult> GetById(int id)
     {
         var u = await _svc.GetByIdAsync(id);
@@ -53,7 +50,7 @@ public class UserController : ControllerBase
     }
 
     [Authorize(Roles = "Admin")]
-    [HttpPost("create")]
+    [HttpPost("createUser")]
     public async Task<IActionResult> CreateUser(CreateUserDto dto)
     {
         try
@@ -68,7 +65,7 @@ public class UserController : ControllerBase
     }
 
     [Authorize(Roles = "Admin")]
-    [HttpPut("update")]
+    [HttpPut("updateUser")]
     public async Task<IActionResult> UpdateUser([FromBody] UpdateUserDto dto)
     {
         var result = await _svc.UpdateUserAsync(dto);

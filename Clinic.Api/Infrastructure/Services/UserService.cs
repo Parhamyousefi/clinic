@@ -43,37 +43,18 @@ namespace Clinic.Api.Infrastructure.Services
             };
         }
 
-        public async Task<int> RegisterAsync(RegisterUserDto dto)
-        {
-            var hasher = new PasswordHasher<object>();
-
-            var user = new UserContext
-            {
-                Email = dto.Email,
-                Password = hasher.HashPassword(null, dto.Password),
-                FirstName = dto.FirstName,
-                LastName = dto.LastName,
-                RoleId = dto.RoleId,
-                IsActive = true
-            };
-
-            await _uow.Users.AddAsync(user);
-            await _uow.SaveAsync();
-            return user.Id;
-        }
-
         public async Task<string?> LoginAsync(LoginUserDto dto)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == dto.Username);
 
             if (user == null || !user.IsActive)
-                return null;
+                throw new Exception("User Is Null Or Not Active");
 
             if (!VerifyPassword(dto.Password, user.Password))
-                return null;
+                throw new Exception("Password Is Not Correct");
 
             var role = await _context.Roles.FirstOrDefaultAsync(r => r.Id == user.RoleId);
-            var roleName = role?.Name ?? "User";
+            var roleName = role?.Name;
 
             return _token.CreateToken(user, roleName);
         }
@@ -140,7 +121,7 @@ namespace Clinic.Api.Infrastructure.Services
         public async Task<bool> UpdateUserAsync(UpdateUserDto dto)
         {
             var user = await _uow.Users.GetByIdAsync(dto.Id);
-            if (user == null) return false;
+            if (user == null) throw new Exception("User Not Exists");
 
             if (!string.IsNullOrEmpty(dto.Email))
                 user.Email = dto.Email;
