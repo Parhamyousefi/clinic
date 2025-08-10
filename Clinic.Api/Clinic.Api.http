@@ -1,11 +1,11 @@
-@Clinic_Api_Host = http://localhost:5044
+@Clinic_Api_Host = https://localhost:7281
 
 ### Register
 POST {{Clinic_Api_Host}}/api/user/register
 Content-Type: application/json
 
 {
-  "email": "test@example.com",
+  "email": "parham",
   "password": "123456",
   "firstName": "John",
   "lastName": "Doe",
@@ -17,57 +17,56 @@ POST {{Clinic_Api_Host}}/api/user/login
 Content-Type: application/json
 
 {
-  "email": "test@example.com",
+  "Username": "nima",
   "password": "123456"
 }
 
 ### Get All (requires JWT)
-GET {{Clinic_Api_Host}}/api/user
-Authorization: Bearer {{JWT_TOKEN}}
+GET {{Clinic_Api_Host}}/api/user/getAll
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwidXNlcm5hbWUiOiJuaW1hIiwicm9sZSI6IkFkbWluIiwiZXhwIjoxNzU0NzUzNzIxLCJpc3MiOiJDbGluaWMuQXBpIiwiYXVkIjoiQ2xpbmljLkFwaS5Vc2VycyJ9.mE3Dgii81P3hn9_wcWbmo7v4pYU3n6z2MKMr4h5eW5o
 
 ### Get By ID
-GET {{Clinic_Api_Host}}/api/user/1
-Authorization: Bearer {{JWT_TOKEN}}
+GET {{Clinic_Api_Host}}/api/user/getById/3
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwidXNlcm5hbWUiOiJuaW1hIiwicm9sZSI6IkFkbWluIiwiZXhwIjoxNzU0NzUzNzIxLCJpc3MiOiJDbGluaWMuQXBpIiwiYXVkIjoiQ2xpbmljLkFwaS5Vc2VycyJ9.mE3Dgii81P3hn9_wcWbmo7v4pYU3n6z2MKMr4h5eW5o
 
-### Get All Roles
-GET http://localhost:5044/api/role
-Authorization: Bearer {{JWT}}
-
-### Get Role By Id
-GET http://localhost:5044/api/role/1
-Authorization: Bearer {{JWT}}
-
-### Create Role
-POST http://localhost:5044/api/role
-Content-Type: application/json
-Authorization: Bearer {{JWT}}
-
-{
-  "name": "Reception",
-  "description": "Receptionist Role"
-}
-
-### Update Role
-PUT http://localhost:5044/api/role
-Content-Type: application/json
-Authorization: Bearer {{JWT}}
-
-{
-  "id": 2,
-  "name": "Practitioner",
-  "description": "Updated Practitioner Role"
-}
-
-### Delete Role
-DELETE http://localhost:5044/api/role/3
-Authorization: Bearer {{JWT}}
+### Delete Usser
+Delete {{Clinic_Api_Host}}/api/user/deleteUser/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwidXNlcm5hbWUiOiJuaW1hIiwicm9sZSI6IkFkbWluIiwiZXhwIjoxNzU0NzUzNzIxLCJpc3MiOiJDbGluaWMuQXBpIiwiYXVkIjoiQ2xpbmljLkFwaS5Vc2VycyJ9.mE3Dgii81P3hn9_wcWbmo7v4pYU3n6z2MKMr4h5eW5o
 
 ### Assign Role to User
-PUT http://localhost:5044/api/user/assign-role
+PUT {{Clinic_Api_Host}}/api/user/assign-role
 Content-Type: application/json
-Authorization: Bearer {{JWT}}
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwidXNlcm5hbWUiOiJuaW1hIiwicm9sZSI6IkFkbWluIiwiZXhwIjoxNzU0NzUzNzIxLCJpc3MiOiJDbGluaWMuQXBpIiwiYXVkIjoiQ2xpbmljLkFwaS5Vc2VycyJ9.mE3Dgii81P3hn9_wcWbmo7v4pYU3n6z2MKMr4h5eW5o
 
 {
   "userId": 1,
   "roleId": 2
+}
+
+### Create User (Admin only, requires JWT)
+POST {{Clinic_Api_Host}}/api/user/create
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwidXNlcm5hbWUiOiJuaW1hIiwicm9sZSI6IkFkbWluIiwiZXhwIjoxNzU0NzUzNzIxLCJpc3MiOiJDbGluaWMuQXBpIiwiYXVkIjoiQ2xpbmljLkFwaS5Vc2VycyJ9.mE3Dgii81P3hn9_wcWbmo7v4pYU3n6z2MKMr4h5eW5o
+
+{
+  "email": "nima2",
+  "password": "Password123!",
+  "firstName": "New",
+  "lastName": "User",
+  "roleId": 1,
+  "isActive": true
+}
+
+### Update User (Admin only, requires JWT)
+PUT {{Clinic_Api_Host}}/api/user/update
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwidXNlcm5hbWUiOiJuaW1hIiwicm9sZSI6IkFkbWluIiwiZXhwIjoxNzU0NzUzNzIxLCJpc3MiOiJDbGluaWMuQXBpIiwiYXVkIjoiQ2xpbmljLkFwaS5Vc2VycyJ9.mE3Dgii81P3hn9_wcWbmo7v4pYU3n6z2MKMr4h5eW5o
+
+{
+  "id": 3,
+  "email": "parhamversionpiercing",
+  "firstName": "UpdatedFirstName",
+  "lastName": "UpdatedLastName",
+  "roleId": 1,
+  "isActive": true
 }

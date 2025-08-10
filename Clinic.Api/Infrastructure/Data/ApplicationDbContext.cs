@@ -9,7 +9,6 @@ namespace Clinic.Api.Infrastructure.Data
 
         public DbSet<UserContext> Users { get; set; }
         public DbSet<UserPhonesContext> UserPhones { get; set; }
-        public DbSet<RoleContext> RoleCtx { get; set; }
         public DbSet<RolesContext> Roles { get; set; }
         public DbSet<UserAppointmentsContext> UserAppointment { get; set; }
         public DbSet<UserBusinessesContext> UserBusinesses { get; set; }
@@ -97,6 +96,9 @@ namespace Clinic.Api.Infrastructure.Data
         {
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.Entity<DateConvertContext>()
+     .HasNoKey()
+     .ToView(null);
         }
     }
 }
