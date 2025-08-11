@@ -50,10 +50,9 @@ namespace Clinic.Api.Middlwares
                     break;
 
                 // Bad request from invalid arguments
-                case ArgumentException argEx:
-                case ArgumentNullException argNullEx:
+                case ArgumentException or ArgumentNullException:
                     statusCode = HttpStatusCode.BadRequest;
-                    message = argEx?.Message ?? argNullEx?.Message;
+                    message = exception.Message;
                     break;
 
                 // Unauthorized or Forbidden

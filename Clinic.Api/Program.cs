@@ -1,10 +1,12 @@
 using Clinic.Api.Application.Interfaces;
+using Clinic.Api.Domain.Entities;
 using Clinic.Api.Infrastructure.Data;
 using Clinic.Api.Infrastructure.Services;
 using Clinic.Api.JwtAuth.Helpers;
 using Clinic.Api.Mappings;
 using Clinic.Api.Middlwares;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -29,6 +31,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(opt =>
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<IAppointmentService, AppointmentService>();
+builder.Services.AddScoped<IPasswordHasher<UserContext>, PasswordHasher<UserContext>>();
 
 // Auth & JWT
 var jwt = builder.Configuration.GetSection("JwtSettings").Get<JwtSettings>();

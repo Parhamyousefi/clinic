@@ -12,12 +12,14 @@ namespace Clinic.Api.Infrastructure.Services
         private readonly IUnitOfWork _uow;
         private readonly ITokenService _token;
         private readonly ApplicationDbContext _context;
+        private readonly IPasswordHasher<UserContext> _passwordHasher;
 
-        public UserService(IUnitOfWork uow, ITokenService token, ApplicationDbContext context)
+        public UserService(IUnitOfWork uow, ITokenService token, ApplicationDbContext context, IPasswordHasher<UserContext> passwordHasher)
         {
             _uow = uow;
             _token = token;
             _context = context;
+            _passwordHasher = passwordHasher;
         }
 
         public async Task<IEnumerable<UserDto>> GetAllAsync() =>
@@ -123,8 +125,8 @@ namespace Clinic.Api.Infrastructure.Services
             var user = await _uow.Users.GetByIdAsync(dto.Id);
             if (user == null) throw new Exception("User Not Exists");
 
-            if (!string.IsNullOrEmpty(dto.Email))
-                user.Email = dto.Email;
+            if (!string.IsNullOrEmpty(dto.Username))
+                user.Email = dto.Username;
 
             if (!string.IsNullOrEmpty(dto.FirstName))
                 user.FirstName = dto.FirstName;
@@ -137,6 +139,12 @@ namespace Clinic.Api.Infrastructure.Services
 
             if (dto.IsActive.HasValue)
                 user.IsActive = dto.IsActive.Value;
+
+            if (!string.IsNullOrEmpty(dto.Password))
+            {
+                // Assuming you have IPasswordHasher<User> injected
+                user.Password = _passwordHasher.HashPassword(user, dto.Password);
+            }
 
             _context.Users.Update(user);
             await _uow.SaveAsync();

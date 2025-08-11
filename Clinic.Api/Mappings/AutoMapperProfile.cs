@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Clinic.Api.Application.DTOs.Appointments;
 using Clinic.Api.Application.DTOs.Users;
 using Clinic.Api.Domain.Entities;
 
@@ -9,8 +10,8 @@ namespace Clinic.Api.Mappings
         public AutoMapperProfile()
         {
             CreateMap<UserContext, UserDto>().ReverseMap();
-            CreateMap<RegisterUserDto, UserContext>();
             CreateMap<LoginUserDto, UserContext>();
+            CreateMap<CreateAppointmentDto, AppointmentsContext>().ReverseMap();
         }
     }
 }
