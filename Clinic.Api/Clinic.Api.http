@@ -5,13 +5,13 @@ POST {{Clinic_Api_Host}}/api/user/login
 Content-Type: application/json
 
 {
-  "Username": "doctorroletestauth",
-  "password": "Password123!"
+  "Username": "nima",
+  "password": "123456"
 }
 
 ### Get All (requires JWT)
 GET {{Clinic_Api_Host}}/api/user/getAllUsers
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwidXNlcm5hbWUiOiJuaW1hIiwicm9sZSI6IkFkbWluIiwiZXhwIjoxNzU0NzUzNzIxLCJpc3MiOiJDbGluaWMuQXBpIiwiYXVkIjoiQ2xpbmljLkFwaS5Vc2VycyJ9.mE3Dgii81P3hn9_wcWbmo7v4pYU3n6z2MKMr4h5eW5o
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwidXNlcm5hbWUiOiJuaW1hIiwicm9sZSI6IkFkbWluIiwiZXhwIjoxNzU1MDA3NjQzLCJpc3MiOiJDbGluaWMuQXBpIiwiYXVkIjoiQ2xpbmljLkFwaS5Vc2VycyJ9.tnOvt8qWS1Mq4mUQZ7u53JrTJeEzFL1qHKHCvfe9DCI
 
 ### Get By ID
 GET {{Clinic_Api_Host}}/api/user/getUserById/3
@@ -90,4 +90,13 @@ Authorization: Bearer {{jwtToken}}
   "ignoreDidNotCome": false,
   "creatorId": 1,
   "byInvoice": false
+}
+
+### Forgot Password
+POST {{Clinic_Api_Host}}/api/users/forgot-password
+Content-Type: application/json
+
+{
+  "username": "john.doe",
+  "newPassword": "MyNewSecurePass123"
 }

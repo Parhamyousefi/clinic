@@ -19,12 +19,19 @@ namespace Clinic.Api.Infrastructure.Services
 
         public async Task<int> CreateAppointmentAsync(CreateAppointmentDto dto)
         {
-            var appointment = _mapper.Map<AppointmentsContext>(dto);
+            try
+            {
+                var appointment = _mapper.Map<AppointmentsContext>(dto);
 
-            _context.Appointments.Add(appointment);
-            await _context.SaveChangesAsync();
+                _context.Appointments.Add(appointment);
+                await _context.SaveChangesAsync();
 
-            return appointment.Id;
+                return appointment.Id;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
     }
 }
