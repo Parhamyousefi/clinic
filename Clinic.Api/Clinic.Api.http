@@ -1,17 +1,5 @@
 @Clinic_Api_Host = https://localhost:7281
 
-### Register
-POST {{Clinic_Api_Host}}/api/user/register
-Content-Type: application/json
-
-{
-  "email": "parham",
-  "password": "123456",
-  "firstName": "John",
-  "lastName": "Doe",
-  "roleId": 1
-}
-
 ### Login
 POST {{Clinic_Api_Host}}/api/user/login
 Content-Type: application/json
@@ -22,11 +10,11 @@ Content-Type: application/json
 }
 
 ### Get All (requires JWT)
-GET {{Clinic_Api_Host}}/api/user/getAll
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwidXNlcm5hbWUiOiJuaW1hIiwicm9sZSI6IkFkbWluIiwiZXhwIjoxNzU0NzUzNzIxLCJpc3MiOiJDbGluaWMuQXBpIiwiYXVkIjoiQ2xpbmljLkFwaS5Vc2VycyJ9.mE3Dgii81P3hn9_wcWbmo7v4pYU3n6z2MKMr4h5eW5o
+GET {{Clinic_Api_Host}}/api/user/getAllUsers
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwidXNlcm5hbWUiOiJuaW1hIiwicm9sZSI6IkFkbWluIiwiZXhwIjoxNzU1MDA3NjQzLCJpc3MiOiJDbGluaWMuQXBpIiwiYXVkIjoiQ2xpbmljLkFwaS5Vc2VycyJ9.tnOvt8qWS1Mq4mUQZ7u53JrTJeEzFL1qHKHCvfe9DCI
 
 ### Get By ID
-GET {{Clinic_Api_Host}}/api/user/getById/3
+GET {{Clinic_Api_Host}}/api/user/getUserById/3
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwidXNlcm5hbWUiOiJuaW1hIiwicm9sZSI6IkFkbWluIiwiZXhwIjoxNzU0NzUzNzIxLCJpc3MiOiJDbGluaWMuQXBpIiwiYXVkIjoiQ2xpbmljLkFwaS5Vc2VycyJ9.mE3Dgii81P3hn9_wcWbmo7v4pYU3n6z2MKMr4h5eW5o
 
 ### Delete Usser
@@ -44,29 +32,71 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwid
 }
 
 ### Create User (Admin only, requires JWT)
-POST {{Clinic_Api_Host}}/api/user/create
+POST {{Clinic_Api_Host}}/api/user/createUser
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwidXNlcm5hbWUiOiJuaW1hIiwicm9sZSI6IkFkbWluIiwiZXhwIjoxNzU0NzUzNzIxLCJpc3MiOiJDbGluaWMuQXBpIiwiYXVkIjoiQ2xpbmljLkFwaS5Vc2VycyJ9.mE3Dgii81P3hn9_wcWbmo7v4pYU3n6z2MKMr4h5eW5o
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1IiwidXNlcm5hbWUiOiJkb2N0b3Jyb2xldGVzdGF1dGgiLCJyb2xlIjoiRG9jdG9yIiwiZXhwIjoxNzU0OTI2MTc4LCJpc3MiOiJDbGluaWMuQXBpIiwiYXVkIjoiQ2xpbmljLkFwaS5Vc2VycyJ9.UWSrmXevo5XiY3TSWJbKjfrAFI1qVNPxNwygl3p27aY
 
 {
-  "email": "nima2",
+  "Username": "testUser",
   "password": "Password123!",
   "firstName": "New",
   "lastName": "User",
-  "roleId": 1,
+  "roleId": 9,
   "isActive": true
 }
 
 ### Update User (Admin only, requires JWT)
-PUT {{Clinic_Api_Host}}/api/user/update
+PUT {{Clinic_Api_Host}}/api/user/updateUser
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwidXNlcm5hbWUiOiJuaW1hIiwicm9sZSI6IkFkbWluIiwiZXhwIjoxNzU0NzUzNzIxLCJpc3MiOiJDbGluaWMuQXBpIiwiYXVkIjoiQ2xpbmljLkFwaS5Vc2VycyJ9.mE3Dgii81P3hn9_wcWbmo7v4pYU3n6z2MKMr4h5eW5o
 
 {
   "id": 3,
-  "email": "parhamversionpiercing",
+  "Username": "parhamversionpiercing",
   "firstName": "UpdatedFirstName",
   "lastName": "UpdatedLastName",
   "roleId": 1,
   "isActive": true
+}
+
+### Create Appointment
+POST {{Clinic_Api_Host}}/api/appointments/createAppointment
+Content-Type: application/json
+Authorization: Bearer {{jwtToken}}
+
+{
+  "businessId": 1,
+  "practitionerId": 2,
+  "patientId": 3,
+  "appointmentTypeId": 1,
+  "start": "2025-08-15T10:00:00",
+  "end": "2025-08-15T11:00:00",
+  "repeatId": null,
+  "repeatEvery": null,
+  "endsAfter": null,
+  "note": "Initial consultation",
+  "arrived": 0,
+  "waitListId": null,
+  "cancelled": false,
+  "appointmentCancelTypeId": null,
+  "cancelNotes": null,
+  "isUnavailbleBlock": false,
+  "modifierId": null,
+  "createdOn": "2025-08-11T12:00:00",
+  "lastUpdated": null,
+  "isAllDay": false,
+  "sendReminder": true,
+  "appointmentSMS": null,
+  "ignoreDidNotCome": false,
+  "creatorId": 1,
+  "byInvoice": false
+}
+
+### Forgot Password
+POST {{Clinic_Api_Host}}/api/users/forgot-password
+Content-Type: application/json
+
+{
+  "username": "john.doe",
+  "newPassword": "MyNewSecurePass123"
 }
