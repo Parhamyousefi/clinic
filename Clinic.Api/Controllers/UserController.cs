@@ -17,8 +17,8 @@ public class UserController : ControllerBase
     {
         try
         {
-            var token = await _svc.LoginAsync(dto);
-            return Ok(new { Token = token });
+            var result = await _svc.LoginAsync(dto);
+            return Ok(result);
         }
         catch (UnauthorizedAccessException ex)
         {
@@ -66,7 +66,7 @@ public class UserController : ControllerBase
 
     [Authorize(Roles = "Admin")]
     [HttpPut("updateUser")]
-    public async Task<IActionResult> UpdateUser([FromBody] UpdateUserDto dto)
+    public async Task<IActionResult> UpdateUser(UpdateUserDto dto)
     {
         var result = await _svc.UpdateUserAsync(dto);
         if (!result)
@@ -81,5 +81,12 @@ public class UserController : ControllerBase
     {
         var result = await _svc.AssignRoleAsync(dto.UserId, dto.RoleId);
         return result ? Ok("Role assigned successfully.") : NotFound("User not found.");
+    }
+
+    [HttpPost("forgot-password")]
+    public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordDto dto)
+    {
+        var result = await _svc.ForgotPasswordAsync(dto);
+        return Ok(new { success = result, message = "Password updated successfully" });
     }
 }
