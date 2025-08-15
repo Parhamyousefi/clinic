@@ -19,10 +19,10 @@ namespace Clinic.Api.Infrastructure.Services
         {
             var claims = new[]
             {
-        new Claim("userId", user.Id.ToString()),
-        new Claim("username", user.Email ?? ""),
-        new Claim("role", roleName)
-    };
+                new Claim("userId", user.Id.ToString()),
+                new Claim("username", user.Email ?? ""),
+                new Claim("role", roleName)
+            };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_settings.Key));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
