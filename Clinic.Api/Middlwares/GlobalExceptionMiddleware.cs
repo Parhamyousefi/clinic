@@ -24,90 +24,41 @@ namespace Clinic.Api.Middlwares
             }
             catch (Exception ex)
             {
-                await HandleGlobalExceptionAsync(context, ex);
+                await HandleExceptionAsync(context, ex);
             }
         }
 
-        private static async Task HandleGlobalExceptionAsync(HttpContext context, Exception exception)
+        private static Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
-            Log.Error(exception, "Unhandled exception caught by GlobalExceptionMiddleware");
-
-            var response = context.Response;
-            response.ContentType = "application/json";
-
-            HttpStatusCode statusCode;
-            string message;
-            object details = null;
-
+            HttpStatusCode statusCode = HttpStatusCode.InternalServerError;
+            object result;
 
             switch (exception)
             {
-                // Validation errors
-                case ValidationException validationEx:
+                case AppException appEx:
                     statusCode = HttpStatusCode.BadRequest;
-                    message = validationEx.Message;
-                    details = validationEx.ValidationResult;
+                    result = new { appEx.ErrorId, appEx.Description };
                     break;
 
-                // Bad request from invalid arguments
-                case ArgumentException or ArgumentNullException:
-                    statusCode = HttpStatusCode.BadRequest;
-                    message = exception.Message;
+                case KeyNotFoundException:
+                    statusCode = HttpStatusCode.NotFound;
+                    result = new { ErrorId = 404, Description = "Resource not found" };
                     break;
 
-                // Unauthorized or Forbidden
                 case UnauthorizedAccessException:
                     statusCode = HttpStatusCode.Unauthorized;
-                    message = "Unauthorized access.";
-                    break;
-                case InvalidOperationException opEx when opEx.Message.Contains("Forbidden", StringComparison.OrdinalIgnoreCase):
-                    statusCode = HttpStatusCode.Forbidden;
-                    message = opEx.Message;
+                    result = new { ErrorId = 401, Description = "Unauthorized" };
                     break;
 
-                // Not found
-                case KeyNotFoundException notFoundEx:
-                    statusCode = HttpStatusCode.NotFound;
-                    message = notFoundEx.Message;
-                    break;
-
-                // Database errors
-                case DbUpdateException dbUpdateEx:
-                    statusCode = HttpStatusCode.InternalServerError;
-                    message = "A database error occurred while processing your request.";
-                    details = dbUpdateEx.InnerException?.Message ?? dbUpdateEx.Message;
-                    break;
-                case SqlException sqlEx:
-                    statusCode = HttpStatusCode.InternalServerError;
-                    message = "A SQL Server error occurred.";
-                    details = sqlEx.Message;
-                    break;
-
-                // Business logic exceptions
-                case ApplicationException appEx:
-                    statusCode = HttpStatusCode.BadRequest;
-                    message = appEx.Message;
-                    break;
-
-                // Default fallback for unknown exceptions
                 default:
-                    statusCode = HttpStatusCode.InternalServerError;
-                    message = "An unexpected error occurred.";
+                    result = new { ErrorId = 500, Description = "An unexpected error occurred" };
                     break;
             }
 
-            response.StatusCode = (int)statusCode;
+            context.Response.ContentType = "application/json";
+            context.Response.StatusCode = (int)statusCode;
 
-            var result = JsonSerializer.Serialize(new
-            {
-                success = false,
-                error = message,
-                details,
-                statusCode = response.StatusCode,
-                timestamp = DateTime.UtcNow
-            });
-
-            await response.WriteAsync(result);
+            return context.Response.WriteAsJsonAsync(result);
         }
     }
 }

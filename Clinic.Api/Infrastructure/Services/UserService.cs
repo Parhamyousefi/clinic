@@ -1,11 +1,11 @@
-﻿using Azure.Core;
-using Clinic.Api.Application.DTOs.Users;
+﻿using Clinic.Api.Application.DTOs.Users;
 using Clinic.Api.Application.Interfaces;
 using Clinic.Api.Domain.Entities;
 using Clinic.Api.Infrastructure.Data;
 using Clinic.Api.Middlwares;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using static Clinic.Api.Middlwares.Exceptions;
 
 namespace Clinic.Api.Infrastructure.Services
 {
@@ -61,7 +61,7 @@ namespace Clinic.Api.Infrastructure.Services
                 var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == dto.Username);
                 if (user == null ||
                     _passwordHasher.VerifyHashedPassword(user, user.Password, dto.Password) != PasswordVerificationResult.Success)
-                    throw new UnauthorizedAccessException("Invalid username or password.");
+                    throw new InvalidModelData(1009, "Invalid username or password.");
 
                 var roleName = await _context.Roles
       .Where(r => r.Id == user.RoleId)
@@ -123,7 +123,7 @@ namespace Clinic.Api.Infrastructure.Services
             {
                 var existingUser = await _context.Users.FirstOrDefaultAsync(u => u.Email == dto.Username);
                 if (existingUser != null)
-                    throw new ArgumentException("Email already exists.");
+                    throw new InvalidModelData(1006, "Email already exists.");
 
                 var hasher = new PasswordHasher<object>();
                 var hashedPassword = hasher.HashPassword(null, dto.Password);
@@ -154,7 +154,7 @@ namespace Clinic.Api.Infrastructure.Services
             try
             {
                 var user = await _uow.Users.GetByIdAsync(dto.Id);
-                if (user == null) throw new Exception("User Not Exists");
+                if (user == null) throw new NotFoundException(1008, "User Not Exists");
 
                 if (!string.IsNullOrEmpty(dto.Username))
                     user.Email = dto.Username;
@@ -173,7 +173,6 @@ namespace Clinic.Api.Infrastructure.Services
 
                 if (!string.IsNullOrEmpty(dto.Password))
                 {
-                    // Assuming you have IPasswordHasher<User> injected
                     user.Password = _passwordHasher.HashPassword(user, dto.Password);
                 }
 
@@ -194,7 +193,7 @@ namespace Clinic.Api.Infrastructure.Services
             {
                 var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == dto.Username);
                 if (user == null)
-                    throw new Exception("User not found");
+                    throw new NotFoundException(1007, "User not found");
 
                 user.Password = _passwordHasher.HashPassword(user, dto.NewPassword);
                 _context.Users.Update(user);

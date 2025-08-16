@@ -2,6 +2,7 @@
 using Clinic.Api.Application.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Clinic.Api.Controllers
@@ -25,7 +26,21 @@ namespace Clinic.Api.Controllers
                 return BadRequest(ModelState);
 
             var id = await _appointmentService.CreateAppointmentAsync(dto);
-            return CreatedAtAction(nameof(Create), new { id }, new { id });
+            return Ok(new { success = id, message = "Appointment Created Successfully" });
+        }
+
+        [HttpGet("getAppointments/{clinicId}/{date?}")]
+        [Authorize(Roles = "Admin,Practitioner")]
+        public async Task<IActionResult> GetAppointments(int clinicId, DateTime? date)
+        {
+            if (!date.HasValue)
+            {
+                date = DateTime.UtcNow;
+            }
+
+            var result = _appointmentService.GetAppointments(clinicId, date.Value);
+
+            return Ok(result);
         }
     }
 }

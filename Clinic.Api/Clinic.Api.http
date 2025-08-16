@@ -60,17 +60,17 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwid
 }
 
 ### Create Appointment
-POST {{Clinic_Api_Host}}/api/appointments/createAppointment
+POST {{Clinic_Api_Host}}/api/appointment/createAppointment
 Content-Type: application/json
-Authorization: Bearer {{jwtToken}}
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwidXNlcm5hbWUiOiJuaW1hIiwicm9sZSI6IkFkbWluIiwiZXhwIjoxNzU1MzYwOTk4LCJpc3MiOiJDbGluaWMuQXBpIiwiYXVkIjoiQ2xpbmljLkFwaS5Vc2VycyJ9.LFqZBAfSZ08y1a66RjIin1Mkb5MLH3gNd73qDfxv1R4
 
 {
   "businessId": 1,
   "practitionerId": 2,
   "patientId": 3,
   "appointmentTypeId": 1,
-  "start": "2025-08-15T10:00:00",
-  "end": "2025-08-15T11:00:00",
+  "start": "2025-08-16T10:00:00",
+  "end": "2025-08-17T11:00:00",
   "repeatId": null,
   "repeatEvery": null,
   "endsAfter": null,
@@ -100,3 +100,11 @@ Content-Type: application/json
   "username": "john.doe",
   "newPassword": "MyNewSecurePass123"
 }
+
+### Get appointments with date
+GET {{Clinic_Api_Host}}/api/appointment/getAppointments/1/2025-08-16
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwidXNlcm5hbWUiOiJuaW1hIiwicm9sZSI6IkFkbWluIiwiZXhwIjoxNzU1MzYwOTk4LCJpc3MiOiJDbGluaWMuQXBpIiwiYXVkIjoiQ2xpbmljLkFwaS5Vc2VycyJ9.LFqZBAfSZ08y1a66RjIin1Mkb5MLH3gNd73qDfxv1R4
+
+### Get appointments without date (will default inside controller/service)
+GET {{Clinic_Api_Host}}/api/appointment/getAppointments/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwidXNlcm5hbWUiOiJuaW1hIiwicm9sZSI6IkFkbWluIiwiZXhwIjoxNzU1MzYwOTk4LCJpc3MiOiJDbGluaWMuQXBpIiwiYXVkIjoiQ2xpbmljLkFwaS5Vc2VycyJ9.LFqZBAfSZ08y1a66RjIin1Mkb5MLH3gNd73qDfxv1R4
