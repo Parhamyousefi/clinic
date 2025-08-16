@@ -1,0 +1,101 @@
+.bg-cyan {
+    background: rgba(204, 247, 244, .6);
+}
+
+.text-dark-cyan {
+    color: #025c56;
+}
+
+.text-light-cyan {
+    color: #84a3a1;
+}
+
+.logo-container {
+    width: 70px !important;
+    height: 70px !important;
+    border-radius: 50%;
+    background-color: #00c4b4;
+}
+
+.login-card {
+    backdrop-filter: blur(20px);
+    border-radius: 32px;
+    padding: 48px 40px;
+    min-width: 30%;
+    box-shadow: rgba(0, 0, 0, 0.03) 0px 20px 40px, rgba(0, 0, 0, 0.02) 0px 8px 24px, rgba(255, 255, 255, 0.8) 0px 1px 0px inset;
+}
+
+
+.input-container {
+    border: 2px solid #00c4b4;
+    border-radius: 16px;
+    transition: all 0.3s ease;
+}
+
+.input-container input {
+    border: none;
+    outline: none;
+    background: none;
+    padding: 18px 16px;
+    width: 100%;
+    height: 100%;
+    position: relative;
+
+}
+
+
+.input-container label {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    right: 10%;
+    transition: all 0.3s ease;
+    color: #009d90;
+    font-weight: 500;
+}
+
+.input-container input:focus+label,
+.input-container input:not(:placeholder-shown)+label {
+    top: -25px;
+    right: 10px;
+    font-size: 12px;
+    color: #025c56;
+    transform: translateY(0);
+    font-weight: 500;
+}
+
+/* .input-container::after {
+    position: absolute;
+    content: '';
+    width: 100%;
+    height: 0;
+    bottom: 0;
+    left: 0;
+    background-color: #5bc2b9;
+    transition: .3s all ease;
+} */
+
+.input-container input:focus {
+    border-bottom: 2px !important;
+}
+
+.input-container input:-webkit-autofill {
+    background-color: transparent !important;
+    background-image: none !important;
+    -webkit-box-shadow: 0 0 0 1000px white inset !important;
+    box-shadow: 0 0 0 1000px white inset !important;
+    -webkit-text-fill-color: #000 !important;
+}
+
+.login-btn {
+    background-color: #00a394;
+    border-radius: 16px;
+    padding: 10px 0;
+    font-weight: 500;
+    transition: .2s all ease;
+}
+
+.login-btn:hover {
+    background-color: #007469;
+}

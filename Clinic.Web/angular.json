@@ -27,9 +27,11 @@
               }
             ],
             "styles": [
+              "node_modules/bootstrap-v4-rtl/dist/css/bootstrap.min.css",
               "src/styles.css"
             ],
-            "scripts": []
+            "scripts": [
+            ]
           },
           "configurations": {
             "production": {
