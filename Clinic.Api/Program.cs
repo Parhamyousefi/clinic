@@ -33,6 +33,8 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IAppointmentService, AppointmentService>();
 builder.Services.AddScoped<IPasswordHasher<UserContext>, PasswordHasher<UserContext>>();
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<IReadTokenClaims, ReadTokenClaims>();
 
 // Auth & JWT
 var jwt = builder.Configuration.GetSection("JwtSettings").Get<JwtSettings>();
