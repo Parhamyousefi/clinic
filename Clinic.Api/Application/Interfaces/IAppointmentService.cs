@@ -5,7 +5,7 @@ namespace Clinic.Api.Application.Interfaces
 {
     public interface IAppointmentService
     {
-        Task<int> CreateAppointmentAsync(CreateAppointmentDto dto);
+        Task<int> CreateAppointmentAsync(CreateAppointmentDto model);
         Task<IEnumerable<AppointmentsContext>> GetAppointments(int clinicId, DateTime? date);
     }
 }

@@ -19,28 +19,22 @@ namespace Clinic.Api.Controllers
         }
 
         [HttpPost("createAppointment")]
-        [Authorize(Roles = "Admin,Practitioner")]
-        public async Task<IActionResult> Create(CreateAppointmentDto dto)
+        [Authorize(Roles = "Admin,Doctor")]
+        public async Task<IActionResult> Create(CreateAppointmentDto model)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var id = await _appointmentService.CreateAppointmentAsync(dto);
+            var id = await _appointmentService.CreateAppointmentAsync(model);
             return Ok(new { success = id, message = "Appointment Created Successfully" });
         }
 
         [HttpGet("getAppointments/{clinicId}/{date?}")]
-        [Authorize(Roles = "Admin,Practitioner")]
+        [Authorize(Roles = "Admin,Doctor")]
         public async Task<IActionResult> GetAppointments(int clinicId, DateTime? date)
         {
-            if (!date.HasValue)
-            {
-                date = DateTime.UtcNow;
-            }
-
-            var result = _appointmentService.GetAppointments(clinicId, date.Value);
-
-            return Ok(result);
+            var appointments = await _appointmentService.GetAppointments(clinicId, date);
+            return Ok(appointments);
         }
     }
 }

@@ -15,7 +15,6 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
 // Logging
 builder.Host.UseSerilog((ctx, lc) => lc
     .ReadFrom.Configuration(ctx.Configuration));
@@ -35,6 +34,7 @@ builder.Services.AddScoped<IAppointmentService, AppointmentService>();
 builder.Services.AddScoped<IPasswordHasher<UserContext>, PasswordHasher<UserContext>>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IReadTokenClaims, ReadTokenClaims>();
+builder.Services.AddScoped<IPatientService, PatientService>();
 
 // Auth & JWT
 var jwt = builder.Configuration.GetSection("JwtSettings").Get<JwtSettings>();
@@ -82,6 +82,17 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddControllers();
 
 var app = builder.Build();
+
+// Configure the HTTP request pipeline.
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Clinic API V1");
+        c.RoutePrefix = string.Empty;
+    });
+}
 
 app.UseSerilogRequestLogging();
 app.UseSwagger();

@@ -21,33 +21,33 @@ namespace Clinic.Api.Infrastructure.Services
             _token = token;
         }
 
-        public async Task<int> CreateAppointmentAsync(CreateAppointmentDto dto)
+        public async Task<int> CreateAppointmentAsync(CreateAppointmentDto model)
         {
             try
             {
                 var userId = _token.GetUserId();
 
-                if (dto.Start >= dto.End)
+                if (model.Start >= model.End)
                     throw new ValidationException(1001, "Start date must be earlier than End date.");
 
-                if (dto.PatientId == null)
-                    dto.PatientId = userId;
+                if (model.PatientId == null)
+                    model.PatientId = userId;
 
                 bool hasOverlap = await _context.Appointments
              .AnyAsync(a =>
-                 a.PatientId == dto.PatientId &&
-                 a.BusinessId == dto.BusinessId &&
+                 a.PatientId == model.PatientId &&
+                 a.BusinessId == model.BusinessId &&
                  (
-                     (dto.Start >= a.Start && dto.Start < a.End) ||
-                     (dto.End > a.Start && dto.End <= a.End) ||
-                     (dto.Start <= a.Start && dto.End >= a.End)
+                     (model.Start >= a.Start && model.Start < a.End) ||
+                     (model.End > a.Start && model.End <= a.End) ||
+                     (model.Start <= a.Start && model.End >= a.End)
                  ));
 
                 if (hasOverlap)
                     throw new ConflictException(1002, "Patient already has an appointment in this business during this time.");
 
 
-                var appointment = _mapper.Map<AppointmentsContext>(dto);
+                var appointment = _mapper.Map<AppointmentsContext>(model);
                 appointment.CreatorId = userId;
                 _context.Appointments.Add(appointment);
                 await _context.SaveChangesAsync();
@@ -66,10 +66,15 @@ namespace Clinic.Api.Infrastructure.Services
             {
                 var userId = _token.GetUserId();
 
-                var appointment = await _context.Appointments.Where(u => u.Id == clinicId && u.Start == date)
-                                                .ToListAsync();
+                var selectedDate = date?.Date ?? DateTime.Today;
 
-                return appointment;
+                return await _context.Appointments
+         .Where(u =>
+             u.BusinessId == clinicId &&
+             u.PractitionerId == userId &&
+             u.Start.Date <= selectedDate &&
+             u.End.Date >= selectedDate)
+         .ToListAsync();
             }
             catch (Exception ex)
             {

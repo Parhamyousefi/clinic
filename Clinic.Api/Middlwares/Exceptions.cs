@@ -37,5 +37,12 @@
             public InvalidModelData(int errorId, string description)
                 : base(errorId, description) { }
         }
+
+        public class OldPasswordIncorrect : AppException
+        {
+            public OldPasswordIncorrect(int errorId, string description) : base(errorId, description)
+            {
+            }
+        }
     }
 }

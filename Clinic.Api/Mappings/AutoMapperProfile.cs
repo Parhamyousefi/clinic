@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Clinic.Api.Application.DTOs.Appointments;
+using Clinic.Api.Application.DTOs.Patients;
 using Clinic.Api.Application.DTOs.Users;
 using Clinic.Api.Domain.Entities;
 
@@ -12,6 +13,7 @@ namespace Clinic.Api.Mappings
             CreateMap<UserContext, UserDto>().ReverseMap();
             CreateMap<LoginUserDto, UserContext>();
             CreateMap<CreateAppointmentDto, AppointmentsContext>().ReverseMap();
+            CreateMap<SavePatientDto, PatientsContext>().ReverseMap();
         }
     }
 }
