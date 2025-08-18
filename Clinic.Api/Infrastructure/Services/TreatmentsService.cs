@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Clinic.Api.Application.DTOs;
 using Clinic.Api.Application.DTOs.Appointments;
 using Clinic.Api.Application.Interfaces;
 using Clinic.Api.Domain.Entities;
@@ -8,13 +9,13 @@ using static Clinic.Api.Middlwares.Exceptions;
 
 namespace Clinic.Api.Infrastructure.Services
 {
-    public class AppointmentService : IAppointmentService
+    public class TreatmentsService : ITreatmentsService
     {
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
         private readonly IReadTokenClaims _token;
 
-        public AppointmentService(ApplicationDbContext context, IMapper mapper, IReadTokenClaims token)
+        public TreatmentsService(ApplicationDbContext context, IMapper mapper, IReadTokenClaims token)
         {
             _context = context;
             _mapper = mapper;
@@ -75,6 +76,35 @@ namespace Clinic.Api.Infrastructure.Services
              u.Start.Date <= selectedDate &&
              u.End.Date >= selectedDate)
          .ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<IEnumerable<TreatmentsContext>> GetTreatments(int appointmentId)
+        {
+            try
+            {
+                var result = await _context.Treatments.Where(t => t.AppointmentId == appointmentId).ToListAsync();
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<string> SaveTreatment(SaveTreatmentsDto model)
+        {
+            try
+            {
+                var treatment = _mapper.Map<TreatmentsContext>(model);
+                _context.Treatments.Add(treatment);
+                await _context.SaveChangesAsync();
+                return "Successfully Saved Treatment";
             }
             catch (Exception ex)
             {

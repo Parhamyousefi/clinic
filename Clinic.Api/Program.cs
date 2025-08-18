@@ -30,11 +30,13 @@ builder.Services.AddDbContext<ApplicationDbContext>(opt =>
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
-builder.Services.AddScoped<IAppointmentService, AppointmentService>();
+builder.Services.AddScoped<ITreatmentsService, TreatmentsService>();
 builder.Services.AddScoped<IPasswordHasher<UserContext>, PasswordHasher<UserContext>>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IReadTokenClaims, ReadTokenClaims>();
 builder.Services.AddScoped<IPatientService, PatientService>();
+builder.Services.AddScoped<IQuestionsService, QuestionsService>();
+builder.Services.AddScoped<IMainService, MainService>();
 
 // Auth & JWT
 var jwt = builder.Configuration.GetSection("JwtSettings").Get<JwtSettings>();

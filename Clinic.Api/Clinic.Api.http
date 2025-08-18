@@ -60,7 +60,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwid
 }
 
 ### Create Appointment
-POST {{Clinic_Api_Host}}/api/appointment/createAppointment
+POST {{Clinic_Api_Host}}/api/treatments/createAppointment
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwidXNlcm5hbWUiOiJuaW1hIiwicm9sZSI6IkFkbWluIiwiZXhwIjoxNzU1NDI0NTQyLCJpc3MiOiJDbGluaWMuQXBpIiwiYXVkIjoiQ2xpbmljLkFwaS5Vc2VycyJ9.LTAK60TQc1MgocqkjJHqeYu9hyPrwfHGksWx-l2MzpI
 
@@ -102,11 +102,11 @@ Content-Type: application/json
 }
 
 ### Get appointments with date
-GET {{Clinic_Api_Host}}/api/appointment/getAppointments/1/2025-08-18
+GET {{Clinic_Api_Host}}/api/treatments/getAppointments/1/2025-08-18
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwidXNlcm5hbWUiOiJuaW1hIiwicm9sZSI6IkFkbWluIiwiZXhwIjoxNzU1NDI5OTMwLCJpc3MiOiJDbGluaWMuQXBpIiwiYXVkIjoiQ2xpbmljLkFwaS5Vc2VycyJ9.f4r_G_wCuE1JQi-ZV1T0c0ZrGRQATltfv2laPiZDOjU
 
 ### Get appointments without date (will default inside controller/service)
-GET {{Clinic_Api_Host}}/api/appointment/getAppointments/1
+GET {{Clinic_Api_Host}}/api/treatments/getAppointments/1
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwidXNlcm5hbWUiOiJuaW1hIiwicm9sZSI6IkFkbWluIiwiZXhwIjoxNzU1MzYwOTk4LCJpc3MiOiJDbGluaWMuQXBpIiwiYXVkIjoiQ2xpbmljLkFwaS5Vc2VycyJ9.LFqZBAfSZ08y1a66RjIin1Mkb5MLH3gNd73qDfxv1R4
 
 ### Create a new patient
@@ -162,3 +162,48 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwid
 GET {{Clinic_Api_Host}}/api/patient/getPatients
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwidXNlcm5hbWUiOiJuaW1hIiwicm9sZSI6IkFkbWluIiwiZXhwIjoxNzU1NDQzMDA3LCJpc3MiOiJDbGluaWMuQXBpIiwiYXVkIjoiQ2xpbmljLkFwaS5Vc2VycyJ9.evwJj8MwMPYhT--4OVgCm_qzlrxpCiE81ySxUbsCF7I
+
+### Get Treatments
+GET {{Clinic_Api_Host}}/api/treatments/getTreatments/2
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwidXNlcm5hbWUiOiJuaW1hIiwicm9sZSI6IkFkbWluIiwiZXhwIjoxNzU1NTM0MjE2LCJpc3MiOiJDbGluaWMuQXBpIiwiYXVkIjoiQ2xpbmljLkFwaS5Vc2VycyJ9.m2aC3StvAxkQ8MWLhJDmDW0vkMv3i6rK0qxQXJH6k5A
+
+### Get Sections
+GET {{Clinic_Api_Host}}/api/main/getSections
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwidXNlcm5hbWUiOiJuaW1hIiwicm9sZSI6IkFkbWluIiwiZXhwIjoxNzU1NTM0MjE2LCJpc3MiOiJDbGluaWMuQXBpIiwiYXVkIjoiQ2xpbmljLkFwaS5Vc2VycyJ9.m2aC3StvAxkQ8MWLhJDmDW0vkMv3i6rK0qxQXJH6k5A
+
+### Get Questions 
+GET {{Clinic_Api_Host}}/api/questions/getQuestions
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwidXNlcm5hbWUiOiJuaW1hIiwicm9sZSI6IkFkbWluIiwiZXhwIjoxNzU1NTM0MjE2LCJpc3MiOiJDbGluaWMuQXBpIiwiYXVkIjoiQ2xpbmljLkFwaS5Vc2VycyJ9.m2aC3StvAxkQ8MWLhJDmDW0vkMv3i6rK0qxQXJH6k5A
+
+### Save Treatments
+POST {{Clinic_Api_Host}}/api/treatments/saveTreatment
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwidXNlcm5hbWUiOiJuaW1hIiwicm9sZSI6IkFkbWluIiwiZXhwIjoxNzU1NTM0MjE2LCJpc3MiOiJDbGluaWMuQXBpIiwiYXVkIjoiQ2xpbmljLkFwaS5Vc2VycyJ9.m2aC3StvAxkQ8MWLhJDmDW0vkMv3i6rK0qxQXJH6k5A
+Content-Type: application/json
+
+{
+  "patientId": 1,
+  "appointmentId": 2,
+  "isFinal": true,
+  "treatmentTemplateId": 5,
+  "modifierId": null,
+  "createdOn": "2025-08-18T10:00:00",
+  "lastUpdated": null,
+  "creatorId": 2,
+  "invoiceItemId": null,
+  "visitTime": "2025-08-18T12:00:00"
+}
+
+### Save QuestionValue
+POST {{Clinic_Api_Host}}/api/questions/saveQuestionValue
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwidXNlcm5hbWUiOiJuaW1hIiwicm9sZSI6IkFkbWluIiwiZXhwIjoxNzU1NTM0MjE2LCJpc3MiOiJDbGluaWMuQXBpIiwiYXVkIjoiQ2xpbmljLkFwaS5Vc2VycyJ9.m2aC3StvAxkQ8MWLhJDmDW0vkMv3i6rK0qxQXJH6k5A
+Content-Type: application/json
+
+{
+  "questionId": 12,
+  "selectedValue": "Yes",
+  "treatmentId": 1,
+  "answerId": null
+}
