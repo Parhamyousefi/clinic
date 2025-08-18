@@ -1,11 +1,11 @@
-﻿using Azure.Core;
-using Clinic.Api.Application.DTOs.Users;
+﻿using Clinic.Api.Application.DTOs.Users;
 using Clinic.Api.Application.Interfaces;
 using Clinic.Api.Domain.Entities;
 using Clinic.Api.Infrastructure.Data;
 using Clinic.Api.Middlwares;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using static Clinic.Api.Middlwares.Exceptions;
 
 namespace Clinic.Api.Infrastructure.Services
 {
@@ -54,14 +54,14 @@ namespace Clinic.Api.Infrastructure.Services
             }
         }
 
-        public async Task<LoginResponseDto> LoginAsync(LoginUserDto dto)
+        public async Task<LoginResponseDto> LoginAsync(LoginUserDto model)
         {
             try
             {
-                var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == dto.Username);
+                var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == model.Username);
                 if (user == null ||
-                    _passwordHasher.VerifyHashedPassword(user, user.Password, dto.Password) != PasswordVerificationResult.Success)
-                    throw new UnauthorizedAccessException("Invalid username or password.");
+                    _passwordHasher.VerifyHashedPassword(user, user.Password, model.Password) != PasswordVerificationResult.Success)
+                    throw new InvalidModelData(1009, "Invalid username or password.");
 
                 var roleName = await _context.Roles
       .Where(r => r.Id == user.RoleId)
@@ -117,25 +117,25 @@ namespace Clinic.Api.Infrastructure.Services
             }
         }
 
-        public async Task<int> CreateUserAsync(CreateUserDto dto)
+        public async Task<int> CreateUserAsync(CreateUserDto model)
         {
             try
             {
-                var existingUser = await _context.Users.FirstOrDefaultAsync(u => u.Email == dto.Username);
+                var existingUser = await _context.Users.FirstOrDefaultAsync(u => u.Email == model.Username);
                 if (existingUser != null)
-                    throw new ArgumentException("Email already exists.");
+                    throw new InvalidModelData(1006, "Email already exists.");
 
                 var hasher = new PasswordHasher<object>();
-                var hashedPassword = hasher.HashPassword(null, dto.Password);
+                var hashedPassword = hasher.HashPassword(null, model.Password);
 
                 var user = new UserContext
                 {
-                    Email = dto.Username,
+                    Email = model.Username,
                     Password = hashedPassword,
-                    FirstName = dto.FirstName,
-                    LastName = dto.LastName,
-                    RoleId = dto.RoleId,
-                    IsActive = dto.IsActive
+                    FirstName = model.FirstName,
+                    LastName = model.LastName,
+                    RoleId = model.RoleId,
+                    IsActive = model.IsActive
                 };
 
                 await _uow.Users.AddAsync(user);
@@ -149,32 +149,31 @@ namespace Clinic.Api.Infrastructure.Services
             }
         }
 
-        public async Task<bool> UpdateUserAsync(UpdateUserDto dto)
+        public async Task<bool> UpdateUserAsync(UpdateUserDto model)
         {
             try
             {
-                var user = await _uow.Users.GetByIdAsync(dto.Id);
-                if (user == null) throw new Exception("User Not Exists");
+                var user = await _uow.Users.GetByIdAsync(model.Id);
+                if (user == null) throw new NotFoundException(1008, "User Not Exists");
 
-                if (!string.IsNullOrEmpty(dto.Username))
-                    user.Email = dto.Username;
+                if (!string.IsNullOrEmpty(model.Username))
+                    user.Email = model.Username;
 
-                if (!string.IsNullOrEmpty(dto.FirstName))
-                    user.FirstName = dto.FirstName;
+                if (!string.IsNullOrEmpty(model.FirstName))
+                    user.FirstName = model.FirstName;
 
-                if (!string.IsNullOrEmpty(dto.LastName))
-                    user.LastName = dto.LastName;
+                if (!string.IsNullOrEmpty(model.LastName))
+                    user.LastName = model.LastName;
 
-                if (dto.RoleId.HasValue)
-                    user.RoleId = dto.RoleId.Value;
+                if (model.RoleId.HasValue)
+                    user.RoleId = model.RoleId.Value;
 
-                if (dto.IsActive.HasValue)
-                    user.IsActive = dto.IsActive.Value;
+                if (model.IsActive.HasValue)
+                    user.IsActive = model.IsActive.Value;
 
-                if (!string.IsNullOrEmpty(dto.Password))
+                if (!string.IsNullOrEmpty(model.Password))
                 {
-                    // Assuming you have IPasswordHasher<User> injected
-                    user.Password = _passwordHasher.HashPassword(user, dto.Password);
+                    user.Password = _passwordHasher.HashPassword(user, model.Password);
                 }
 
                 _context.Users.Update(user);
@@ -188,15 +187,19 @@ namespace Clinic.Api.Infrastructure.Services
             }
         }
 
-        public async Task<bool> ForgotPasswordAsync(ForgotPasswordDto dto)
+        public async Task<bool> ForgotPasswordAsync(ForgotPasswordDto model)
         {
             try
             {
-                var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == dto.Username);
+                var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == model.Username);
                 if (user == null)
-                    throw new Exception("User not found");
+                    throw new NotFoundException(1007, "User not found");
 
-                user.Password = _passwordHasher.HashPassword(user, dto.NewPassword);
+                var passwordVerification = _passwordHasher.VerifyHashedPassword(user, user.Password, model.OldPassword);
+                if (passwordVerification != PasswordVerificationResult.Success)
+                    throw new OldPasswordIncorrect(1010, "Old password is incorrect");
+
+                user.Password = _passwordHasher.HashPassword(user, model.NewPassword);
                 _context.Users.Update(user);
                 await _context.SaveChangesAsync();
 

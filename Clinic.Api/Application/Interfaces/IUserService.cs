@@ -9,8 +9,8 @@ namespace Clinic.Api.Application.Interfaces
         Task<LoginResponseDto> LoginAsync(LoginUserDto loginDto);
         Task<bool> DeleteAsync(int id);
         Task<bool> AssignRoleAsync(int userId, int roleId);
-        Task<int> CreateUserAsync(CreateUserDto dto);
-        Task<bool> UpdateUserAsync(UpdateUserDto dto);
-        Task<string> ForgotPasswordAsync(ForgotPasswordDto dto);
+        Task<int> CreateUserAsync(CreateUserDto model);
+        Task<bool> UpdateUserAsync(UpdateUserDto model);
+        Task<bool> ForgotPasswordAsync(ForgotPasswordDto model);
     }
 }
