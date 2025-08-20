@@ -1,1 +1,51 @@
 /* You can add global styles to this file, and also import other style files */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.body {
+    direction: rtl;
+
+}
+
+.appContainer {
+    width: 100%;
+    height: 100vh;
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+.navbar {
+    z-index: 90;
+    direction: rtl;
+    width: calc(100% - 250px);
+    height: 80px;
+    position: fixed;
+    top: 0;
+    background-color: #ffff;
+    box-shadow: 0px 15px 25px rgba(0, 0, 0, 0.05);
+}
+
+.sidebar {
+    display: flex;
+    flex-flow: column;
+    /* justify-content: space-between; */
+    direction: rtl;
+    text-align: center;
+    width: 250px;
+    height: 100%;
+    background-color: #ffff !important;
+    position: fixed;
+    top: 0;
+    right: 0;
+    /* border-radius: 12px 0px 12px 0px; */
+    z-index: 99;
+    box-shadow: 0 0 5px rgb(0 0 0 / 20%);
+    animation-name: fadeRight;
+    animation-duration: 0.8s;
+}
