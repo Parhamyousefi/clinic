@@ -218,8 +218,6 @@ Content-Type: application/json
   "arrived": 1,                    // e.g. 1 = arrived, 0 = not arrived
   "clinic": 2,                     // clinic id
   "service": null,                 // optional service
-  "onlineBooking": true,           // true if booked online
-  "documentStatus": "Confirmed",   // optional status
   "from": 9,                       // start hour or range
   "to": 17                         // end hour or range
 }

@@ -33,5 +33,21 @@ namespace Clinic.Api.Controllers
 
             return Ok(result);
         }
+
+        [HttpPost("savePatientPhone")]
+        [Authorize(Roles ="Admin,Doctor")]
+        public async Task<IActionResult> SavePatientPhone(SavePatientPhoneDto model)
+        {
+            var result = await _patientService.SavePatientPhone(model);
+            return Ok(result);
+        }
+
+        [HttpGet("getPatientPhone/{patientId}")]
+        [Authorize(Roles ="Admin,Doctor")]
+        public async Task<IActionResult> GetPatientPhone(int patientId)
+        {
+            var result = await _patientService.GetPatientPhones(patientId);
+            return Ok(result);
+        }
     }
 }
