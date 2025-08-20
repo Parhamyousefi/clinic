@@ -7,5 +7,7 @@ namespace Clinic.Api.Application.Interfaces
     {
         Task<string> SavePatient(SavePatientDto model);
         Task<IEnumerable<PatientsContext>> GetPatients();
+        Task<string> SavePatientPhone(SavePatientPhoneDto model);
+        Task<IEnumerable<PatientPhonesContext>> GetPatientPhones(int patientId);
     }
 }

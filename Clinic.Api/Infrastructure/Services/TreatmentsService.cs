@@ -111,5 +111,34 @@ namespace Clinic.Api.Infrastructure.Services
                 throw new Exception(ex.Message);
             }
         }
+
+        public async Task<IEnumerable<AppointmentsContext>> GetTodayAppointments(GetTodayAppointmentsDto model)
+        {
+            try
+            {
+                var query = _context.Appointments.AsQueryable();
+
+                var today = DateTime.Today;
+                query = query.Where(a => a.Start.Date == today);
+
+                if (model.Arrived.HasValue)
+                    query = query.Where(a => a.Arrived == model.Arrived.Value);
+
+                if (model.Clinic.HasValue)
+                    query = query.Where(a => a.BusinessId == model.Clinic.Value);
+
+                if (model.Service.HasValue)
+                    query = query.Where(a => a.AppointmentTypeId == model.Service.Value);
+
+                if (model.From.HasValue && model.To.HasValue)
+                    query = query.Where(a => a.Start.Hour >= model.From.Value && a.End.Hour <= model.To.Value);
+
+                return await query.ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message); 
+            }
+        }
     }
 }

@@ -18,6 +18,8 @@ namespace Clinic.Api.Mappings
             CreateMap<SavePatientDto, PatientsContext>().ReverseMap();
             CreateMap<SaveTreatmentsDto, TreatmentsContext>().ReverseMap();
             CreateMap<SaveQuestionValueDto, QuestionValuesContext>().ReverseMap();
+            CreateMap<SaveLoginHistoryDto, LoginHistoriesContext>().ReverseMap();
+            CreateMap<SavePatientPhoneDto, PatientPhonesContext>().ReverseMap();
         }
     }
 }
