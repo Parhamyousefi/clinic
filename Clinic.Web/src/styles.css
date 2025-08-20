@@ -6,6 +6,11 @@
     box-sizing: border-box;
 }
 
+.body {
+    direction: rtl;
+
+}
+
 .appContainer {
     width: 100%;
     height: 100vh;
@@ -17,25 +22,28 @@
 
 .navbar {
     z-index: 90;
-    width: 100%;
-    height: 60px;
+    direction: rtl;
+    width: calc(100% - 250px);
+    height: 80px;
     position: fixed;
     top: 0;
+    background-color: #ffff;
     box-shadow: 0px 15px 25px rgba(0, 0, 0, 0.05);
 }
 
 .sidebar {
     display: flex;
     flex-flow: column;
-    justify-content: space-between;
+    /* justify-content: space-between; */
     direction: rtl;
     text-align: center;
-    height: 90%;
-    background-color: #007469 !important;
+    width: 250px;
+    height: 100%;
+    background-color: #ffff !important;
     position: fixed;
-    top: 4.3rem;
+    top: 0;
     right: 0;
-    border-radius: 12px 0px 12px 0px;
+    /* border-radius: 12px 0px 12px 0px; */
     z-index: 99;
     box-shadow: 0 0 5px rgb(0 0 0 / 20%);
     animation-name: fadeRight;
