@@ -53,5 +53,13 @@ namespace Clinic.Api.Controllers
 
             return Ok(result);
         }
+
+        [HttpPost("getTodayAppointments")]
+        [Authorize(Roles ="Admin,Doctor")]
+        public async Task<IActionResult> GetTodayAppointments(GetTodayAppointmentsDto model)
+        {
+            var result = await _treatmentsService.GetTodayAppointments(model);
+            return Ok(result);
+        }
     }
 }

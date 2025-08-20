@@ -111,5 +111,21 @@ namespace Clinic.Api.Infrastructure.Services
                 throw new Exception(ex.Message);
             }
         }
+
+        public async Task<IEnumerable<AppointmentsContext>> GetTodayAppointments(GetTodayAppointmentsDto model)
+        {
+            try
+            {
+                var today = model.Date = DateTime.Today.Date;
+                var result = await _context.Appointments.Where(a =>
+                a.Start == today || a.Arrived == model.Arrived || a.BusinessId == model.Clinic || a.AppointmentTypeId == model.Service
+                || a.IsUnavailbleBlock == model.OnlineBooking || a.Note == model.DocumentStatus || a.Start.Hour == model.From || a.End.Hour == model.To).ToListAsync();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message); 
+            }
+        }
     }
 }

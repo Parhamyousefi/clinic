@@ -207,3 +207,19 @@ Content-Type: application/json
   "treatmentId": 1,
   "answerId": null
 }
+
+### Get Today Appointments
+POST {{Clinic_Api_Host}}/api/treatments/getTodayAppointments
+Authorization: Bearer {{jwtToken}}
+Content-Type: application/json
+
+{
+  "date": "2025-08-18T00:00:00",   // today’s date or the one you want to check
+  "arrived": 1,                    // e.g. 1 = arrived, 0 = not arrived
+  "clinic": 2,                     // clinic id
+  "service": null,                 // optional service
+  "onlineBooking": true,           // true if booked online
+  "documentStatus": "Confirmed",   // optional status
+  "from": 9,                       // start hour or range
+  "to": 17                         // end hour or range
+}
