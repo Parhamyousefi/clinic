@@ -1,9 +1,5 @@
-﻿using Microsoft.Data.SqlClient;
-using Microsoft.EntityFrameworkCore;
-using Serilog;
-using System.ComponentModel.DataAnnotations;
+﻿using Serilog;
 using System.Net;
-using System.Text.Json;
 
 namespace Clinic.Api.Middlwares
 {
@@ -32,6 +28,8 @@ namespace Clinic.Api.Middlwares
         {
             HttpStatusCode statusCode = HttpStatusCode.InternalServerError;
             object result;
+
+            Log.Error(exception, "Unhandled exception at {Path}", context.Request.Path);
 
             switch (exception)
             {
