@@ -23,3 +23,21 @@
     top: 0;
     box-shadow: 0px 15px 25px rgba(0, 0, 0, 0.05);
 }
+
+.sidebar {
+    display: flex;
+    flex-flow: column;
+    justify-content: space-between;
+    direction: rtl;
+    text-align: center;
+    height: 90%;
+    background-color: #007469 !important;
+    position: fixed;
+    top: 4.3rem;
+    right: 0;
+    border-radius: 12px 0px 12px 0px;
+    z-index: 99;
+    box-shadow: 0 0 5px rgb(0 0 0 / 20%);
+    animation-name: fadeRight;
+    animation-duration: 0.8s;
+}
