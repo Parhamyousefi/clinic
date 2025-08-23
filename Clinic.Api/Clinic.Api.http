@@ -221,3 +221,23 @@ Content-Type: application/json
   "from": 9,                       // start hour or range
   "to": 17                         // end hour or range
 }
+
+### Save Patient Phones
+POST {{Clinic_Api_Host}}/api/patient/savePatientPhone
+Authorization: Bearer 
+Content-Type: application/json
+
+{
+  "patientId": 1,
+  "phoneNoTypeId": 1,
+  "number": "09129561523",
+  "modifierId": 2,
+  "createdOn": "2025-08-18T00:00:00",
+  "lastUpdated": null,
+  "creatorId": 2
+}
+
+### Get Patient Phone
+GET {{Clinic_Api_Host}}/api/patient/getPatientPhone/1
+Authorization: Bearer
+Content-Type: application/json
