@@ -1,0 +1,15 @@
+﻿using Clinic.Api.Application.DTOs;
+using Clinic.Api.Application.DTOs.Appointments;
+using Clinic.Api.Domain.Entities;
+
+namespace Clinic.Api.Application.Interfaces
+{
+    public interface ITreatmentsService
+    {
+        Task<int> CreateAppointmentAsync(CreateAppointmentDto model);
+        Task<IEnumerable<AppointmentsContext>> GetAppointments(int clinicId, DateTime? date);
+        Task<IEnumerable<TreatmentsContext>> GetTreatments(int appointmentId);
+        Task<string> SaveTreatment(SaveTreatmentsDto model);
+        Task<IEnumerable<AppointmentsContext>> GetTodayAppointments(GetTodayAppointmentsDto model);
+    }
+}

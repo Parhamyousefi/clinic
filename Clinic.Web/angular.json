@@ -27,9 +27,12 @@
               }
             ],
             "styles": [
+              "node_modules/bootstrap-v4-rtl/dist/css/bootstrap.min.css",
+              "node_modules/font-awesome/css/font-awesome.min.css",
               "src/styles.css"
             ],
-            "scripts": []
+            "scripts": [
+            ]
           },
           "configurations": {
             "production": {

@@ -1,7 +1,6 @@
 ﻿using Clinic.Api.Application.Interfaces;
 using Clinic.Api.Domain.Entities;
 using Clinic.Api.JwtAuth.Helpers;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -30,7 +29,7 @@ namespace Clinic.Api.Infrastructure.Services
                 _settings.Issuer,
                 _settings.Audience,
                 claims,
-                expires: DateTime.UtcNow.AddMinutes(_settings.ExpireMinutes),
+                expires: DateTime.UtcNow.AddDays(_settings.ExpireDays),
                 signingCredentials: creds
             );
             return new JwtSecurityTokenHandler().WriteToken(token);

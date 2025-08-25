@@ -90,6 +90,7 @@ namespace Clinic.Api.Infrastructure.Data
         public DbSet<AppointmentRemindersContext> AppointmentReminders { get; set; }
         public DbSet<AppointmentCancelTypesContext> AppointmentCancelTypes { get; set; }
         public DbSet<AnswersContext> Answers { get; set; }
+        public DbSet<TreatmentTemplatesContext> TreatmentTemplates { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

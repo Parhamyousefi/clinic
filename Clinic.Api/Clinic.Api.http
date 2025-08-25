@@ -60,17 +60,17 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwid
 }
 
 ### Create Appointment
-POST {{Clinic_Api_Host}}/api/appointments/createAppointment
+POST {{Clinic_Api_Host}}/api/treatments/createAppointment
 Content-Type: application/json
-Authorization: Bearer {{jwtToken}}
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwidXNlcm5hbWUiOiJuaW1hIiwicm9sZSI6IkFkbWluIiwiZXhwIjoxNzU1NDI0NTQyLCJpc3MiOiJDbGluaWMuQXBpIiwiYXVkIjoiQ2xpbmljLkFwaS5Vc2VycyJ9.LTAK60TQc1MgocqkjJHqeYu9hyPrwfHGksWx-l2MzpI
 
 {
   "businessId": 1,
   "practitionerId": 2,
   "patientId": 3,
   "appointmentTypeId": 1,
-  "start": "2025-08-15T10:00:00",
-  "end": "2025-08-15T11:00:00",
+  "start": "2025-08-18T10:00:00",
+  "end": "2025-08-20T11:00:00",
   "repeatId": null,
   "repeatEvery": null,
   "endsAfter": null,
@@ -99,4 +99,125 @@ Content-Type: application/json
 {
   "username": "john.doe",
   "newPassword": "MyNewSecurePass123"
+}
+
+### Get appointments with date
+GET {{Clinic_Api_Host}}/api/treatments/getAppointments/1/2025-08-18
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwidXNlcm5hbWUiOiJuaW1hIiwicm9sZSI6IkFkbWluIiwiZXhwIjoxNzU1NDI5OTMwLCJpc3MiOiJDbGluaWMuQXBpIiwiYXVkIjoiQ2xpbmljLkFwaS5Vc2VycyJ9.f4r_G_wCuE1JQi-ZV1T0c0ZrGRQATltfv2laPiZDOjU
+
+### Get appointments without date (will default inside controller/service)
+GET {{Clinic_Api_Host}}/api/treatments/getAppointments/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwidXNlcm5hbWUiOiJuaW1hIiwicm9sZSI6IkFkbWluIiwiZXhwIjoxNzU1MzYwOTk4LCJpc3MiOiJDbGluaWMuQXBpIiwiYXVkIjoiQ2xpbmljLkFwaS5Vc2VycyJ9.LFqZBAfSZ08y1a66RjIin1Mkb5MLH3gNd73qDfxv1R4
+
+### Create a new patient
+POST {{Clinic_Api_Host}}/api/patient/savePatient
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwidXNlcm5hbWUiOiJuaW1hIiwicm9sZSI6IkFkbWluIiwiZXhwIjoxNzU1NDQzMDA3LCJpc3MiOiJDbGluaWMuQXBpIiwiYXVkIjoiQ2xpbmljLkFwaS5Vc2VycyJ9.evwJj8MwMPYhT--4OVgCm_qzlrxpCiE81ySxUbsCF7I
+
+{
+  "titleId": 1,
+  "firstName": "Nima",
+  "lastName": "Ghahremanian",
+  "gender": 1,
+  "fatherName": "Ali",
+  "birthDate": "1995-08-16",
+  "email": "nima@example.com",
+  "address1": "Street 123",
+  "address2": "Apt 4B",
+  "address3": "District 7",
+  "city": "Tehran",
+  "state": "Tehran",
+  "postCode": "1234567890",
+  "countryId": 276,
+  "reminderTypeId": 2,
+  "unsubscribeFromSMSMarketing": false,
+  "receiveBookingConfirmationEmails": true,
+  "invoiceTo": "Nima Ghahremanian",
+  "emailInvoiceTo": "billing@example.com",
+  "invoiceExtraInformation": "Paid by insurance",
+  "emergencyContact": "09121234567",
+  "referenceNumber": "REF-001",
+  "referringDoctorId": 2,
+  "notes": "Patient has no allergies",
+  "referringInsurerId": 3,
+  "referringInsurer2Id": null,
+  "referringContactId": 7,
+  "referringContact2Id": null,
+  "referringPatientId": null,
+  "modifierId": null,
+  "createdOn": "2025-08-16T12:00:00",
+  "lastUpdated": null,
+  "patientCode": 101,
+  "creatorId": 2,
+  "nationalCode": "1234567890",
+  "jobId": 4,
+  "referringInpatientInsurerId": null,
+  "balance": 500000.00,
+  "outBalance": 200000.00,
+  "inBalance": 300000.00,
+  "paperless": true
+}
+
+### Get Patients
+GET {{Clinic_Api_Host}}/api/patient/getPatients
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwidXNlcm5hbWUiOiJuaW1hIiwicm9sZSI6IkFkbWluIiwiZXhwIjoxNzU1NDQzMDA3LCJpc3MiOiJDbGluaWMuQXBpIiwiYXVkIjoiQ2xpbmljLkFwaS5Vc2VycyJ9.evwJj8MwMPYhT--4OVgCm_qzlrxpCiE81ySxUbsCF7I
+
+### Get Treatments
+GET {{Clinic_Api_Host}}/api/treatments/getTreatments/2
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwidXNlcm5hbWUiOiJuaW1hIiwicm9sZSI6IkFkbWluIiwiZXhwIjoxNzU1NTM0MjE2LCJpc3MiOiJDbGluaWMuQXBpIiwiYXVkIjoiQ2xpbmljLkFwaS5Vc2VycyJ9.m2aC3StvAxkQ8MWLhJDmDW0vkMv3i6rK0qxQXJH6k5A
+
+### Get Sections
+GET {{Clinic_Api_Host}}/api/main/getSections
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwidXNlcm5hbWUiOiJuaW1hIiwicm9sZSI6IkFkbWluIiwiZXhwIjoxNzU1NTM0MjE2LCJpc3MiOiJDbGluaWMuQXBpIiwiYXVkIjoiQ2xpbmljLkFwaS5Vc2VycyJ9.m2aC3StvAxkQ8MWLhJDmDW0vkMv3i6rK0qxQXJH6k5A
+
+### Get Questions 
+GET {{Clinic_Api_Host}}/api/questions/getQuestions
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwidXNlcm5hbWUiOiJuaW1hIiwicm9sZSI6IkFkbWluIiwiZXhwIjoxNzU1NTM0MjE2LCJpc3MiOiJDbGluaWMuQXBpIiwiYXVkIjoiQ2xpbmljLkFwaS5Vc2VycyJ9.m2aC3StvAxkQ8MWLhJDmDW0vkMv3i6rK0qxQXJH6k5A
+
+### Save Treatments
+POST {{Clinic_Api_Host}}/api/treatments/saveTreatment
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwidXNlcm5hbWUiOiJuaW1hIiwicm9sZSI6IkFkbWluIiwiZXhwIjoxNzU1NTM0MjE2LCJpc3MiOiJDbGluaWMuQXBpIiwiYXVkIjoiQ2xpbmljLkFwaS5Vc2VycyJ9.m2aC3StvAxkQ8MWLhJDmDW0vkMv3i6rK0qxQXJH6k5A
+Content-Type: application/json
+
+{
+  "patientId": 1,
+  "appointmentId": 2,
+  "isFinal": true,
+  "treatmentTemplateId": 5,
+  "modifierId": null,
+  "createdOn": "2025-08-18T10:00:00",
+  "lastUpdated": null,
+  "creatorId": 2,
+  "invoiceItemId": null,
+  "visitTime": "2025-08-18T12:00:00"
+}
+
+### Save QuestionValue
+POST {{Clinic_Api_Host}}/api/questions/saveQuestionValue
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwidXNlcm5hbWUiOiJuaW1hIiwicm9sZSI6IkFkbWluIiwiZXhwIjoxNzU1NTM0MjE2LCJpc3MiOiJDbGluaWMuQXBpIiwiYXVkIjoiQ2xpbmljLkFwaS5Vc2VycyJ9.m2aC3StvAxkQ8MWLhJDmDW0vkMv3i6rK0qxQXJH6k5A
+Content-Type: application/json
+
+{
+  "questionId": 12,
+  "selectedValue": "Yes",
+  "treatmentId": 1,
+  "answerId": null
+}
+
+### Get Today Appointments
+POST {{Clinic_Api_Host}}/api/treatments/getTodayAppointments
+Authorization: Bearer {{jwtToken}}
+Content-Type: application/json
+
+{
+  "date": "2025-08-18T00:00:00",   // today’s date or the one you want to check
+  "arrived": 1,                    // e.g. 1 = arrived, 0 = not arrived
+  "clinic": 2,                     // clinic id
+  "service": null,                 // optional service
+  "from": 9,                       // start hour or range
+  "to": 17                         // end hour or range
 }

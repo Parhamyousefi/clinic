@@ -17,7 +17,7 @@ namespace Clinic.Api.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.7")
+                .HasAnnotation("ProductVersion", "9.0.8")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -3528,6 +3528,52 @@ namespace Clinic.Api.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Titles");
+                });
+
+            modelBuilder.Entity("Clinic.Api.Domain.Entities.TreatmentTemplatesContext", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("CreatorId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("LastUpdated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("ModifierId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Ordering")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PrintTemplate")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("ShowPatientBirthDate")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("ShowPatientReferenceNumber")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("TemplateNotes")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TreatmentTemplates");
                 });
 
             modelBuilder.Entity("Clinic.Api.Domain.Entities.TreatmentsContext", b =>

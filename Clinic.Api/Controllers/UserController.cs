@@ -13,11 +13,11 @@ public class UserController : ControllerBase
     public UserController(IUserService svc) => _svc = svc;
 
     [HttpPost("login")]
-    public async Task<IActionResult> Login(LoginUserDto dto)
+    public async Task<IActionResult> Login(LoginUserDto model)
     {
         try
         {
-            var result = await _svc.LoginAsync(dto);
+            var result = await _svc.LoginAsync(model);
             return Ok(result);
         }
         catch (UnauthorizedAccessException ex)
@@ -51,11 +51,11 @@ public class UserController : ControllerBase
 
     [Authorize(Roles = "Admin")]
     [HttpPost("createUser")]
-    public async Task<IActionResult> CreateUser(CreateUserDto dto)
+    public async Task<IActionResult> CreateUser(CreateUserDto model)
     {
         try
         {
-            var userId = await _svc.CreateUserAsync(dto);
+            var userId = await _svc.CreateUserAsync(model);
             return Ok(new { UserId = userId });
         }
         catch (ArgumentException ex)
@@ -66,9 +66,9 @@ public class UserController : ControllerBase
 
     [Authorize(Roles = "Admin")]
     [HttpPut("updateUser")]
-    public async Task<IActionResult> UpdateUser(UpdateUserDto dto)
+    public async Task<IActionResult> UpdateUser(UpdateUserDto model)
     {
-        var result = await _svc.UpdateUserAsync(dto);
+        var result = await _svc.UpdateUserAsync(model);
         if (!result)
             return NotFound("User not found.");
 
@@ -77,16 +77,16 @@ public class UserController : ControllerBase
 
     [HttpPut("assignRole")]
     [Authorize(Roles = "Admin")]
-    public async Task<IActionResult> AssignRoleToUser(AssignRoleDto dto)
+    public async Task<IActionResult> AssignRoleToUser(AssignRoleDto model)
     {
-        var result = await _svc.AssignRoleAsync(dto.UserId, dto.RoleId);
+        var result = await _svc.AssignRoleAsync(model.UserId, model.RoleId);
         return result ? Ok("Role assigned successfully.") : NotFound("User not found.");
     }
 
     [HttpPost("forgotPassword")]
     public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordDto dto)
     {
-        var result = await _svc.ForgotPasswordAsync(dto);
+        var result = await _svc.ForgotPasswordAsync(model);
         return Ok(new { success = result, message = "Password updated successfully" });
     }
 }
