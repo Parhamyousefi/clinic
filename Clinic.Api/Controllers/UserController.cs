@@ -75,7 +75,7 @@ public class UserController : ControllerBase
         return NoContent();
     }
 
-    [HttpPut("assign-role")]
+    [HttpPut("assignRole")]
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> AssignRoleToUser(AssignRoleDto dto)
     {
@@ -83,7 +83,7 @@ public class UserController : ControllerBase
         return result ? Ok("Role assigned successfully.") : NotFound("User not found.");
     }
 
-    [HttpPost("forgot-password")]
+    [HttpPost("forgotPassword")]
     public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordDto dto)
     {
         var result = await _svc.ForgotPasswordAsync(dto);

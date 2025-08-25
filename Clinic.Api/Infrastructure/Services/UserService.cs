@@ -64,9 +64,9 @@ namespace Clinic.Api.Infrastructure.Services
                     throw new UnauthorizedAccessException("Invalid username or password.");
 
                 var roleName = await _context.Roles
-      .Where(r => r.Id == user.RoleId)
-      .Select(r => r.Name)
-      .FirstOrDefaultAsync() ?? string.Empty;
+                      .Where(r => r.Id == user.RoleId)
+                      .Select(r => r.Name)
+                      .FirstOrDefaultAsync() ?? string.Empty;
 
                 var token = _token.CreateToken(user, roleName);
                 var roleHandler = UserMapper.MapRole(user.RoleId.ToString());
