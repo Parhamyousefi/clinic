@@ -12,8 +12,10 @@
 }
 
 .appContainer {
-    width: 100%;
+    width: calc(100% - 270px);
+    margin-top: 80px;
     height: 100vh;
+    padding: 20px;
 }
 
 .pointer {

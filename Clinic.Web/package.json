@@ -21,6 +21,7 @@
     "bootstrap-v4-rtl": "^4.4.1-1",
     "font-awesome": "4.7",
     "moment": "^2.30.1",
+    "ng2-date-picker": "^18.0.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.10"
