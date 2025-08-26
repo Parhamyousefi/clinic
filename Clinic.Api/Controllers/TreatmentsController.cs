@@ -28,6 +28,14 @@ namespace Clinic.Api.Controllers
             return Ok(new { success = id, message = "Appointment Created Successfully" });
         }
 
+        [HttpGet("deleteAppointment/{id}")]
+        [Authorize(Roles ="Admin,Doctor")]
+        public async Task<IActionResult> DeleteAppointment(int id)
+        {
+            var result = await _treatmentsService.DeleteAppointment(id);
+            return Ok(result);
+        }
+
         [HttpGet("getAppointments/{clinicId}/{date?}")]
         [Authorize(Roles = "Admin,Doctor")]
         public async Task<IActionResult> GetAppointments(int clinicId, DateTime? date)
@@ -51,6 +59,14 @@ namespace Clinic.Api.Controllers
         {
             var result = await _treatmentsService.SaveTreatment(model);
 
+            return Ok(result);
+        }
+
+        [HttpGet("deleteTreatment/{id}")]
+        [Authorize(Roles ="Admin,Doctor")]
+        public async Task<IActionResult> DeleteTreatment(int id)
+        {
+            var result = await _treatmentsService.DeleteTreatment(id);
             return Ok(result);
         }
 

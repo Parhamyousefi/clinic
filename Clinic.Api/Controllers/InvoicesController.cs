@@ -24,6 +24,14 @@ namespace Clinic.Api.Controllers
             return Ok(result);
         }
 
+        [HttpGet("deleteInvoices/{id}")]
+        [Authorize(Roles ="Admin,Doctor")]
+        public async Task<IActionResult> DeleteInvoices(int id)
+        {
+            var result = await _invoicesService.DeleteInvoices(id);
+            return Ok(result);
+        }
+
         [HttpGet("getInvoices")]
         [Authorize(Roles ="Admin,Doctor")]
         public async Task<IActionResult> GetInvoices()
@@ -37,6 +45,14 @@ namespace Clinic.Api.Controllers
         public async Task<IActionResult> SaveInvoiceItems(SaveInvoiceItemsDto model)
         {
             var result = await _invoicesService.SaveInvoiceItems(model);
+            return Ok(result);
+        }
+
+        [HttpGet("deleteInvoiceItems/{id}")]
+        [Authorize(Roles ="Admin,Doctor")]
+        public async Task<IActionResult> DeleteInvoiceItems(int id)
+        {
+            var result = await _invoicesService.DeleteInvoiceItems(id);
             return Ok(result);
         }
 

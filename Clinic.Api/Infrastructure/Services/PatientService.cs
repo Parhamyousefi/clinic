@@ -24,14 +24,49 @@ namespace Clinic.Api.Infrastructure.Services
         {
             try
             {
-                var userId = _token.GetUserId();
+                if (model.EditOrNew == -1)
+                {
+                    var userId = _token.GetUserId();
 
-                var patient = _mapper.Map<PatientsContext>(model);
-                patient.CreatorId = userId;
-                _context.Patients.Add(patient);
+                    var patient = _mapper.Map<PatientsContext>(model);
+                    patient.CreatorId = userId;
+                    _context.Patients.Add(patient);
+                    await _context.SaveChangesAsync();
+
+                    return "Patient Saved Successfully";
+                }
+                else
+                {
+                    var existingPatient = await _context.Patients.FirstOrDefaultAsync(p => p.Id == model.EditOrNew);
+
+                    if (existingPatient == null)
+                    {
+                        throw new Exception("Patient Not Found");
+                    }
+
+                    _mapper.Map(model, existingPatient);
+                    _context.Patients.Update(existingPatient);
+                    await _context.SaveChangesAsync();
+                    return "Patient Updated Successfully";
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<string> DeletePatient(int id)
+        {
+            try
+            {
+                var patient = await _context.Patients.FindAsync(id);
+                if (patient == null)
+                    throw new Exception("Patient Not Found");
+
+                _context.Patients.Remove(patient);
                 await _context.SaveChangesAsync();
-
-                return "Patient Saved Successfully";
+                return "Patient Deleted Successfully";
             }
             catch (Exception ex)
             {
@@ -83,6 +118,24 @@ namespace Clinic.Api.Infrastructure.Services
                     .SetProperty(x => x.CreatorId, userId));
                 await _context.SaveChangesAsync();
                 return "Patient Phone Updated Successfully";
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<string> DeletePatientPhone(int id)
+        {
+            try
+            {
+                var patientPhone = await _context.PatientPhones.FindAsync(id);
+                if (patientPhone == null)
+                    throw new Exception("Patient Phone Not Found");
+
+                _context.PatientPhones.Remove(patientPhone);
+                await _context.SaveChangesAsync();
+                return "Patient Phone Deleted Successfully";
             }
             catch (Exception ex)
             {

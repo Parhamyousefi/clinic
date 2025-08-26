@@ -32,7 +32,7 @@ namespace Clinic.Api.Infrastructure.Services
                     return "Invoice Saved Successfully";
                 }
                 else
-                { 
+                {
                     var existingInvoice = await _context.Invoices.FirstOrDefaultAsync(i => i.Id == model.EditOrNew);
 
                     if (existingInvoice == null)
@@ -103,6 +103,44 @@ namespace Clinic.Api.Infrastructure.Services
             {
                 var invoiceItems = await _context.InvoiceItems.ToListAsync();
                 return invoiceItems;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<string> DeleteInvoices(int id)
+        {
+            try
+            {
+                var invoice = await _context.Invoices.FindAsync(id);
+
+                if (invoice == null)
+                    throw new Exception("Invoice Not Found");
+
+                _context.Invoices.Remove(invoice);
+                await _context.SaveChangesAsync();
+
+                return "Invoice Deleted Successfully";
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<string> DeleteInvoiceItems(int id)
+        {
+            try
+            {
+                var invoiceItems = await _context.InvoiceItems.FindAsync(id);
+                if (invoiceItems == null)
+                    throw new Exception("Invoice Items Not Found");
+
+                _context.InvoiceItems.Remove(invoiceItems);
+                await _context.SaveChangesAsync();
+                return "Invoice Item Deleted Successfully";
             }
             catch (Exception ex)
             {

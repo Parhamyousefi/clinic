@@ -9,5 +9,7 @@ namespace Clinic.Api.Application.Interfaces
         Task<IEnumerable<InvoicesContext>> GetInvoices();
         Task<string> SaveInvoiceItems(SaveInvoiceItemsDto model);
         Task<IEnumerable<InvoiceItemsContext>> GetInvoiceItems();
+        Task<string> DeleteInvoices(int id);
+        Task<string> DeleteInvoiceItems(int id);
     }
 }
