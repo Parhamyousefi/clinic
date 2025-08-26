@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { SharedModule } from "../share/shared.module";
-import { DpDatePickerModule, IMonth } from 'ng2-date-picker';
+import { DpDatePickerModule, DatePickerComponent } from 'ngx-jalali-date-picker';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { UserService } from '../_services/user.service';
@@ -13,43 +13,51 @@ import moment from 'moment';
   styleUrl: './appointment.component.css'
 })
 export class AppointmentComponent {
-  weekDetail: any;
+  appointmentsData: any = [];
+  today: any;
+  selectedDate: any;
 
+  datePickerConfig = {
+    locale: 'fa',
+    format: 'jYYYY/jMM/jDD',
+    displayMode: 'popup',
+    theme: 'material',
+    showGoToCurrent: true
+  };
+  @ViewChild('picker') picker!: DatePickerComponent;
+  hours = Array.from({ length: 48 }, (_, i) => {
+    const hour = Math.floor(i / 2);
+    const minute = i % 2 === 0 ? '00' : '30';
+    return `${hour.toString().padStart(2, '0')}:${minute}`;
+  });
   constructor(
     private userService: UserService
   ) { }
 
-  showCalander: any = true;
-  changeDate() {
-    throw new Error('Method not implemented.');
-  }
-  getMonthlyClassSchedule($event: IMonth, arg1: number) {
-    throw new Error('Method not implemented.');
-  }
-  selectedDate: any;
   config: any = {
     hideInputContainer: true,
     hideOnOutsideClick: false,
     drops: "down",
     showNearMonthDays: false
-  };;
-  weekChange(arg0: number) {
-    throw new Error('Method not implemented.');
-  }
-  currentDayForUpComimgString: any;
-  upcomingProgram: any;
-  currentDayString: any;
+  };
 
-
-  ngOnInit() {
-    this.getAppointment();
-    // this.createAppointment();
+  ngAfterViewInit() {
+    this.picker.showCalendars();
   }
-  async getAppointment() {
-    let today: any = moment();
-    today = today.format('YYYY-MM-DD')
-    let res = await this.userService.getAppointments(1, "2025-08-25").toPromise();
-    console.log(res);
+
+  async ngOnInit() {
+    this.today = moment();
+    this.getAppointment(this.today);
+    this.today = this.today._d;
+  }
+
+  async getAppointment(date: any) {
+    date = date._d.format('YYYY-MM-DD');
+    let res: any = await this.userService.getAppointments(1, date).toPromise();
+    if (res.length > 0) {
+      this.appointmentsData = res;
+    }
+
   }
 
   async createAppointment() {
@@ -85,5 +93,13 @@ export class AppointmentComponent {
     console.log(res);
 
   }
+
+  setNewAppointment(time: any) {
+    console.log(time);
+
+  }
+
+
+
 
 }

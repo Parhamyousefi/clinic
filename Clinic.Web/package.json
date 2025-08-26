@@ -21,7 +21,9 @@
     "bootstrap-v4-rtl": "^4.4.1-1",
     "font-awesome": "4.7",
     "moment": "^2.30.1",
+    "moment-jalaali": "^0.10.4",
     "ng2-date-picker": "^18.0.0",
+    "ngx-jalali-date-picker": "^3.0.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.10"
@@ -31,6 +33,7 @@
     "@angular/cli": "^18.2.20",
     "@angular/compiler-cli": "^18.2.0",
     "@types/jasmine": "~5.1.0",
+    "@types/moment-jalaali": "^0.7.9",
     "jasmine-core": "~5.2.0",
     "karma": "~6.4.0",
     "karma-chrome-launcher": "~3.2.0",

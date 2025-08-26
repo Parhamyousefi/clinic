@@ -1,7 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import moment from 'moment';
-// import * as moment from 'moment-jalaali';
+import moment from 'moment-jalaali';
 /*
  * Raise the value exponentially
  * Takes an exponent argument that defaults to 1.

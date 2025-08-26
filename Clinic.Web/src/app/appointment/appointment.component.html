@@ -1,51 +1,20 @@
 <div class="appContainer">
+    <div class="col-12 text-right">
+        <h4>وقت دهی</h4>
+    </div>
+    <hr>
     <div class="row px-0 d-lg-flex">
         <div class="col-lg-4 col-12 pr-2 my-2">
-            <div class="mb-1 container-carousel">
-                <div class="simple-carousel-container ltr card-style">
-                    <!-- <img class="carts-image" src="../../../../assets/images/board.svg" alt="installment-wallet"> -->
-                    <div class="p-2 d-flex justify-content-between">
-                        <p *ngIf="!upcomingProgram" class="rtl">{{currentDayForUpComimgString}}</p>
-                        <p *ngIf="upcomingProgram" class="rtl">{{upcomingProgram.stringDate}}</p>
-                        <div *ngIf="upcomingProgram">
-                            <h6 class="pointer">اولین حضور شما در تاملند</h6>
-                            <div class="m-0 ml-auto danger-line"></div>
-                        </div>
-                    </div>
-                    <!-- <div class="mt-2">
-                        <div *ngIf="upcomingProgram" class="col-12 mx-0 px-2 w-100">
-                            <h5 class="mb-1">{{upcomingProgram.fldCourseTitle}}</h5>
-                            <h6 class="mb-0">{{upcomingProgram.fldTitle}}</h6>
-                            <div class="d-flex flex-column align-items-end mt-2">
-                                <div class="d-flex rtl text-muted">
-                                    <p class="mb-0 ">{{upcomingProgram.fldShowStartDate | ShamsiUTC}}</p>
-                                    <p class="mb-0 mx-1"> الی </p>
-                                    <p class="mb-0">{{upcomingProgram.fldShowEndDate | ShamsiUTC}}</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div *ngIf="!upcomingProgram" class="col-12 mx-0 px-2 w-100">
-                            <img class="carts-hasData" src="../../../../assets/images/board.svg"
-                                alt="installment-wallet">
-                            <h6 class="mb-0 mt-2 p-3"> برنامه وجود ندارد</h6>
-                        </div>
-                        <div class="bg-box-1" style="background-color: #D2FFDA;"></div>
-                        <div class="bg-box-2" style="background-color: #EEFFEF;"></div>
-                    </div> -->
-                </div>
-            </div>
             <div class="mt-3">
                 <div class="card-style-date">
-                    <div class="mr-2" id="MonthSetDiv">
-                        <!-- <h6 class="mt-2"> ماه نمای کلاس ها</h6> -->
-                        <div class="m-0 ml-auto danger-line"></div>
-                    </div>
                     <div class="test-cal">
                         <div id="datePickerTeacher" class="d-flex justify-content-center mb-2">
-                            <dp-day-calendar *ngIf="showCalander" name='ngModel' dir="rtl" [(ngModel)]="selectedDate"
-                                [config]="config" (onMonthSelect)="getMonthlyClassSchedule($event,2)"
-                                theme="dp-material" (ngModelChange)="changeDate()" required>
-                            </dp-day-calendar>
+                            <!-- <dp-day-calendar *ngIf="showCalander" name='ngModel' dir="rtl" [(ngModel)]="selectedDate"
+                                [config]="config" theme="dp-material" (ngModelChange)="changeDate()" required>
+                            </dp-day-calendar> -->
+                            <dp-date-picker #picker [(ngModel)]="selectedDate" [config]="datePickerConfig"
+                                [mode]="'day'" theme="dp-material" (onChange)="getAppointment(selectedDate)">
+                            </dp-date-picker>
                         </div>
                     </div>
                 </div>
@@ -55,62 +24,39 @@
             <div class="card-style-date p-3">
                 <div class="col-12">
                     <div class="d-lg-flex justify-content-between align-items-center mb-3">
-                        <div class="d-flex align-items-center ">
-                            <img class="arrow-box" src="../../../../assets/images/arrow.svg" alt=""
-                                (click)="weekChange(1)">
-                            <p class="mb-0">هفته قبل</p>
+                        <div class="d-flex align-items-center pointer">
+                            <i class="fa fa-arrow-left mx-1" aria-hidden="true"></i>
+                            <p class="mb-0">روز بعد</p>
                         </div>
                         <div class="text-center">
-                            <h6 class="mb-0">{{currentDayString}}</h6>
+                            <h6 class="mb-0">{{today| JustDate}}</h6>
                         </div>
-                        <div class="d-flex align-items-center ">
-                            <p class="mb-0">هفته بعد</p>
-                            <img class="arrow-box" (click)="weekChange(2)" style="transform: rotate(180deg);"
-                                src="../../../../assets/images/arrow.svg" alt="">
+                        <div class="d-flex align-items-center pointer">
+                            <p class="mb-0">روز قبل</p>
+                            <i class="fa fa-arrow-right mx-1" aria-hidden="true"></i>
                         </div>
                     </div>
                 </div>
-                <table class="table table-bordered table-responsive border-0 text-center">
-                    <thead>
-                        <tr class="tr-sticky">
-                            <th class="table-time border-0 bg-white"></th>
-                            <!-- <th [ngClass]="{'currentDate-box-table': item.currentDate }" *ngFor="let item of days"
-                            class="text-center">
-                            <span [ngClass]=" item.currentDate? 'text-light' : 'text-dark'" class=" font-weight-normal">
-                                {{item.dayName}}
-                            </span>
-                            <br>
-                            <span [ngClass]=" item.currentDate? 'text-light' : 'text-dark'"
-                                class="h6 mt-2 font-weight-bold">{{item.dayNumber}}</span>
-                        </th> -->
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let item of weekDetail , let index=index">
-                            <td class="td-timer">
-                                <!-- {{item.endtTime}} - -->
-                                <span> {{item.startTime}} </span>
-                            </td>
-                            <!-- <td *ngFor="let plan of item?.detail , let index=index"
-                            [ngClass]="{'d-none': item?.detail[index]?.showBox == false ,'currentDate-box-table-td': item?.detail[index][0]?.currentDate == true  }"
-                            [attr.rowspan]="item?.detail[index][0].fldCount || 1" class="text-right p-0 mt-1 pointer">
-                            <div [pTooltip]="item?.detail[index][0].tooltipContent" tooltipPosition="bottom"
-                                *ngFor="let plan of item?.detail[index]" class="table-box"
-                                [ngClass]="{'d-none': !plan.fldTitle , 'div-hashor': !plan.isBefore }">
-                                <div>
-                                    <p class=""> {{plan.fldTitle}} </p>
-                                    <p class="mb-0 mt-2">{{plan.fldShowStartDate}} الی
-                                        {{plan.fldShowEndDate}} </p>
-                                    <div class="d-flex align-items-center">
-                                        <img class="switcher-Image" src="../../../../assets/images/Users.svg" alt="">
-                                        <p class="mb-0"> {{plan.fldSwitcherName}}</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </td> -->
-                        </tr>
-                    </tbody>
-                </table>
+                <div class="row">
+                    <div class="table-scroll col-12">
+                        <table
+                            class="table col-12 table-bordered table-responsive border-0 text-center appointment-grid">
+                            <thead class="d-flex">
+                                <tr class="tr-sticky w-100 d-flex">
+                                    <th class="table-time col-2">ساعت</th>
+                                    <th class="text-center currentDate-box-table col-10">
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="d-flex flex-column">
+                                <tr class="d-flex" *ngFor="let time of hours">
+                                    <td class="col-2">{{time}}</td>
+                                    <td class="col-10" (click)="setNewAppointment(time)"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

@@ -68,20 +68,23 @@ namespace Clinic.Api.Infrastructure.Services
                 var userId = _token.GetUserId();
 
                 var selectedDate = date?.Date ?? DateTime.Today;
+                var nextDay = selectedDate.AddDays(1);
 
                 return await _context.Appointments
-         .Where(u =>
-             u.BusinessId == clinicId &&
-             u.PractitionerId == userId &&
-             u.Start.Date <= selectedDate &&
-             u.End.Date >= selectedDate)
-         .ToListAsync();
+                    .Where(u =>
+                        u.BusinessId == clinicId &&
+                        u.PractitionerId == userId &&
+                        u.Start < nextDay &&     // starts before end of day
+                        u.End >= selectedDate)   // ends after start of day
+                    .ToListAsync();
             }
             catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
         }
+       
+
 
         public async Task<IEnumerable<TreatmentsContext>> GetTreatments(int appointmentId)
         {

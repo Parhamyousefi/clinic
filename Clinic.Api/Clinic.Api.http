@@ -102,7 +102,7 @@ Content-Type: application/json
 }
 
 ### Get appointments with date
-GET {{Clinic_Api_Host}}/api/treatments/getAppointments/1/2025-08-18
+GET {{Clinic_Api_Host}}/api/treatments/getAppointments/1/2025-08-25
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwidXNlcm5hbWUiOiJuaW1hIiwicm9sZSI6IkFkbWluIiwiZXhwIjoxNzU1NDI5OTMwLCJpc3MiOiJDbGluaWMuQXBpIiwiYXVkIjoiQ2xpbmljLkFwaS5Vc2VycyJ9.f4r_G_wCuE1JQi-ZV1T0c0ZrGRQATltfv2laPiZDOjU
 
 ### Get appointments without date (will default inside controller/service)
