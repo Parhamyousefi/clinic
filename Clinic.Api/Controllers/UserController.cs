@@ -84,7 +84,7 @@ public class UserController : ControllerBase
     }
 
     [HttpPost("forgotPassword")]
-    public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordDto dto)
+    public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordDto model)
     {
         var result = await _svc.ForgotPasswordAsync(model);
         return Ok(new { success = result, message = "Password updated successfully" });

@@ -1,4 +1,4 @@
-﻿namespace Clinic.Api.JwtAuth.Helpers
+﻿namespace Clinic.Api.Application.JwtAuth.Helpers
 {
     public class JwtSettings
     {
