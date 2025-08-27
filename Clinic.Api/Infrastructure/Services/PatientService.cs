@@ -96,7 +96,7 @@ namespace Clinic.Api.Infrastructure.Services
             {
                 var userId = _token.GetUserId();
 
-                var patient = _context.PatientPhones.Where(p => p.PatientId == model.PatientId).ToListAsync();
+                var patient = await _context.PatientPhones.Where(p => p.PatientId == model.PatientId).ToListAsync();
 
                 if (patient == null)
                 {

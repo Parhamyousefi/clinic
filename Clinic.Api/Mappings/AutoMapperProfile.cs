@@ -2,6 +2,7 @@
 using Clinic.Api.Application.DTOs;
 using Clinic.Api.Application.DTOs.Appointments;
 using Clinic.Api.Application.DTOs.Invoices;
+using Clinic.Api.Application.DTOs.Main;
 using Clinic.Api.Application.DTOs.Patients;
 using Clinic.Api.Application.DTOs.Questions;
 using Clinic.Api.Application.DTOs.Users;
@@ -23,6 +24,7 @@ namespace Clinic.Api.Mappings
             CreateMap<SavePatientPhoneDto, PatientPhonesContext>().ReverseMap();
             CreateMap<SaveInvoicesDto, InvoicesContext>().ReverseMap();
             CreateMap<SaveInvoiceItemsDto, InvoiceItemsContext>().ReverseMap();
+            CreateMap<SaveReceiptsDto, ReceiptsContext>().ReverseMap();
         }
     }
 }
