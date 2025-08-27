@@ -7,5 +7,6 @@ namespace Clinic.Api.Application.Interfaces
     {
         Task<IEnumerable<QuestionsContext>> GetQuestions();
         Task<string> SaveQuestionValue(SaveQuestionValueDto model);
+        Task<string> DeleteQuestionValue(int id);
     }
 }
