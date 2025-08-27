@@ -27,5 +27,6 @@
         public bool IgnoreDidNotCome { get; set; }
         public int? CreatorId { get; set; }
         public bool ByInvoice { get; set; }
+        public int EditOrNew { get; set; }
     }
 }

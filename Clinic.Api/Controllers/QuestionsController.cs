@@ -32,5 +32,13 @@ namespace Clinic.Api.Controllers
 
             return Ok(result);
         }
+
+        [HttpGet("deleteQuestionValue/{id}")]
+        [Authorize(Roles ="Admin,Doctor")]
+        public async Task<IActionResult> DeleteQuestionValue(int id)
+        {
+            var result = await _questionsService.DeleteQuestionValue(id);
+            return Ok(result);
+        }
     }
 }

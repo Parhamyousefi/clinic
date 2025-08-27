@@ -12,5 +12,6 @@
         public int? CreatorId { get; set; }
         public int? InvoiceItemId { get; set; }
         public DateTime? VisitTime { get; set; }
+        public int EditOrNew { get; set; }
     }
 }
