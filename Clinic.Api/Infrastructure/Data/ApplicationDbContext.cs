@@ -98,8 +98,8 @@ namespace Clinic.Api.Infrastructure.Data
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<DateConvertContext>()
-     .HasNoKey()
-     .ToView(null);
+                 .HasNoKey()
+                 .ToView(null);
         }
     }
 }

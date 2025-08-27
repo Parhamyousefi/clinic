@@ -2,7 +2,7 @@
 {
     public class UserMapper
     {
-        public static string[] MapRole(string roleId)
+        public string[] MapRole(string roleId)
         {
             string[] result = new string[2];
             switch (roleId)
