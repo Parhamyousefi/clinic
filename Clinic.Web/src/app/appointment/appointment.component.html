@@ -12,9 +12,21 @@
                             <!-- <dp-day-calendar *ngIf="showCalander" name='ngModel' dir="rtl" [(ngModel)]="selectedDate"
                                 [config]="config" theme="dp-material" (ngModelChange)="changeDate()" required>
                             </dp-day-calendar> -->
-                            <dp-date-picker #picker [(ngModel)]="selectedDate" [config]="datePickerConfig"
-                                [mode]="'day'" theme="dp-material" (onChange)="getAppointment(selectedDate)">
-                            </dp-date-picker>
+                            <!-- <dp-date-picker #picker [(ngModel)]="selectedDate" [config]="datePickerConfig"
+                                [mode]="'day'" theme="dp-material" (onChange)="changeDate(selectedDate)">
+                            </dp-date-picker> -->
+
+                            <!-- <mat-form-field appearance="outline">
+                                <mat-label>تاریخ</mat-label>
+                                <input matInput [matDatepicker]="picker" placeholder="انتخاب تاریخ" />
+                                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                <mat-datepicker #picker></mat-datepicker>
+                            </mat-form-field> -->
+                            <mat-card class="calendar-card">
+                                <mat-calendar [(selected)]="selectedDate"></mat-calendar>
+                            </mat-card>
+
+
                         </div>
                     </div>
                 </div>
@@ -24,14 +36,14 @@
             <div class="card-style-date p-3">
                 <div class="col-12">
                     <div class="d-lg-flex justify-content-between align-items-center mb-3">
-                        <div class="d-flex align-items-center pointer">
+                        <div class="d-flex align-items-center pointer" (click)="changeDate(1)">
                             <i class="fa fa-arrow-left mx-1" aria-hidden="true"></i>
                             <p class="mb-0">روز بعد</p>
                         </div>
                         <div class="text-center">
-                            <h6 class="mb-0">{{today| JustDate}}</h6>
+                            <h6 class="mb-0">{{timeSheetHeaderDate| JustDate}}</h6>
                         </div>
-                        <div class="d-flex align-items-center pointer">
+                        <div class="d-flex align-items-center pointer" (click)="changeDate(0)">
                             <p class="mb-0">روز قبل</p>
                             <i class="fa fa-arrow-right mx-1" aria-hidden="true"></i>
                         </div>
@@ -51,7 +63,9 @@
                             <tbody class="d-flex flex-column">
                                 <tr class="d-flex" *ngFor="let time of hours">
                                     <td class="col-2">{{time}}</td>
-                                    <td class="col-10" (click)="setNewAppointment(time)"></td>
+                                    <td class="col-10" (click)="setNewAppointment(time)">
+                                        <div class=""></div>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -60,4 +74,19 @@
             </div>
         </div>
     </div>
+
+    <p-dialog header="اختصاص وقت به بیمار" [(visible)]="showNewAppointment" [closable]="true"
+        [ngClass]="{'modalShadow' : showNewAppointment}">
+        <div class="col-12">
+            <div class="col-12 d-flex justify-content-between">
+                <div>نوع وقت</div>
+                <p-dropdown [options]="appointmentTypes" [(ngModel)]="selectedType" optionLabel="name" />
+            </div>
+            <div class="col-12 d-flex justify-content-between">
+                <div>انتخاب بیمار</div>
+                <p-dropdown [options]="pateints" [(ngModel)]="selectedPateint" optionLabel="name" />
+            </div>
+
+        </div>
+    </p-dialog>
 </div>

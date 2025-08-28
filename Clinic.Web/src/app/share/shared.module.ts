@@ -9,6 +9,8 @@ import {
   ShamsiMonthPipe,
   PriceWithoutTaxPipe
 } from './custom.pipe';
+import { MatDatepickerModulePersian } from 'ngx-persian-datepicker';
+
 
 
 @NgModule({
@@ -38,7 +40,7 @@ import {
     ConvertTimeSeconds
   ],
   imports: [
-    CommonModule,
+    CommonModule
   ],
   exports: [
     NumberSplitPipe,
@@ -63,7 +65,7 @@ import {
     ShamsiTimePipe,
     NumberSplitSlashPipe,
     NumberSplitDotPipe,
-    ConvertTimeSeconds,
+    ConvertTimeSeconds
   ]
 })
 export class SharedModule { }

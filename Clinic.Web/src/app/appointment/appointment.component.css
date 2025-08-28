@@ -1,20 +1,47 @@
- ::ng-deep .dp-picker-input {
-     display: none !important;
- }
+.table-scroll {
+    position: relative;
+    width: 100%;
+    z-index: 1;
+    margin: auto;
+    overflow: auto;
+    height: 600px;
+}
 
- ::ng-deep .dp-container {
-     min-width: 320px;
- }
+.appointment-grid {
+    direction: rtl;
+}
 
- .table-scroll {
-     position: relative;
-     width: 100%;
-     z-index: 1;
-     margin: auto;
-     overflow: auto;
-     height: 600px;
- }
+.calendar-card {
+    max-width: 350px;
+    margin: 20px auto;
+    padding: 10px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    font-family: 'Vazir', sans-serif;
+}
 
- .appointment-grid {
-     direction: rtl;
- }
+.mat-calendar {
+    width: 100%;
+}
+
+.mat-calendar-header {
+    background-color: #1976d2;
+    color: white;
+    border-radius: 8px 8px 0 0;
+}
+
+.selected-date {
+    margin-top: 12px;
+    text-align: center;
+    font-weight: bold;
+    color: #1976d2;
+}
+
+::ng-deep .cdk-visually-hidden {
+    font-size: 15px !important;
+    margin: 0 1px;
+}
+
+::ng-deep .mat-calendar-table-header span:nth-child(1) {
+    display: none;
+}
