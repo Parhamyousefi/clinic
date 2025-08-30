@@ -44,7 +44,8 @@ namespace Clinic.Api.Controllers
         [Authorize(Roles ="Admin,Doctor")]
         public async Task<IActionResult> DeleteReceipts(int patientId)
         {
-
+            var result = await _mainService.DeleteReceipt(patientId);
+            return Ok(result);
         }
     }
 }
