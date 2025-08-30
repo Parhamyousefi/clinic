@@ -210,5 +210,23 @@ namespace Clinic.Api.Infrastructure.Services
                 throw new Exception(ex.Message); 
             }
         }
+
+        public async Task<IEnumerable<GetAppointmentTypesDto>> GetAppointmentTypes()
+        {
+            try
+            {
+                var appointmentTypes = await _context.AppointmentTypes.Select(a => new GetAppointmentTypesDto
+                {
+                    Id = a.Id,
+                    Name = a.Name
+                }).ToListAsync();
+
+                return appointmentTypes;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }

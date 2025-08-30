@@ -77,5 +77,14 @@ namespace Clinic.Api.Controllers
             var result = await _treatmentsService.GetTodayAppointments(model);
             return Ok(result);
         }
+
+        [HttpGet("getAppointmentTypes")]
+        [Authorize(Roles = "Admin,Doctor")]
+        public async Task<IActionResult> GetAppointmentTypes() 
+        {
+            var result = await _treatmentsService.GetAppointmentTypes();
+
+            return Ok(result);
+        }
     }
 }
