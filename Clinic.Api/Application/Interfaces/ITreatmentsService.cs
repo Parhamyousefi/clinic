@@ -7,8 +7,12 @@ namespace Clinic.Api.Application.Interfaces
     public interface ITreatmentsService
     {
         Task<int> CreateAppointmentAsync(CreateAppointmentDto model);
+        Task<string> DeleteAppointment(int id);
         Task<IEnumerable<AppointmentsContext>> GetAppointments(int clinicId, DateTime? date);
         Task<IEnumerable<TreatmentsContext>> GetTreatments(int appointmentId);
         Task<string> SaveTreatment(SaveTreatmentsDto model);
+        Task<string> DeleteTreatment(int id);
+        Task<IEnumerable<AppointmentsContext>> GetTodayAppointments(GetTodayAppointmentsDto model);
+        Task<IEnumerable<GetAppointmentTypesDto>> GetAppointmentTypes();
     }
 }

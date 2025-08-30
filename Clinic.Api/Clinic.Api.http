@@ -207,3 +207,37 @@ Content-Type: application/json
   "treatmentId": 1,
   "answerId": null
 }
+
+### Get Today Appointments
+POST {{Clinic_Api_Host}}/api/treatments/getTodayAppointments
+Authorization: Bearer {{jwtToken}}
+Content-Type: application/json
+
+{
+  "date": "2025-08-18T00:00:00",   // today’s date or the one you want to check
+  "arrived": 1,                    // e.g. 1 = arrived, 0 = not arrived
+  "clinic": 2,                     // clinic id
+  "service": null,                 // optional service
+  "from": 9,                       // start hour or range
+  "to": 17                         // end hour or range
+}
+
+### Save Patient Phones
+POST {{Clinic_Api_Host}}/api/patient/savePatientPhone
+Authorization: Bearer 
+Content-Type: application/json
+
+{
+  "patientId": 1,
+  "phoneNoTypeId": 1,
+  "number": "09129561523",
+  "modifierId": 2,
+  "createdOn": "2025-08-18T00:00:00",
+  "lastUpdated": null,
+  "creatorId": 2
+}
+
+### Get Patient Phone
+GET {{Clinic_Api_Host}}/api/patient/getPatientPhone/1
+Authorization: Bearer
+Content-Type: application/json

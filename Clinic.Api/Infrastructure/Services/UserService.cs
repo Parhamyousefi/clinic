@@ -1,4 +1,5 @@
-﻿using Clinic.Api.Application.DTOs.Users;
+﻿using AutoMapper;
+using Clinic.Api.Application.DTOs.Users;
 using Clinic.Api.Application.Interfaces;
 using Clinic.Api.Domain.Entities;
 using Clinic.Api.Infrastructure.Data;
@@ -15,13 +16,26 @@ namespace Clinic.Api.Infrastructure.Services
         private readonly ITokenService _token;
         private readonly ApplicationDbContext _context;
         private readonly IPasswordHasher<UserContext> _passwordHasher;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IMapper _mapper;
+        private readonly UserMapper _userMapper;
 
-        public UserService(IUnitOfWork uow, ITokenService token, ApplicationDbContext context, IPasswordHasher<UserContext> passwordHasher)
+        public UserService(IUnitOfWork uow,
+            ITokenService token, 
+            ApplicationDbContext context, 
+            IPasswordHasher<UserContext> passwordHasher, 
+            IHttpContextAccessor httpContextAccessor,
+            IMapper mapper,
+            UserMapper userMapper
+            )
         {
             _uow = uow;
             _token = token;
             _context = context;
             _passwordHasher = passwordHasher;
+            _httpContextAccessor = httpContextAccessor;
+            _mapper = mapper;
+            _userMapper = userMapper;
         }
 
         public async Task<IEnumerable<UserDto>> GetAllAsync() =>
@@ -64,13 +78,15 @@ namespace Clinic.Api.Infrastructure.Services
                     throw new InvalidModelData(1009, "Invalid username or password.");
 
                 var roleName = await _context.Roles
-      .Where(r => r.Id == user.RoleId)
-      .Select(r => r.Name)
-      .FirstOrDefaultAsync() ?? string.Empty;
+                      .Where(r => r.Id == user.RoleId)
+                      .Select(r => r.Name)
+                      .FirstOrDefaultAsync() ?? string.Empty;
 
                 var token = _token.CreateToken(user, roleName);
-                var roleHandler = UserMapper.MapRole(user.RoleId.ToString());
+                var roleHandler = _userMapper.MapRole(user.RoleId.ToString());
                 string secret = roleHandler[1];
+
+                await SaveLoginHistory(model.Username);
                 return new LoginResponseDto
                 {
                     Token = token,
@@ -209,6 +225,42 @@ namespace Clinic.Api.Infrastructure.Services
             {
                 throw new Exception(ex.Message);
             }
+        }
+
+        public async Task SaveLoginHistory (string? Username)
+        {
+            try
+            {
+                var ip = GetClientIp();
+                var loginHistoryModel = new SaveLoginHistoryDto
+                {
+                    UserName = Username,
+                    Ip = ip,
+                    LoginDateTime = DateTime.UtcNow,
+                    HostName = ip
+                };
+
+                var history = _mapper.Map<LoginHistoriesContext>(loginHistoryModel);
+                _context.LoginHistories.Add(history);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public string GetClientIp()
+        {
+            var context = _httpContextAccessor.HttpContext;
+            if (context == null)
+                return "Unknown";
+
+            var forwardedIp = context.Request.Headers["MC-Real-IP"].FirstOrDefault();
+            if (!string.IsNullOrEmpty(forwardedIp))
+                return forwardedIp;
+
+            return context.Connection.RemoteIpAddress?.ToString() ?? "Unknown";
         }
     }
 }

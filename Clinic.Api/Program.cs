@@ -1,8 +1,8 @@
 using Clinic.Api.Application.Interfaces;
+using Clinic.Api.Application.JwtAuth.Helpers;
 using Clinic.Api.Domain.Entities;
 using Clinic.Api.Infrastructure.Data;
 using Clinic.Api.Infrastructure.Services;
-using Clinic.Api.JwtAuth.Helpers;
 using Clinic.Api.Mappings;
 using Clinic.Api.Middlwares;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -37,6 +37,8 @@ builder.Services.AddScoped<IReadTokenClaims, ReadTokenClaims>();
 builder.Services.AddScoped<IPatientService, PatientService>();
 builder.Services.AddScoped<IQuestionsService, QuestionsService>();
 builder.Services.AddScoped<IMainService, MainService>();
+builder.Services.AddScoped<IInvoicesService, InvoicesService>();
+builder.Services.AddHttpContextAccessor();
 
 // Auth & JWT
 var jwt = builder.Configuration.GetSection("JwtSettings").Get<JwtSettings>();

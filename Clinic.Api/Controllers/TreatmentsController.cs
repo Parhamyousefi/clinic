@@ -28,6 +28,14 @@ namespace Clinic.Api.Controllers
             return Ok(new { success = id, message = "Appointment Created Successfully" });
         }
 
+        [HttpGet("deleteAppointment/{id}")]
+        [Authorize(Roles ="Admin,Doctor")]
+        public async Task<IActionResult> DeleteAppointment(int id)
+        {
+            var result = await _treatmentsService.DeleteAppointment(id);
+            return Ok(result);
+        }
+
         [HttpGet("getAppointments/{clinicId}/{date?}")]
         [Authorize(Roles = "Admin,Doctor")]
         public async Task<IActionResult> GetAppointments(int clinicId, DateTime? date)
@@ -50,6 +58,31 @@ namespace Clinic.Api.Controllers
         public async Task<IActionResult> SaveTreatment(SaveTreatmentsDto model)
         {
             var result = await _treatmentsService.SaveTreatment(model);
+
+            return Ok(result);
+        }
+
+        [HttpGet("deleteTreatment/{id}")]
+        [Authorize(Roles ="Admin,Doctor")]
+        public async Task<IActionResult> DeleteTreatment(int id)
+        {
+            var result = await _treatmentsService.DeleteTreatment(id);
+            return Ok(result);
+        }
+
+        [HttpPost("getTodayAppointments")]
+        [Authorize(Roles ="Admin,Doctor")]
+        public async Task<IActionResult> GetTodayAppointments(GetTodayAppointmentsDto model)
+        {
+            var result = await _treatmentsService.GetTodayAppointments(model);
+            return Ok(result);
+        }
+
+        [HttpGet("getAppointmentTypes")]
+        [Authorize(Roles = "Admin,Doctor")]
+        public async Task<IActionResult> GetAppointmentTypes() 
+        {
+            var result = await _treatmentsService.GetAppointmentTypes();
 
             return Ok(result);
         }

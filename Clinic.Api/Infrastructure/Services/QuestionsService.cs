@@ -35,10 +35,45 @@ namespace Clinic.Api.Infrastructure.Services
         {
             try
             {
-                var questionValue = _mapper.Map<QuestionValuesContext>(model);
-                _context.QuestionValues.Add(questionValue);
+                if (model.EditOrNew == -1)
+                {
+                    var questionValue = _mapper.Map<QuestionValuesContext>(model);
+                    _context.QuestionValues.Add(questionValue);
+                    await _context.SaveChangesAsync();
+                    return "Successfully Saved QuestionValue";
+                }
+                else
+                {
+                    var existingQuestionValue = await _context.QuestionValues.FirstOrDefaultAsync(q => q.Id == model.EditOrNew);
+
+                    if (existingQuestionValue == null)
+                    {
+                        throw new Exception("Question Value Not Found");
+                    }
+
+                    _mapper.Map(model, existingQuestionValue);
+                    _context.QuestionValues.Update(existingQuestionValue);
+                    await _context.SaveChangesAsync();
+                    return "Question Value Update Successfully";
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<string> DeleteQuestionValue(int id)
+        {
+            try
+            {
+                var questionValue = await _context.QuestionValues.FindAsync(id);
+                if (questionValue == null)
+                    throw new Exception("Question Value Not Found");
+
+                _context.QuestionValues.Remove(questionValue);
                 await _context.SaveChangesAsync();
-                return "Successfully Saved QuestionValue";
+                return "Question Value Deleted Successfully";
             }
             catch (Exception ex)
             {
