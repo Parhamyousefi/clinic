@@ -18,15 +18,13 @@ namespace Clinic.Api.Infrastructure.Services
         private readonly IPasswordHasher<UserContext> _passwordHasher;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IMapper _mapper;
-        private readonly UserMapper _userMapper;
 
         public UserService(IUnitOfWork uow,
             ITokenService token, 
             ApplicationDbContext context, 
             IPasswordHasher<UserContext> passwordHasher, 
             IHttpContextAccessor httpContextAccessor,
-            IMapper mapper,
-            UserMapper userMapper
+            IMapper mapper
             )
         {
             _uow = uow;
@@ -35,7 +33,6 @@ namespace Clinic.Api.Infrastructure.Services
             _passwordHasher = passwordHasher;
             _httpContextAccessor = httpContextAccessor;
             _mapper = mapper;
-            _userMapper = userMapper;
         }
 
         public async Task<IEnumerable<UserDto>> GetAllAsync() =>
@@ -83,7 +80,7 @@ namespace Clinic.Api.Infrastructure.Services
                       .FirstOrDefaultAsync() ?? string.Empty;
 
                 var token = _token.CreateToken(user, roleName);
-                var roleHandler = _userMapper.MapRole(user.RoleId.ToString());
+                var roleHandler = UserMapper.MapRole(user.RoleId.ToString());
                 string secret = roleHandler[1];
 
                 await SaveLoginHistory(model.Username);

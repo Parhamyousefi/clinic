@@ -46,9 +46,23 @@
     display: none;
 }
 
-
 .new-appointment-modal {
-    direction: rtl;
     min-width: 500px;
     min-height: 200px;
+}
+
+::ng-deep #new-appointment-modal #pn_id_1_header {
+    padding: 15px;
+}
+
+::ng-deep .mat-calendar-body-cell-content {
+    border: none !important;
+}
+
+::ng-deep .mat-calendar-body-cell .mat-calendar-body-active {
+    background-color: red !important;
+    outline: none !important;
+    border-radius: 100%;
+    border: 1px solid #00c4b4;
+    color: red !important;
 }

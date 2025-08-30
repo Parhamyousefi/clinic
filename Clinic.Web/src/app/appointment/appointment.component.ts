@@ -43,6 +43,8 @@ export class AppointmentComponent {
   appointmentTypes: any = [];
   selectedType: any;
   patientsList: any;
+  appointmentStartTime: any;
+  newAppointmentModel: any = [];
   get selectedDate(): Date | null {
     return this._selectedDate;
   }
@@ -96,14 +98,14 @@ export class AppointmentComponent {
     let model = {
       "businessId": 0,
       "practitionerId": 0,
-      "patientId": 0,
-      "appointmentTypeId": 0,
-      "start": "2025-08-24T13:56:59.006Z",
-      "end": "2025-08-25T13:56:59.006Z",
+      "patientId": this.newAppointmentModel.selectedPateint.code,
+      "appointmentTypeId": this.newAppointmentModel.selectedType.code,
+      "start": this.newAppointmentModel.appointmentStartTime,
+      "end": this.newAppointmentModel.appointmentEndTime,
       "repeatId": 0,
       "repeatEvery": 0,
       "endsAfter": 0,
-      "note": "string",
+      "note": this.newAppointmentModel.description,
       "arrived": 0,
       "waitListId": 0,
       "cancelled": false,
@@ -127,10 +129,11 @@ export class AppointmentComponent {
   }
 
   setNewAppointment(time: any) {
+    this.newAppointmentModel.appointmentStartTime = this.combineDateAndTime(this.timeSheetHeaderDate, time);
+    this.newAppointmentModel.appointmentEndTime = this.combineDateAndTime(this.timeSheetHeaderDate, this.getEndTime(time))
     this.showNewAppointment = true;
     this.getPatients();
     this.getAppointmentTypes();
-    console.log(time);
   }
 
 
@@ -151,10 +154,37 @@ export class AppointmentComponent {
   async getAppointmentTypes() {
     try {
       let res: any = await this.userService.getAppointmentTypes().toPromise();
+      if (res.length > 0) {
+        this.appointmentTypes = res;
+        this.appointmentTypes.forEach((type: any) => {
+          type.code = type.id;
+        });
+      }
+
     }
     catch { }
   }
 
+
+  combineDateAndTime(dateInput: any, timeInput: any): string {
+    const date = new Date(dateInput);
+    const timeString = String(timeInput);
+    const [hours, minutes] = timeString.split(":").map(Number);
+    date.setHours(hours, minutes, 0, 0);
+    return date.toISOString();
+  }
+
+
+
+  getEndTime(startTime: string, durationMinutes: number = 30) {
+    const [hours, minutes] = startTime.split(":").map(Number);
+    const date = new Date();
+    date.setHours(hours, minutes, 0, 0);
+    date.setMinutes(date.getMinutes() + durationMinutes);
+    const endHours = String(date.getHours()).padStart(2, "0");
+    const endMinutes = String(date.getMinutes()).padStart(2, "0");
+    return `${endHours}:${endMinutes}`;
+  }
 
 
 

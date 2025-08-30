@@ -38,7 +38,6 @@ builder.Services.AddScoped<IPatientService, PatientService>();
 builder.Services.AddScoped<IQuestionsService, QuestionsService>();
 builder.Services.AddScoped<IMainService, MainService>();
 builder.Services.AddScoped<IInvoicesService, InvoicesService>();
-builder.Services.AddHttpContextAccessor();
 
 // Auth & JWT
 var jwt = builder.Configuration.GetSection("JwtSettings").Get<JwtSettings>();
