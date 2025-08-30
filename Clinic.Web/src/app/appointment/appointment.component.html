@@ -25,8 +25,6 @@
                             <mat-card class="calendar-card">
                                 <mat-calendar [(selected)]="selectedDate"></mat-calendar>
                             </mat-card>
-
-
                         </div>
                     </div>
                 </div>
@@ -75,16 +73,17 @@
         </div>
     </div>
 
-    <p-dialog header="اختصاص وقت به بیمار" [(visible)]="showNewAppointment" [closable]="true"
-        [ngClass]="{'modalShadow' : showNewAppointment}">
-        <div class="col-12">
-            <div class="col-12 d-flex justify-content-between">
+    <p-dialog id="new-appointment-modal" header="اختصاص وقت به بیمار" [(visible)]="showNewAppointment" [closable]="true"
+        [ngClass]="{'modalShadow' : showNewAppointment}" class="p-2">
+        <div class="col-12 new-appointment-modal">
+            <div class="col-12 d-flex justify-content-between mt-3">
                 <div>نوع وقت</div>
                 <p-dropdown [options]="appointmentTypes" [(ngModel)]="selectedType" optionLabel="name" />
             </div>
-            <div class="col-12 d-flex justify-content-between">
+            <div class="col-12 d-flex justify-content-between mt-3">
                 <div>انتخاب بیمار</div>
-                <p-dropdown [options]="pateints" [(ngModel)]="selectedPateint" optionLabel="name" />
+                <p-dropdown [options]="patientsList" [(ngModel)]="selectedPateint" optionLabel="name"
+                    placeholder="بیمار مورد نظر را انتخاب کنید" />
             </div>
 
         </div>

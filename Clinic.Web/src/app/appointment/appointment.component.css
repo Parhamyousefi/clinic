@@ -45,3 +45,10 @@
 ::ng-deep .mat-calendar-table-header span:nth-child(1) {
     display: none;
 }
+
+
+.new-appointment-modal {
+    direction: rtl;
+    min-width: 500px;
+    min-height: 200px;
+}

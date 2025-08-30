@@ -42,6 +42,7 @@ export class AppointmentComponent {
   selectedPateint: any;
   appointmentTypes: any = [];
   selectedType: any;
+  patientsList: any;
   get selectedDate(): Date | null {
     return this._selectedDate;
   }
@@ -76,7 +77,6 @@ export class AppointmentComponent {
     } else if (status == 2) {
       formattedDate = formattedDate.subtract(1, 'day');
     }
-    this.getAppointment(formattedDate);
     console.log(this.timeSheetHeaderDate);
 
   }
@@ -128,7 +128,31 @@ export class AppointmentComponent {
 
   setNewAppointment(time: any) {
     this.showNewAppointment = true;
+    this.getPatients();
+    this.getAppointmentTypes();
     console.log(time);
+  }
+
+
+  async getPatients() {
+    try {
+      let res: any = await this.userService.getPatients().toPromise();
+      if (res.length > 0) {
+        this.patientsList = res;
+        this.patientsList.forEach((patient: any) => {
+          patient.name = patient.firstName + ' ' + patient.lastName;
+          patient.code = patient.patientCode;
+        });
+      }
+    }
+    catch { }
+  }
+
+  async getAppointmentTypes() {
+    try {
+      let res: any = await this.userService.getAppointmentTypes().toPromise();
+    }
+    catch { }
   }
 
 
