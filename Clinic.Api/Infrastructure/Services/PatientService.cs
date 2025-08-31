@@ -24,12 +24,13 @@ namespace Clinic.Api.Infrastructure.Services
         {
             try
             {
-                if (model.EditOrNew == -1)
-                {
-                    var userId = _token.GetUserId();
+                var userId = _token.GetUserId();
 
+                if (model.EditOrNew == -1)
+                {   
                     var patient = _mapper.Map<PatientsContext>(model);
                     patient.CreatorId = userId;
+                    patient.CreatedOn = DateTime.UtcNow;
                     _context.Patients.Add(patient);
                     await _context.SaveChangesAsync();
 
@@ -45,6 +46,8 @@ namespace Clinic.Api.Infrastructure.Services
                     }
 
                     _mapper.Map(model, existingPatient);
+                    existingPatient.CreatorId = userId;
+                    existingPatient.LastUpdated = DateTime.UtcNow;
                     _context.Patients.Update(existingPatient);
                     await _context.SaveChangesAsync();
                     return "Patient Updated Successfully";

@@ -26,5 +26,20 @@ namespace Clinic.Api.Infrastructure.Services
 
             return int.Parse(userIdClaim.Value);
         }
+
+        public string GetUserRole()
+        {
+            var user = _httpContextAccessor.HttpContext?.User;
+
+            if (user == null)
+                throw new UnAuthorizedException(1004, "User Is Not Authenticated");
+
+            var userRoleClaim = user.FindFirst("role");
+
+            if (userRoleClaim == null)
+                throw new ClaimNotFound(1005, "UserRole Claim Not Found In Token");
+
+            return userRoleClaim.Value;
+        }
     }
 }

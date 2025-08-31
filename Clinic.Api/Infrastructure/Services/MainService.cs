@@ -46,6 +46,7 @@ namespace Clinic.Api.Infrastructure.Services
                 {
                     var mappReceipt = _mapper.Map<ReceiptsContext>(model);
                     mappReceipt.CreatorId = userId;
+                    mappReceipt.CreatedOn = DateTime.UtcNow;
                     _context.Receipts.Add(mappReceipt);
                     await _context.SaveChangesAsync();
 
@@ -53,6 +54,8 @@ namespace Clinic.Api.Infrastructure.Services
                 }
 
                 _mapper.Map(model, receipt);
+                receipt.CreatorId = userId;
+                receipt.LastUpdated = DateTime.UtcNow;
                 _context.Receipts.Update(receipt);
                 await _context.SaveChangesAsync();
                 return "Receipt Updated Successfully";
@@ -93,6 +96,23 @@ namespace Clinic.Api.Infrastructure.Services
                 _context.Receipts.Remove(receipt);
                 await _context.SaveChangesAsync();
                 return "Receipt Deleted Successfully";
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<IEnumerable<BusinessesContext>> GetClinics()
+        {
+            try
+            {
+                var result = await _context.Businesses.Select(b => new BusinessesContext
+                {
+                    Id = b.Id,
+                    Name = b.Name
+                }).ToListAsync();
+                return result;
             }
             catch (Exception ex)
             {

@@ -26,6 +26,11 @@ namespace Clinic.Api.Infrastructure.Services
         {
             try
             {
+                var userRole = _token.GetUserRole();
+                if (userRole == "Doctor")
+                {
+                    model.PractitionerId = _token.GetUserId();
+                }
                 var userId = _token.GetUserId();
 
                 if (model.EditOrNew == -1)
@@ -139,9 +144,13 @@ namespace Clinic.Api.Infrastructure.Services
         {
             try
             {
+                var userId = _token.GetUserId();
+
                 if (model.EditOrNew == -1)
                 {
                     var treatment = _mapper.Map<TreatmentsContext>(model);
+                    treatment.CreatorId = userId;
+                    treatment.CreatedOn = DateTime.UtcNow;
                     _context.Treatments.Add(treatment);
                     await _context.SaveChangesAsync();
                     return "Successfully Saved Treatment";
@@ -156,6 +165,8 @@ namespace Clinic.Api.Infrastructure.Services
                     }
 
                     _mapper.Map(model, existingTreatment);
+                    existingTreatment.CreatorId = userId;
+                    existingTreatment.CreatedOn = DateTime.UtcNow;
                     _context.Treatments.Update(existingTreatment);
                     await _context.SaveChangesAsync();
                     return "Treatment Updated Successfully";
