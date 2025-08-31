@@ -7,7 +7,8 @@ import {
   NumberSplitSlashPipe,
   NumberSplitDotPipe,
   ShamsiMonthPipe,
-  PriceWithoutTaxPipe
+  PriceWithoutTaxPipe,
+  JustDateZone
 } from './custom.pipe';
 import { MatDatepickerModulePersian } from 'ngx-persian-datepicker';
 
@@ -37,7 +38,8 @@ import { MatDatepickerModulePersian } from 'ngx-persian-datepicker';
     ShamsiTimePipe,
     NumberSplitDotPipe,
     NumberSplitSlashPipe,
-    ConvertTimeSeconds
+    ConvertTimeSeconds,
+    JustDateZone
   ],
   imports: [
     CommonModule
@@ -65,7 +67,8 @@ import { MatDatepickerModulePersian } from 'ngx-persian-datepicker';
     ShamsiTimePipe,
     NumberSplitSlashPipe,
     NumberSplitDotPipe,
-    ConvertTimeSeconds
+    ConvertTimeSeconds,
+    JustDateZone
   ]
 })
 export class SharedModule { }

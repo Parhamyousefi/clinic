@@ -12,12 +12,18 @@
 }
 
 .calendar-card {
-    max-width: 350px;
-    margin: 20px auto;
+    width: 100% !important;
     padding: 10px;
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     font-family: 'Vazir', sans-serif;
+}
+
+.card-style-date {
+    padding: 10px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+
 }
 
 .mat-calendar {
@@ -65,4 +71,27 @@
     border-radius: 100%;
     border: 1px solid #00c4b4;
     color: red !important;
+}
+
+::ng-deep .mat-calendar-body-cell .mat-calendar-body-active:focus {
+    outline: none !important;
+}
+
+::ng-deep .mat-calendar-body-cell-container button:focus {
+    outline: none;
+    border-radius: 100%;
+    background-color: #84a3a1;
+    color: #FFFFFF;
+}
+
+::ng-deep .mat-calendar-body-cell:focus .mat-focus-indicator::before {
+    content: none !important;
+}
+
+::ng-deep .cdk-visually-hidden {
+    display: none !important;
+}
+
+::ng-deep .mat-calendar-body-label {
+    display: none;
 }

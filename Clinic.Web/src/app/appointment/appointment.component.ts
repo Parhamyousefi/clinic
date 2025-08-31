@@ -45,13 +45,14 @@ export class AppointmentComponent {
   patientsList: any;
   appointmentStartTime: any;
   newAppointmentModel: any = [];
+  appointmentDate: any;
   get selectedDate(): Date | null {
     return this._selectedDate;
   }
 
   set selectedDate(value: Date | null) {
     this._selectedDate = value;
-    this.changeDate(2);
+    this.changeDate(0);
   }
 
   constructor(
@@ -70,18 +71,63 @@ export class AppointmentComponent {
     this.selectedDate = this.today;
     this.getAppointment(this.today);
     this.today = this.today._d;
+    console.log(this.selectedDate);
+
   }
 
-  changeDate(status: any) {
-    let formattedDate = moment(this.selectedDate);
-    if (status == 1) {
-      formattedDate = formattedDate.add(1, 'day');
-    } else if (status == 2) {
-      formattedDate = formattedDate.subtract(1, 'day');
+  // changeDate(status: any) {
+  //   let formattedDate: any = moment(this.selectedDate);
+  //   if (status == 1) {
+  //     formattedDate = formattedDate.add(1, 'day');
+  //   } else if (status == 2) {
+  //     formattedDate = formattedDate.subtract(1, 'day');
+  //   }
+  //   this.timeSheetHeaderDate = formattedDate._d;
+  // }
+  // status :  0  => mostaghim taghir bede
+  // status :  1 => + day
+  // status : -1 => - day 
+  // changeDate(status: any) {
+  //   let formattedDate: any = moment(this.selectedDate);
+  //   switch (status) {
+  //     case 1:
+  //       this.selectedDate = formattedDate.add(1, 'day');
+  //       break;
+  //     case 0:
+  //       this.appointmentDate = formattedDate._d;
+  //       break;
+  //     case -1:
+  //       this.appointmentDate = formattedDate.subtract(1, 'day');
+  //       break;
+  //     default:
+  //       break;
+  //   }
+
+  // }
+
+  changeDate(status: number) {
+    let formattedDate: any = '';
+    switch (status) {
+      case 1:
+        formattedDate = moment(this.appointmentDate);
+        this.appointmentDate = formattedDate.clone().add(1, 'day').toDate();
+        break;
+
+      case 0:
+        formattedDate = moment(this.selectedDate);
+        this.appointmentDate = formattedDate.clone().toDate();
+        break;
+
+      case -1:
+        formattedDate = moment(this.appointmentDate);
+        this.appointmentDate = formattedDate.clone().subtract(1, 'day').toDate();
+        break;
+
+      default:
+        break;
     }
-    console.log(this.timeSheetHeaderDate);
-
   }
+
 
   async getAppointment(date: any) {
     try {
@@ -129,8 +175,8 @@ export class AppointmentComponent {
   }
 
   setNewAppointment(time: any) {
-    this.newAppointmentModel.appointmentStartTime = this.combineDateAndTime(this.timeSheetHeaderDate, time);
-    this.newAppointmentModel.appointmentEndTime = this.combineDateAndTime(this.timeSheetHeaderDate, this.getEndTime(time))
+    this.newAppointmentModel.appointmentStartTime = this.combineDateAndTime(this.appointmentDate, time);
+    this.newAppointmentModel.appointmentEndTime = this.combineDateAndTime(this.appointmentDate, this.getEndTime(time))
     this.showNewAppointment = true;
     this.getPatients();
     this.getAppointmentTypes();
@@ -176,7 +222,7 @@ export class AppointmentComponent {
 
 
 
-  getEndTime(startTime: string, durationMinutes: number = 30) {
+  getEndTime(startTime: string, durationMinutes: number = 15) {
     const [hours, minutes] = startTime.split(":").map(Number);
     const date = new Date();
     date.setHours(hours, minutes, 0, 0);
@@ -185,7 +231,5 @@ export class AppointmentComponent {
     const endMinutes = String(date.getMinutes()).padStart(2, "0");
     return `${endHours}:${endMinutes}`;
   }
-
-
 
 }
