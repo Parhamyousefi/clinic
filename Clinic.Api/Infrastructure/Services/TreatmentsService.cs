@@ -26,10 +26,10 @@ namespace Clinic.Api.Infrastructure.Services
         {
             try
             {
+                var userId = _token.GetUserId();
+
                 if (model.EditOrNew == -1)
                 {
-                    var userId = _token.GetUserId();
-
                     if (model.Start >= model.End)
                         throw new ValidationException(1001, "Start date must be earlier than End date.");
 
@@ -49,9 +49,10 @@ namespace Clinic.Api.Infrastructure.Services
                     if (hasOverlap)
                         throw new ConflictException(1002, "Patient already has an appointment in this business during this time.");
 
-
+                    model.ByInvoice = true;
                     var appointment = _mapper.Map<AppointmentsContext>(model);
                     appointment.CreatorId = userId;
+                    appointment.CreatedOn = DateTime.UtcNow;
                     _context.Appointments.Add(appointment);
                     await _context.SaveChangesAsync();
 
@@ -67,6 +68,8 @@ namespace Clinic.Api.Infrastructure.Services
                     }
 
                     _mapper.Map(model, existingAppointment);
+                    existingAppointment.CreatorId = userId;
+                    existingAppointment.LastUpdated = DateTime.UtcNow;
                     _context.Appointments.Update(existingAppointment);
                     await _context.SaveChangesAsync();
                     return existingAppointment.Id;
