@@ -26,11 +26,11 @@ public class UserController : ControllerBase
         }
     }
 
-    [Authorize]
+    [Authorize(Roles ="Admin")]
     [HttpGet("getAllUsers")] 
     public async Task<IActionResult> GetAll() => Ok(await _svc.GetAllAsync());
 
-    [Authorize]
+    [Authorize(Roles ="Admin")]
     [HttpGet("getUserById/{id}")]
     public async Task<IActionResult> GetById(int id)
     {
