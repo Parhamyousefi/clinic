@@ -61,8 +61,16 @@
                             <tbody class="d-flex flex-column">
                                 <tr class="d-flex" *ngFor="let time of hours">
                                     <td class="col-2">{{time}}</td>
-                                    <td class="col-10" (click)="setNewAppointment(time)">
-                                        <div class=""></div>
+                                    <td class="col-10 p-0 d-flex appointments-container"
+                                        (click)="setNewAppointment(time)">
+                                        <div *ngFor="let appointment of timeSheetData[time]"
+                                            class="appointment text-right p-2 pointer">
+                                            <div class="mt-2">نوع وقت : {{appointment.type}}</div>
+                                            <div class="mt-2">نام بیمار : {{appointment.patient}}</div>
+                                            <div class="mt-2">توضیحات : {{appointment.note}}</div>
+                                            <div class="mt-2">کنسل <span *ngIf="appointment.cancelled">شده</span><span
+                                                    *ngIf="!appointment.cancelled">نشده</span></div>
+                                        </div>
                                     </td>
                                 </tr>
                             </tbody>
@@ -107,7 +115,7 @@
                 <p class="text-right">یادداشت</p>
                 <div>
                     <textarea name="description" id="appointment-description" class="col-12"
-                        [(ngModel)]="newAppointmentModel.description"></textarea>
+                        [(ngModel)]="newAppointmentModel.note"></textarea>
                 </div>
             </div>
             <div class="col-12 d-flex justify-content-between my-3">

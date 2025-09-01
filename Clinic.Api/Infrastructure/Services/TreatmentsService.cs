@@ -41,9 +41,9 @@ namespace Clinic.Api.Infrastructure.Services
                      a.PatientId == model.PatientId &&
                      a.BusinessId == model.BusinessId &&
                      (
-                         (model.Start >= a.Start && model.Start < a.End) ||
-                         (model.End > a.Start && model.End <= a.End) ||
-                         (model.Start <= a.Start && model.End >= a.End)
+                         (model.Start.Hour >= a.Start.Hour && model.Start.Hour < a.End.Hour) ||
+                         (model.End.Hour > a.Start.Hour && model.End.Hour <= a.End.Hour) ||
+                         (model.Start.Hour <= a.Start.Hour && model.End.Hour >= a.End.Hour)
                      ));
 
                     if (hasOverlap)

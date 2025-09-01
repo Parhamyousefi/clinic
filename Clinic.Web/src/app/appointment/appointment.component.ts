@@ -9,7 +9,6 @@ import { MatCalendar, MatCalendarBody } from '@angular/material/datepicker';
 import moment from 'moment-jalaali';
 import { DialogModule } from 'primeng/dialog';
 import { DropdownModule } from 'primeng/dropdown';
-
 @Component({
   selector: 'app-appointment',
   standalone: true,
@@ -22,7 +21,6 @@ export class AppointmentComponent {
 
   appointmentsData: any = [];
   today: any;
-  // selectedDate: any;
 
   datePickerConfig = {
     locale: 'fa',
@@ -46,6 +44,8 @@ export class AppointmentComponent {
   appointmentStartTime: any;
   newAppointmentModel: any = [];
   appointmentDate: any;
+  clinicId: any;
+  timeSheetData: any = [];
   get selectedDate(): Date | null {
     return this._selectedDate;
   }
@@ -56,7 +56,7 @@ export class AppointmentComponent {
   }
 
   constructor(
-    private userService: UserService
+    private userService: UserService,
   ) { }
 
   config: any = {
@@ -69,7 +69,9 @@ export class AppointmentComponent {
   async ngOnInit() {
     this.today = moment();
     this.selectedDate = this.today;
-    this.getAppointment(this.today);
+    await this.getPatients();
+    await this.getAppointmentTypes();
+    await this.getAppointment(this.today);
     this.today = this.today._d;
     console.log(this.selectedDate);
 
@@ -111,16 +113,19 @@ export class AppointmentComponent {
       case 1:
         formattedDate = moment(this.appointmentDate);
         this.appointmentDate = formattedDate.clone().add(1, 'day').toDate();
+        this.getAppointment(this.appointmentDate);
         break;
 
       case 0:
         formattedDate = moment(this.selectedDate);
         this.appointmentDate = formattedDate.clone().toDate();
+        this.getAppointment(this.appointmentDate);
         break;
 
       case -1:
         formattedDate = moment(this.appointmentDate);
         this.appointmentDate = formattedDate.clone().subtract(1, 'day').toDate();
+        this.getAppointment(this.appointmentDate);
         break;
 
       default:
@@ -130,11 +135,24 @@ export class AppointmentComponent {
 
 
   async getAppointment(date: any) {
+    this.hours.forEach(hour => this.timeSheetData[hour] = []);
     try {
-      let formattedDate = date.format('YYYY-MM-DD');
+      let formattedDate = moment(date).format('YYYY-MM-DD');
       let res: any = await this.userService.getAppointments(1, formattedDate).toPromise();
       this.appointmentsData = res;
+      this.appointmentsData.forEach((appointment: any) => {
+        appointment.type = this.appointmentTypes.filter((type: any) => type.id == appointment.appointmentTypeId)[0].name;
+        appointment.patient = this.patientsList.filter((patient: any) => patient.patientCode == appointment.patientId);
+        appointment.showStartTime = moment(appointment.start).format('HH:mm');
+        let startIndex = this.hours.indexOf(appointment.showStartTime);
+        if (startIndex !== -1) {
+          this.timeSheetData[this.hours[startIndex]].push(appointment);
+        }
+      });
+      console.log(this.timeSheetData);
+
       this.timeSheetHeaderDate = date._d;
+
     }
     catch { }
 
@@ -142,31 +160,32 @@ export class AppointmentComponent {
 
   async createAppointment() {
     let model = {
-      "businessId": 0,
-      "practitionerId": 0,
+      "businessId": 1,
+      "practitionerId": null,
       "patientId": this.newAppointmentModel.selectedPateint.code,
       "appointmentTypeId": this.newAppointmentModel.selectedType.code,
       "start": this.newAppointmentModel.appointmentStartTime,
       "end": this.newAppointmentModel.appointmentEndTime,
-      "repeatId": 0,
-      "repeatEvery": 0,
-      "endsAfter": 0,
-      "note": this.newAppointmentModel.description,
-      "arrived": 0,
-      "waitListId": 0,
-      "cancelled": false,
-      "appointmentCancelTypeId": 0,
-      "cancelNotes": "string",
-      "isUnavailbleBlock": true,
-      "modifierId": 0,
-      "createdOn": "2025-08-23T13:56:59.006Z",
-      "lastUpdated": "2025-08-23T13:56:59.006Z",
-      "isAllDay": true,
-      "sendReminder": true,
-      "appointmentSMS": "2025-08-23T13:56:59.006Z",
-      "ignoreDidNotCome": true,
-      "creatorId": 0,
-      "byInvoice": true
+      "repeatId": null,
+      "repeatEvery": null,
+      "endsAfter": null,
+      "note": this.newAppointmentModel.note,
+      "arrived": null,
+      "waitListId": null,
+      "cancelled": null,
+      "appointmentCancelTypeId": null,
+      "cancelNotes": null,
+      "isUnavailbleBlock": null,
+      "modifierId": null,
+      "createdOn": null,
+      "lastUpdated": null,
+      "isAllDay": null,
+      "sendReminder": null,
+      "appointmentSMS": null,
+      "ignoreDidNotCome": null,
+      "creatorId": null,
+      "byInvoice": null,
+      "editOrNew": -1
     }
 
     let res = await this.userService.createAppointment(model).toPromise();
@@ -178,8 +197,6 @@ export class AppointmentComponent {
     this.newAppointmentModel.appointmentStartTime = this.combineDateAndTime(this.appointmentDate, time);
     this.newAppointmentModel.appointmentEndTime = this.combineDateAndTime(this.appointmentDate, this.getEndTime(time))
     this.showNewAppointment = true;
-    this.getPatients();
-    this.getAppointmentTypes();
   }
 
 

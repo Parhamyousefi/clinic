@@ -1,15 +1,22 @@
-/* You can add global styles to this file, and also import other style files */
+@font-face {
+    font-family: "iran-sans";
+    src: url("assets/fonts/IRANSans.eot") format("eot"),
+        url("assets/fonts/IRANSans.ttf") format("truetype"),
+        url("assets/fonts/IRANSans.woff") format("woff"),
+        url("assets/fonts/IRANSans.woff2") format("woff2");
+    font-style: normal;
+    font-weight: normal;
+}
 
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    /* direction: rtl; */
 }
 
-/* .body {
-    direction: rtl;
-} */
+body {
+    font-family: "iran-sans" !important;
+}
 
 .appContainer {
     width: calc(100% - 270px);
