@@ -55,5 +55,28 @@ namespace Clinic.Api.Controllers
             var result = await _mainService.GetClinics();
             return Ok(result);
         }
+
+        [HttpPost("saveJobs")]
+        [Authorize("Admin", "Doctor")]
+        public async Task<IActionResult> SaveJobs(SaveJobsDto model)
+        {
+            var result = await _mainService.SaveJobs(model);
+            return Ok(result);
+        }
+
+        [HttpGet("getJobs")]
+        [Authorize("Admin", "Doctor")]
+        public async Task<IActionResult> GetJobs()
+        {
+            var result = await _mainService.GetJobs();
+            return Ok(result);
+        }
+
+        [HttpGet("deleteJob/{id}")]
+        public async Task<IActionResult> DeleteJob(int id)
+        {
+            var result = await _mainService.DeleteJob(id);
+            return Ok(result);
+        }
     }
 }

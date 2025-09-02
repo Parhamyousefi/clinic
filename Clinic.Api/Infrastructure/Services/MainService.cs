@@ -119,5 +119,74 @@ namespace Clinic.Api.Infrastructure.Services
                 throw new Exception(ex.Message);
             }
         }
+
+        public async Task<string> SaveJobs(SaveJobsDto model)
+        {
+            try
+            {
+                var userId = _token.GetUserId();
+
+                if (model.EditOrNew == -1)
+                {
+                    var job = _mapper.Map<JobsContext>(model);
+                    job.CreatorId = userId;
+                    job.CreatedOn = DateTime.UtcNow;
+                    _context.Add(job);
+                    await _context.SaveChangesAsync();
+                    return "Job Saved Successfully";
+                }
+                else
+                {
+                    var existingJob = await _context.Jobs.FirstOrDefaultAsync(j => j.Id == model.EditOrNew);
+                    if (existingJob == null)
+                    {
+                        throw new Exception("Job Not Found");
+                    }
+
+                    _mapper.Map(model, existingJob);
+                    existingJob.CreatorId = userId;
+                    existingJob.LastUpdated = DateTime.UtcNow;
+                    _context.Jobs.Update(existingJob);
+                    await _context.SaveChangesAsync();
+                    return "Job Updated Successfully";
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<IEnumerable<JobsContext>> GetJobs()
+        {
+            try
+            {
+                var jobs = await _context.Jobs.ToListAsync();
+                return jobs;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<string> DeleteJob(int id)
+        {
+            try
+            {
+                var job = await _context.Jobs.FindAsync(id);
+
+                if (job == null)
+                    throw new Exception("Job Not Found");
+
+                _context.Jobs.Remove(job);
+                await _context.SaveChangesAsync();
+                return "Job Deleted Successfully";
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }
