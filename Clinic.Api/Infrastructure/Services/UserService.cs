@@ -20,9 +20,9 @@ namespace Clinic.Api.Infrastructure.Services
         private readonly IMapper _mapper;
 
         public UserService(IUnitOfWork uow,
-            ITokenService token, 
-            ApplicationDbContext context, 
-            IPasswordHasher<UserContext> passwordHasher, 
+            ITokenService token,
+            ApplicationDbContext context,
+            IPasswordHasher<UserContext> passwordHasher,
             IHttpContextAccessor httpContextAccessor,
             IMapper mapper
             )
@@ -82,12 +82,14 @@ namespace Clinic.Api.Infrastructure.Services
                 var token = _token.CreateToken(user, roleName);
                 var roleHandler = UserMapper.MapRole(user.RoleId.ToString());
                 string secret = roleHandler[1];
+                string role = roleHandler[0];
 
                 await SaveLoginHistory(model.Username);
                 return new LoginResponseDto
                 {
                     Token = token,
-                    SecretCode = secret
+                    SecretCode = secret,
+                    Role = role
                 };
             }
             catch (Exception ex)
@@ -224,7 +226,7 @@ namespace Clinic.Api.Infrastructure.Services
             }
         }
 
-        public async Task SaveLoginHistory (string? Username)
+        public async Task SaveLoginHistory(string? Username)
         {
             try
             {

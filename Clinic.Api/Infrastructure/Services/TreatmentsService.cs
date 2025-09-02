@@ -118,21 +118,12 @@ namespace Clinic.Api.Infrastructure.Services
                 var nextDay = selectedDate.AddDays(1);
 
                 return await _context.Appointments
-<<<<<<< HEAD
-                    .Where(u =>
-                        u.BusinessId == clinicId &&
-                        u.PractitionerId == userId &&
-                        u.Start < nextDay &&     // starts before end of day
-                        u.End >= selectedDate)   // ends after start of day
-                    .ToListAsync();
-=======
          .Where(u =>
              u.BusinessId == clinicId &&
              u.PractitionerId == docId &&
              u.Start.Date <= selectedDate &&
              u.End.Date >= selectedDate)
          .ToListAsync();
->>>>>>> MNTNima/main
             }
             catch (Exception ex)
             {

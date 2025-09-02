@@ -187,7 +187,7 @@ export class AppointmentComponent {
         "ignoreDidNotCome": null,
         "creatorId": null,
         "byInvoice": null,
-        "editOrNew": this.editmode ? -1 : this.newAppointmentModel.id
+        "editOrNew": -1
       }
       let res = await this.userService.createAppointment(model).toPromise();
       this.newAppointmentModel = [];

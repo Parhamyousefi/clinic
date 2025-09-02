@@ -32,7 +32,7 @@ namespace Clinic.Api.Authorization
             if (!string.IsNullOrEmpty(token) && token != "null")
             {
                 var tokenHandler = new JwtSecurityTokenHandler();
-                var key = Encoding.ASCII.GetBytes("Something wicked this way comes!");
+                var key = Encoding.ASCII.GetBytes("your_super_secret_key_here_1234567890");
                 tokenHandler.ValidateToken(token, new TokenValidationParameters
                 {
                     ValidateIssuerSigningKey = true,
@@ -43,15 +43,9 @@ namespace Clinic.Api.Authorization
                     ValidateLifetime = true
                 }, out SecurityToken validatedToken);
 
-                var userRoleId = _token.GetUserRole();
-                var role = UserMapper.MapRole(userRoleId);
-                var userRoleFinal = "";
-                if (token != null)
-                {
-                    userRoleFinal = role[0];
-                }
+                var userRole = _token.GetUserRole();
 
-                if (_roles.Any() && !_roles.Contains(userRoleFinal))
+                if (_roles.Any() && !_roles.Contains(userRole))
                 {
                     // not logged in
                     context.Result = new JsonResult(new { message = "Unauthorized" }) { StatusCode = StatusCodes.Status403Forbidden };
