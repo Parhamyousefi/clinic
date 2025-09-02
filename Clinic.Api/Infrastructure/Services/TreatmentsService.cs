@@ -104,18 +104,22 @@ namespace Clinic.Api.Infrastructure.Services
             }
         }
 
-        public async Task<IEnumerable<AppointmentsContext>> GetAppointments(int clinicId, DateTime? date)
+        public async Task<IEnumerable<AppointmentsContext>> GetAppointments(int clinicId, DateTime? date, int? docId)
         {
             try
             {
-                var userId = _token.GetUserId();
+                var userRole = _token.GetUserRole();
+                if (userRole == "Doctor")
+                {
+                    docId = _token.GetUserId();
+                }
 
                 var selectedDate = date?.Date ?? DateTime.Today;
 
                 return await _context.Appointments
          .Where(u =>
              u.BusinessId == clinicId &&
-             u.PractitionerId == userId &&
+             u.PractitionerId == docId &&
              u.Start.Date <= selectedDate &&
              u.End.Date >= selectedDate)
          .ToListAsync();
