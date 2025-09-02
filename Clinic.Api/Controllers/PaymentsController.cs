@@ -1,6 +1,6 @@
 ﻿using Clinic.Api.Application.DTOs.Payments;
 using Clinic.Api.Application.Interfaces;
-using Microsoft.AspNetCore.Authorization;
+using Clinic.Api.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Clinic.Api.Controllers
@@ -17,7 +17,7 @@ namespace Clinic.Api.Controllers
         }
 
         [HttpPost("savePayments")]
-        [Authorize(Roles ="Admin,Doctor")]
+        [Authorize("Admin", "Doctor")]
         public async Task<IActionResult> SavePayments(SavePaymentsDto model)
         {
             var result = await _paymentService.SavePayments(model);
@@ -26,7 +26,7 @@ namespace Clinic.Api.Controllers
         }
 
         [HttpGet("getAllPayments")]
-        [Authorize(Roles ="Admin,Doctor")]
+        [Authorize("Admin", "Doctor")]
         public async Task<IActionResult> GetAllPayments()
         {
             var result = await _paymentService.GetAllPayments();
@@ -34,7 +34,7 @@ namespace Clinic.Api.Controllers
         }
 
         [HttpGet("getPayment/{patientId}")]
-        [Authorize(Roles ="Admin,Doctor")]
+        [Authorize("Admin", "Doctor")]
         public async Task<IActionResult> GetPayment(int patientId)
         {
             var result = await _paymentService.GetPayment(patientId);
@@ -42,7 +42,7 @@ namespace Clinic.Api.Controllers
         }
 
         [HttpGet("deletePayment/{id}")]
-        [Authorize(Roles ="Admin,Doctor")]
+        [Authorize("Admin", "Doctor")]
         public async Task<IActionResult> DeletePayment(int id)
         {
             var result = await _paymentService.DeletePayment(id);

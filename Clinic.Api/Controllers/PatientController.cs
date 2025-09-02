@@ -1,6 +1,6 @@
 ﻿using Clinic.Api.Application.DTOs.Patients;
 using Clinic.Api.Application.Interfaces;
-using Microsoft.AspNetCore.Authorization;
+using Clinic.Api.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Clinic.Api.Controllers
@@ -17,7 +17,7 @@ namespace Clinic.Api.Controllers
         }
 
         [HttpPost("savePatient")]
-        [Authorize(Roles ="Admin,Doctor")]
+        [Authorize("Admin", "Doctor")]
         public async Task<IActionResult> SavePatient(SavePatientDto model)
         {
             var result = await _patientService.SavePatient(model);
@@ -26,7 +26,7 @@ namespace Clinic.Api.Controllers
         }
 
         [HttpGet("deletePatient/{id}")]
-        [Authorize(Roles ="Admin,Doctor")]
+        [Authorize("Admin", "Doctor")]
         public async Task<IActionResult> DeletePatient(int id)
         {
             var result = await _patientService.DeletePatient(id);
@@ -34,7 +34,7 @@ namespace Clinic.Api.Controllers
         }
 
         [HttpGet("getPatients")]
-        [Authorize(Roles ="Admin,Doctor")]
+        [Authorize("Admin", "Doctor")]
         public async Task<IActionResult> GetPatients()
         {
             var result = await _patientService.GetPatients();
@@ -43,7 +43,7 @@ namespace Clinic.Api.Controllers
         }
 
         [HttpPost("savePatientPhone")]
-        [Authorize(Roles ="Admin,Doctor")]
+        [Authorize("Admin", "Doctor")]
         public async Task<IActionResult> SavePatientPhone(SavePatientPhoneDto model)
         {
             var result = await _patientService.SavePatientPhone(model);
@@ -51,7 +51,7 @@ namespace Clinic.Api.Controllers
         }
 
         [HttpGet("deletePatientPhone/{id}")]
-        [Authorize(Roles ="Admin,Doctor")]
+        [Authorize("Admin", "Doctor")]
         public async Task<IActionResult> DeletePatientPhone(int id)
         {
             var result = await _patientService.DeletePatientPhone(id);
@@ -59,7 +59,7 @@ namespace Clinic.Api.Controllers
         }
 
         [HttpGet("getPatientPhone/{patientId}")]
-        [Authorize(Roles ="Admin,Doctor")]
+        [Authorize("Admin", "Doctor")]
         public async Task<IActionResult> GetPatientPhone(int patientId)
         {
             var result = await _patientService.GetPatientPhones(patientId);
