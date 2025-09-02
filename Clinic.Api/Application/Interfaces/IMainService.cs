@@ -9,5 +9,6 @@ namespace Clinic.Api.Application.Interfaces
         Task<string> SaveReceipts(SaveReceiptsDto model);
         Task<IEnumerable<ReceiptsContext>> GetReceipts(int? patientId);
         Task<string> DeleteReceipt(int patientId);
+        Task<IEnumerable<BusinessesContext>> GetClinics();
     }
 }

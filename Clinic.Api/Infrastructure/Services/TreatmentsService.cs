@@ -26,6 +26,11 @@ namespace Clinic.Api.Infrastructure.Services
         {
             try
             {
+                var userRole = _token.GetUserRole();
+                if (userRole == "Doctor")
+                {
+                    model.PractitionerId = _token.GetUserId();
+                }
                 var userId = _token.GetUserId();
 
                 if (model.EditOrNew == -1)
@@ -99,22 +104,35 @@ namespace Clinic.Api.Infrastructure.Services
             }
         }
 
-        public async Task<IEnumerable<AppointmentsContext>> GetAppointments(int clinicId, DateTime? date)
+        public async Task<IEnumerable<AppointmentsContext>> GetAppointments(int clinicId, DateTime? date, int? docId)
         {
             try
             {
-                var userId = _token.GetUserId();
+                var userRole = _token.GetUserRole();
+                if (userRole == "Doctor")
+                {
+                    docId = _token.GetUserId();
+                }
 
                 var selectedDate = date?.Date ?? DateTime.Today;
                 var nextDay = selectedDate.AddDays(1);
 
                 return await _context.Appointments
+<<<<<<< HEAD
                     .Where(u =>
                         u.BusinessId == clinicId &&
                         u.PractitionerId == userId &&
                         u.Start < nextDay &&     // starts before end of day
                         u.End >= selectedDate)   // ends after start of day
                     .ToListAsync();
+=======
+         .Where(u =>
+             u.BusinessId == clinicId &&
+             u.PractitionerId == docId &&
+             u.Start.Date <= selectedDate &&
+             u.End.Date >= selectedDate)
+         .ToListAsync();
+>>>>>>> MNTNima/main
             }
             catch (Exception ex)
             {
@@ -142,9 +160,13 @@ namespace Clinic.Api.Infrastructure.Services
         {
             try
             {
+                var userId = _token.GetUserId();
+
                 if (model.EditOrNew == -1)
                 {
                     var treatment = _mapper.Map<TreatmentsContext>(model);
+                    treatment.CreatorId = userId;
+                    treatment.CreatedOn = DateTime.UtcNow;
                     _context.Treatments.Add(treatment);
                     await _context.SaveChangesAsync();
                     return "Successfully Saved Treatment";
@@ -159,6 +181,8 @@ namespace Clinic.Api.Infrastructure.Services
                     }
 
                     _mapper.Map(model, existingTreatment);
+                    existingTreatment.CreatorId = userId;
+                    existingTreatment.CreatedOn = DateTime.UtcNow;
                     _context.Treatments.Update(existingTreatment);
                     await _context.SaveChangesAsync();
                     return "Treatment Updated Successfully";

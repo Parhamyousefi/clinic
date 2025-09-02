@@ -30,6 +30,7 @@ namespace Clinic.Api.Infrastructure.Services
                 {
                     var payments = _mapper.Map<PaymentsContext>(model);
                     payments.CreatorId = userId;
+                    payments.CreatedOn = DateTime.UtcNow;
                     _context.Payments.Add(payments);
                     await _context.SaveChangesAsync();
                     return "Pyament Saved Successfully";
@@ -43,8 +44,10 @@ namespace Clinic.Api.Infrastructure.Services
                         throw new Exception("Payment Not Found");
                     }
 
-                    model.CreatorId = userId;
+                 
                     _mapper.Map(model, existingPayments);
+                    existingPayments.CreatorId = userId;
+                    existingPayments.LastUpdated = DateTime.UtcNow;
                     _context.Payments.Update(existingPayments);
                     await _context.SaveChangesAsync();
                     return "Pyament Updated Successfully";

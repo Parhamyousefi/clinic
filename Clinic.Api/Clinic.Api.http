@@ -3,7 +3,6 @@
 ### Login
 POST {{Clinic_Api_Host}}/api/user/login
 Content-Type: application/json
-
 {
   "Username": "nima",
   "password": "123456"
@@ -347,12 +346,12 @@ Content-Type: application/json
 
 ### Delete Receipts
 GET {{Clinic_Api_Host}}/api/main/deleteReceipts/2
-Authorization: Bearer
+Authorization: Bearer 
 Content-Type: application/json
 
 ### Save Payments
 POST {{Clinic_Api_Host}}/api/payments/savePayments
-Authorization: Bearer
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwidXNlcm5hbWUiOiJuaW1hIiwicm9sZSI6IkFkbWluIiwiZXhwIjoxNzU2NjUyMjE4LCJpc3MiOiJDbGluaWMuQXBpIiwiYXVkIjoiQ2xpbmljLkFwaS5Vc2VycyJ9.MVn8XLhTQglJ3ysHtn5YrIrZ7DEoFZ4Eh93JbgAE-cQ
 Content-Type: application/json
 {
   "paymentNo": null,
@@ -372,15 +371,20 @@ Content-Type: application/json
 
 ### Get All Payments
 GET {{Clinic_Api_Host}}/api/payments/getAllPayments
-Authorization: Bearer
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwidXNlcm5hbWUiOiJuaW1hIiwicm9sZSI6IkFkbWluIiwiZXhwIjoxNzU2NjUyMjE4LCJpc3MiOiJDbGluaWMuQXBpIiwiYXVkIjoiQ2xpbmljLkFwaS5Vc2VycyJ9.MVn8XLhTQglJ3ysHtn5YrIrZ7DEoFZ4Eh93JbgAE-cQ
 Content-Type: application/json
 
 ### Get Payment
 GET {{Clinic_Api_Host}}/api/payments/getPayment/2
-Authorization: Bearer
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwidXNlcm5hbWUiOiJuaW1hIiwicm9sZSI6IkFkbWluIiwiZXhwIjoxNzU2NjUyMjE4LCJpc3MiOiJDbGluaWMuQXBpIiwiYXVkIjoiQ2xpbmljLkFwaS5Vc2VycyJ9.MVn8XLhTQglJ3ysHtn5YrIrZ7DEoFZ4Eh93JbgAE-cQ
 Content-Type: application/json
 
 ### Delete Payment
 GET {{Clinic_Api_Host}}/api/payments/deletePayment/1
-Authorization: Bearer
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwidXNlcm5hbWUiOiJuaW1hIiwicm9sZSI6IkFkbWluIiwiZXhwIjoxNzU2NjUyMjE4LCJpc3MiOiJDbGluaWMuQXBpIiwiYXVkIjoiQ2xpbmljLkFwaS5Vc2VycyJ9.MVn8XLhTQglJ3ysHtn5YrIrZ7DEoFZ4Eh93JbgAE-cQ
+Content-Type: application/json
+
+### Get Clinics
+GET {{Clinic_Api_Host}}/api/main/getClinics
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwidXNlcm5hbWUiOiJuaW1hIiwicm9sZSI6IkFkbWluIiwiZXhwIjoxNzU2ODA1NjE4LCJpc3MiOiJDbGluaWMuQXBpIiwiYXVkIjoiQ2xpbmljLkFwaS5Vc2VycyJ9.S8z4iLf7sKv6IOaJNX2CVFGjM3IZaG5yK84Sv-VYTd8
 Content-Type: application/json

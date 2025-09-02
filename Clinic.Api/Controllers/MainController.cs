@@ -47,5 +47,13 @@ namespace Clinic.Api.Controllers
             var result = await _mainService.DeleteReceipt(patientId);
             return Ok(result);
         }
+
+        [HttpGet("getClinics")]
+        [Authorize(Roles ="Admin,Doctor")]
+        public async Task<IActionResult> GetClinics()
+        {
+            var result = await _mainService.GetClinics();
+            return Ok(result);
+        }
     }
 }
