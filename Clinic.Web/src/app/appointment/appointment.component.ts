@@ -46,6 +46,7 @@ export class AppointmentComponent {
   appointmentDate: any;
   clinicId: any;
   timeSheetData: any = [];
+  editmode: boolean = false;
   get selectedDate(): Date | null {
     return this._selectedDate;
   }
@@ -159,38 +160,39 @@ export class AppointmentComponent {
   }
 
   async createAppointment() {
-    let model = {
-      "businessId": 1,
-      "practitionerId": null,
-      "patientId": this.newAppointmentModel.selectedPateint.code,
-      "appointmentTypeId": this.newAppointmentModel.selectedType.code,
-      "start": this.newAppointmentModel.appointmentStartTime,
-      "end": this.newAppointmentModel.appointmentEndTime,
-      "repeatId": null,
-      "repeatEvery": null,
-      "endsAfter": null,
-      "note": this.newAppointmentModel.note,
-      "arrived": null,
-      "waitListId": null,
-      "cancelled": null,
-      "appointmentCancelTypeId": null,
-      "cancelNotes": null,
-      "isUnavailbleBlock": null,
-      "modifierId": null,
-      "createdOn": null,
-      "lastUpdated": null,
-      "isAllDay": null,
-      "sendReminder": null,
-      "appointmentSMS": null,
-      "ignoreDidNotCome": null,
-      "creatorId": null,
-      "byInvoice": null,
-      "editOrNew": -1
+    try {
+      let model = {
+        "businessId": 1,
+        "practitionerId": null,
+        "patientId": this.newAppointmentModel.selectedPatient.code,
+        "appointmentTypeId": this.newAppointmentModel.selectedType.code,
+        "start": this.newAppointmentModel.appointmentStartTime,
+        "end": this.newAppointmentModel.appointmentEndTime,
+        "repeatId": null,
+        "repeatEvery": null,
+        "endsAfter": null,
+        "note": this.newAppointmentModel.note,
+        "arrived": null,
+        "waitListId": null,
+        "cancelled": null,
+        "appointmentCancelTypeId": null,
+        "cancelNotes": null,
+        "isUnavailbleBlock": null,
+        "modifierId": null,
+        "createdOn": null,
+        "lastUpdated": null,
+        "isAllDay": null,
+        "sendReminder": null,
+        "appointmentSMS": null,
+        "ignoreDidNotCome": null,
+        "creatorId": null,
+        "byInvoice": null,
+        "editOrNew": this.editmode ? -1 : this.newAppointmentModel.id
+      }
+      let res = await this.userService.createAppointment(model).toPromise();
+      this.newAppointmentModel = [];
     }
-
-    let res = await this.userService.createAppointment(model).toPromise();
-    console.log(res);
-
+    catch { }
   }
 
   setNewAppointment(time: any) {
@@ -247,6 +249,19 @@ export class AppointmentComponent {
     const endHours = String(date.getHours()).padStart(2, "0");
     const endMinutes = String(date.getMinutes()).padStart(2, "0");
     return `${endHours}:${endMinutes}`;
+  }
+
+  editAppointment(appointment: any) {
+    this.newAppointmentModel.id = appointment.id;
+    this.newAppointmentModel.selectedType = this.appointmentTypes.filter((type: any) => type.id == appointment.appointmentTypeId)[0];
+    this.newAppointmentModel.selectedPatient = this.patientsList.filter((patient: any) => patient.patientCode == appointment.patientId);
+    this.newAppointmentModel.appointmentStartTime = appointment.start;
+    this.newAppointmentModel.appointmentEndTime = appointment.end;
+    this.newAppointmentModel.note = appointment.note;
+    this.showNewAppointment = true;
+    this.editmode = true;
+
+
   }
 
 }

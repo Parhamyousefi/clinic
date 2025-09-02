@@ -60,11 +60,12 @@
                             </thead>
                             <tbody class="d-flex flex-column">
                                 <tr class="d-flex" *ngFor="let time of hours">
-                                    <td class="col-2">{{time}}</td>
+                                    <td class="col-2 d-flex justify-content-center align-items-center">{{time}}</td>
                                     <td class="col-10 p-0 d-flex appointments-container"
                                         (click)="setNewAppointment(time)">
                                         <div *ngFor="let appointment of timeSheetData[time]"
-                                            class="appointment text-right p-2 pointer">
+                                            class="appointment text-right p-2 pointer"
+                                            (click)="editAppointment(appointment)">
                                             <div class="mt-2">نوع وقت : {{appointment.type}}</div>
                                             <div class="mt-2">نام بیمار : {{appointment.patient}}</div>
                                             <div class="mt-2">توضیحات : {{appointment.note}}</div>
@@ -94,7 +95,7 @@
             <div class="col-12 d-flex justify-content-between mt-3">
                 <div class="col-6 text-right">انتخاب بیمار</div>
                 <div class="col-6">
-                    <p-dropdown [options]="patientsList" [(ngModel)]="newAppointmentModel.selectedPateint"
+                    <p-dropdown [options]="patientsList" [(ngModel)]="newAppointmentModel.selectedPatient"
                         optionLabel="name" placeholder="بیمار مورد نظر را انتخاب کنید" class="w-100" />
                 </div>
             </div>

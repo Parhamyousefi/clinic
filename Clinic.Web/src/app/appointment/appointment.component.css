@@ -98,6 +98,8 @@
 
 .appointment {
     background-color: #63C7B2;
+    color: #ffffff;
+    border-radius: 10px;
 }
 
 .appointments-container .appointment:not(:first-child) {
