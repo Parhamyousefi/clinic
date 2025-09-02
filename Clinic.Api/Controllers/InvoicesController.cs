@@ -1,6 +1,6 @@
 ﻿using Clinic.Api.Application.DTOs.Invoices;
 using Clinic.Api.Application.Interfaces;
-using Microsoft.AspNetCore.Authorization;
+using Clinic.Api.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Clinic.Api.Controllers
@@ -17,7 +17,7 @@ namespace Clinic.Api.Controllers
         }
 
         [HttpPost("saveInvoices")]
-        [Authorize(Roles ="Admin,Doctor")]
+        [Authorize("Admin","Doctor")]
         public async Task<IActionResult> SaveInvoices(SaveInvoicesDto model)
         {
             var result = await _invoicesService.SaveInvoices(model);
@@ -25,7 +25,7 @@ namespace Clinic.Api.Controllers
         }
 
         [HttpGet("deleteInvoices/{id}")]
-        [Authorize(Roles ="Admin,Doctor")]
+        [Authorize("Admin","Doctor")]
         public async Task<IActionResult> DeleteInvoices(int id)
         {
             var result = await _invoicesService.DeleteInvoices(id);
@@ -33,7 +33,7 @@ namespace Clinic.Api.Controllers
         }
 
         [HttpGet("getInvoices")]
-        [Authorize(Roles ="Admin,Doctor")]
+        [Authorize("Admin", "Doctor")]
         public async Task<IActionResult> GetInvoices()
         {
             var result = await _invoicesService.GetInvoices();
@@ -41,7 +41,7 @@ namespace Clinic.Api.Controllers
         }
 
         [HttpPost("saveInvoiceItems")]
-        [Authorize(Roles ="Admin,Doctor")]
+        [Authorize("Admin", "Doctor")]
         public async Task<IActionResult> SaveInvoiceItems(SaveInvoiceItemsDto model)
         {
             var result = await _invoicesService.SaveInvoiceItems(model);
@@ -49,7 +49,7 @@ namespace Clinic.Api.Controllers
         }
 
         [HttpGet("deleteInvoiceItems/{id}")]
-        [Authorize(Roles ="Admin,Doctor")]
+        [Authorize("Admin", "Doctor")]
         public async Task<IActionResult> DeleteInvoiceItems(int id)
         {
             var result = await _invoicesService.DeleteInvoiceItems(id);
@@ -57,7 +57,7 @@ namespace Clinic.Api.Controllers
         }
 
         [HttpGet("getInvoiceItems")]
-        [Authorize(Roles ="Admin,Doctor")]
+        [Authorize("Admin", "Doctor")]
         public async Task<IActionResult> GetInvoiceItems()
         {
             var result = await _invoicesService.GetInvoiceItems();
