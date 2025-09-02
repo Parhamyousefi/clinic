@@ -68,4 +68,16 @@ export class UserService {
     return this.http.get(uri, httpOptions);
   }
 
+  getClinics() {
+    const token: any = localStorage.getItem("token");
+    const uri = this.url + `api/main/getClinics`;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      }),
+    };
+    return this.http.get(uri, httpOptions);
+  }
+
 }

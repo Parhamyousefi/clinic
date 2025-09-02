@@ -1,5 +1,5 @@
-import { Component, ViewChild } from '@angular/core';
-import { SharedModule } from "../share/shared.module";
+import { Component } from '@angular/core';
+import { SharedModule, ShamsiUTCPipe } from "../share/shared.module";
 import { DpDatePickerModule, DatePickerComponent } from 'ngx-jalali-date-picker';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -47,6 +47,8 @@ export class AppointmentComponent {
   clinicId: any;
   timeSheetData: any = [];
   editmode: boolean = false;
+  clinicsList: any = [];
+  selectedClinic: any;
   get selectedDate(): Date | null {
     return this._selectedDate;
   }
@@ -58,7 +60,8 @@ export class AppointmentComponent {
 
   constructor(
     private userService: UserService,
-  ) { }
+  ) {
+  }
 
   config: any = {
     hideInputContainer: true,
@@ -73,40 +76,9 @@ export class AppointmentComponent {
     await this.getPatients();
     await this.getAppointmentTypes();
     await this.getAppointment(this.today);
+    await this.getClinics();
     this.today = this.today._d;
-    console.log(this.selectedDate);
-
   }
-
-  // changeDate(status: any) {
-  //   let formattedDate: any = moment(this.selectedDate);
-  //   if (status == 1) {
-  //     formattedDate = formattedDate.add(1, 'day');
-  //   } else if (status == 2) {
-  //     formattedDate = formattedDate.subtract(1, 'day');
-  //   }
-  //   this.timeSheetHeaderDate = formattedDate._d;
-  // }
-  // status :  0  => mostaghim taghir bede
-  // status :  1 => + day
-  // status : -1 => - day 
-  // changeDate(status: any) {
-  //   let formattedDate: any = moment(this.selectedDate);
-  //   switch (status) {
-  //     case 1:
-  //       this.selectedDate = formattedDate.add(1, 'day');
-  //       break;
-  //     case 0:
-  //       this.appointmentDate = formattedDate._d;
-  //       break;
-  //     case -1:
-  //       this.appointmentDate = formattedDate.subtract(1, 'day');
-  //       break;
-  //     default:
-  //       break;
-  //   }
-
-  // }
 
   changeDate(status: number) {
     let formattedDate: any = '';
@@ -136,22 +108,22 @@ export class AppointmentComponent {
 
 
   async getAppointment(date: any) {
+    const shamsiTimePipe = new ShamsiUTCPipe()
+
     this.hours.forEach(hour => this.timeSheetData[hour] = []);
     try {
       let formattedDate = moment(date).format('YYYY-MM-DD');
-      let res: any = await this.userService.getAppointments(1, formattedDate).toPromise();
+      let res: any = await this.userService.getAppointments(this.selectedClinic.code, formattedDate).toPromise();
       this.appointmentsData = res;
       this.appointmentsData.forEach((appointment: any) => {
-        appointment.type = this.appointmentTypes.filter((type: any) => type.id == appointment.appointmentTypeId)[0].name;
-        appointment.patient = this.patientsList.filter((patient: any) => patient.patientCode == appointment.patientId);
-        appointment.showStartTime = moment(appointment.start).format('HH:mm');
+        appointment.typeName = this.appointmentTypes.filter((type: any) => type.id == appointment.appointmentTypeId)[0].name;
+        appointment.patientName = this.patientsList.filter((patient: any) => patient.patientCode == appointment.patientId)[0].name;
+        appointment.showStartTime = shamsiTimePipe.transform(appointment.start);
         let startIndex = this.hours.indexOf(appointment.showStartTime);
         if (startIndex !== -1) {
           this.timeSheetData[this.hours[startIndex]].push(appointment);
         }
       });
-      console.log(this.timeSheetData);
-
       this.timeSheetHeaderDate = date._d;
 
     }
@@ -187,15 +159,20 @@ export class AppointmentComponent {
         "ignoreDidNotCome": null,
         "creatorId": null,
         "byInvoice": null,
-        "editOrNew": -1
+        "editOrNew": this.editmode == true ? this.newAppointmentModel.id : -1
       }
       let res = await this.userService.createAppointment(model).toPromise();
+      this.getAppointment(this.appointmentDate)
       this.newAppointmentModel = [];
+      this.showNewAppointment = false;
+      this.editmode = false;
     }
-    catch { }
+    catch (err) {
+    }
   }
 
   setNewAppointment(time: any) {
+    // this.newAppointmentModel = [];
     this.newAppointmentModel.appointmentStartTime = this.combineDateAndTime(this.appointmentDate, time);
     this.newAppointmentModel.appointmentEndTime = this.combineDateAndTime(this.appointmentDate, this.getEndTime(time))
     this.showNewAppointment = true;
@@ -254,7 +231,7 @@ export class AppointmentComponent {
   editAppointment(appointment: any) {
     this.newAppointmentModel.id = appointment.id;
     this.newAppointmentModel.selectedType = this.appointmentTypes.filter((type: any) => type.id == appointment.appointmentTypeId)[0];
-    this.newAppointmentModel.selectedPatient = this.patientsList.filter((patient: any) => patient.patientCode == appointment.patientId);
+    this.newAppointmentModel.selectedPatient = this.patientsList.filter((patient: any) => patient.patientCode == appointment.patientId)[0];
     this.newAppointmentModel.appointmentStartTime = appointment.start;
     this.newAppointmentModel.appointmentEndTime = appointment.end;
     this.newAppointmentModel.note = appointment.note;
@@ -262,6 +239,23 @@ export class AppointmentComponent {
     this.editmode = true;
 
 
+  }
+
+  async getClinics() {
+    try {
+      let res = await this.userService.getClinics().toPromise();
+      this.clinicsList = res;
+      this.clinicsList.forEach((clinic: any) => {
+        clinic.code = clinic.id;
+      });
+      this.selectedClinic = this.clinicsList[0];
+    }
+    catch { }
+  }
+
+  closeNewAppointmentModal() {
+    this.showNewAppointment = false;
+    this.newAppointmentModel = [];
   }
 
 }
