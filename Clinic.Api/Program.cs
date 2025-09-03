@@ -38,7 +38,7 @@ builder.Services.AddScoped<IPatientService, PatientService>();
 builder.Services.AddScoped<IQuestionsService, QuestionsService>();
 builder.Services.AddScoped<IMainService, MainService>();
 builder.Services.AddScoped<IInvoicesService, InvoicesService>();
-builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<IPaymentService, PaymentService>();
 
 // Auth & JWT
 var jwt = builder.Configuration.GetSection("JwtSettings").Get<JwtSettings>();
@@ -69,18 +69,40 @@ builder.Services.AddAutoMapper(cfg =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
-    c.AddSecurityDefinition("Bearer", new()
+    c.SwaggerDoc("v1", new OpenApiInfo
     {
-        Type = SecuritySchemeType.Http,
-        Scheme = "bearer",
+        Title = "Clinic Api Project.",
+        Version = "v1",
+        Description = "Clinic Api.",
+        Contact = new OpenApiContact
+        {
+            Name = "Nima"
+        },
+    });
+    c.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = "Bearer",
         BearerFormat = "JWT",
         In = ParameterLocation.Header,
-        Description = "Enter 'Bearer {token}'"
+        Description = "JWT Authorization header using the Bearer scheme."
     });
-    c.AddSecurityRequirement(new()
-    {
-        { new OpenApiSecurityScheme{Reference = new(){Type = ReferenceType.SecurityScheme, Id="Bearer"}}, Array.Empty<string>() }
-    });
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+            {
+                {
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = "Bearer"
+                        }
+                    },
+                    new string[] {}
+                }
+            });
 });
 
 builder.Services.AddCors(options =>

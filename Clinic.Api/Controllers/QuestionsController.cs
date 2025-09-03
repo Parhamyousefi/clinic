@@ -1,6 +1,6 @@
 ﻿using Clinic.Api.Application.DTOs.Questions;
 using Clinic.Api.Application.Interfaces;
-using Microsoft.AspNetCore.Authorization;
+using Clinic.Api.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Clinic.Api.Controllers
@@ -17,7 +17,7 @@ namespace Clinic.Api.Controllers
         }
 
         [HttpGet("getQuestions")]
-        [Authorize(Roles ="Admin,Doctor")]
+        [Authorize("Admin","Doctor")]
         public async Task<IActionResult> GetQuestions()
         {
             var result = await _questionsService.GetQuestions();
@@ -25,7 +25,7 @@ namespace Clinic.Api.Controllers
         }
 
         [HttpPost("saveQuestionValue")]
-        [Authorize(Roles ="Admin,Doctor")]
+        [Authorize("Admin", "Doctor")]
         public async Task<IActionResult> SaveQuestionValue(SaveQuestionValueDto model)
         {
             var result = await _questionsService.SaveQuestionValue(model);
@@ -34,7 +34,7 @@ namespace Clinic.Api.Controllers
         }
 
         [HttpGet("deleteQuestionValue/{id}")]
-        [Authorize(Roles ="Admin,Doctor")]
+        [Authorize("Admin", "Doctor")]
         public async Task<IActionResult> DeleteQuestionValue(int id)
         {
             var result = await _questionsService.DeleteQuestionValue(id);

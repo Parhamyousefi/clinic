@@ -1,6 +1,6 @@
 ﻿using Clinic.Api.Application.DTOs.Main;
 using Clinic.Api.Application.Interfaces;
-using Microsoft.AspNetCore.Authorization;
+using Clinic.Api.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Clinic.Api.Controllers
@@ -17,7 +17,7 @@ namespace Clinic.Api.Controllers
         }
 
         [HttpGet("getSections")]
-        [Authorize(Roles ="Admin,Doctor")]
+        [Authorize("Admin", "Doctor")]
         public async Task<IActionResult> GetSections()
         {
             var result = await _mainService.GetSections();
@@ -25,7 +25,7 @@ namespace Clinic.Api.Controllers
         }
 
         [HttpPost("saveReceipts")]
-        [Authorize(Roles ="Admin,Doctor")]
+        [Authorize("Admin", "Doctor")]
         public async Task<IActionResult> SaveReceipt(SaveReceiptsDto model)
         {
             var result = await _mainService.SaveReceipts(model);
@@ -33,7 +33,7 @@ namespace Clinic.Api.Controllers
         }
 
         [HttpGet("getReceipts/{patientId?}")]
-        [Authorize(Roles ="Admin,Doctor")]
+        [Authorize("Admin", "Doctor")]
         public async Task<IActionResult> GetReceipts(int? patientId)
         {
             var result = await _mainService.GetReceipts(patientId);
@@ -41,10 +41,42 @@ namespace Clinic.Api.Controllers
         }
 
         [HttpGet("deleteReceipts/{patientId}")]
-        [Authorize(Roles ="Admin,Doctor")]
+        [Authorize("Admin", "Doctor")]
         public async Task<IActionResult> DeleteReceipts(int patientId)
         {
+            var result = await _mainService.DeleteReceipt(patientId);
+            return Ok(result);
+        }
 
+        [HttpGet("getClinics")]
+        [Authorize("Admin", "Doctor")]
+        public async Task<IActionResult> GetClinics()
+        {
+            var result = await _mainService.GetClinics();
+            return Ok(result);
+        }
+
+        [HttpPost("saveJobs")]
+        [Authorize("Admin", "Doctor")]
+        public async Task<IActionResult> SaveJobs(SaveJobsDto model)
+        {
+            var result = await _mainService.SaveJobs(model);
+            return Ok(result);
+        }
+
+        [HttpGet("getJobs")]
+        [Authorize("Admin", "Doctor")]
+        public async Task<IActionResult> GetJobs()
+        {
+            var result = await _mainService.GetJobs();
+            return Ok(result);
+        }
+
+        [HttpGet("deleteJob/{id}")]
+        public async Task<IActionResult> DeleteJob(int id)
+        {
+            var result = await _mainService.DeleteJob(id);
+            return Ok(result);
         }
     }
 }

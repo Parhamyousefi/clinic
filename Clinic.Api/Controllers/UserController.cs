@@ -1,6 +1,6 @@
 ﻿using Clinic.Api.Application.DTOs.Users;
 using Clinic.Api.Application.Interfaces;
-using Microsoft.AspNetCore.Authorization;
+using Clinic.Api.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Clinic.Api.Controllers;
@@ -26,11 +26,11 @@ public class UserController : ControllerBase
         }
     }
 
-    [Authorize]
+    [Authorize("Admin")]
     [HttpGet("getAllUsers")] 
     public async Task<IActionResult> GetAll() => Ok(await _svc.GetAllAsync());
 
-    [Authorize]
+    [Authorize("Admin")]
     [HttpGet("getUserById/{id}")]
     public async Task<IActionResult> GetById(int id)
     {
@@ -38,7 +38,7 @@ public class UserController : ControllerBase
         return u is null ? NotFound() : Ok(u);
     }
 
-    [Authorize(Roles = "Admin")]
+    [Authorize("Admin")]
     [HttpDelete("deleteUser/{id}")]
     public async Task<IActionResult> Delete(int id)
     {
@@ -49,7 +49,7 @@ public class UserController : ControllerBase
         return NoContent();
     }
 
-    [Authorize(Roles = "Admin")]
+    [Authorize("Admin")]
     [HttpPost("createUser")]
     public async Task<IActionResult> CreateUser(CreateUserDto model)
     {
@@ -64,7 +64,7 @@ public class UserController : ControllerBase
         }
     }
 
-    [Authorize(Roles = "Admin")]
+    [Authorize("Admin")]
     [HttpPut("updateUser")]
     public async Task<IActionResult> UpdateUser(UpdateUserDto model)
     {
@@ -76,7 +76,7 @@ public class UserController : ControllerBase
     }
 
     [HttpPut("assignRole")]
-    [Authorize(Roles = "Admin")]
+    [Authorize("Admin")]
     public async Task<IActionResult> AssignRoleToUser(AssignRoleDto model)
     {
         var result = await _svc.AssignRoleAsync(model.UserId, model.RoleId);

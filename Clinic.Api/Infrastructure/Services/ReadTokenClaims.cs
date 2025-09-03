@@ -1,30 +1,28 @@
 ﻿using Clinic.Api.Application.Interfaces;
-using static Clinic.Api.Middlwares.Exceptions;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace Clinic.Api.Infrastructure.Services
 {
     public class ReadTokenClaims : IReadTokenClaims
     {
-        private readonly IHttpContextAccessor _httpContextAccessor;
-
-        public ReadTokenClaims(IHttpContextAccessor httpContextAccessor)
-        {
-            _httpContextAccessor = httpContextAccessor;
-        }
-
         public int GetUserId()
         {
-            var user = _httpContextAccessor.HttpContext?.User;
+            HttpContextAccessor context = new HttpContextAccessor();
+            var idToken = context.HttpContext.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
+            var token = new JwtSecurityToken(jwtEncodedString: idToken);
 
-            if (user == null)
-                throw new UnAuthorizedException(1004, "User is not authenticated.");
+            int userId = Convert.ToInt32(token.Claims.First(x => x.Type == "userId").Value);
+            return userId;
+        }
 
-            var userIdClaim = user.FindFirst("userId");
+        public string GetUserRole()
+        {
+            HttpContextAccessor context = new HttpContextAccessor();
+            var idToken = context.HttpContext.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
+            var token = new JwtSecurityToken(jwtEncodedString: idToken);
 
-            if (userIdClaim == null)
-                throw new ClaimNotFound(1005, "UserId claim not found in token.");
-
-            return int.Parse(userIdClaim.Value);
+            string userRole = token.Claims.First(x => x.Type == "userRole").Value;
+            return userRole;
         }
     }
 }

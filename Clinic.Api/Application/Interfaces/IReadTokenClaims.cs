@@ -3,5 +3,6 @@
     public interface IReadTokenClaims
     {
         int GetUserId();
+        string GetUserRole();
     }
 }

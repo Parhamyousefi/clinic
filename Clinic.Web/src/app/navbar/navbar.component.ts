@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { NgForOf, NgClass } from "@angular/common";
+import { RouterLink } from "@angular/router";
 export interface imenu {
   id: number;
   text: string;
@@ -9,7 +10,7 @@ export interface imenu {
 }
 
 export const Menu: imenu[] = [
-  { id: 0, text: "وقت دهی", link: '/', roleAccess: [], icon: '' },
+  { id: 0, text: "وقت دهی", link: '/appointment', roleAccess: [], icon: '' },
   { id: 1, text: "اوقات امروز", link: '/', roleAccess: [], icon: '' },
   { id: 2, text: "بیماران", link: '/', roleAccess: [], icon: '' },
   { id: 3, text: "صورت حساب ها", link: '/', roleAccess: [], icon: '' },
@@ -25,7 +26,7 @@ export const Menu: imenu[] = [
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [NgForOf, NgClass],
+  imports: [NgForOf, NgClass, RouterLink],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css'
 })
