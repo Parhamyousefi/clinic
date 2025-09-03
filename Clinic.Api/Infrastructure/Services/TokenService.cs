@@ -6,6 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Microsoft.IdentityModel.JsonWebTokens;
 
 namespace Clinic.Api.Infrastructure.Services
 {
@@ -16,23 +17,24 @@ namespace Clinic.Api.Infrastructure.Services
 
         public string CreateToken(UserContext user, string roleName)
         {
-            var claims = new[]
+            var tokenHandler = new JsonWebTokenHandler();
+            var key = Encoding.ASCII.GetBytes(_settings.Key);
+
+            var tokenDescriptor = new SecurityTokenDescriptor
             {
-                new Claim("userId", user.Id.ToString()),
-                new Claim("username", user.Email ?? ""),
-                new Claim("role", roleName)
+                Subject = new ClaimsIdentity(new Claim[]
+                {
+          new Claim("userId", user.Id.ToString()),
+          new Claim("username", user.Email ?? ""),
+          new Claim("userRole", roleName)
+                }),
+                IssuedAt = DateTime.UtcNow,
+                Expires = DateTime.UtcNow.AddDays(7),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256),
             };
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_settings.Key));
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-            var token = new JwtSecurityToken(
-                _settings.Issuer,
-                _settings.Audience,
-                claims,
-                expires: DateTime.UtcNow.AddDays(_settings.ExpireDays),
-                signingCredentials: creds
-            );
-            return new JwtSecurityTokenHandler().WriteToken(token);
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            return token;
         }
     }
 }

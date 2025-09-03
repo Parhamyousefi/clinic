@@ -26,10 +26,15 @@ namespace Clinic.Api.Infrastructure.Services
         {
             try
             {
+                var userRole = _token.GetUserRole();
+                if (userRole == "Doctor")
+                {
+                    model.PractitionerId = _token.GetUserId();
+                }
+                var userId = _token.GetUserId();
+
                 if (model.EditOrNew == -1)
                 {
-                    var userId = _token.GetUserId();
-
                     if (model.Start >= model.End)
                         throw new ValidationException(1001, "Start date must be earlier than End date.");
 
@@ -41,17 +46,18 @@ namespace Clinic.Api.Infrastructure.Services
                      a.PatientId == model.PatientId &&
                      a.BusinessId == model.BusinessId &&
                      (
-                         (model.Start >= a.Start && model.Start < a.End) ||
-                         (model.End > a.Start && model.End <= a.End) ||
-                         (model.Start <= a.Start && model.End >= a.End)
+                         (model.Start.Hour >= a.Start.Hour && model.Start.Hour < a.End.Hour) ||
+                         (model.End.Hour > a.Start.Hour && model.End.Hour <= a.End.Hour) ||
+                         (model.Start.Hour <= a.Start.Hour && model.End.Hour >= a.End.Hour)
                      ));
 
                     if (hasOverlap)
                         throw new ConflictException(1002, "Patient already has an appointment in this business during this time.");
 
-
+                    model.ByInvoice = true;
                     var appointment = _mapper.Map<AppointmentsContext>(model);
                     appointment.CreatorId = userId;
+                    appointment.CreatedOn = DateTime.UtcNow;
                     _context.Appointments.Add(appointment);
                     await _context.SaveChangesAsync();
 
@@ -67,6 +73,8 @@ namespace Clinic.Api.Infrastructure.Services
                     }
 
                     _mapper.Map(model, existingAppointment);
+                    existingAppointment.CreatorId = userId;
+                    existingAppointment.LastUpdated = DateTime.UtcNow;
                     _context.Appointments.Update(existingAppointment);
                     await _context.SaveChangesAsync();
                     return existingAppointment.Id;
@@ -96,18 +104,23 @@ namespace Clinic.Api.Infrastructure.Services
             }
         }
 
-        public async Task<IEnumerable<AppointmentsContext>> GetAppointments(int clinicId, DateTime? date)
+        public async Task<IEnumerable<AppointmentsContext>> GetAppointments(int clinicId, DateTime? date, int? docId)
         {
             try
             {
-                var userId = _token.GetUserId();
+                var userRole = _token.GetUserRole();
+                if (userRole == "Doctor")
+                {
+                    docId = _token.GetUserId();
+                }
 
                 var selectedDate = date?.Date ?? DateTime.Today;
+                var nextDay = selectedDate.AddDays(1);
 
                 return await _context.Appointments
          .Where(u =>
              u.BusinessId == clinicId &&
-             u.PractitionerId == userId &&
+             u.PractitionerId == docId &&
              u.Start.Date <= selectedDate &&
              u.End.Date >= selectedDate)
          .ToListAsync();
@@ -117,6 +130,8 @@ namespace Clinic.Api.Infrastructure.Services
                 throw new Exception(ex.Message);
             }
         }
+       
+
 
         public async Task<IEnumerable<TreatmentsContext>> GetTreatments(int appointmentId)
         {
@@ -136,9 +151,13 @@ namespace Clinic.Api.Infrastructure.Services
         {
             try
             {
+                var userId = _token.GetUserId();
+
                 if (model.EditOrNew == -1)
                 {
                     var treatment = _mapper.Map<TreatmentsContext>(model);
+                    treatment.CreatorId = userId;
+                    treatment.CreatedOn = DateTime.UtcNow;
                     _context.Treatments.Add(treatment);
                     await _context.SaveChangesAsync();
                     return "Successfully Saved Treatment";
@@ -153,6 +172,8 @@ namespace Clinic.Api.Infrastructure.Services
                     }
 
                     _mapper.Map(model, existingTreatment);
+                    existingTreatment.CreatorId = userId;
+                    existingTreatment.CreatedOn = DateTime.UtcNow;
                     _context.Treatments.Update(existingTreatment);
                     await _context.SaveChangesAsync();
                     return "Treatment Updated Successfully";

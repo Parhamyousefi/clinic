@@ -1,8 +1,8 @@
 ﻿namespace Clinic.Api.Middlwares
 {
-    public class UserMapper
+    public static class UserMapper
     {
-        public string[] MapRole(string roleId)
+        public static string[] MapRole(string roleId)
         {
             string[] result = new string[2];
             switch (roleId)

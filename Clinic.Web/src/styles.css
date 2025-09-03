@@ -1,4 +1,12 @@
-/* You can add global styles to this file, and also import other style files */
+@font-face {
+    font-family: "iran-sans";
+    src: url("assets/fonts/IRANSans.eot") format("eot"),
+        url("assets/fonts/IRANSans.ttf") format("truetype"),
+        url("assets/fonts/IRANSans.woff") format("woff"),
+        url("assets/fonts/IRANSans.woff2") format("woff2");
+    font-style: normal;
+    font-weight: normal;
+}
 
 * {
     margin: 0;
@@ -6,14 +14,16 @@
     box-sizing: border-box;
 }
 
-.body {
-    direction: rtl;
-
+body {
+    font-family: "iran-sans" !important;
 }
 
 .appContainer {
-    width: 100%;
+    width: calc(100% - 270px);
+    margin-top: 80px;
     height: 100vh;
+    padding: 20px;
+    margin-right: 270px;
 }
 
 .pointer {
@@ -27,6 +37,7 @@
     height: 80px;
     position: fixed;
     top: 0;
+    right: 250px;
     background-color: #ffff;
     box-shadow: 0px 15px 25px rgba(0, 0, 0, 0.05);
 }
@@ -34,7 +45,6 @@
 .sidebar {
     display: flex;
     flex-flow: column;
-    /* justify-content: space-between; */
     direction: rtl;
     text-align: center;
     width: 250px;
@@ -43,9 +53,21 @@
     position: fixed;
     top: 0;
     right: 0;
-    /* border-radius: 12px 0px 12px 0px; */
     z-index: 99;
     box-shadow: 0 0 5px rgb(0 0 0 / 20%);
     animation-name: fadeRight;
     animation-duration: 0.8s;
+}
+
+
+
+.modalShadow {
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
 }

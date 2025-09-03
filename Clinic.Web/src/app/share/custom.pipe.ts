@@ -1,7 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import moment from 'moment';
-// import * as moment from 'moment-jalaali';
+import moment from 'moment-jalaali';
 /*
  * Raise the value exponentially
  * Takes an exponent argument that defaults to 1.
@@ -250,6 +249,14 @@ export class ConvertTimeSeconds implements PipeTransform {
 export class ShamsiMonthPipe implements PipeTransform {
   transform(value: number): string {
     const date = moment(value + "Z").locale('fa').format('jDD jMMMM jYYYY');
+    return date;
+  }
+}
+
+@Pipe({ name: 'JustDateZone' })
+export class JustDateZone implements PipeTransform {
+  transform(value: any) {
+    let date = moment(value).format('jYYYY/jMM/jDD');
     return date;
   }
 }

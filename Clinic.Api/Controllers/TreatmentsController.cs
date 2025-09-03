@@ -1,7 +1,7 @@
 ﻿using Clinic.Api.Application.DTOs;
 using Clinic.Api.Application.DTOs.Appointments;
 using Clinic.Api.Application.Interfaces;
-using Microsoft.AspNetCore.Authorization;
+using Clinic.Api.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Clinic.Api.Controllers
@@ -18,7 +18,7 @@ namespace Clinic.Api.Controllers
         }
 
         [HttpPost("createAppointment")]
-        [Authorize(Roles = "Admin,Doctor")]
+        [Authorize("Admin", "Doctor")]
         public async Task<IActionResult> Create(CreateAppointmentDto model)
         {
             if (!ModelState.IsValid)
@@ -29,23 +29,23 @@ namespace Clinic.Api.Controllers
         }
 
         [HttpGet("deleteAppointment/{id}")]
-        [Authorize(Roles ="Admin,Doctor")]
+        [Authorize("Admin", "Doctor")]
         public async Task<IActionResult> DeleteAppointment(int id)
         {
             var result = await _treatmentsService.DeleteAppointment(id);
             return Ok(result);
         }
 
-        [HttpGet("getAppointments/{clinicId}/{date?}")]
-        [Authorize(Roles = "Admin,Doctor")]
-        public async Task<IActionResult> GetAppointments(int clinicId, DateTime? date)
+        [HttpGet("getAppointments/{clinicId}/{date?}/{docId?}")]
+        [Authorize("Admin", "Doctor")]
+        public async Task<IActionResult> GetAppointments(int clinicId, DateTime? date, int? docId)
         {
-            var result = await _treatmentsService.GetAppointments(clinicId, date);
+            var result = await _treatmentsService.GetAppointments(clinicId, date, docId);
             return Ok(result);
         }
 
         [HttpGet("getTreatments/{appointmentId}")]
-        [Authorize(Roles = "Admin,Doctor")]
+        [Authorize("Admin", "Doctor")]
         public async Task<IActionResult> GetTreatments(int appointmentId)
         {
             var result = await _treatmentsService.GetTreatments(appointmentId);
@@ -54,7 +54,7 @@ namespace Clinic.Api.Controllers
         }
 
         [HttpPost("saveTreatment")]
-        [Authorize(Roles ="Admin,Doctor")]
+        [Authorize("Admin", "Doctor")]
         public async Task<IActionResult> SaveTreatment(SaveTreatmentsDto model)
         {
             var result = await _treatmentsService.SaveTreatment(model);
@@ -63,7 +63,7 @@ namespace Clinic.Api.Controllers
         }
 
         [HttpGet("deleteTreatment/{id}")]
-        [Authorize(Roles ="Admin,Doctor")]
+        [Authorize("Admin", "Doctor")]
         public async Task<IActionResult> DeleteTreatment(int id)
         {
             var result = await _treatmentsService.DeleteTreatment(id);
@@ -71,7 +71,7 @@ namespace Clinic.Api.Controllers
         }
 
         [HttpPost("getTodayAppointments")]
-        [Authorize(Roles ="Admin,Doctor")]
+        [Authorize("Admin", "Doctor")]
         public async Task<IActionResult> GetTodayAppointments(GetTodayAppointmentsDto model)
         {
             var result = await _treatmentsService.GetTodayAppointments(model);
@@ -79,8 +79,8 @@ namespace Clinic.Api.Controllers
         }
 
         [HttpGet("getAppointmentTypes")]
-        [Authorize(Roles = "Admin,Doctor")]
-        public async Task<IActionResult> GetAppointmentTypes() 
+        [Authorize("Admin", "Doctor")]
+        public async Task<IActionResult> GetAppointmentTypes()
         {
             var result = await _treatmentsService.GetAppointmentTypes();
 

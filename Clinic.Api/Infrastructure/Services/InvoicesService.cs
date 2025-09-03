@@ -24,9 +24,13 @@ namespace Clinic.Api.Infrastructure.Services
         {
             try
             {
+                var userId = _token.GetUserId();
+
                 if (model.EditOrNew == -1)
                 {
                     var invoice = _mapper.Map<InvoicesContext>(model);
+                    invoice.CreatorId = userId;
+                    invoice.CreatedOn = DateTime.UtcNow;
                     _context.Invoices.Add(invoice);
                     await _context.SaveChangesAsync();
                     return "Invoice Saved Successfully";
@@ -41,6 +45,8 @@ namespace Clinic.Api.Infrastructure.Services
                     }
 
                     _mapper.Map(model, existingInvoice);
+                    existingInvoice.CreatorId = userId;
+                    existingInvoice.LastUpdated = DateTime.UtcNow;
                     _context.Invoices.Update(existingInvoice);
                     await _context.SaveChangesAsync();
                     return "Invoice Updated Successfully";
@@ -69,9 +75,13 @@ namespace Clinic.Api.Infrastructure.Services
         {
             try
             {
+                var userId = _token.GetUserId();
+
                 if (model.EditOrNew == -1)
                 {
                     var invoiceItem = _mapper.Map<InvoiceItemsContext>(model);
+                    invoiceItem.CreatorId = userId;
+                    invoiceItem.CreatedOn = DateTime.UtcNow;
                     _context.InvoiceItems.Add(invoiceItem);
                     await _context.SaveChangesAsync();
                     return "Invoice Item Saved Successfully";
@@ -86,6 +96,8 @@ namespace Clinic.Api.Infrastructure.Services
                     }
 
                     _mapper.Map(model, existingInvoiceItem);
+                    existingInvoiceItem.CreatorId = userId;
+                    existingInvoiceItem.LastUpdated = DateTime.UtcNow;
                     _context.InvoiceItems.Update(existingInvoiceItem);
                     await _context.SaveChangesAsync();
                     return "Invoice Item Updated Successfully";
