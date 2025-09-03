@@ -45,7 +45,6 @@ body {
 .sidebar {
     display: flex;
     flex-flow: column;
-    /* justify-content: space-between; */
     direction: rtl;
     text-align: center;
     width: 250px;
@@ -54,7 +53,6 @@ body {
     position: fixed;
     top: 0;
     right: 0;
-    /* border-radius: 12px 0px 12px 0px; */
     z-index: 99;
     box-shadow: 0 0 5px rgb(0 0 0 / 20%);
     animation-name: fadeRight;

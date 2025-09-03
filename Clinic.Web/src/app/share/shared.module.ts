@@ -72,3 +72,5 @@ import { MatDatepickerModulePersian } from 'ngx-persian-datepicker';
   ]
 })
 export class SharedModule { }
+export { ShamsiUTCPipe };
+
