@@ -71,7 +71,7 @@ namespace Clinic.Api.Infrastructure.Data
         public DbSet<DocumentsPrintingsContext> DocumentsPrintings { get; set; }
         public DbSet<DocumentNumbersContext> DocumentNumbers { get; set; }
         public DbSet<DateConvertContext> DateConverts { get; set; }
-        public DbSet<ContriesContext> Contries { get; set; }
+        public DbSet<CountriesContext> Countries { get; set; }
         public DbSet<ContactTypesContext> ContactTypes { get; set; }
         public DbSet<ContactsContext> Contacts { get; set; }
         public DbSet<ContactPhonesContext> ContactPhones { get; set; }
