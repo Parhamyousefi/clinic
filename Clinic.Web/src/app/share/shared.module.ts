@@ -11,6 +11,8 @@ import {
   JustDateZone
 } from './custom.pipe';
 import { MatDatepickerModulePersian } from 'ngx-persian-datepicker';
+import { TableModule } from 'primeng/table';
+import { FormsModule } from '@angular/forms';
 
 
 
@@ -42,7 +44,9 @@ import { MatDatepickerModulePersian } from 'ngx-persian-datepicker';
     JustDateZone
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    TableModule,
+    FormsModule
   ],
   exports: [
     NumberSplitPipe,
@@ -68,7 +72,9 @@ import { MatDatepickerModulePersian } from 'ngx-persian-datepicker';
     NumberSplitSlashPipe,
     NumberSplitDotPipe,
     ConvertTimeSeconds,
-    JustDateZone
+    JustDateZone,
+    TableModule,
+    FormsModule
   ]
 })
 export class SharedModule { }
