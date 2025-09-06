@@ -1,0 +1,80 @@
+<div class="appContainer">
+    <div class="col-12 text-right">
+        <h4>وقت دهی</h4>
+    </div>
+    <hr>
+    <div class="col-12">
+        <div class="d-lg-flex align-items-baseline my-3">
+            <div class="col-lg-2 col-12">
+                <p-dropdown [options]="clinicsList" placeholder="مکان" [(ngModel)]="selectedClinic" optionLabel="name" class="full-width text-right" />
+            </div>
+            <div class="col-lg-2 col-12">
+                <p-dropdown [options]="servicesList" placeholder="خدمات" [(ngModel)]="selectedservice" optionLabel="name" class="full-width text-right" />
+            </div>
+            <div class="col-lg-2 col-12">
+                <mat-form-field appearance="outline">
+                    <mat-label>از تاریخ</mat-label>
+                    <input matInput [matDatepicker]="picker1" [(ngModel)]="selectedDatefrom">
+                    <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                    <mat-datepicker #picker1></mat-datepicker>
+                </mat-form-field>
+            </div>
+            <div class="col-lg-2 col-12">
+                <ngx-timepicker-field [format]="24" (timeSet)="selectedTimefrom = $event" [defaultTime]="'08:00'">
+                </ngx-timepicker-field>
+            </div>
+            <div class="col-lg-2 col-12">
+                <mat-form-field appearance="outline">
+                    <mat-label>تا تاریخ</mat-label>
+                    <input matInput [matDatepicker]="picker3" [(ngModel)]="selectedDateTo">
+                    <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
+                    <mat-datepicker #picker3></mat-datepicker>
+                </mat-form-field>
+            </div>
+            <div class="col-lg-2 col-12">
+                <ngx-timepicker-field [format]="24" (timeSet)="selectedTimeTo = $event" [defaultTime]="'08:00'">
+                </ngx-timepicker-field>
+            </div>
+        </div>
+        <div class="text-center mb-3" (click)="getAppointment()">
+            <button class="btn btn-danger">جستجو</button>
+        </div>
+        <p-table #dt styleClass="p-datatable-gridlines" [value]="todayAppointmentsList" [autoLayout]="true" [paginator]="true" [rows]="10" [showCurrentPageReport]="true" currentPageReportTemplate="نمایش {first} تا {last} " [rowsPerPageOptions]="[10,25,50]">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th pSortableColumn="fldFirstName">زمان ملاقات
+                        <p-sortIcon field="fldFirstName"></p-sortIcon>
+                    </th>
+                    <th> نام</th>
+                    <th> نوع وقت</th>
+                    <th> خدمت</th>
+                    <th> پزشک</th>
+                    <th> عملیات</th>
+                </tr>
+                <tr>
+                    <th>
+                        <input type="text" (input)="dt.filter($event.target?.value, 'fldFirstName', 'contains')" class="form-control">
+                    </th>
+                    <th>
+                        <input type="text" (input)="dt.filter($event.target?.value, 'fldFirstName', 'contains')" class="form-control">
+                    </th>
+                    <th></th>
+                    <th></th>
+                    <th>
+                        <input type="text" (input)="dt.filter($event.target?.value, 'fldEmail', 'contains')" class="form-control">
+                    </th>
+                    <th></th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-item>
+                <tr>
+                    <td class="px-2">
+                        <div class="py-2 widthClassPrime">
+                            <span>{{item.fldFirstName}}</span>
+                        </div>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</div>
