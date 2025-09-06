@@ -31,7 +31,7 @@ export class LoginComponent {
         }
         let res: any = await this.userService.login(data).toPromise();
         if (res.token && res.secretCode) {
-          this.router.navigate(["/dashboard"]);
+          this.router.navigate(["/appointment"]);
           localStorage.setItem("token", res.token)
         }
       }

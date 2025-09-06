@@ -23,7 +23,7 @@
         </div>
         <div class="col-lg-8 col-12 px-0 my-2">
             <div class="card-style-date p-3">
-                <div class="col-12" *ngIf="weekMode">
+                <div class="col-12" *ngIf="!weekMode">
                     <div class="d-lg-flex justify-content-between align-items-center mb-3">
                         <div class="d-flex align-items-center pointer" (click)="changeDate(1)">
                             <i class="fa fa-arrow-right mx-1" aria-hidden="true"></i>
@@ -77,7 +77,7 @@
                                 <tr class="tr-sticky w-100 d-flex">
                                     <th class="table-time col-2"></th>
                                     <th *ngFor="let day of weekDays" class="text-center col-2"
-                                        [ngClass]="{'bg-danger': day.currentDate}">
+                                        [ngClass]="{'today-bg': day.isToday}">
                                         <div>{{day.dayName}}</div>
                                         <div>{{day.dayNumber}}</div>
                                     </th>
@@ -87,7 +87,8 @@
                                 <tr class="d-flex" *ngFor="let time of hours">
                                     <td class="col-2 d-flex justify-content-center align-items-center">{{time}}</td>
                                     <td *ngFor="let day of weekDays" class="text-center col-2"
-                                        (click)="setNewAppointment(time)">
+                                        [ngClass]="{'today-bg': day.isToday}"
+                                        (click)="setWeeklyNewAppointment(day.fullDate,time)">
                                     </td>
                                     <!-- <td class="col-10 p-2 d-flex appointments-container"
                                         (click)="setNewAppointment(time)">

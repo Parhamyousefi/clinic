@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NgForOf, NgClass } from "@angular/common";
 import { RouterLink } from "@angular/router";
+import { AuthService } from '../_services/auth.service';
 export interface imenu {
   id: number;
   text: string;
@@ -33,8 +34,17 @@ export const Menu: imenu[] = [
 export class NavbarComponent {
   sidebarMenu: any[] = [];
   selectedSideBarItem: any;
+  constructor(
+    private authService: AuthService
+  ) {
+
+  }
   ngOnInit() {
     this.sidebarMenu = Menu;
 
+  }
+
+  logOut() {
+    this.authService.logout();
   }
 }

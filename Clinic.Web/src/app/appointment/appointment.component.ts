@@ -262,24 +262,29 @@ export class AppointmentComponent {
   }
 
 
-
   getCurrentWeek() {
     let currentDate = moment(this.appointmentDate);
-    let weekStart: any = currentDate.locale('fa').startOf('week');
+    let weekStart: any = currentDate.clone().locale('fa').startOf('week');
     let daysOfWeek = [];
-    for (let i = 0; i < 7; i++) {
-      let currentDate = moment().format('jYYYY/jMM/jDD') == weekStart.format('jYYYY/jMM/jDD');
-      daysOfWeek.push(
-        {
-          dayName: weekStart.locale('fa').format('dddd'),
-          dayNumber: weekStart.format('jDD'),
-          currentDate: currentDate,
-          fullDate: weekStart._d
-        });
+
+    for (let i = 0; i < 6; i++) {
+      daysOfWeek.push({
+        dayName: weekStart.locale('fa').format('dddd'),
+        dayNumber: weekStart.format('jDD'),
+        fullDate: weekStart.toDate(),
+        isToday: weekStart.isSame(moment(), 'day'),
+      });
       weekStart.add(1, 'day');
     }
+
     this.weekDays = daysOfWeek;
     console.log(this.weekDays);
+  }
 
+
+  setWeeklyNewAppointment(date: any, time: any) {
+    this.newAppointmentModel.appointmentStartTime = this.combineDateAndTime(date, time);
+    this.newAppointmentModel.appointmentEndTime = this.combineDateAndTime(date, this.getEndTime(time))
+    this.showNewAppointment = true;
   }
 }

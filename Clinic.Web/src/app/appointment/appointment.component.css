@@ -116,3 +116,7 @@
 ::ng-deep .p-dropdown .p-dropdown-label {
     font-family: 'iran-sans' !important;
 }
+
+.today-bg {
+    background-color: rgba(204, 247, 244, .6) !important;
+}

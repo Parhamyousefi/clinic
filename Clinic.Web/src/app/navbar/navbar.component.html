@@ -10,7 +10,7 @@
             <div class="navbar-item mx-2 d-flex justify-content-center align-items-center pointer">
                 <i class="fa fa-bell-o text-white" aria-hidden="true"></i>
             </div>
-            <div class="profile-avatar pointer">
+            <div class="profile-avatar pointer d-flex justify-content-center align-items-center">
                 <i class="fa fa-2 fa-user text-white" aria-hidden="true"></i>
             </div>
         </div>
@@ -30,5 +30,9 @@
                 aria-hidden="true"></i>
             <p class="m-0">{{item.text}}</p>
         </div>
+    </div>
+    <div class="sidebar-item d-flex align-items-center pointer mt-3 p-2" (click)="logOut()">
+        <i class="fa fa-sign-out ml-2 sidebar-item-icon" aria-hidden="true"></i>
+        <p class="m-0">خروج</p>
     </div>
 </div>
