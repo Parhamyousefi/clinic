@@ -57,7 +57,7 @@ namespace Clinic.Api.Controllers
         }
 
         [HttpPost("saveJobs")]
-        [Authorize("Admin", "Doctor")]
+        [Authorize("Admin")]
         public async Task<IActionResult> SaveJobs(SaveJobsDto model)
         {
             var result = await _mainService.SaveJobs(model);
@@ -73,9 +73,18 @@ namespace Clinic.Api.Controllers
         }
 
         [HttpGet("deleteJob/{id}")]
+        [Authorize("Admin")]
         public async Task<IActionResult> DeleteJob(int id)
         {
             var result = await _mainService.DeleteJob(id);
+            return Ok(result);
+        }
+
+        [HttpGet("getCountries")]
+        [Authorize("Admin","Doctor")]
+        public async Task<IActionResult> GetCountries()
+        {
+            var result = await _mainService.GetCountries();
             return Ok(result);
         }
     }

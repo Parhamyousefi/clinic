@@ -389,3 +389,53 @@ Content-Type: application/json
 GET {{Clinic_Api_Host}}/api/main/getClinics
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwidXNlcm5hbWUiOiJuaW1hIiwicm9sZSI6IkFkbWluIiwiZXhwIjoxNzU2ODA1NjE4LCJpc3MiOiJDbGluaWMuQXBpIiwiYXVkIjoiQ2xpbmljLkFwaS5Vc2VycyJ9.S8z4iLf7sKv6IOaJNX2CVFGjM3IZaG5yK84Sv-VYTd8
 Content-Type: application/json
+
+### Save Contacts
+POST {{Clinic_Api_Host}}/api/contacts/saveContacts
+Authorization: Bearer
+Content-Type: application/json
+{
+  "contactTypeId": 1,
+  "titleId": null,
+  "firstName": null,
+  "lastName": null,
+  "preferredName": null,
+  "occupation": null,
+  "companyName": null,
+  "providerName": null,
+  "email": null,
+  "address1": null,
+  "address2": null,
+  "address3": null,
+  "city": null,
+  "state": null,
+  "postCode": null,
+  "countryId": null,
+  "notes": null,
+  "modifierId": null,
+  "createdOn": null,
+  "lastUpdated": null,
+  "creatorId": null,
+  "jobId": null,
+  "editOrNew": -1
+}
+
+### Get Contacts
+GET {{Clinic_Api_Host}}/api/contacts/getContacts
+Authorization: Bearer
+Content-Type: application/json
+
+### Delete Contacts
+GET {{Clinic_Api_Host}}/api/contacts/deleteContacts/1
+Authorization: Bearer
+Content-Type: application/json
+
+### Get Contact Types
+GET {{Clinic_Api_Host}}/api/contacts/getContactTypes
+Authorization: Bearer
+Content-Type: application/json
+
+### Get Countries
+GET {{Clinic_Api_Host}}/api/contacts/getCountries
+Authorization: Bearer
+Content-Type: application/json

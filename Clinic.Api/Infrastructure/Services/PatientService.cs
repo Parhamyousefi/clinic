@@ -46,7 +46,7 @@ namespace Clinic.Api.Infrastructure.Services
                     }
 
                     _mapper.Map(model, existingPatient);
-                    existingPatient.CreatorId = userId;
+                    existingPatient.ModifierId = userId;
                     existingPatient.LastUpdated = DateTime.UtcNow;
                     _context.Patients.Update(existingPatient);
                     await _context.SaveChangesAsync();
@@ -118,7 +118,7 @@ namespace Clinic.Api.Infrastructure.Services
                     .SetProperty(x => x.ModifierId, model.ModifierId)
                     .SetProperty(x => x.CreatedOn, model.CreatedOn)
                     .SetProperty(x => x.LastUpdated, model.LastUpdated)
-                    .SetProperty(x => x.CreatorId, userId));
+                    .SetProperty(x => x.ModifierId, userId));
                 await _context.SaveChangesAsync();
                 return "Patient Phone Updated Successfully";
             }

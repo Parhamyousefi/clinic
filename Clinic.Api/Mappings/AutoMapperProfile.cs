@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Clinic.Api.Application.DTOs;
 using Clinic.Api.Application.DTOs.Appointments;
+using Clinic.Api.Application.DTOs.Contacts;
 using Clinic.Api.Application.DTOs.Invoices;
 using Clinic.Api.Application.DTOs.Main;
 using Clinic.Api.Application.DTOs.Patients;
@@ -28,6 +29,7 @@ namespace Clinic.Api.Mappings
             CreateMap<SaveReceiptsDto, ReceiptsContext>().ReverseMap();
             CreateMap<SavePaymentsDto, PaymentsContext>().ReverseMap();
             CreateMap<SaveJobsDto, JobsContext>().ReverseMap();
+            CreateMap<SaveContactsDto, ContactsContext>().ReverseMap();
         }
     }
 }
