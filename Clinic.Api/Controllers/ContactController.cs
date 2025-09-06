@@ -7,11 +7,11 @@ namespace Clinic.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ContactsController : ControllerBase
+    public class ContactController : ControllerBase
     {
         private readonly IContactsService _contactsService;
 
-        public ContactsController(IContactsService contactsService)
+        public ContactController(IContactsService contactsService)
         {
             _contactsService = contactsService;
         }

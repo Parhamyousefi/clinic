@@ -8,11 +8,11 @@ namespace Clinic.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TreatmentsController : ControllerBase
+    public class TreatmentController : ControllerBase
     {
         private readonly ITreatmentsService _treatmentsService;
 
-        public TreatmentsController(ITreatmentsService treatmentsService)
+        public TreatmentController(ITreatmentsService treatmentsService)
         {
             _treatmentsService = treatmentsService;
         }
