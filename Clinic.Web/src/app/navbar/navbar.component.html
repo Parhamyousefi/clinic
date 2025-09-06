@@ -19,13 +19,9 @@
     <div class="w-100 logo-container d-flex justify-content-center align-items-center">
         Logo
     </div>
-    <div class="sidebar-items d-flex flex-column justify-content-center mx-4 mt-3">
-        <div *ngFor="let item of sidebarMenu"
-            [ngClass]="{'selected-sidebar-menu text-white': selectedSideBarItem == item.id}"
-            class="sidebar-item d-flex align-items-center pointer mt-3 p-2" [routerLink]="item.link"
-            (click)="selectedSideBarItem = item.id">
-            <i class="fa fa-plus ml-2 sidebar-item-icon" [ngClass]="{'text-white': selectedSideBarItem == item.id}"
-                aria-hidden="true"></i>
+    <div class="sidebar-items mx-4 mt-3">
+        <div *ngFor="let item of sidebarMenu" [ngClass]="{'selected-sidebar-menu text-white': selectedSideBarItem == item.id}" class="sidebar-item d-flex align-items-center pointer mt-3 p-2" [routerLink]="item.link" (click)="selectedSideBarItem = item.id">
+            <i class="fa fa-plus ml-2 sidebar-item-icon" [ngClass]="{'text-white': selectedSideBarItem == item.id}" aria-hidden="true"></i>
             <p class="m-0">{{item.text}}</p>
         </div>
     </div>

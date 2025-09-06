@@ -78,3 +78,39 @@ body {
 .p-paginator {
     direction: ltr !important;
 }
+
+.full-width .p-dropdown {
+    width: 100%;
+    padding: 5px;
+}
+
+.p-element {
+    font-family: "iran-sans" !important;
+}
+
+.mat-calendar {
+    font-family: "iran-sans" !important;
+}
+
+.mat-mdc-text-field-wrapper.mdc-text-field--outlined .mdc-text-field__input {
+    text-align: center;
+}
+
+.ngx-timepicker {
+    direction: ltr;
+    justify-content: center;
+}
+
+ngx-material-timepicker-toggle {
+    display: none;
+}
+
+.ngx-timepicker {
+    border: 1px solid rgba(0, 0, 0, .12);
+    padding: 0.8rem;
+    border-radius: 8px;
+}
+
+mat-label {
+    font-family: "iran-sans" !important;
+}

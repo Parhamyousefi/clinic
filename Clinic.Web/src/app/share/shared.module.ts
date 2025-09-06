@@ -13,7 +13,11 @@ import {
 import { MatDatepickerModulePersian } from 'ngx-persian-datepicker';
 import { TableModule } from 'primeng/table';
 import { FormsModule } from '@angular/forms';
-
+import { DropdownModule } from 'primeng/dropdown';
+import { MatInputModule } from '@angular/material/input';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 
 
 @NgModule({
@@ -46,7 +50,12 @@ import { FormsModule } from '@angular/forms';
   imports: [
     CommonModule,
     TableModule,
-    FormsModule
+    FormsModule,
+    DropdownModule,
+    MatInputModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    NgxMaterialTimepickerModule
   ],
   exports: [
     NumberSplitPipe,
@@ -74,7 +83,11 @@ import { FormsModule } from '@angular/forms';
     ConvertTimeSeconds,
     JustDateZone,
     TableModule,
-    FormsModule
+    FormsModule,
+    DropdownModule,
+    MatInputModule,
+    MatDatepickerModule,
+    NgxMaterialTimepickerModule
   ]
 })
 export class SharedModule { }

@@ -3,6 +3,7 @@ import moment from 'moment';
 import { TreatmentsService } from './../../_services/treatments.service';
 import { UserService } from '../../_services/user.service';
 import { SharedModule } from '../../share/shared.module';
+import { MainService } from './../../_services/main.service';
 
 @Component({
   selector: 'app-today-appointments',
@@ -15,15 +16,22 @@ export class TodayAppointmentsComponent implements OnInit {
 
   constructor(
     private treatmentsService: TreatmentsService,
-    private userService: UserService
+    private userService: UserService,
+    private mainService: MainService
   ) { }
 
   clinicsList: any = [];
   selectedClinic: any;
   todayAppointmentsList: any = [];
-
+  servicesList: any = [];
+  selectedservice: any;
+  selectedDatefrom: Date | null = null;
+  selectedTimefrom: any;
+  selectedDateTo: Date | null = null;
+  selectedTimeTo: any;
   async ngOnInit() {
     await this.getClinics();
+    await this.getJobs();
     await this.getAppointment();
   }
 
@@ -32,14 +40,14 @@ export class TodayAppointmentsComponent implements OnInit {
     let model = {
       date: today,
       arrived: null,
-      clinic: this.selectedClinic.code,
-      "service": 0,
+      clinic: this.selectedClinic?.code,
+      service: this.selectedservice?.code,
       from: null,
       to: null
     }
     try {
       let res: any = await this.treatmentsService.getTodayAppointments(model).toPromise();
-
+      this.todayAppointmentsList = res;
     }
     catch { }
 
@@ -53,6 +61,18 @@ export class TodayAppointmentsComponent implements OnInit {
         clinic.code = clinic.id;
       });
       this.selectedClinic = this.clinicsList[0];
+    }
+    catch { }
+  }
+
+  async getJobs() {
+    try {
+      let res = await this.mainService.getJobs().toPromise();
+      this.servicesList = res;
+      this.servicesList.forEach((service: any) => {
+        service.code = service.id;
+      });
+      this.selectedClinic = this.servicesList[0];
     }
     catch { }
   }
