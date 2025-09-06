@@ -73,7 +73,7 @@ namespace Clinic.Api.Controllers
         }
 
         [HttpGet("deleteJob/{id}")]
-        [Authorize("Admin","Doctor")]
+        [Authorize("Admin")]
         public async Task<IActionResult> DeleteJob(int id)
         {
             var result = await _mainService.DeleteJob(id);
@@ -85,6 +85,14 @@ namespace Clinic.Api.Controllers
         public async Task<IActionResult> GetBillableItems()
         {
             var result = await _mainService.GetBillableItems();
+            return Ok(result);
+        }
+        
+        [HttpGet("getCountries")]
+        [Authorize("Admin","Doctor")]
+        public async Task<IActionResult> GetCountries()
+        {
+            var result = await _mainService.GetCountries();
             return Ok(result);
         }
     }

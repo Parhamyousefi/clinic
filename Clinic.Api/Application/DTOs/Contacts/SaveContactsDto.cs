@@ -1,8 +1,7 @@
-﻿namespace Clinic.Api.Domain.Entities
+﻿namespace Clinic.Api.Application.DTOs.Contacts
 {
-    public class ContactsContext
+    public class SaveContactsDto
     {
-        public int Id { get; set; }
         public int ContactTypeId { get; set; }
         public int? TitleId { get; set; }
         public string? FirstName { get; set; }
@@ -25,5 +24,6 @@
         public DateTime? LastUpdated { get; set; }
         public int? CreatorId { get; set; }
         public int? JobId { get; set; }
+        public int EditOrNew { get; set; }
     }
 }

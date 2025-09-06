@@ -45,11 +45,12 @@ namespace Clinic.Api.Infrastructure.Services
                  .AnyAsync(a =>
                      a.PatientId == model.PatientId &&
                      a.BusinessId == model.BusinessId &&
-                     (
-                         (model.Start.Hour >= a.Start.Hour && model.Start.Hour < a.End.Hour) ||
-                         (model.End.Hour > a.Start.Hour && model.End.Hour <= a.End.Hour) ||
-                         (model.Start.Hour <= a.Start.Hour && model.End.Hour >= a.End.Hour)
-                     ));
+                      a.Start.Date == model.Start.Date &&
+        (
+            (model.Start.TimeOfDay >= a.Start.TimeOfDay && model.Start.TimeOfDay < a.End.TimeOfDay) ||
+            (model.End.TimeOfDay > a.Start.TimeOfDay && model.End.TimeOfDay <= a.End.TimeOfDay) ||
+            (model.Start.TimeOfDay <= a.Start.TimeOfDay && model.End.TimeOfDay >= a.End.TimeOfDay)
+        ));
 
                     if (hasOverlap)
                         throw new ConflictException(1002, "Patient already has an appointment in this business during this time.");
@@ -73,7 +74,7 @@ namespace Clinic.Api.Infrastructure.Services
                     }
 
                     _mapper.Map(model, existingAppointment);
-                    existingAppointment.CreatorId = userId;
+                    existingAppointment.ModifierId = userId;
                     existingAppointment.LastUpdated = DateTime.UtcNow;
                     _context.Appointments.Update(existingAppointment);
                     await _context.SaveChangesAsync();
@@ -170,7 +171,7 @@ namespace Clinic.Api.Infrastructure.Services
                     }
 
                     _mapper.Map(model, existingTreatment);
-                    existingTreatment.CreatorId = userId;
+                    existingTreatment.ModifierId = userId;
                     existingTreatment.CreatedOn = DateTime.UtcNow;
                     _context.Treatments.Update(existingTreatment);
                     await _context.SaveChangesAsync();

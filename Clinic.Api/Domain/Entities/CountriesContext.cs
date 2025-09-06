@@ -1,6 +1,6 @@
 ﻿namespace Clinic.Api.Domain.Entities
 {
-    public class ContriesContext
+    public class CountriesContext
     {
         public int Id { get; set; }
         public string? Name { get; set; }
