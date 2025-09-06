@@ -20,7 +20,7 @@ namespace Clinic.Api.Infrastructure.Services
             _token = token;
         }
 
-        public async Task<string> SaveInvoices(SaveInvoicesDto model)
+        public async Task<string> SaveInvoice(SaveInvoiceDto model)
         {
             try
             {
@@ -71,7 +71,7 @@ namespace Clinic.Api.Infrastructure.Services
             }
         }
 
-        public async Task<string> SaveInvoiceItems(SaveInvoiceItemsDto model)
+        public async Task<string> SaveInvoiceItem(SaveInvoiceItemDto model)
         {
             try
             {
@@ -122,7 +122,7 @@ namespace Clinic.Api.Infrastructure.Services
             }
         }
 
-        public async Task<string> DeleteInvoices(int id)
+        public async Task<string> DeleteInvoice(int id)
         {
             try
             {
@@ -142,7 +142,7 @@ namespace Clinic.Api.Infrastructure.Services
             }
         }
 
-        public async Task<string> DeleteInvoiceItems(int id)
+        public async Task<string> DeleteInvoiceItem(int id)
         {
             try
             {

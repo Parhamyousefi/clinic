@@ -10,7 +10,7 @@ namespace Clinic.Api.Application.Interfaces
         Task<string> DeleteAppointment(int id);
         Task<IEnumerable<AppointmentsContext>> GetAppointments(int clinicId, DateTime? date, int? docId);
         Task<IEnumerable<TreatmentsContext>> GetTreatments(int appointmentId);
-        Task<string> SaveTreatment(SaveTreatmentsDto model);
+        Task<string> SaveTreatment(SaveTreatmentDto model);
         Task<string> DeleteTreatment(int id);
         Task<IEnumerable<AppointmentsContext>> GetTodayAppointments(GetTodayAppointmentsDto model);
         Task<IEnumerable<GetAppointmentTypesDto>> GetAppointmentTypes();
