@@ -9,9 +9,9 @@ namespace Clinic.Api.Controllers
     [ApiController]
     public class InvoiceController : ControllerBase
     {
-        private readonly IInvoicesService _invoicesService;
+        private readonly IInvoiceService _invoicesService;
 
-        public InvoiceController(IInvoicesService invoicesService)
+        public InvoiceController(IInvoiceService invoicesService)
         {
             _invoicesService = invoicesService;
         }

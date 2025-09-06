@@ -10,9 +10,9 @@ namespace Clinic.Api.Controllers
     [ApiController]
     public class TreatmentController : ControllerBase
     {
-        private readonly ITreatmentsService _treatmentsService;
+        private readonly ITreatmentService _treatmentsService;
 
-        public TreatmentController(ITreatmentsService treatmentsService)
+        public TreatmentController(ITreatmentService treatmentsService)
         {
             _treatmentsService = treatmentsService;
         }

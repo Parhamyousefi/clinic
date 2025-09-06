@@ -7,13 +7,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Clinic.Api.Infrastructure.Services
 {
-    public class InvoicesService : IInvoicesService
+    public class InvoiceService : IInvoiceService
     {
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
         private readonly IReadTokenClaims _token;
 
-        public InvoicesService(ApplicationDbContext context, IMapper mapper, IReadTokenClaims token)
+        public InvoiceService(ApplicationDbContext context, IMapper mapper, IReadTokenClaims token)
         {
             _context = context;
             _mapper = mapper;

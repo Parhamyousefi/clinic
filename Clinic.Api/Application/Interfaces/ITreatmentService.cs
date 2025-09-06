@@ -4,7 +4,7 @@ using Clinic.Api.Domain.Entities;
 
 namespace Clinic.Api.Application.Interfaces
 {
-    public interface ITreatmentsService
+    public interface ITreatmentService
     {
         Task<int> CreateAppointmentAsync(CreateAppointmentDto model);
         Task<string> DeleteAppointment(int id);
@@ -12,7 +12,7 @@ namespace Clinic.Api.Application.Interfaces
         Task<IEnumerable<TreatmentsContext>> GetTreatments(int appointmentId);
         Task<string> SaveTreatment(SaveTreatmentDto model);
         Task<string> DeleteTreatment(int id);
-        Task<IEnumerable<AppointmentsContext>> GetTodayAppointments(GetTodayAppointmentsDto model);
+        Task<IEnumerable<GetTodayAppointmentsInfoDto>> GetTodayAppointments(GetTodayAppointmentsDto model);
         Task<IEnumerable<GetAppointmentTypesDto>> GetAppointmentTypes();
     }
 }

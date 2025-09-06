@@ -7,20 +7,20 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Clinic.Api.Infrastructure.Services
 {
-    public class ContactsService : IContactsService
+    public class ContactService : IContactService
     {
         private readonly ApplicationDbContext _context;
         private readonly IReadTokenClaims _token;
         private readonly IMapper _mapper;
 
-        public ContactsService(ApplicationDbContext context, IReadTokenClaims token, IMapper mapper)
+        public ContactService(ApplicationDbContext context, IReadTokenClaims token, IMapper mapper)
         {
             _context = context;
             _token = token;
             _mapper = mapper;
         }
 
-        public async Task<string> SaveContacts(SaveContactsDto model)
+        public async Task<string> SaveContact(SaveContactDto model)
         {
             var userId = _token.GetUserId();
 
@@ -68,7 +68,7 @@ namespace Clinic.Api.Infrastructure.Services
             }
         }
 
-        public async Task<string> DeleteContacts(int id)
+        public async Task<string> DeleteContact(int id)
         {
             try
             {

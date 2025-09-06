@@ -9,9 +9,9 @@ namespace Clinic.Api.Controllers
     [ApiController]
     public class QuestionController : ControllerBase
     {
-        private readonly IQuestionsService _questionsService;
+        private readonly IQuestionService _questionsService;
 
-        public QuestionController(IQuestionsService questionsService)
+        public QuestionController(IQuestionService questionsService)
         {
             _questionsService = questionsService;
         }

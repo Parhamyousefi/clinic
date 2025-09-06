@@ -9,13 +9,13 @@ using static Clinic.Api.Middlwares.Exceptions;
 
 namespace Clinic.Api.Infrastructure.Services
 {
-    public class TreatmentsService : ITreatmentsService
+    public class TreatmentService : ITreatmentService
     {
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
         private readonly IReadTokenClaims _token;
 
-        public TreatmentsService(ApplicationDbContext context, IMapper mapper, IReadTokenClaims token)
+        public TreatmentService(ApplicationDbContext context, IMapper mapper, IReadTokenClaims token)
         {
             _context = context;
             _mapper = mapper;
@@ -202,7 +202,7 @@ namespace Clinic.Api.Infrastructure.Services
             }
         }
 
-        public async Task<IEnumerable<AppointmentsContext>> GetTodayAppointments(GetTodayAppointmentsDto model)
+        public async Task<IEnumerable<GetTodayAppointmentsInfoDto>> GetTodayAppointments(GetTodayAppointmentsDto model)
         {
             try
             {
@@ -245,7 +245,34 @@ namespace Clinic.Api.Infrastructure.Services
                        );
                 }
 
-                    return await query.Distinct().ToListAsync();
+                var result = await query
+           .Select(a => new GetTodayAppointmentsInfoDto
+           {
+               Time = a.Start.ToString("HH:mm"),
+               Date = a.Start.Date,
+               PatientName = _context.Patients
+                               .Where(p => p.Id == a.PatientId)
+                               .Select(p => p.FirstName + " " + p.LastName)
+                               .FirstOrDefault() ?? string.Empty,
+               AppointmentTypeName = _context.AppointmentTypes
+                                       .Where(at => at.Id == a.AppointmentTypeId)
+                                       .Select(at => at.Name)
+                                       .FirstOrDefault() ?? string.Empty,
+               BillableItemName = _context.Treatments
+                                   .Where(t => t.AppointmentId == a.Id)
+                                   .Join(_context.BillableItems,
+                                       t => t.TreatmentTemplateId,
+                                       b => b.TreatmentTemplateId,
+                                       (t, b) => b.Name)
+                                   .FirstOrDefault() ?? string.Empty,
+               PractitionerName = _context.Users
+                                   .Where(u => u.Id == a.PractitionerId)
+                                   .Select(u => u.FirstName + " " + u.LastName)
+                                   .FirstOrDefault() ?? string.Empty
+           })
+           .ToListAsync();
+
+                return result;
             }
             catch (Exception ex)
             {

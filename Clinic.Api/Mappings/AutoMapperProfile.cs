@@ -29,7 +29,7 @@ namespace Clinic.Api.Mappings
             CreateMap<SaveReceiptDto, ReceiptsContext>().ReverseMap();
             CreateMap<SavePaymentDto, PaymentsContext>().ReverseMap();
             CreateMap<SaveJobDto, JobsContext>().ReverseMap();
-            CreateMap<SaveContactsDto, ContactsContext>().ReverseMap();
+            CreateMap<SaveContactDto, ContactsContext>().ReverseMap();
         }
     }
 }

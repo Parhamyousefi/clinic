@@ -3,7 +3,7 @@ using Clinic.Api.Domain.Entities;
 
 namespace Clinic.Api.Application.Interfaces
 {
-    public interface IInvoicesService
+    public interface IInvoiceService
     {
         Task<string> SaveInvoice(SaveInvoiceDto model);
         Task<IEnumerable<InvoicesContext>> GetInvoices();
