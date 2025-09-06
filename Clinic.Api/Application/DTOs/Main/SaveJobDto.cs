@@ -1,6 +1,6 @@
 ﻿namespace Clinic.Api.Application.DTOs.Main
 {
-    public class SaveJobsDto
+    public class SaveJobDto
     {
         public string? Name { get; set; }
         public int? CreatorId { get; set; }

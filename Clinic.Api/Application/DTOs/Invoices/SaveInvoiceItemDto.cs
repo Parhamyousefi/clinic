@@ -1,6 +1,6 @@
 ﻿namespace Clinic.Api.Application.DTOs.Invoices
 {
-    public class SaveInvoiceItemsDto
+    public class SaveInvoiceItemDto
     {
         public int InvoiceId { get; set; }
         public int? ItemId { get; set; }

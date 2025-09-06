@@ -55,7 +55,7 @@ namespace Clinic.Api.Controllers
 
         [HttpPost("saveTreatment")]
         [Authorize("Admin", "Doctor")]
-        public async Task<IActionResult> SaveTreatment(SaveTreatmentsDto model)
+        public async Task<IActionResult> SaveTreatment(SaveTreatmentDto model)
         {
             var result = await _treatmentsService.SaveTreatment(model);
 

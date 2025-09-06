@@ -24,11 +24,11 @@ namespace Clinic.Api.Controllers
             return Ok(result);
         }
 
-        [HttpPost("saveReceipts")]
+        [HttpPost("saveReceipt")]
         [Authorize("Admin", "Doctor")]
-        public async Task<IActionResult> SaveReceipt(SaveReceiptsDto model)
+        public async Task<IActionResult> SaveReceipt(SaveReceiptDto model)
         {
-            var result = await _mainService.SaveReceipts(model);
+            var result = await _mainService.SaveReceipt(model);
             return Ok(result);
         }
 
@@ -40,9 +40,9 @@ namespace Clinic.Api.Controllers
             return Ok(result);
         }
 
-        [HttpGet("deleteReceipts/{patientId}")]
+        [HttpGet("deleteReceipt/{patientId}")]
         [Authorize("Admin", "Doctor")]
-        public async Task<IActionResult> DeleteReceipts(int patientId)
+        public async Task<IActionResult> DeleteReceipt(int patientId)
         {
             var result = await _mainService.DeleteReceipt(patientId);
             return Ok(result);
@@ -56,11 +56,11 @@ namespace Clinic.Api.Controllers
             return Ok(result);
         }
 
-        [HttpPost("saveJobs")]
+        [HttpPost("saveJob")]
         [Authorize("Admin", "Doctor")]
-        public async Task<IActionResult> SaveJobs(SaveJobsDto model)
+        public async Task<IActionResult> SaveJob(SaveJobDto model)
         {
-            var result = await _mainService.SaveJobs(model);
+            var result = await _mainService.SaveJob(model);
             return Ok(result);
         }
 
@@ -73,9 +73,18 @@ namespace Clinic.Api.Controllers
         }
 
         [HttpGet("deleteJob/{id}")]
+        [Authorize("Admin","Doctor")]
         public async Task<IActionResult> DeleteJob(int id)
         {
             var result = await _mainService.DeleteJob(id);
+            return Ok(result);
+        }
+
+        [HttpGet("getBillableItems")]
+        [Authorize("Admin","Doctor")]
+        public async Task<IActionResult> GetBillableItems()
+        {
+            var result = await _mainService.GetBillableItems();
             return Ok(result);
         }
     }

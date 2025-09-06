@@ -16,19 +16,19 @@ namespace Clinic.Api.Controllers
             _invoicesService = invoicesService;
         }
 
-        [HttpPost("saveInvoices")]
+        [HttpPost("saveInvoice")]
         [Authorize("Admin","Doctor")]
-        public async Task<IActionResult> SaveInvoices(SaveInvoicesDto model)
+        public async Task<IActionResult> SaveInvoice(SaveInvoiceDto model)
         {
-            var result = await _invoicesService.SaveInvoices(model);
+            var result = await _invoicesService.SaveInvoice(model);
             return Ok(result);
         }
 
-        [HttpGet("deleteInvoices/{id}")]
+        [HttpGet("deleteInvoice/{id}")]
         [Authorize("Admin","Doctor")]
-        public async Task<IActionResult> DeleteInvoices(int id)
+        public async Task<IActionResult> DeleteInvoice(int id)
         {
-            var result = await _invoicesService.DeleteInvoices(id);
+            var result = await _invoicesService.DeleteInvoice(id);
             return Ok(result);
         }
 
@@ -40,19 +40,19 @@ namespace Clinic.Api.Controllers
             return Ok(result);
         }
 
-        [HttpPost("saveInvoiceItems")]
+        [HttpPost("saveInvoiceItem")]
         [Authorize("Admin", "Doctor")]
-        public async Task<IActionResult> SaveInvoiceItems(SaveInvoiceItemsDto model)
+        public async Task<IActionResult> SaveInvoiceItem(SaveInvoiceItemDto model)
         {
-            var result = await _invoicesService.SaveInvoiceItems(model);
+            var result = await _invoicesService.SaveInvoiceItem(model);
             return Ok(result);
         }
 
-        [HttpGet("deleteInvoiceItems/{id}")]
+        [HttpGet("deleteInvoiceItem/{id}")]
         [Authorize("Admin", "Doctor")]
-        public async Task<IActionResult> DeleteInvoiceItems(int id)
+        public async Task<IActionResult> DeleteInvoiceItem(int id)
         {
-            var result = await _invoicesService.DeleteInvoiceItems(id);
+            var result = await _invoicesService.DeleteInvoiceItem(id);
             return Ok(result);
         }
 

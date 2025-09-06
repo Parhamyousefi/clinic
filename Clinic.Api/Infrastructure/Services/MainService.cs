@@ -34,7 +34,7 @@ namespace Clinic.Api.Infrastructure.Services
             }
         }
 
-        public async Task<string> SaveReceipts(SaveReceiptsDto model)
+        public async Task<string> SaveReceipt(SaveReceiptDto model)
         {
             try
             {
@@ -120,7 +120,7 @@ namespace Clinic.Api.Infrastructure.Services
             }
         }
 
-        public async Task<string> SaveJobs(SaveJobsDto model)
+        public async Task<string> SaveJob(SaveJobDto model)
         {
             try
             {
@@ -182,6 +182,19 @@ namespace Clinic.Api.Infrastructure.Services
                 _context.Jobs.Remove(job);
                 await _context.SaveChangesAsync();
                 return "Job Deleted Successfully";
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<IEnumerable<BillableItemsContext>> GetBillableItems()
+        {
+            try
+            {
+                var result = await _context.BillableItems.ToListAsync();
+                return result;
             }
             catch (Exception ex)
             {

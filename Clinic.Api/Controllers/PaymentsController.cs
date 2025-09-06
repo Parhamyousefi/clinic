@@ -16,11 +16,11 @@ namespace Clinic.Api.Controllers
             _paymentService = paymentService;
         }
 
-        [HttpPost("savePayments")]
+        [HttpPost("savePayment")]
         [Authorize("Admin", "Doctor")]
-        public async Task<IActionResult> SavePayments(SavePaymentsDto model)
+        public async Task<IActionResult> SavePayment(SavePaymentDto model)
         {
-            var result = await _paymentService.SavePayments(model);
+            var result = await _paymentService.SavePayment(model);
 
             return Ok(result);
         }
