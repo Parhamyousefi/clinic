@@ -34,6 +34,7 @@ export class AppointmentComponent {
     const minute = i % 2 === 0 ? '00' : '30';
     return `${hour.toString().padStart(2, '0')}:${minute}`;
   });
+  weekDays: any = [];
   timeSheetHeaderDate: any;
   showNewAppointment: boolean = false;
   pateints: any = [];
@@ -49,6 +50,7 @@ export class AppointmentComponent {
   editmode: boolean = false;
   clinicsList: any = [];
   selectedClinic: any;
+  weekMode: any = 0;
   get selectedDate(): Date | null {
     return this._selectedDate;
   }
@@ -75,9 +77,10 @@ export class AppointmentComponent {
     this.selectedDate = this.today;
     await this.getPatients();
     await this.getAppointmentTypes();
-    await this.getAppointment(this.today);
     await this.getClinics();
+    await this.getAppointment(this.today);
     this.today = this.today._d;
+    this.getCurrentWeek();
   }
 
   changeDate(status: number) {
@@ -258,4 +261,25 @@ export class AppointmentComponent {
     this.newAppointmentModel = [];
   }
 
+
+
+  getCurrentWeek() {
+    let currentDate = moment(this.appointmentDate);
+    let weekStart: any = currentDate.locale('fa').startOf('week');
+    let daysOfWeek = [];
+    for (let i = 0; i < 7; i++) {
+      let currentDate = moment().format('jYYYY/jMM/jDD') == weekStart.format('jYYYY/jMM/jDD');
+      daysOfWeek.push(
+        {
+          dayName: weekStart.locale('fa').format('dddd'),
+          dayNumber: weekStart.format('jDD'),
+          currentDate: currentDate,
+          fullDate: weekStart._d
+        });
+      weekStart.add(1, 'day');
+    }
+    this.weekDays = daysOfWeek;
+    console.log(this.weekDays);
+
+  }
 }

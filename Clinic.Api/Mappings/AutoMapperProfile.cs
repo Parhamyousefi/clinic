@@ -20,15 +20,15 @@ namespace Clinic.Api.Mappings
             CreateMap<LoginUserDto, UserContext>();
             CreateMap<CreateAppointmentDto, AppointmentsContext>().ReverseMap();
             CreateMap<SavePatientDto, PatientsContext>().ReverseMap();
-            CreateMap<SaveTreatmentsDto, TreatmentsContext>().ReverseMap();
+            CreateMap<SaveTreatmentDto, TreatmentsContext>().ReverseMap();
             CreateMap<SaveQuestionValueDto, QuestionValuesContext>().ReverseMap();
             CreateMap<SaveLoginHistoryDto, LoginHistoriesContext>().ReverseMap();
             CreateMap<SavePatientPhoneDto, PatientPhonesContext>().ReverseMap();
-            CreateMap<SaveInvoicesDto, InvoicesContext>().ReverseMap();
-            CreateMap<SaveInvoiceItemsDto, InvoiceItemsContext>().ReverseMap();
-            CreateMap<SaveReceiptsDto, ReceiptsContext>().ReverseMap();
-            CreateMap<SavePaymentsDto, PaymentsContext>().ReverseMap();
-            CreateMap<SaveJobsDto, JobsContext>().ReverseMap();
+            CreateMap<SaveInvoiceDto, InvoicesContext>().ReverseMap();
+            CreateMap<SaveInvoiceItemDto, InvoiceItemsContext>().ReverseMap();
+            CreateMap<SaveReceiptDto, ReceiptsContext>().ReverseMap();
+            CreateMap<SavePaymentDto, PaymentsContext>().ReverseMap();
+            CreateMap<SaveJobDto, JobsContext>().ReverseMap();
             CreateMap<SaveContactsDto, ContactsContext>().ReverseMap();
         }
     }

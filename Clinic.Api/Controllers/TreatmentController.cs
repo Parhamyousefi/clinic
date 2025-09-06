@@ -8,11 +8,11 @@ namespace Clinic.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TreatmentsController : ControllerBase
+    public class TreatmentController : ControllerBase
     {
         private readonly ITreatmentsService _treatmentsService;
 
-        public TreatmentsController(ITreatmentsService treatmentsService)
+        public TreatmentController(ITreatmentsService treatmentsService)
         {
             _treatmentsService = treatmentsService;
         }
@@ -55,7 +55,7 @@ namespace Clinic.Api.Controllers
 
         [HttpPost("saveTreatment")]
         [Authorize("Admin", "Doctor")]
-        public async Task<IActionResult> SaveTreatment(SaveTreatmentsDto model)
+        public async Task<IActionResult> SaveTreatment(SaveTreatmentDto model)
         {
             var result = await _treatmentsService.SaveTreatment(model);
 

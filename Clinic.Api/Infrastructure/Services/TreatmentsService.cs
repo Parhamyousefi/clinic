@@ -132,8 +132,6 @@ namespace Clinic.Api.Infrastructure.Services
             }
         }
 
-
-
         public async Task<IEnumerable<TreatmentsContext>> GetTreatments(int appointmentId)
         {
             try
@@ -148,7 +146,7 @@ namespace Clinic.Api.Infrastructure.Services
             }
         }
 
-        public async Task<string> SaveTreatment(SaveTreatmentsDto model)
+        public async Task<string> SaveTreatment(SaveTreatmentDto model)
         {
             try
             {
@@ -208,24 +206,46 @@ namespace Clinic.Api.Infrastructure.Services
         {
             try
             {
+                var today = DateTime.Today;
                 var query = _context.Appointments.AsQueryable();
 
-                var today = DateTime.Today;
-                query = query.Where(a => a.Start.Date == today);
+                if (!model.FromDate.HasValue && !model.ToDate.HasValue)
+                {
+                    query = query.Where(a => a.Start.Date <= today && a.End.Date >= today);
+                }
+                else
+                {
+                    var fromDate = model.FromDate.Value.Date;
+                    var toDate = model.ToDate.Value.Date;
 
-                if (model.Arrived.HasValue)
-                    query = query.Where(a => a.Arrived == model.Arrived.Value);
+                    query = query.Where(a =>
+                         a.Start.Date >= fromDate &&
+                          a.End.Date <= toDate
+                            );
+                }
 
                 if (model.Clinic.HasValue)
                     query = query.Where(a => a.BusinessId == model.Clinic.Value);
 
-                if (model.Service.HasValue)
-                    query = query.Where(a => a.AppointmentTypeId == model.Service.Value);
-
                 if (model.From.HasValue && model.To.HasValue)
                     query = query.Where(a => a.Start.Hour >= model.From.Value && a.End.Hour <= model.To.Value);
 
-                return await query.ToListAsync();
+                if (model.Service.HasValue)
+                {
+                    int serviceId = model.Service.Value;
+
+                    query = query.Where(a =>
+                          _context.Treatments.Any(t =>
+                             t.AppointmentId == a.Id &&
+                              t.TreatmentTemplateId == serviceId
+                                    ) &&
+                              _context.BillableItems.Any(b =>
+                                    b.TreatmentTemplateId == serviceId
+                            )
+                       );
+                }
+
+                    return await query.Distinct().ToListAsync();
             }
             catch (Exception ex)
             {

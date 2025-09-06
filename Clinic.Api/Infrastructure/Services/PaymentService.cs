@@ -20,7 +20,7 @@ namespace Clinic.Api.Infrastructure.Services
             _token = token;
         }
 
-        public async Task<string> SavePayments(SavePaymentsDto model)
+        public async Task<string> SavePayment(SavePaymentDto model)
         {
             try
             {

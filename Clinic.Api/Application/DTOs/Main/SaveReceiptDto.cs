@@ -1,6 +1,6 @@
 ﻿namespace Clinic.Api.Application.DTOs.Main
 {
-    public class SaveReceiptsDto
+    public class SaveReceiptDto
     {
         public int? ReceiptNo { get; set; }
         public int PatientId { get; set; }
