@@ -1,6 +1,6 @@
 import { isPlatformBrowser } from '@angular/common';
 import { Injectable } from '@angular/core';
-import { CanActivate, Router, RouterStateSnapshot, ActivatedRouteSnapshot } from '@angular/router';
+import { CanActivate, Router, RouterStateSnapshot, ActivatedRouteSnapshot, GuardResult, MaybeAsync, UrlTree } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 import { AuthService } from './_services/auth.service';
 // import { UtilService } from './_services/util.service';
@@ -19,42 +19,38 @@ export class AuthGuard implements CanActivate {
     private authService: AuthService
     //  private utilService: UtilService
   ) { }
-  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
-
-    if (this.authService.isLoggedIn()) {
+  canActivate(): boolean {
+    const token = localStorage.getItem('token');
+    if (token) {
       return true;
     } else {
-      this.router.navigate(['/login']);
+      this.router.navigate(['/']);
+      return false;
     }
-    // if (!checkRequierd()) {
-    //   this._router.navigate(['/'], { queryParams: { returnUrl: state.url } });
-    //   this.clear();
-    //   return false;
-    // }
-    // if (this.utilService.checkUserType() === -1) {
-    //   this._router.navigate(['/'], { queryParams: { returnUrl: state.url } });
-    //   this.clear();
-    //   return false;
-    // }
-    return true;
   }
+
+  // canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
+
+  // if (!checkRequierd()) {
+  //   this._router.navigate(['/'], { queryParams: { returnUrl: state.url } });
+  //   this.clear();
+  //   return false;
+  // }
+  // if (this.utilService.checkUserType() === -1) {
+  //   this._router.navigate(['/'], { queryParams: { returnUrl: state.url } });
+  //   this.clear();
+  //   return false;
+  // }
+  //   return true;
+  // }
 
   clear() {
-    localStorage.removeItem('txcd94Hg_doH63');
-    localStorage.removeItem('schoolId');
-    localStorage.removeItem('operator');
-    localStorage.removeItem('jwt');
-    localStorage.removeItem('userLoginId');
-    localStorage.removeItem('username');
-    localStorage.removeItem('regionId');
-    localStorage.removeItem('mobile');
-    localStorage.removeItem('token');
+    localStorage.clear();
   }
-
 
   logout(): void {
     this.tokenSubject.next(null);
-    this.router.navigate(['/login']);
+    this.router.navigate(['/']);
   }
 }
 // @Injectable({

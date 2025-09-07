@@ -12,7 +12,7 @@ import { DropdownModule } from 'primeng/dropdown';
 @Component({
   selector: 'app-appointment',
   standalone: true,
-  imports: [SharedModule, DpDatePickerModule, FormsModule, SharedModule, CommonModule, MatCardModule, MatCalendarBody, MatCalendar, DialogModule, DropdownModule],
+  imports: [SharedModule, DpDatePickerModule, FormsModule, CommonModule, MatCardModule, MatCalendarBody, MatCalendar, DialogModule, DropdownModule],
   templateUrl: './appointment.component.html',
   styleUrl: './appointment.component.css'
 })

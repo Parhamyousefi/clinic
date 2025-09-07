@@ -3,6 +3,7 @@ import { UserService } from '../_services/user.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-login',
@@ -15,7 +16,8 @@ export class LoginComponent {
   model: any = [];
   constructor(
     private userService: UserService,
-    private router: Router
+    private router: Router,
+    private toastR: ToastrService
   ) { }
 
   ngOnInit() {
@@ -31,8 +33,9 @@ export class LoginComponent {
         }
         let res: any = await this.userService.login(data).toPromise();
         if (res.token && res.secretCode) {
+          localStorage.setItem("token", res.token);
           this.router.navigate(["/appointment"]);
-          localStorage.setItem("token", res.token)
+          // this.router.navigateByUrl('/appointment', { replaceUrl: true });
         }
       }
       else {

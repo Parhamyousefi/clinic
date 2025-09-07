@@ -14,6 +14,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { provideToastr } from 'ngx-toastr';
 export const PERSIAN_DATE_FORMATS = {
   parse: {
     dateInput: 'jYYYY/jMM/jDD',
@@ -35,6 +36,8 @@ export const appConfig: ApplicationConfig = {
     MatDatepickerModule,
     MatFormFieldModule,
     MatInputModule
-  ), provideAnimationsAsync()
+  ), provideAnimationsAsync(),
+  provideToastr()
+
   ]
 };

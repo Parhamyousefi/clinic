@@ -16,11 +16,11 @@ export class AuthService {
   logout(): void {
     localStorage.removeItem('token');
     this.tokenSubject.next(null);
-    this.router.navigate(['/login']);
+    this.router.navigate(['/']);
   }
 
   getToken(): string | null {
-    return this.tokenSubject.value;
+    return localStorage.getItem('token');
   }
 
   isLoggedIn(): boolean {
