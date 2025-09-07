@@ -1,6 +1,6 @@
 ﻿namespace Clinic.Api.Application.DTOs.Payments
 {
-    public class SavePaymentsDto
+    public class SavePaymentDto
     {
         public string? PaymentNo { get; set; }
         public int PatientId { get; set; }

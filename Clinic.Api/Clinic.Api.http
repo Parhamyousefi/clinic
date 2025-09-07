@@ -209,17 +209,17 @@ Content-Type: application/json
 }
 
 ### Get Today Appointments
-POST {{Clinic_Api_Host}}/api/treatments/getTodayAppointments
-Authorization: Bearer {{jwtToken}}
+POST {{Clinic_Api_Host}}/api/treatment/getTodayAppointments
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTc3NTA4NDAsImlhdCI6MTc1NzE0NjA0MCwidXNlcklkIjoiMiIsInVzZXJuYW1lIjoibmltYSIsInVzZXJSb2xlIjoiQWRtaW4iLCJuYmYiOjE3NTcxNDYwNDB9.pSmMbUGbSWgdq5AKGuvwIqCdph4nzSgmOBQCqcd28qo
 Content-Type: application/json
 
 {
-  "date": "2025-08-18T00:00:00",   // today’s date or the one you want to check
-  "arrived": 1,                    // e.g. 1 = arrived, 0 = not arrived
-  "clinic": 2,                     // clinic id
-  "service": null,                 // optional service
-  "from": 9,                       // start hour or range
-  "to": 17                         // end hour or range
+  "fromDate": "2025-08-18",  
+  "toDate": "2025-08-20",         
+  "clinic": null,                  
+  "service": null,            
+  "from": null,                       
+  "to": null     
 }
 
 ### Save Patient Phones

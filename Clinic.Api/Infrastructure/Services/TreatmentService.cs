@@ -9,13 +9,13 @@ using static Clinic.Api.Middlwares.Exceptions;
 
 namespace Clinic.Api.Infrastructure.Services
 {
-    public class TreatmentsService : ITreatmentsService
+    public class TreatmentService : ITreatmentService
     {
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
         private readonly IReadTokenClaims _token;
 
-        public TreatmentsService(ApplicationDbContext context, IMapper mapper, IReadTokenClaims token)
+        public TreatmentService(ApplicationDbContext context, IMapper mapper, IReadTokenClaims token)
         {
             _context = context;
             _mapper = mapper;
@@ -132,8 +132,6 @@ namespace Clinic.Api.Infrastructure.Services
             }
         }
 
-
-
         public async Task<IEnumerable<TreatmentsContext>> GetTreatments(int appointmentId)
         {
             try
@@ -148,7 +146,7 @@ namespace Clinic.Api.Infrastructure.Services
             }
         }
 
-        public async Task<string> SaveTreatment(SaveTreatmentsDto model)
+        public async Task<string> SaveTreatment(SaveTreatmentDto model)
         {
             try
             {
@@ -204,28 +202,77 @@ namespace Clinic.Api.Infrastructure.Services
             }
         }
 
-        public async Task<IEnumerable<AppointmentsContext>> GetTodayAppointments(GetTodayAppointmentsDto model)
+        public async Task<IEnumerable<GetTodayAppointmentsInfoDto>> GetTodayAppointments(GetTodayAppointmentsDto model)
         {
             try
             {
+                var today = DateTime.Today;
                 var query = _context.Appointments.AsQueryable();
 
-                var today = DateTime.Today;
-                query = query.Where(a => a.Start.Date == today);
+                if (!model.FromDate.HasValue && !model.ToDate.HasValue)
+                {
+                    query = query.Where(a => a.Start.Date <= today && a.End.Date >= today);
+                }
+                else
+                {
+                    var fromDate = model.FromDate.Value.Date;
+                    var toDate = model.ToDate.Value.Date;
 
-                if (model.Arrived.HasValue)
-                    query = query.Where(a => a.Arrived == model.Arrived.Value);
+                    query = query.Where(a =>
+                         a.Start.Date >= fromDate &&
+                          a.End.Date <= toDate
+                            );
+                }
 
                 if (model.Clinic.HasValue)
                     query = query.Where(a => a.BusinessId == model.Clinic.Value);
 
-                if (model.Service.HasValue)
-                    query = query.Where(a => a.AppointmentTypeId == model.Service.Value);
-
                 if (model.From.HasValue && model.To.HasValue)
                     query = query.Where(a => a.Start.Hour >= model.From.Value && a.End.Hour <= model.To.Value);
 
-                return await query.ToListAsync();
+                if (model.Service.HasValue)
+                {
+                    int serviceId = model.Service.Value;
+
+                    query = query.Where(a =>
+                          _context.Treatments.Any(t =>
+                             t.AppointmentId == a.Id &&
+                              t.TreatmentTemplateId == serviceId
+                                    ) &&
+                              _context.BillableItems.Any(b =>
+                                    b.TreatmentTemplateId == serviceId
+                            )
+                       );
+                }
+
+                var result = await query
+           .Select(a => new GetTodayAppointmentsInfoDto
+           {
+               Time = a.Start.ToString("HH:mm"),
+               Date = a.Start.Date,
+               PatientName = _context.Patients
+                               .Where(p => p.Id == a.PatientId)
+                               .Select(p => p.FirstName + " " + p.LastName)
+                               .FirstOrDefault() ?? string.Empty,
+               AppointmentTypeName = _context.AppointmentTypes
+                                       .Where(at => at.Id == a.AppointmentTypeId)
+                                       .Select(at => at.Name)
+                                       .FirstOrDefault() ?? string.Empty,
+               BillableItemName = _context.Treatments
+                                   .Where(t => t.AppointmentId == a.Id)
+                                   .Join(_context.BillableItems,
+                                       t => t.TreatmentTemplateId,
+                                       b => b.TreatmentTemplateId,
+                                       (t, b) => b.Name)
+                                   .FirstOrDefault() ?? string.Empty,
+               PractitionerName = _context.Users
+                                   .Where(u => u.Id == a.PractitionerId)
+                                   .Select(u => u.FirstName + " " + u.LastName)
+                                   .FirstOrDefault() ?? string.Empty
+           })
+           .ToListAsync();
+
+                return result;
             }
             catch (Exception ex)
             {

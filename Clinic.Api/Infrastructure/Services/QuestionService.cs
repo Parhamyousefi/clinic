@@ -7,12 +7,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Clinic.Api.Infrastructure.Services
 {
-    public class QuestionsService : IQuestionsService
+    public class QuestionService : IQuestionService
     {
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
 
-        public QuestionsService(ApplicationDbContext context, IMapper mapper)
+        public QuestionService(ApplicationDbContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
