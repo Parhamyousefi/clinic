@@ -1,6 +1,6 @@
 ﻿namespace Clinic.Api.Application.DTOs.Invoices
 {
-    public class SaveInvoicesDto
+    public class SaveInvoiceDto
     {
         public string? InvoiceNo { get; set; }
         public int BusinessId { get; set; }
@@ -15,7 +15,7 @@
         public string? Notes { get; set; }
         public decimal Payment { get; set; }
         public int? ModifierId { get; set; }
-        public DateTime CreatedOn { get; set; }
+        public DateTime? CreatedOn { get; set; }
         public DateTime? LastUpdated { get; set; }
         public int? InvoiceBillStatusId { get; set; }
         public bool AllowPayLater { get; set; }

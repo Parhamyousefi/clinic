@@ -7,20 +7,20 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Clinic.Api.Infrastructure.Services
 {
-    public class InvoicesService : IInvoicesService
+    public class InvoiceService : IInvoiceService
     {
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
         private readonly IReadTokenClaims _token;
 
-        public InvoicesService(ApplicationDbContext context, IMapper mapper, IReadTokenClaims token)
+        public InvoiceService(ApplicationDbContext context, IMapper mapper, IReadTokenClaims token)
         {
             _context = context;
             _mapper = mapper;
             _token = token;
         }
 
-        public async Task<string> SaveInvoices(SaveInvoicesDto model)
+        public async Task<string> SaveInvoice(SaveInvoiceDto model)
         {
             try
             {
@@ -45,7 +45,7 @@ namespace Clinic.Api.Infrastructure.Services
                     }
 
                     _mapper.Map(model, existingInvoice);
-                    existingInvoice.CreatorId = userId;
+                    existingInvoice.ModifierId = userId;
                     existingInvoice.LastUpdated = DateTime.UtcNow;
                     _context.Invoices.Update(existingInvoice);
                     await _context.SaveChangesAsync();
@@ -71,7 +71,7 @@ namespace Clinic.Api.Infrastructure.Services
             }
         }
 
-        public async Task<string> SaveInvoiceItems(SaveInvoiceItemsDto model)
+        public async Task<string> SaveInvoiceItem(SaveInvoiceItemDto model)
         {
             try
             {
@@ -96,7 +96,7 @@ namespace Clinic.Api.Infrastructure.Services
                     }
 
                     _mapper.Map(model, existingInvoiceItem);
-                    existingInvoiceItem.CreatorId = userId;
+                    existingInvoiceItem.ModifierId = userId;
                     existingInvoiceItem.LastUpdated = DateTime.UtcNow;
                     _context.InvoiceItems.Update(existingInvoiceItem);
                     await _context.SaveChangesAsync();
@@ -122,7 +122,7 @@ namespace Clinic.Api.Infrastructure.Services
             }
         }
 
-        public async Task<string> DeleteInvoices(int id)
+        public async Task<string> DeleteInvoice(int id)
         {
             try
             {
@@ -142,7 +142,7 @@ namespace Clinic.Api.Infrastructure.Services
             }
         }
 
-        public async Task<string> DeleteInvoiceItems(int id)
+        public async Task<string> DeleteInvoiceItem(int id)
         {
             try
             {

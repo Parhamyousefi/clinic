@@ -7,20 +7,20 @@ namespace Clinic.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class PaymentsController : ControllerBase
+    public class PaymentController : ControllerBase
     {
         private readonly IPaymentService _paymentService;
 
-        public PaymentsController(IPaymentService paymentService)
+        public PaymentController(IPaymentService paymentService)
         {
             _paymentService = paymentService;
         }
 
-        [HttpPost("savePayments")]
+        [HttpPost("savePayment")]
         [Authorize("Admin", "Doctor")]
-        public async Task<IActionResult> SavePayments(SavePaymentsDto model)
+        public async Task<IActionResult> SavePayment(SavePaymentDto model)
         {
-            var result = await _paymentService.SavePayments(model);
+            var result = await _paymentService.SavePayment(model);
 
             return Ok(result);
         }

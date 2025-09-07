@@ -20,7 +20,7 @@ namespace Clinic.Api.Infrastructure.Services
             _token = token;
         }
 
-        public async Task<string> SavePayments(SavePaymentsDto model)
+        public async Task<string> SavePayment(SavePaymentDto model)
         {
             try
             {
@@ -46,7 +46,7 @@ namespace Clinic.Api.Infrastructure.Services
 
                  
                     _mapper.Map(model, existingPayments);
-                    existingPayments.CreatorId = userId;
+                    existingPayments.ModifierId = userId;
                     existingPayments.LastUpdated = DateTime.UtcNow;
                     _context.Payments.Update(existingPayments);
                     await _context.SaveChangesAsync();
