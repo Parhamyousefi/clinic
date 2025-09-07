@@ -228,7 +228,14 @@ namespace Clinic.Api.Infrastructure.Services
                     query = query.Where(a => a.BusinessId == model.Clinic.Value);
 
                 if (model.From.HasValue && model.To.HasValue)
-                    query = query.Where(a => a.Start.Hour >= model.From.Value && a.End.Hour <= model.To.Value);
+                {
+                    var from = new TimeSpan(model.From.Value.Hour, model.From.Value.Minute, 0);
+                    var to = new TimeSpan(model.To.Value.Hour, model.To.Value.Minute, 0);
+
+                    query = query.Where(a =>
+                        new TimeSpan(a.Start.Hour, a.Start.Minute, 0) >= from &&
+                        new TimeSpan(a.Start.Hour, a.Start.Minute, 0) <= to);
+                }
 
                 if (model.Service.HasValue)
                 {
@@ -248,6 +255,7 @@ namespace Clinic.Api.Infrastructure.Services
                 var result = await query
            .Select(a => new GetTodayAppointmentsInfoDto
            {
+               Id = a.Id,
                Time = a.Start.ToString("HH:mm"),
                Date = a.Start.Date,
                PatientName = _context.Patients
