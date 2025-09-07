@@ -23,7 +23,7 @@ export class UserService {
 
   getAppointments(clinicId: any, date: any) {
     const token: any = localStorage.getItem("token");
-    const uri = this.url + `api/Treatments/getAppointments/` + clinicId + '/' + date;
+    const uri = this.url + `api/Treatment/getAppointments/` + clinicId + '/' + date;
     const httpOptions = {
       headers: new HttpHeaders({
         "Content-Type": "application/json",
@@ -34,7 +34,7 @@ export class UserService {
   }
 
   createAppointment(data: any) {
-    const uri = this.url + `api/Treatments/createAppointment`;
+    const uri = this.url + `api/Treatment/createAppointment`;
     const httpOptions = {
       headers: new HttpHeaders({
         "Content-Type": "application/json",
@@ -58,7 +58,7 @@ export class UserService {
 
   getAppointmentTypes() {
     const token: any = localStorage.getItem("token");
-    const uri = this.url + `api/treatments/getAppointmentTypes`;
+    const uri = this.url + `api/treatment/getAppointmentTypes`;
     const httpOptions = {
       headers: new HttpHeaders({
         "Content-Type": "application/json",

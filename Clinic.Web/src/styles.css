@@ -114,3 +114,7 @@ ngx-material-timepicker-toggle {
 mat-label {
     font-family: "iran-sans" !important;
 }
+
+.p-datatable.p-datatable-gridlines:has(.p-datatable-thead):has(.p-datatable-tbody) .p-datatable-tbody>tr>td {
+    text-align: center;
+}

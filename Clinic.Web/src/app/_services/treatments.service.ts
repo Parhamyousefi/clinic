@@ -15,7 +15,7 @@ export class TreatmentsService {
   token: any = localStorage.getItem("token");
 
   getTodayAppointments(data: any) {
-    const uri = this.url + `api/Treatments/getTodayAppointments`;
+    const uri = this.url + `api/Treatment/getTodayAppointments`;
     const httpOptions = {
       headers: new HttpHeaders({
         "Content-Type": "application/json",
