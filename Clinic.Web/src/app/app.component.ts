@@ -12,7 +12,7 @@ import { NgIf } from "@angular/common";
 })
 export class AppComponent {
   title = 'clinic';
-  isLogin: boolean = false;
+  showNavbar: boolean = false;
 
   constructor(
     private router: Router,
@@ -21,11 +21,11 @@ export class AppComponent {
     router.events.subscribe((event: Event) => {
       let url = location.pathname.split('?')[0];
       if (event instanceof NavigationEnd) {
-        if ((url.startsWith("/login"))) {
-          this.isLogin = false;
+        if ((url.startsWith("/login") || url == '')) {
+          this.showNavbar = false;
           return;
         }
-        this.isLogin = true;
+        this.showNavbar = true;
       }
     })
   }

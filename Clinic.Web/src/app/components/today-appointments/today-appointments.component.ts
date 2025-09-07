@@ -50,7 +50,6 @@ export class TodayAppointmentsComponent implements OnInit {
       this.todayAppointmentsList = res;
     }
     catch { }
-
   }
 
   async getClinics() {
@@ -76,5 +75,4 @@ export class TodayAppointmentsComponent implements OnInit {
     }
     catch { }
   }
-
 }
