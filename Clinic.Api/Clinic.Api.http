@@ -439,3 +439,8 @@ Content-Type: application/json
 GET {{Clinic_Api_Host}}/api/contacts/getCountries
 Authorization: Bearer
 Content-Type: application/json
+
+### Get Week Appointments
+GET {{Clinic_Api_Host}}/api/treatment/getWeekAppointments
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTc4NjE0NjksImlhdCI6MTc1NzI1NjY2OSwidXNlcklkIjoiMiIsInVzZXJuYW1lIjoibmltYSIsInVzZXJSb2xlIjoiQWRtaW4iLCJuYmYiOjE3NTcyNTY2Njl9.FDXrmJb0vaxiH0PMwf9sVt6b99W5z712bIb48AXQqwk
+Content-Type: application/json
