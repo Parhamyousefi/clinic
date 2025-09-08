@@ -3,7 +3,7 @@ using Clinic.Api.Domain.Entities;
 
 namespace Clinic.Api.Application.Interfaces
 {
-    public interface IQuestionsService
+    public interface IQuestionService
     {
         Task<IEnumerable<QuestionsContext>> GetQuestions();
         Task<string> SaveQuestionValue(SaveQuestionValueDto model);

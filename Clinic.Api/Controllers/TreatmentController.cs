@@ -8,11 +8,11 @@ namespace Clinic.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TreatmentsController : ControllerBase
+    public class TreatmentController : ControllerBase
     {
-        private readonly ITreatmentsService _treatmentsService;
+        private readonly ITreatmentService _treatmentsService;
 
-        public TreatmentsController(ITreatmentsService treatmentsService)
+        public TreatmentController(ITreatmentService treatmentsService)
         {
             _treatmentsService = treatmentsService;
         }
@@ -55,7 +55,7 @@ namespace Clinic.Api.Controllers
 
         [HttpPost("saveTreatment")]
         [Authorize("Admin", "Doctor")]
-        public async Task<IActionResult> SaveTreatment(SaveTreatmentsDto model)
+        public async Task<IActionResult> SaveTreatment(SaveTreatmentDto model)
         {
             var result = await _treatmentsService.SaveTreatment(model);
 
@@ -84,6 +84,14 @@ namespace Clinic.Api.Controllers
         {
             var result = await _treatmentsService.GetAppointmentTypes();
 
+            return Ok(result);
+        }
+
+        [HttpGet("getWeekAppointments")]
+        [Authorize("Admin", "Doctor")]
+        public async Task<IActionResult> GetWeekAppointments()
+        {
+            var result = await _treatmentsService.GetWeekAppointments();
             return Ok(result);
         }
     }

@@ -1,6 +1,6 @@
 ﻿namespace Clinic.Api.Application.DTOs.Contacts
 {
-    public class SaveContactsDto
+    public class SaveContactDto
     {
         public int ContactTypeId { get; set; }
         public int? TitleId { get; set; }

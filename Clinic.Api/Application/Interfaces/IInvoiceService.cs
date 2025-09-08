@@ -3,13 +3,13 @@ using Clinic.Api.Domain.Entities;
 
 namespace Clinic.Api.Application.Interfaces
 {
-    public interface IInvoicesService
+    public interface IInvoiceService
     {
-        Task<string> SaveInvoices(SaveInvoicesDto model);
+        Task<string> SaveInvoice(SaveInvoiceDto model);
         Task<IEnumerable<InvoicesContext>> GetInvoices();
-        Task<string> SaveInvoiceItems(SaveInvoiceItemsDto model);
+        Task<string> SaveInvoiceItem(SaveInvoiceItemDto model);
         Task<IEnumerable<InvoiceItemsContext>> GetInvoiceItems();
-        Task<string> DeleteInvoices(int id);
-        Task<string> DeleteInvoiceItems(int id);
+        Task<string> DeleteInvoice(int id);
+        Task<string> DeleteInvoiceItem(int id);
     }
 }
