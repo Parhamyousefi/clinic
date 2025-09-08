@@ -40,6 +40,7 @@ builder.Services.AddScoped<IMainService, MainService>();
 builder.Services.AddScoped<IInvoicesService, InvoicesService>();
 builder.Services.AddScoped<IPaymentService, PaymentService>();
 builder.Services.AddScoped<IContactsService, ContactsService>();
+builder.Services.AddScoped<IExpenseService, ExpenseService>();
 
 // Auth & JWT
 var jwt = builder.Configuration.GetSection("JwtSettings").Get<JwtSettings>();
