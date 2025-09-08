@@ -43,8 +43,8 @@ export class TodayAppointmentsComponent implements OnInit {
       toDate: this.selectedDateTo,
       clinic: this.selectedClinic?.code,
       service: this.selectedservice?.code,
-      from: this.selectedTimefrom,
-      to: this.selectedTimeTo
+      from: this.convertTimeToUTC(this.selectedTimefrom),
+      to: this.convertTimeToUTC(this.selectedTimeTo)
     }
     try {
       let res: any = await this.treatmentsService.getTodayAppointments(model).toPromise();
@@ -81,5 +81,22 @@ export class TodayAppointmentsComponent implements OnInit {
     }
     catch { }
   }
+
+  convertTimeToUTC(time: string): string {
+    let [hours, minutes] = time.split(":").map(Number);
+    const now = new Date();
+    const date = new Date(Date.UTC(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate(),
+      hours,
+      minutes,
+      0,
+      0
+    ));
+    const timePart = date.toISOString().split("T")[1];
+    return timePart.replace("Z", "");
+  }
+
 
 }

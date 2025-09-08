@@ -229,12 +229,13 @@ namespace Clinic.Api.Infrastructure.Services
 
                 if (model.From.HasValue && model.To.HasValue)
                 {
-                    var from = new TimeSpan(model.From.Value.Hour, model.From.Value.Minute, 0);
-                    var to = new TimeSpan(model.To.Value.Hour, model.To.Value.Minute, 0);
+                    var from = model.From.Value;
+                    var to = model.To.Value;
 
                     query = query.Where(a =>
-                        new TimeSpan(a.Start.Hour, a.Start.Minute, 0) >= from &&
-                        new TimeSpan(a.Start.Hour, a.Start.Minute, 0) <= to);
+           (a.Start.Hour > from.Hour || (a.Start.Hour == from.Hour && a.Start.Minute >= from.Minute)) &&
+           (a.Start.Hour < to.Hour || (a.Start.Hour == to.Hour && a.Start.Minute <= to.Minute))
+       );
                 }
 
                 if (model.Service.HasValue)
