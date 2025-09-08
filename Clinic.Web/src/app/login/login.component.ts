@@ -14,6 +14,7 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class LoginComponent {
   model: any = [];
+  token: any;
   constructor(
     private userService: UserService,
     private router: Router,
@@ -21,7 +22,13 @@ export class LoginComponent {
   ) { }
 
   ngOnInit() {
+  }
+  ngAfterViewInit(): void {
+    const token = localStorage.getItem('token');
+    if (token) {
+      this.router.navigate(['/appointment']);
 
+    }
   }
 
   async login() {
@@ -35,10 +42,13 @@ export class LoginComponent {
         if (res.token && res.secretCode) {
           localStorage.setItem("token", res.token);
           this.router.navigate(["/appointment"]);
-          // this.router.navigateByUrl('/appointment', { replaceUrl: true });
         }
       }
+      else if (this.model.userName && !this.model.password) {
+        this.toastR.error('خطا', 'رمز عبور را وارد نمایید')
+      }
       else {
+        this.toastR.error('خطا', 'نام کاربری و رمز عبور را وارد نمایید')
       }
     }
     catch { }

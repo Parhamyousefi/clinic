@@ -23,7 +23,17 @@
         </div>
         <div class="col-lg-8 col-12 px-0 my-2">
             <div class="card-style-date p-3">
-                <div class="col-12" *ngIf="!weekMode">
+                <div class="col-12">
+                    <div class="d-flex mode-selector p-0 my-2">
+                        <div class="ml-1 p-2 pointer text-center" [ngClass]="{  'selected-mode' :!weekMode}"
+                            (click)="weekMode = false">
+                            روزانه</div>
+                        <div class="mr-1 p-2 pointer text-center" [ngClass]="{  'selected-mode' :weekMode}"
+                            (click)="weekMode = true">
+                            هفتگی</div>
+                    </div>
+                </div>
+                <div class="col-12 mt-3" *ngIf="!weekMode">
                     <div class="d-lg-flex justify-content-between align-items-center mb-3">
                         <div class="d-flex align-items-center pointer" (click)="changeDate(1)">
                             <i class="fa fa-arrow-right mx-1" aria-hidden="true"></i>
@@ -40,7 +50,7 @@
                 </div>
                 <div class="row">
                     <!-- Daily mode -->
-                    <div class="table-scroll col-12 d-none">
+                    <div *ngIf="!weekMode" class="table-scroll col-12">
                         <table
                             class="table col-12 table-bordered table-responsive border-0 text-center appointment-grid">
                             <thead class="d-flex">
@@ -70,7 +80,7 @@
                         </table>
                     </div>
                     <!-- Weekly Mode -->
-                    <div class="table-scroll col-12">
+                    <div *ngIf="weekMode" class="table-scroll col-12">
                         <table
                             class="table col-12 table-bordered table-responsive border-0 text-center appointment-grid">
                             <thead class="d-flex">

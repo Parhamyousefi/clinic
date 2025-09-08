@@ -25,6 +25,7 @@ body {
     height: 100vh;
     padding: 20px;
     margin-right: 270px;
+    direction: rtl;
 }
 
 .pointer {
