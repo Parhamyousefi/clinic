@@ -14,5 +14,6 @@ namespace Clinic.Api.Application.Interfaces
         Task<string> DeleteTreatment(int id);
         Task<IEnumerable<GetTodayAppointmentsInfoDto>> GetTodayAppointments(GetTodayAppointmentsDto model);
         Task<IEnumerable<GetAppointmentTypesDto>> GetAppointmentTypes();
+        Task<Dictionary<string, List<GetTodayAppointmentsInfoDto>>> GetWeekAppointments();
     }
 }

@@ -2,6 +2,7 @@
 {
     public class GetTodayAppointmentsInfoDto
     {
+        public int Id { get; set; }
         public string Time { get; set; } = string.Empty;
         public string PatientName { get; set; } = string.Empty;
         public string AppointmentTypeName { get; set; } = string.Empty;
