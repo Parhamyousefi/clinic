@@ -14,9 +14,6 @@
         public decimal Amount { get; set; }
         public string? Notes { get; set; }
         public decimal Payment { get; set; }
-        public int? ModifierId { get; set; }
-        public DateTime? CreatedOn { get; set; }
-        public DateTime? LastUpdated { get; set; }
         public int? InvoiceBillStatusId { get; set; }
         public bool AllowPayLater { get; set; }
         public int? UserAllowPayLaterId { get; set; }
@@ -24,7 +21,6 @@
         public int BillStatus { get; set; }
         public bool IsCanceled { get; set; }
         public decimal? BusinessDebit { get; set; }
-        public int? CreatorId { get; set; }
         public int RecordStateId { get; set; }
         public int? AnesthesiaTechnicianId { get; set; }
         public int? ElectroTechnicianId { get; set; }
