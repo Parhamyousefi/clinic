@@ -1,5 +1,5 @@
-import { Component, ViewChild } from '@angular/core';
-import { SharedModule } from "../share/shared.module";
+import { Component } from '@angular/core';
+import { SharedModule, ShamsiUTCPipe } from "../share/shared.module";
 import { DpDatePickerModule, DatePickerComponent } from 'ngx-jalali-date-picker';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -9,15 +9,18 @@ import { MatCalendar, MatCalendarBody } from '@angular/material/datepicker';
 import moment from 'moment-jalaali';
 import { DialogModule } from 'primeng/dialog';
 import { DropdownModule } from 'primeng/dropdown';
+import { ToastrService } from 'ngx-toastr';
+import { PatientService } from '../_services/patient.service';
 @Component({
   selector: 'app-appointment',
   standalone: true,
-  imports: [SharedModule, DpDatePickerModule, FormsModule, SharedModule, CommonModule, MatCardModule, MatCalendarBody, MatCalendar, DialogModule, DropdownModule],
+  imports: [SharedModule, DpDatePickerModule, FormsModule, CommonModule, MatCardModule, MatCalendarBody, MatCalendar, DialogModule, DropdownModule],
   templateUrl: './appointment.component.html',
   styleUrl: './appointment.component.css'
 })
 export class AppointmentComponent {
   private _selectedDate: Date | null = null;
+  private patientService: PatientService;
 
   appointmentsData: any = [];
   today: any;
@@ -34,6 +37,7 @@ export class AppointmentComponent {
     const minute = i % 2 === 0 ? '00' : '30';
     return `${hour.toString().padStart(2, '0')}:${minute}`;
   });
+  weekDays: any = [];
   timeSheetHeaderDate: any;
   showNewAppointment: boolean = false;
   pateints: any = [];
@@ -47,6 +51,9 @@ export class AppointmentComponent {
   clinicId: any;
   timeSheetData: any = [];
   editmode: boolean = false;
+  clinicsList: any = [];
+  selectedClinic: any;
+  weekMode: any = 0;
   get selectedDate(): Date | null {
     return this._selectedDate;
   }
@@ -58,7 +65,9 @@ export class AppointmentComponent {
 
   constructor(
     private userService: UserService,
-  ) { }
+    private toastR: ToastrService,
+  ) {
+  }
 
   config: any = {
     hideInputContainer: true,
@@ -72,41 +81,11 @@ export class AppointmentComponent {
     this.selectedDate = this.today;
     await this.getPatients();
     await this.getAppointmentTypes();
+    await this.getClinics();
     await this.getAppointment(this.today);
     this.today = this.today._d;
-    console.log(this.selectedDate);
-
+    this.getCurrentWeek();
   }
-
-  // changeDate(status: any) {
-  //   let formattedDate: any = moment(this.selectedDate);
-  //   if (status == 1) {
-  //     formattedDate = formattedDate.add(1, 'day');
-  //   } else if (status == 2) {
-  //     formattedDate = formattedDate.subtract(1, 'day');
-  //   }
-  //   this.timeSheetHeaderDate = formattedDate._d;
-  // }
-  // status :  0  => mostaghim taghir bede
-  // status :  1 => + day
-  // status : -1 => - day 
-  // changeDate(status: any) {
-  //   let formattedDate: any = moment(this.selectedDate);
-  //   switch (status) {
-  //     case 1:
-  //       this.selectedDate = formattedDate.add(1, 'day');
-  //       break;
-  //     case 0:
-  //       this.appointmentDate = formattedDate._d;
-  //       break;
-  //     case -1:
-  //       this.appointmentDate = formattedDate.subtract(1, 'day');
-  //       break;
-  //     default:
-  //       break;
-  //   }
-
-  // }
 
   changeDate(status: number) {
     let formattedDate: any = '';
@@ -136,22 +115,22 @@ export class AppointmentComponent {
 
 
   async getAppointment(date: any) {
+    const shamsiTimePipe = new ShamsiUTCPipe()
+
     this.hours.forEach(hour => this.timeSheetData[hour] = []);
     try {
       let formattedDate = moment(date).format('YYYY-MM-DD');
-      let res: any = await this.userService.getAppointments(1, formattedDate).toPromise();
+      let res: any = await this.userService.getAppointments(this.selectedClinic.code, formattedDate).toPromise();
       this.appointmentsData = res;
       this.appointmentsData.forEach((appointment: any) => {
-        appointment.type = this.appointmentTypes.filter((type: any) => type.id == appointment.appointmentTypeId)[0].name;
-        appointment.patient = this.patientsList.filter((patient: any) => patient.patientCode == appointment.patientId);
-        appointment.showStartTime = moment(appointment.start).format('HH:mm');
+        appointment.typeName = this.appointmentTypes.filter((type: any) => type.id == appointment.appointmentTypeId)[0].name;
+        appointment.patientName = this.patientsList.filter((patient: any) => patient.patientCode == appointment.patientId)[0].name;
+        appointment.showStartTime = shamsiTimePipe.transform(appointment.start);
         let startIndex = this.hours.indexOf(appointment.showStartTime);
         if (startIndex !== -1) {
           this.timeSheetData[this.hours[startIndex]].push(appointment);
         }
       });
-      console.log(this.timeSheetData);
-
       this.timeSheetHeaderDate = date._d;
 
     }
@@ -187,15 +166,23 @@ export class AppointmentComponent {
         "ignoreDidNotCome": null,
         "creatorId": null,
         "byInvoice": null,
-        "editOrNew": -1
+        "editOrNew": this.editmode == true ? this.newAppointmentModel.id : -1
       }
       let res = await this.userService.createAppointment(model).toPromise();
+      this.toastR.success('با موفقیت ثبت شد')
+      this.getAppointment(this.appointmentDate)
       this.newAppointmentModel = [];
+      this.showNewAppointment = false;
+      this.editmode = false;
     }
-    catch { }
+    catch (err) {
+      this.toastR.error('خطا!', 'خطا در ثبت وقت')
+
+    }
   }
 
   setNewAppointment(time: any) {
+    // this.newAppointmentModel = [];
     this.newAppointmentModel.appointmentStartTime = this.combineDateAndTime(this.appointmentDate, time);
     this.newAppointmentModel.appointmentEndTime = this.combineDateAndTime(this.appointmentDate, this.getEndTime(time))
     this.showNewAppointment = true;
@@ -204,7 +191,7 @@ export class AppointmentComponent {
 
   async getPatients() {
     try {
-      let res: any = await this.userService.getPatients().toPromise();
+      let res: any = await this.patientService.getPatients().toPromise();
       if (res.length > 0) {
         this.patientsList = res;
         this.patientsList.forEach((patient: any) => {
@@ -213,7 +200,10 @@ export class AppointmentComponent {
         });
       }
     }
-    catch { }
+    catch {
+      this.toastR.error('خطا!', 'خطا در دریافت اطلاعات')
+
+    }
   }
 
   async getAppointmentTypes() {
@@ -227,7 +217,9 @@ export class AppointmentComponent {
       }
 
     }
-    catch { }
+    catch {
+      this.toastR.error('خطا!', 'خطا در دریافت اطلاعات')
+    }
   }
 
 
@@ -254,7 +246,7 @@ export class AppointmentComponent {
   editAppointment(appointment: any) {
     this.newAppointmentModel.id = appointment.id;
     this.newAppointmentModel.selectedType = this.appointmentTypes.filter((type: any) => type.id == appointment.appointmentTypeId)[0];
-    this.newAppointmentModel.selectedPatient = this.patientsList.filter((patient: any) => patient.patientCode == appointment.patientId);
+    this.newAppointmentModel.selectedPatient = this.patientsList.filter((patient: any) => patient.patientCode == appointment.patientId)[0];
     this.newAppointmentModel.appointmentStartTime = appointment.start;
     this.newAppointmentModel.appointmentEndTime = appointment.end;
     this.newAppointmentModel.note = appointment.note;
@@ -264,4 +256,49 @@ export class AppointmentComponent {
 
   }
 
+  async getClinics() {
+    try {
+      let res = await this.userService.getClinics().toPromise();
+      this.clinicsList = res;
+      this.clinicsList.forEach((clinic: any) => {
+        clinic.code = clinic.id;
+      });
+      this.selectedClinic = this.clinicsList[0];
+    }
+    catch {
+      this.toastR.error('خطا!', 'خطا در دریافت اطلاعات')
+    }
+  }
+
+  closeNewAppointmentModal() {
+    this.showNewAppointment = false;
+    this.newAppointmentModel = [];
+  }
+
+
+  getCurrentWeek() {
+    let currentDate = moment(this.appointmentDate);
+    let weekStart: any = currentDate.clone().locale('fa').startOf('week');
+    let daysOfWeek = [];
+
+    for (let i = 0; i < 6; i++) {
+      daysOfWeek.push({
+        dayName: weekStart.locale('fa').format('dddd'),
+        dayNumber: weekStart.format('jDD'),
+        fullDate: weekStart.toDate(),
+        isToday: weekStart.isSame(moment(), 'day'),
+      });
+      weekStart.add(1, 'day');
+    }
+
+    this.weekDays = daysOfWeek;
+    console.log(this.weekDays);
+  }
+
+
+  setWeeklyNewAppointment(date: any, time: any) {
+    this.newAppointmentModel.appointmentStartTime = this.combineDateAndTime(date, time);
+    this.newAppointmentModel.appointmentEndTime = this.combineDateAndTime(date, this.getEndTime(time))
+    this.showNewAppointment = true;
+  }
 }

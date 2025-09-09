@@ -11,7 +11,13 @@ import {
   JustDateZone
 } from './custom.pipe';
 import { MatDatepickerModulePersian } from 'ngx-persian-datepicker';
-
+import { TableModule } from 'primeng/table';
+import { FormsModule } from '@angular/forms';
+import { DropdownModule } from 'primeng/dropdown';
+import { MatInputModule } from '@angular/material/input';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 
 
 @NgModule({
@@ -42,7 +48,14 @@ import { MatDatepickerModulePersian } from 'ngx-persian-datepicker';
     JustDateZone
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    TableModule,
+    FormsModule,
+    DropdownModule,
+    MatInputModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    NgxMaterialTimepickerModule
   ],
   exports: [
     NumberSplitPipe,
@@ -68,7 +81,15 @@ import { MatDatepickerModulePersian } from 'ngx-persian-datepicker';
     NumberSplitSlashPipe,
     NumberSplitDotPipe,
     ConvertTimeSeconds,
-    JustDateZone
+    JustDateZone,
+    TableModule,
+    FormsModule,
+    DropdownModule,
+    MatInputModule,
+    MatDatepickerModule,
+    NgxMaterialTimepickerModule
   ]
 })
 export class SharedModule { }
+export { ShamsiUTCPipe };
+
