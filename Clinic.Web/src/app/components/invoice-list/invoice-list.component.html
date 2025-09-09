@@ -1,0 +1,72 @@
+<div class="appContainer">
+    <div class="col-12 text-right">
+        <h4> صورت حساب ها</h4>
+    </div>
+    <hr>
+    <div class="col-12">
+        <button class="btn btn-danger mb-3" routerLink="/new-invoice">صورت حساب جدید 
+      <!-- <i class="fa fa-plus" aria-hidden="true"></i> -->
+    </button>
+
+        <p-table #dt styleClass="p-datatable-gridlines" [value]="InvoiceList" [autoLayout]="true" [paginator]="true" [rows]="10" [showCurrentPageReport]="true" currentPageReportTemplate="نمایش {first} تا {last} " [rowsPerPageOptions]="[10,25,50]">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th pSortableColumn="fldFirstName">زمان ملاقات
+                        <p-sortIcon field="fldFirstName"></p-sortIcon>
+                    </th>
+                    <th> نام</th>
+                    <th> نوع وقت</th>
+                    <th> خدمت</th>
+                    <th> پزشک</th>
+                    <th> عملیات</th>
+                </tr>
+                <tr>
+                    <th>
+                        <input type="text" (input)="dt.filter($event.target?.value, 'fldFirstName', 'contains')" class="form-control">
+                    </th>
+                    <th>
+                        <input type="text" (input)="dt.filter($event.target?.value, 'fldFirstName', 'contains')" class="form-control">
+                    </th>
+                    <th></th>
+                    <th></th>
+                    <th>
+                        <input type="text" (input)="dt.filter($event.target?.value, 'fldEmail', 'contains')" class="form-control">
+                    </th>
+                    <th></th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-item>
+                <tr>
+                    <td class="px-2">
+                        <div class="py-2 widthClassPrime">
+                            <span>{{item.date|JustDateZone}}</span>
+                        </div>
+                    </td>
+                    <td class="px-2">
+                        <div class="py-2 widthClassPrime">
+                            <span>{{item.patientName}}</span>
+                        </div>
+                    </td>
+                    <td class="px-2">
+                        <div class="py-2 widthClassPrime">
+                            <span>{{item.appointmentTypeName}}</span>
+                        </div>
+                    </td>
+                    <td class="px-2">
+                        <div class="py-2 widthClassPrime">
+                            <span>{{item.billableItemName}}</span>
+                        </div>
+                    </td>
+                    <td class="px-2">
+                        <div class="py-2 widthClassPrime">
+                            <span>{{item.practitionerName}}</span>
+                        </div>
+                    </td>
+                    <td class="px-2">
+                        <button class="btn btn-danger">صدور صورتحساب</button>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</div>
