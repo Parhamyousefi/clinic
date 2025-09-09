@@ -105,23 +105,23 @@ namespace Clinic.Api.Infrastructure.Services
             }
         }
 
-        public async Task<IEnumerable<AppointmentsContext>> GetAppointments(int clinicId, DateTime? date, int? docId)
+        public async Task<IEnumerable<AppointmentsContext>> GetAppointments(GetAppointmentsDto model)
         {
             try
             {
                 var userRole = _token.GetUserRole();
                 if (userRole == "Doctor")
                 {
-                    docId = _token.GetUserId();
+                    model.DoctorId = _token.GetUserId();
                 }
 
-                var selectedDate = date?.Date ?? DateTime.Today;
+                var selectedDate = model.Date?.Date ?? DateTime.Today;
                 var nextDay = selectedDate.AddDays(1);
 
                 return await _context.Appointments
          .Where(u =>
-             u.BusinessId == clinicId &&
-             u.PractitionerId == docId &&
+             u.BusinessId == model.ClinicId &&
+             u.PractitionerId == model.DoctorId &&
              u.Start.Date <= selectedDate &&
              u.End.Date >= selectedDate)
          .ToListAsync();
@@ -219,8 +219,8 @@ namespace Clinic.Api.Infrastructure.Services
                     var toDate = model.ToDate.Value.Date;
 
                     query = query.Where(a =>
-                         a.Start.Date >= fromDate &&
-                          a.End.Date <= toDate
+                         a.Start.Date <= fromDate &&
+                          a.End.Date >= toDate
                             );
                 }
 
