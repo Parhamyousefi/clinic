@@ -26,7 +26,7 @@ export class TodayAppointmentsComponent implements OnInit {
   servicesList: any = [];
   selectedservice: any;
   selectedDatefrom: any = new Date(new Date().setHours(0, 0, 0, 0));
-  selectedTimefrom: any = '08:00';
+  selectedTimefrom: any = '00:00';
   selectedDateTo: any = new Date(new Date().setHours(0, 0, 0, 0));
   selectedTimeTo: any = '23:00';
   async ngOnInit() {

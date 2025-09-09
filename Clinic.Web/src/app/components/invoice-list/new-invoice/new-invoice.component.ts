@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../../_services/user.service';
 import { SharedModule } from '../../../share/shared.module';
+import { PatientService } from '../../../_services/patient.service';
 
 @Component({
   selector: 'app-new-invoice',
@@ -12,7 +13,8 @@ import { SharedModule } from '../../../share/shared.module';
 export class NewInvoiceComponent implements OnInit {
 
   constructor(
-    private userService: UserService
+    private userService: UserService,
+    private patientService: PatientService
   ) { }
 
   patientsList: any = [];
@@ -25,6 +27,7 @@ export class NewInvoiceComponent implements OnInit {
     const name = `${hour.toString().padStart(2, '0')}:${minute}`;
     return { id: i, name };
   });
+  hasInviceId: number;
 
   ngOnInit(): void {
     this.getPatients();
@@ -34,7 +37,7 @@ export class NewInvoiceComponent implements OnInit {
 
   async getPatients() {
     try {
-      let res: any = await this.userService.getPatients().toPromise();
+      let res: any = await this.patientService.getPatients().toPromise();
       if (res.length > 0) {
         this.patientsList = res;
         this.patientsList.forEach((patient: any) => {
