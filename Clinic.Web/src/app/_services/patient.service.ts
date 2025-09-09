@@ -26,4 +26,15 @@ export class PatientService {
     };
     return this.http.get(uri, httpOptions);
   }
+
+  savePatient(data) {
+    const uri = this.url + `api/Patient/savePatient`;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + this.token,
+      }),
+    };
+    return this.http.post(uri, data, httpOptions);
+  }
 }

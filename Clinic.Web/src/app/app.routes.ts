@@ -5,12 +5,13 @@ import { AppointmentComponent } from './appointment/appointment.component';
 import { AuthGuard } from './auth.guard';
 import { TodayAppointmentsComponent } from './components/today-appointments/today-appointments.component';
 import { PatientsComponent } from './components/patients/patients.component';
+import { CreatePatientComponent } from './components/patients/create-patient/create-patient.component';
 
 export const routes: Routes = [
     { path: '', component: LoginComponent },
     {
         path: 'appointment', component: AppointmentComponent,
-        // canActivate: [AuthGuard]
+        canActivate: [AuthGuard]
     },
     {
         path: 'today-appointment', component: TodayAppointmentsComponent,
@@ -18,6 +19,10 @@ export const routes: Routes = [
     },
     {
         path: 'patients', component: PatientsComponent,
+        canActivate: [AuthGuard]
+    },
+    {
+        path: 'create-patient', component: CreatePatientComponent,
         canActivate: [AuthGuard]
     }
 ];

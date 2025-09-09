@@ -1,5 +1,5 @@
 .logo-container {
-    height: 80px;
+    min-height: 80px;
 }
 
 .sidebar-items {

@@ -1,0 +1,39 @@
+.new-appointment-containter {
+    direction: rtl !important;
+}
+
+.select-btn {
+    direction: ltr;
+}
+
+::ng-deep .select-btn .p-button {
+    padding: 0.5rem 1.6rem;
+}
+
+::ng-deep .p-button:focus {
+    box-shadow: none !important;
+}
+
+::ng-deep .p-selectbutton .p-button.p-highlight {
+    background-color: #00c4b4;
+    border: 1px solid #00c4b4;
+}
+
+:ng-deep .birthdate-input {
+    background-color: red !important;
+    width: 100% !important;
+}
+
+.create-patient-btn {
+    background-color: #00c4b4;
+
+}
+
+::ng-deep .full-width .p-dropdown {
+    width: 100%;
+    padding: 5px;
+}
+
+::ng-deep .p-dropdown .p-dropdown-label {
+    font-family: 'iran-sans' !important;
+}
