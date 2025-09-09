@@ -3,6 +3,7 @@ import { UserService } from '../_services/user.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-login',
@@ -13,13 +14,21 @@ import { Router } from '@angular/router';
 })
 export class LoginComponent {
   model: any = [];
+  token: any;
   constructor(
     private userService: UserService,
-    private router: Router
+    private router: Router,
+    private toastR: ToastrService
   ) { }
 
   ngOnInit() {
+  }
+  ngAfterViewInit(): void {
+    const token = localStorage.getItem('token');
+    if (token) {
+      this.router.navigate(['/appointment']);
 
+    }
   }
 
   async login() {
@@ -31,11 +40,15 @@ export class LoginComponent {
         }
         let res: any = await this.userService.login(data).toPromise();
         if (res.token && res.secretCode) {
-          this.router.navigate(["/dashboard"]);
-          localStorage.setItem("token", res.token)
+          localStorage.setItem("token", res.token);
+          this.router.navigate(["/appointment"]);
         }
       }
+      else if (this.model.userName && !this.model.password) {
+        this.toastR.error('خطا', 'رمز عبور را وارد نمایید')
+      }
       else {
+        this.toastR.error('خطا', 'نام کاربری و رمز عبور را وارد نمایید')
       }
     }
     catch { }
