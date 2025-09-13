@@ -37,4 +37,15 @@ export class PatientService {
     };
     return this.http.post(uri, data, httpOptions);
   }
+
+  savePatientPhone(data) {
+    const uri = this.url + `api/Patient/savePatientPhone`;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + this.token,
+      }),
+    };
+    return this.http.post(uri, data, httpOptions);
+  }
 }

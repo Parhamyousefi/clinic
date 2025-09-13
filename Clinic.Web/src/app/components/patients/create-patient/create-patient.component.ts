@@ -5,6 +5,8 @@ import { InputMaskModule } from 'primeng/inputmask';
 import { PatientService } from '../../../_services/patient.service';
 import { Router } from '@angular/router';
 import { DropdownModule } from 'primeng/dropdown';
+import { MainService } from '../../../_services/main.service';
+import { ContactService } from '../../../_services/contact.service';
 @Component({
   selector: 'app-create-patient',
   standalone: true,
@@ -13,32 +15,17 @@ import { DropdownModule } from 'primeng/dropdown';
   styleUrl: './create-patient.component.css'
 })
 export class CreatePatientComponent {
-  newPatient: any = [];
-  genderList: any[] = [{ label: 'مرد', value: '1' }, { label: 'زن', value: '2' }];
-  jobs: any;
-  mainInsurance: any;
-  takmiliInsurance: any;
-  firstReagent: any;
-  secondReagent: any;
-  InpatientInsurance: any;
-  patientTitle: any;
-
   constructor(
     private patientService: PatientService,
-    private router: Router
+    private router: Router,
+    private mainService: MainService,
+    private contactService: ContactService
   ) {
   }
 
-  async createPatient() {
-    let model = {
-      firstName: this.newPatient.firstName,
-      lastName: this.newPatient.lastName,
-      gender: this.newPatient.gender,
-      fatherName: this.newPatient.fatherName,
-      birthDate: this.newPatient.birthDate,
-      editOrNew: -1
-    }
-    let res: any = await this.patientService.savePatient(model).toPromise();
-    this.router.navigate(['/patients'])
+  ngOnInit() {
   }
+
+
+
 }
