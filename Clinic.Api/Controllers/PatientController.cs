@@ -65,5 +65,14 @@ namespace Clinic.Api.Controllers
             var result = await _patientService.GetPatientPhones(patientId);
             return Ok(result);
         }
+
+        [HttpGet("getContactTypes")]
+        [Authorize]
+        public async Task<IActionResult> GetContactTypes()
+        {
+            var result = await _patientService.GetContactTypes();
+            return Ok(result);
+        }
+
     }
 }

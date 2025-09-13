@@ -15,7 +15,9 @@ namespace Clinic.Api.Infrastructure.Services
         private readonly IMapper _mapper;
         private readonly IReadTokenClaims _token;
 
-        public TreatmentsService(ApplicationDbContext context, IMapper mapper, IReadTokenClaims token)
+        public TreatmentsService(ApplicationDbContext context,
+            IMapper mapper,
+            IReadTokenClaims token)
         {
             _context = context;
             _mapper = mapper;
@@ -45,12 +47,12 @@ namespace Clinic.Api.Infrastructure.Services
                  .AnyAsync(a =>
                      a.PatientId == model.PatientId &&
                      a.BusinessId == model.BusinessId &&
-                      a.Start.Date == model.Start.Date &&
-        (
-            (model.Start.TimeOfDay >= a.Start.TimeOfDay && model.Start.TimeOfDay < a.End.TimeOfDay) ||
-            (model.End.TimeOfDay > a.Start.TimeOfDay && model.End.TimeOfDay <= a.End.TimeOfDay) ||
-            (model.Start.TimeOfDay <= a.Start.TimeOfDay && model.End.TimeOfDay >= a.End.TimeOfDay)
-        ));
+                     a.Start.Date == model.Start.Date &&
+                        (
+                            (model.Start.TimeOfDay >= a.Start.TimeOfDay && model.Start.TimeOfDay < a.End.TimeOfDay) ||
+                            (model.End.TimeOfDay > a.Start.TimeOfDay && model.End.TimeOfDay <= a.End.TimeOfDay) ||
+                            (model.Start.TimeOfDay <= a.Start.TimeOfDay && model.End.TimeOfDay >= a.End.TimeOfDay)
+                        ));
 
                     if (hasOverlap)
                         throw new ConflictException(1002, "Patient already has an appointment in this business during this time.");
@@ -119,13 +121,13 @@ namespace Clinic.Api.Infrastructure.Services
                 var nextDay = selectedDate.AddDays(1);
 
                 return await _context.Appointments
-         .Where(u =>
-             u.BusinessId == clinicId &&
-             u.PractitionerId == docId &&
-             u.Start.Date <= selectedDate &&
-             u.End.Date >= selectedDate)
-         .ToListAsync();
-            }
+                 .Where(u =>
+                     u.BusinessId == clinicId &&
+                     u.PractitionerId == docId &&
+                     u.Start.Date <= selectedDate &&
+                     u.End.Date >= selectedDate)
+                 .ToListAsync();
+                    }
             catch (Exception ex)
             {
                 throw new Exception(ex.Message);
@@ -245,7 +247,7 @@ namespace Clinic.Api.Infrastructure.Services
                        );
                 }
 
-                    return await query.Distinct().ToListAsync();
+                return await query.Distinct().ToListAsync();
             }
             catch (Exception ex)
             {

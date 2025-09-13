@@ -158,5 +158,18 @@ namespace Clinic.Api.Infrastructure.Services
                 throw new Exception(ex.Message);
             }
         }
+
+        public async Task<IEnumerable<ContactTypesContext>> GetContactTypes()
+        {
+            try
+            {
+                var patientPhone = await _context.ContactTypes.ToListAsync();
+                return patientPhone;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }
