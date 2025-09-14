@@ -33,6 +33,7 @@ export class PatientService {
       headers: new HttpHeaders({
         "Content-Type": "application/json",
         Authorization: "Bearer " + this.token,
+        responseType: 'text'
       }),
     };
     return this.http.post(uri, data, httpOptions);
@@ -44,8 +45,21 @@ export class PatientService {
       headers: new HttpHeaders({
         "Content-Type": "application/json",
         Authorization: "Bearer " + this.token,
+        responseType: 'text'
       }),
     };
     return this.http.post(uri, data, httpOptions);
+  }
+
+  getPatientPhone(patientId) {
+    const token: any = localStorage.getItem("token");
+    const uri = this.url + `api/Patient/getPatientPhone/${patientId}`;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      }),
+    };
+    return this.http.get(uri, httpOptions);
   }
 }

@@ -10,10 +10,12 @@ import { MainService } from '../../_services/main.service';
 import { ContactService } from '../../_services/contact.service';
 import { InputMaskModule } from 'primeng/inputmask';
 import { DropdownModule } from 'primeng/dropdown';
+import { ToastrModule, ToastrService } from 'ngx-toastr';
+import { firstValueFrom } from 'rxjs';
 @Component({
   selector: 'app-patients',
   standalone: true,
-  imports: [TableModule, FormsModule, SelectButtonModule, RouterLink, DialogModule, CommonModule, SelectButtonModule, InputMaskModule, DropdownModule],
+  imports: [TableModule, FormsModule, SelectButtonModule, DialogModule, CommonModule, SelectButtonModule, InputMaskModule, DropdownModule],
   templateUrl: './patients.component.html',
   styleUrl: './patients.component.css'
 })
@@ -22,6 +24,15 @@ export class PatientsComponent {
   showCreatePatient: boolean = false;
   newPatient: any = [];
   genderList: any[] = [{ label: 'مرد', value: '1' }, { label: 'زن', value: '2' }];
+  titleList: any[] = [
+    { name: "جناب", code: "1" },
+    { name: "دکتر", code: "2" },
+    { name: "آقا", code: "3" },
+    { name: "خانم", code: "4" },
+    { name: "پروفسور", code: "5" },
+    { name: "مهندس", code: "6" },
+
+  ];
   jobs: any;
   mainInsurance: any;
   takmiliInsurance: any;
@@ -33,51 +44,83 @@ export class PatientsComponent {
   contactsList: any = [];
   showAddPhoneNum: boolean = false;
   phoneTypeList: any = [
-    { name: "موبایل", code: 0 },
-    { name: "منزل", code: 1 },
-    { name: "محل کار", code: 2 },
-    { name: "فکس", code: 3 },
-    { name: "سایر", code: 4 },
+    { name: "موبایل", code: 1 },
+    { name: "منزل", code: 2 },
+    { name: "محل کار", code: 3 },
+    { name: "فکس", code: 4 },
+    { name: "سایر", code: 5 },
   ]
   phoneNum: any = [];
+  editpatientMode: boolean = false;
+  selectedPatientAddPhoneId: any;
+  patientPhoneEditMode: boolean = false;
+  selectedEditPhoneNum: any;
   constructor(
     private patientService: PatientService,
     private router: Router,
     private mainService: MainService,
-    private contactService: ContactService
+    private contactService: ContactService,
+    private toastR: ToastrService
   ) {
   }
 
   ngOnInit() {
     this.getPatients();
+    this.getJobs();
+    this.getContacts();
+    this.getContactTypes();
   }
   async getPatients() {
     let res: any = await this.patientService.getPatients().toPromise();
     if (res.length > 0) {
       this.patientsList = res;
-      console.log(this.patientsList);
-
     }
+    this.patientsList.forEach(async patient => {
+      patient.patientPhone = await this.getPatientPhone(patient.id);
+      patient.phoneNum = patient.patientPhone.number;
+    });
+    console.log(this.patientsList);
+
   }
 
   createPatientModal() {
     this.showCreatePatient = true;
     this.getJobs();
     this.getContacts();
+    this.getContactTypes();
   }
 
 
   async createPatient() {
     let model = {
+      titleId: this.newPatient.title.code,
       firstName: this.newPatient.firstName,
       lastName: this.newPatient.lastName,
       gender: this.newPatient.gender,
       fatherName: this.newPatient.fatherName,
       birthDate: this.newPatient.birthDate,
-      editOrNew: -1
+      city: this.newPatient.city,
+      referenceNumber: this.newPatient.referenceNumber,
+      note: this.newPatient.note,
+      referringInsurerId: this.newPatient.mainInsurance,
+      referringInsurer2Id: this.newPatient.takmiliInsurance,
+      referringContactId: this.newPatient.referringContactId,
+      referringContact2Id: this.newPatient.referringContact2Id,
+      nationalCode: this.newPatient.nationalCode,
+      jobId: this.newPatient.job.code,
+      referringInpatientInsurerId: this.newPatient.referringInpatientInsurerId,
+      editOrNew: this.editpatientMode ? this.newPatient.id : -1,
     }
-    let res: any = await this.patientService.savePatient(model).toPromise();
-    this.router.navigate(['/patients'])
+    if (this.newPatient.firstName && this.newPatient.lastName && this.newPatient.gender && this.newPatient.fatherName && this.newPatient.birthDate && this.newPatient.job) {
+      let res: any = await firstValueFrom(this.patientService.savePatient(model));
+      if (res) {
+        this.toastR.success('با موفقیت ثبت شد!');
+        this.closeCreatePatientModal();
+      }
+    }
+    else {
+      this.toastR.error('خطا', 'مقادیر را به درستی وارد کنید');
+    }
   }
 
   async getJobs() {
@@ -96,8 +139,11 @@ export class PatientsComponent {
     if (res.length > 0) {
       this.contactsList = res;
       this.contactsList.forEach(contact => {
-        contact.code = contact.id
+        contact.code = contact.id,
+          contact.name = contact.firstName
       });
+      console.log(this.contactsList);
+
     }
   }
 
@@ -107,14 +153,75 @@ export class PatientsComponent {
   }
   async savePhone() {
     let model = {
-      "patientId": 0,
-      "phoneNoTypeId": 0,
-      "number": "string",
-      "modifierId": 0,
-      "createdOn": "2025-09-13T14:41:14.026Z",
-      "lastUpdated": "2025-09-13T14:41:14.026Z",
-      "creatorId": 0
+      patientId: this.selectedPatientAddPhoneId,
+      phoneNoTypeId: this.phoneNum.phoneType.code,
+      number: this.phoneNum.phoneNumber,
+      editOrNew: this.patientPhoneEditMode ? this.selectedEditPhoneNum : -1
     }
     let res = await this.patientService.savePatientPhone(model).toPromise();
+    this.toastR.success("با موفقیت ثبت شد!")
+    this.patientPhoneEditMode = false;
+    this.getPatients();
+  }
+
+  closeAddPhoneNum() {
+    this.showAddPhoneNum = false;
+    this.phoneNum = [];
+    this.selectedPatientAddPhoneId = '';
+  }
+
+  async getContactTypes() {
+    let res = await this.contactService.getContactTypes().toPromise();
+    console.log(res);
+
+  }
+
+  openAddPhoneNumModal(patientId) {
+    this.showAddPhoneNum = true;
+    this.selectedPatientAddPhoneId = patientId
+  }
+
+  async getPatientPhone(patientId) {
+    try {
+      const res: any = await this.patientService.getPatientPhone(patientId).toPromise();
+      if (res.length > 0) {
+        return res[0];
+      }
+      else {
+        return null;
+      }
+    }
+    catch { }
+  }
+
+  editPatient(patient) {
+    this.editpatientMode = true;
+    this.createPatientModal();
+    this.newPatient.title = this.titleList.filter(title => title.code == patient.titleId)[0];
+    this.newPatient.firstName = patient.firstName;
+    this.newPatient.lastName = patient.lastName;
+    this.newPatient.gender = this.genderList.filter(gender => gender.value == patient.gender)[0];
+    this.newPatient.fatherName = patient.fatherName;
+    this.newPatient.birthDate = patient.birthDate;
+    this.newPatient.city = patient.city;
+    this.newPatient.referenceNumber = patient.referenceNumber;
+    this.newPatient.note = patient.notes;
+    this.newPatient.mainInsurance = patient.referringInsurerId;
+    this.newPatient.takmiliInsurance = patient.referringInsurer2Id;
+    this.newPatient.referringContactId = patient.referringContactId;
+    this.newPatient.referringContact2Id = patient.referringContact2Id;
+    this.newPatient.nationalCode = patient.nationalCode;
+    this.newPatient.job = this.jobList.filter(job => job.code == patient.jobId)[0];
+    this.newPatient.referringInpatientInsurerId = patient.referringInpatientInsurerId;
+    console.log(this.newPatient);
+
+  }
+
+  editPhoneNum(patientPhone) {
+    this.selectedEditPhoneNum = patientPhone.id;
+    this.patientPhoneEditMode = true;
+    this.phoneNum.phoneNumber = patientPhone.number;
+    this.phoneNum.phoneType = this.phoneTypeList.filter(type => type.code == patientPhone.phoneNoTypeId)[0];
+    this.openAddPhoneNumModal(patientPhone.patientId);
   }
 }
