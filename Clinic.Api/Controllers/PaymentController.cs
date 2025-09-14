@@ -48,5 +48,12 @@ namespace Clinic.Api.Controllers
             var result = await _paymentService.DeletePayment(id);
             return Ok(result);
         }
+
+        [HttpPost("saveExpense")]
+        [Authorize("Admin", "Doctor")]
+        public async Task<IActionResult> SaveExpense()
+        {
+
+        }
     }
 }

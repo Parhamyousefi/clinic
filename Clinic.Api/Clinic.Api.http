@@ -391,8 +391,8 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwid
 Content-Type: application/json
 
 ### Save Contacts
-POST {{Clinic_Api_Host}}/api/contacts/saveContacts
-Authorization: Bearer
+POST {{Clinic_Api_Host}}/api/contact/saveContact
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTg0NDYxOTUsImlhdCI6MTc1Nzg0MTM5NSwidXNlcklkIjoiMiIsInVzZXJuYW1lIjoibmltYSIsInVzZXJSb2xlIjoiQWRtaW4iLCJuYmYiOjE3NTc4NDEzOTV9.pFOe0vNCHKcRb4s8Pw2Gh9RFcf0r_R1Oa9_7sTqrmLY
 Content-Type: application/json
 {
   "contactTypeId": 1,
@@ -421,8 +421,8 @@ Content-Type: application/json
 }
 
 ### Get Contacts
-GET {{Clinic_Api_Host}}/api/contacts/getContacts
-Authorization: Bearer
+GET {{Clinic_Api_Host}}/api/contact/getContacts
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTg0NDYxOTUsImlhdCI6MTc1Nzg0MTM5NSwidXNlcklkIjoiMiIsInVzZXJuYW1lIjoibmltYSIsInVzZXJSb2xlIjoiQWRtaW4iLCJuYmYiOjE3NTc4NDEzOTV9.pFOe0vNCHKcRb4s8Pw2Gh9RFcf0r_R1Oa9_7sTqrmLY
 Content-Type: application/json
 
 ### Delete Contacts
@@ -443,4 +443,35 @@ Content-Type: application/json
 ### Get Week Appointments
 GET {{Clinic_Api_Host}}/api/treatment/getWeekAppointments
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTc4NjE0NjksImlhdCI6MTc1NzI1NjY2OSwidXNlcklkIjoiMiIsInVzZXJuYW1lIjoibmltYSIsInVzZXJSb2xlIjoiQWRtaW4iLCJuYmYiOjE3NTcyNTY2Njl9.FDXrmJb0vaxiH0PMwf9sVt6b99W5z712bIb48AXQqwk
+Content-Type: application/json
+
+### Save BillableItems
+POST {{Clinic_Api_Host}}/api/treatment/saveBillableItem
+Authorization: Bearer
+Content-Type: application/json
+{
+  "code": null,
+  "name": "salam",
+  "price": 10,
+  "isOther": true,
+  "itemTypeId": 1,
+  "duration": 1,
+  "allowEditPrice": true,
+  "treatmentTemplateId": null,
+  "forceOneInvoice": true,
+  "isTreatmentDataRequired": true,
+  "group": null,
+  "parentId": null,
+  "itemCategoryId": null,
+  "orderInItemCategory": null,
+  "autoCopyTreatment": true,
+  "discountPercent": null,
+  "needAccept": true,
+  "lastTimeColor": null,
+  "editOrNew": -1
+}
+
+### Delete BillableItem
+GET {{Clinic_Api_Host}}/api/treatment/deleteBillableItem/1
+Authorization: Bearer
 Content-Type: application/json

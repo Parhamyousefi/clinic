@@ -79,14 +79,6 @@ namespace Clinic.Api.Controllers
             var result = await _mainService.DeleteJob(id);
             return Ok(result);
         }
-
-        [HttpGet("getBillableItems")]
-        [Authorize("Admin","Doctor")]
-        public async Task<IActionResult> GetBillableItems()
-        {
-            var result = await _mainService.GetBillableItems();
-            return Ok(result);
-        }
         
         [HttpGet("getCountries")]
         [Authorize("Admin","Doctor")]

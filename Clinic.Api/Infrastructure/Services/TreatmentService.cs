@@ -369,5 +369,77 @@ namespace Clinic.Api.Infrastructure.Services
                 throw new Exception(ex.Message);
             }
         }
+
+        public async Task<IEnumerable<BillableItemsContext>> GetBillableItems()
+        {
+            try
+            {
+                var result = await _context.BillableItems.ToListAsync();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<string> SaveBillableItem(SaveBillableItemsDto model)
+        {
+            try
+            {
+                var userId = _token.GetUserId();
+
+                if (model.EditOrNew == -1)
+                {
+                    var billableItems = _mapper.Map<BillableItemsContext>(model);
+                    billableItems.CreatorId = userId;
+                    billableItems.CreatedOn = DateTime.UtcNow;
+                    _context.BillableItems.Add(billableItems);
+                    await _context.SaveChangesAsync();
+                    return "BillableItem Saved Successfully";
+                }
+                else
+                {
+                    var existingBillable = await _context.BillableItems.FirstOrDefaultAsync(b => b.Id == model.EditOrNew);
+
+                    if (existingBillable == null)
+                    {
+                        throw new Exception("BillableItem Not Found");
+                    }
+
+                    _mapper.Map(model, existingBillable);
+                    existingBillable.ModifierId = userId;
+                    existingBillable.LastUpdated = DateTime.UtcNow;
+                    _context.BillableItems.Update(existingBillable);
+                    await _context.SaveChangesAsync();
+                    return "Billable Item Updated Successfully";
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<string> DeleteBillableItem(int id)
+        {
+            try
+            {
+                var billableItem = await _context.BillableItems.FindAsync(id);
+
+                if (billableItem == null)
+                {
+                    throw new Exception("BillableItem Not Found");
+                }
+
+                _context.BillableItems.Remove(billableItem);
+                await _context.SaveChangesAsync();
+                return "Billable Item Deleted Successfully";
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }

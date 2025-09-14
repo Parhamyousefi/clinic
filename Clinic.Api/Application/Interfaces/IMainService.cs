@@ -13,7 +13,6 @@ namespace Clinic.Api.Application.Interfaces
         Task<string> SaveJob(SaveJobDto model);
         Task<IEnumerable<JobsContext>> GetJobs();
         Task<string> DeleteJob(int id);
-        Task<IEnumerable<BillableItemsContext>> GetBillableItems();
         Task<IEnumerable<CountriesContext>> GetCountries();
     }
 }

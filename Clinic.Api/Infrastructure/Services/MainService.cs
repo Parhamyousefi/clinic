@@ -189,19 +189,6 @@ namespace Clinic.Api.Infrastructure.Services
                 throw new Exception(ex.Message);
             }
         }
-
-        public async Task<IEnumerable<BillableItemsContext>> GetBillableItems()
-        {
-            try
-            {
-                var result = await _context.BillableItems.ToListAsync();
-                return result;
-            }
-            catch(Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
         
         public async Task<IEnumerable<CountriesContext>> GetCountries()
         {
