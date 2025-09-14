@@ -87,7 +87,7 @@ namespace Clinic.Api.Controllers
             return Ok(result);
         }
 
-        [HttpGet("getWeekAppointments")]
+        [HttpGet("getWeeklyAppointments")]
         [Authorize("Admin", "Doctor")]
         public async Task<IActionResult> GetWeekAppointments()
         {
