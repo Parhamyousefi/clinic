@@ -10,7 +10,6 @@ import {
   PriceWithoutTaxPipe,
   JustDateZone
 } from './custom.pipe';
-import { MatDatepickerModulePersian } from 'ngx-persian-datepicker';
 import { TableModule } from 'primeng/table';
 import { FormsModule } from '@angular/forms';
 import { DropdownModule } from 'primeng/dropdown';
@@ -87,7 +86,7 @@ import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
     DropdownModule,
     MatInputModule,
     MatDatepickerModule,
-    NgxMaterialTimepickerModule
+    NgxMaterialTimepickerModule,
   ]
 })
 export class SharedModule { }

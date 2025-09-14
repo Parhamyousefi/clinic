@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { SharedModule, ShamsiUTCPipe } from "../share/shared.module";
-import { DpDatePickerModule, DatePickerComponent } from 'ngx-jalali-date-picker';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { UserService } from '../_services/user.service';
@@ -14,7 +13,7 @@ import { PatientService } from '../_services/patient.service';
 @Component({
   selector: 'app-appointment',
   standalone: true,
-  imports: [SharedModule, DpDatePickerModule, FormsModule, CommonModule, MatCardModule, MatCalendarBody, MatCalendar, DialogModule, DropdownModule],
+  imports: [SharedModule, FormsModule, CommonModule, MatCardModule, MatCalendarBody, MatCalendar, DialogModule, DropdownModule],
   templateUrl: './appointment.component.html',
   styleUrl: './appointment.component.css'
 })
