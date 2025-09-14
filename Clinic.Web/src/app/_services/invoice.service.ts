@@ -1,11 +1,11 @@
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
-export class MainService {
+export class InvoiceService {
 
   constructor(
     private http: HttpClient
@@ -14,9 +14,9 @@ export class MainService {
   url = environment.url;
   token: any = localStorage.getItem("token");
 
-  getJobs() {
+  getInvoices() {
     const token: any = localStorage.getItem("token");
-    const uri = this.url + `api/main/getJobs`;
+    const uri = this.url + `api/Invoice/getInvoices`;
     const httpOptions = {
       headers: new HttpHeaders({
         "Content-Type": "application/json",
@@ -25,18 +25,4 @@ export class MainService {
     };
     return this.http.get(uri, httpOptions);
   }
-
-  getBillableItems() {
-    const token: any = localStorage.getItem("token");
-    const uri = this.url + `api/main/getBillableItems`;
-    const httpOptions = {
-      headers: new HttpHeaders({
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + token,
-      }),
-    };
-    return this.http.get(uri, httpOptions);
-  }
-
-
 }

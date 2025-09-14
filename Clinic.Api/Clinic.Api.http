@@ -111,11 +111,11 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwid
 ### Create a new patient
 POST {{Clinic_Api_Host}}/api/patient/savePatient
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTc0MjIxMzQsImlhdCI6MTc1NjgxNzMzNCwidXNlcklkIjoiMiIsInVzZXJuYW1lIjoibmltYSIsInVzZXJSb2xlIjoiQWRtaW4iLCJuYmYiOjE3NTY4MTczMzR9.6_mKpOHryOj5H4eRcwdKBGQTvdsy9Ibts-P1zSFMScw
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTg0NDExNzEsImlhdCI6MTc1NzgzNjM3MSwidXNlcklkIjoiMiIsInVzZXJuYW1lIjoibmltYSIsInVzZXJSb2xlIjoiQWRtaW4iLCJuYmYiOjE3NTc4MzYzNzF9.cwqL8VDBlDE5Q6vrDosRtSm0-zdAowbGmenaE-m4SVY
 
 {
   "titleId": 1,
-  "firstName": "Nima",
+  "firstName": "Nima2234",
   "lastName": "Ghahremanian",
   "gender": 1,
   "fatherName": "Ali",
@@ -136,7 +136,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTc0MjIxM
   "invoiceExtraInformation": "Paid by insurance",
   "emergencyContact": "09121234567",
   "referenceNumber": "REF-001",
-  "referringDoctorId": 6,
+  "referringDoctorId": 2,
   "notes": "Patient has no allergies",
   "referringInsurerId": 3,
   "referringInsurer2Id": null,
@@ -161,7 +161,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTc0MjIxM
 ### Get Patients
 GET {{Clinic_Api_Host}}/api/patient/getPatients
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTc0MjIxMzQsImlhdCI6MTc1NjgxNzMzNCwidXNlcklkIjoiMiIsInVzZXJuYW1lIjoibmltYSIsInVzZXJSb2xlIjoiQWRtaW4iLCJuYmYiOjE3NTY4MTczMzR9.6_mKpOHryOj5H4eRcwdKBGQTvdsy9Ibts-P1zSFMScw
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTg0NDExNzEsImlhdCI6MTc1NzgzNjM3MSwidXNlcklkIjoiMiIsInVzZXJuYW1lIjoibmltYSIsInVzZXJSb2xlIjoiQWRtaW4iLCJuYmYiOjE3NTc4MzYzNzF9.cwqL8VDBlDE5Q6vrDosRtSm0-zdAowbGmenaE-m4SVY
 
 ### Get Treatments
 GET {{Clinic_Api_Host}}/api/treatments/getTreatments/2
@@ -438,4 +438,9 @@ Content-Type: application/json
 ### Get Countries
 GET {{Clinic_Api_Host}}/api/contacts/getCountries
 Authorization: Bearer
+Content-Type: application/json
+
+### Get Week Appointments
+GET {{Clinic_Api_Host}}/api/treatment/getWeekAppointments
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTc4NjE0NjksImlhdCI6MTc1NzI1NjY2OSwidXNlcklkIjoiMiIsInVzZXJuYW1lIjoibmltYSIsInVzZXJSb2xlIjoiQWRtaW4iLCJuYmYiOjE3NTcyNTY2Njl9.FDXrmJb0vaxiH0PMwf9sVt6b99W5z712bIb48AXQqwk
 Content-Type: application/json

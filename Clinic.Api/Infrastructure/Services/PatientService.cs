@@ -27,9 +27,10 @@ namespace Clinic.Api.Infrastructure.Services
                 var userId = _token.GetUserId();
 
                 if (model.EditOrNew == -1)
-                {   
+                {
                     var patient = _mapper.Map<PatientsContext>(model);
                     patient.CreatorId = userId;
+                    patient.ReferringDoctorId = userId;
                     patient.CreatedOn = DateTime.UtcNow;
                     _context.Patients.Add(patient);
                     await _context.SaveChangesAsync();
@@ -47,6 +48,7 @@ namespace Clinic.Api.Infrastructure.Services
 
                     _mapper.Map(model, existingPatient);
                     existingPatient.ModifierId = userId;
+                    existingPatient.ReferringDoctorId = userId;
                     existingPatient.LastUpdated = DateTime.UtcNow;
                     _context.Patients.Update(existingPatient);
                     await _context.SaveChangesAsync();
@@ -98,29 +100,40 @@ namespace Clinic.Api.Infrastructure.Services
             try
             {
                 var userId = _token.GetUserId();
-
-                var patient = await _context.PatientPhones.Where(p => p.PatientId == model.PatientId).ToListAsync();
-
-                if (patient == null)
+                if (model.EditOrNew == -1)
                 {
-                    var mappPatient = _mapper.Map<PatientPhonesContext>(model);
-                    mappPatient.CreatorId = userId;
-                    _context.PatientPhones.Add(mappPatient);
-                    await _context.SaveChangesAsync();
+                    var patient = await _context.PatientPhones.Where(p => p.PatientId == model.PatientId).ToListAsync();
 
-                    return "Patient Phone Saved Successfully";
+                    if (patient == null)
+                    {
+                        var mappPatient = _mapper.Map<PatientPhonesContext>(model);
+                        mappPatient.CreatorId = userId;
+                        _context.PatientPhones.Add(mappPatient);
+                        await _context.SaveChangesAsync();
+
+                        return "Patient Phone Saved Successfully";
+                    }
+                    else
+                    {
+                        throw new Exception("Patient Phone Already Exists");
+                    }
                 }
+                else
+                {
+                    var existingPatientPhone = await _context.PatientPhones.FirstOrDefaultAsync(p => p.Id == model.EditOrNew);
 
-                await _context.PatientPhones.Where(p => p.PatientId == model.PatientId)
-                    .ExecuteUpdateAsync(setters => setters
-                    .SetProperty(x => x.PhoneNoTypeId, model.PhoneNoTypeId)
-                    .SetProperty(x => x.Number, model.Number)
-                    .SetProperty(x => x.ModifierId, model.ModifierId)
-                    .SetProperty(x => x.CreatedOn, model.CreatedOn)
-                    .SetProperty(x => x.LastUpdated, model.LastUpdated)
-                    .SetProperty(x => x.ModifierId, userId));
-                await _context.SaveChangesAsync();
-                return "Patient Phone Updated Successfully";
+                    if (existingPatientPhone == null)
+                    {
+                        throw new Exception("Patient Not Found");
+                    }
+
+                    _mapper.Map(model, existingPatientPhone);
+                    existingPatientPhone.ModifierId = userId;
+                    existingPatientPhone.LastUpdated = DateTime.UtcNow;
+                    _context.PatientPhones.Update(existingPatientPhone);
+                    await _context.SaveChangesAsync();
+                    return "Patient Updated Successfully";
+                }
             }
             catch (Exception ex)
             {

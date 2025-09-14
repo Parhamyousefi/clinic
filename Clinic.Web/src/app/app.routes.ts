@@ -4,6 +4,8 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { AppointmentComponent } from './appointment/appointment.component';
 import { AuthGuard } from './auth.guard';
 import { TodayAppointmentsComponent } from './components/today-appointments/today-appointments.component';
+import { InvoiceListComponent } from './components/invoice-list/invoice-list.component';
+import { NewInvoiceComponent } from './components/invoice-list/new-invoice/new-invoice.component';
 import { PatientsComponent } from './components/patients/patients.component';
 import { CreatePatientComponent } from './components/patients/create-patient/create-patient.component';
 
@@ -24,5 +26,13 @@ export const routes: Routes = [
     {
         path: 'create-patient', component: CreatePatientComponent,
         canActivate: [AuthGuard]
-    }
+    },
+    {
+        path: 'invoice-list', component: InvoiceListComponent,
+        canActivate: [AuthGuard]
+    },
+    {
+        path: 'new-invoice', component: NewInvoiceComponent,
+        canActivate: [AuthGuard]
+    },
 ];

@@ -8,11 +8,12 @@ namespace Clinic.Api.Application.Interfaces
     {
         Task<int> CreateAppointmentAsync(CreateAppointmentDto model);
         Task<string> DeleteAppointment(int id);
-        Task<IEnumerable<AppointmentsContext>> GetAppointments(int clinicId, DateTime? date, int? docId);
+        Task<IEnumerable<AppointmentsContext>> GetAppointments(GetAppointmentsDto model);
         Task<IEnumerable<TreatmentsContext>> GetTreatments(int appointmentId);
         Task<string> SaveTreatment(SaveTreatmentDto model);
         Task<string> DeleteTreatment(int id);
         Task<IEnumerable<GetTodayAppointmentsInfoDto>> GetTodayAppointments(GetTodayAppointmentsDto model);
         Task<IEnumerable<GetAppointmentTypesDto>> GetAppointmentTypes();
+        Task<Dictionary<string, List<GetTodayAppointmentsInfoDto>>> GetWeekAppointments();
     }
 }
