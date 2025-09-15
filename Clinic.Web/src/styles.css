@@ -1,6 +1,5 @@
 @import "primeng/resources/themes/lara-light-blue/theme.css";
 @import "primeng/resources/primeng.css";
-
 @font-face {
     font-family: "iran-sans";
     src: url("assets/fonts/IRANSans.eot") format("eot"), url("assets/fonts/IRANSans.ttf") format("truetype"), url("assets/fonts/IRANSans.woff") format("woff"), url("assets/fonts/IRANSans.woff2") format("woff2");
@@ -9,7 +8,7 @@
 }
 
 
-/* * {
+/* * { 
     margin: 0;
     padding: 0;
     box-sizing: border-box;

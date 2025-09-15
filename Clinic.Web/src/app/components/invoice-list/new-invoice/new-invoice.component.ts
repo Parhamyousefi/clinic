@@ -27,6 +27,7 @@ export class NewInvoiceComponent implements OnInit {
     const name = `${hour.toString().padStart(2, '0')}:${minute}`;
     return { id: i, name };
   });
+  hasInviceId: number;
 
   ngOnInit(): void {
     this.getPatients();

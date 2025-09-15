@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { SharedModule, ShamsiUTCPipe } from "../share/shared.module";
-import { DpDatePickerModule, DatePickerComponent } from 'ngx-jalali-date-picker';
-import { FormsModule } from '@angular/forms';
+import { FormControl, FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { UserService } from '../_services/user.service';
 import { MatCardModule } from '@angular/material/card';
@@ -15,7 +14,7 @@ import { TreatmentsService } from '../_services/treatments.service';
 @Component({
   selector: 'app-appointment',
   standalone: true,
-  imports: [SharedModule, DpDatePickerModule, FormsModule, CommonModule, MatCardModule, MatCalendarBody, MatCalendar, DialogModule, DropdownModule],
+  imports: [SharedModule, FormsModule, CommonModule, MatCardModule, MatCalendarBody, MatCalendar, DialogModule, DropdownModule],
   templateUrl: './appointment.component.html',
   styleUrl: './appointment.component.css'
 })
@@ -54,14 +53,16 @@ export class AppointmentComponent {
   clinicsList: any = [];
   selectedClinic: any;
   weekMode: any = 0;
-  get selectedDate(): Date | null {
+  get selectedDate(): any {
     return this._selectedDate;
   }
 
-  set selectedDate(value: Date | null) {
+  set selectedDate(value: any) {
     this._selectedDate = value;
     this.changeDate(0);
   }
+
+  isCalendarVisible = true;
 
   constructor(
     private userService: UserService,
@@ -78,9 +79,15 @@ export class AppointmentComponent {
     showNearMonthDays: false
   };
 
+  dateNew: any;
   async ngOnInit() {
+    this.dateNew = new FormControl(moment().format('jYYYY/jMM/jDD'));
+    this.dateNew.valueChanges.subscribe(date => {
+      this.onDateSelect(date);
+    });
+
     this.today = moment();
-    this.selectedDate = this.today;
+    // this.selectedDate = this.today;
     await this.getPatients();
     await this.getAppointmentTypes();
     await this.getClinics();
@@ -100,7 +107,8 @@ export class AppointmentComponent {
         break;
 
       case 0:
-        formattedDate = moment(this.selectedDate);
+        // formattedDate = moment(this.selectedDate);
+        formattedDate = moment(this.dateNew.value, 'jYYYY/jMM/jDD').add(3.5, 'hours');
         this.appointmentDate = formattedDate.clone().toDate();
         this.getAppointment(this.appointmentDate);
         break;
@@ -318,4 +326,12 @@ export class AppointmentComponent {
     console.log(res);
 
   }
+  onDateSelect(date: string) {
+    this.isCalendarVisible = false;
+    setTimeout(() => {
+      this.isCalendarVisible = true;
+    }, 10);
+    this.changeDate(0);
+  }
+
 }
