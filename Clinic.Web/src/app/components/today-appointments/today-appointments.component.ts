@@ -4,6 +4,9 @@ import { UserService } from '../../_services/user.service';
 import { SharedModule } from '../../share/shared.module';
 import { MainService } from './../../_services/main.service';
 import moment from 'moment-jalaali';
+import { FormControl } from '@angular/forms';
+
+
 
 
 
@@ -29,11 +32,15 @@ export class TodayAppointmentsComponent implements OnInit {
   todayAppointmentsList: any = [];
   servicesList: any = [];
   selectedservice: any;
-  selectedDatefrom: any = new Date(new Date().setHours(0, 0, 0, 0));
+  selectedDatefrom: any;
   selectedTimefrom: any = '00:00';
-  selectedDateTo: any = new Date(new Date().setHours(0, 0, 0, 0));
+  selectedDateTo: any;
   selectedTimeTo: any = '23:00';
+
+
   async ngOnInit() {
+    this.selectedDatefrom = new FormControl(moment().format('jYYYY/jMM/jDD'));
+    this.selectedDateTo = new FormControl(moment().format('jYYYY/jMM/jDD'));
     await this.getClinics();
     await this.getBillableItems();
     setTimeout(() => {
@@ -43,8 +50,8 @@ export class TodayAppointmentsComponent implements OnInit {
 
   async getAppointment() {
     let model = {
-      fromDate: this.selectedDatefrom,
-      toDate: this.selectedDateTo,
+      fromDate: moment(this.selectedDatefrom.value, 'jYYYY/jMM/jDD').add(3.5, 'hours').toDate(),
+      toDate: moment(this.selectedDateTo.value, 'jYYYY/jMM/jDD').add(3.5, 'hours').toDate(),
       clinic: this.selectedClinic?.code,
       service: this.selectedservice?.code,
       from: this.convertTimeToUTC(this.selectedTimefrom),
@@ -102,52 +109,11 @@ export class TodayAppointmentsComponent implements OnInit {
     return timePart.replace("Z", "");
   }
 
-  onCalendarOpen(): void {
-    setTimeout(() => {
-      const calendarBody = document.querySelector('.mat-calendar-body');
-      if (!calendarBody) return;
 
-      const faToEnDigits = (str: string): string =>
-        str.replace(/[۰-۹]/g, d => String('۰۱۲۳۴۵۶۷۸۹'.indexOf(d)));
 
-      const allCells = Array.from(
-        calendarBody.querySelectorAll('.mat-calendar-body-cell-content')
-      ) as HTMLElement[];
-
-      const findCellByDay = (targetDay: number): HTMLElement | undefined =>
-        allCells.find(cell => {
-          const day = parseInt(faToEnDigits(cell.textContent?.trim() || '0'), 10);
-          return day === targetDay;
-        });
-
-      const todayCell = calendarBody.querySelector('.mat-calendar-body-today') as HTMLElement | null;
-      const selectedCell = calendarBody.querySelector('.mat-calendar-body-selected') as HTMLElement | null;
-
-      const todayDay = todayCell
-        ? parseInt(faToEnDigits(todayCell.textContent?.trim() || '0'), 10)
-        : null;
-      const selectedDay = selectedCell
-        ? parseInt(faToEnDigits(selectedCell.textContent?.trim() || '0'), 10)
-        : null;
-
-      todayCell?.classList.remove('mat-calendar-body-today');
-      selectedCell?.classList.remove('mat-calendar-body-selected');
-
-      const newTodayCell = todayDay && todayDay > 2 ? findCellByDay(todayDay - 2) : null;
-      const newSelectedCell = selectedDay && selectedDay > 2 ? findCellByDay(selectedDay - 2) : null;
-
-      newTodayCell?.classList.add('mat-calendar-body-today');
-      newSelectedCell?.classList.add('mat-calendar-body-selected');
-    }, 300);
+  onDateChange(newDate: string) {
 
   }
 
-  onDateChange(event: any): void {
-    const originalDate = moment(event.value);
-    const shiftedDate = originalDate.clone().subtract(2, 'day');
-    this.selectedDatefrom = shiftedDate;
-
-
-  }
 
 }
