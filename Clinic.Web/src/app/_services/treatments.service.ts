@@ -24,5 +24,17 @@ export class TreatmentsService {
     };
     return this.http.post(uri, data, httpOptions);
   }
-  
+
+  getWeeklyAppointments() {
+    const token: any = localStorage.getItem("token");
+    const uri = this.url + `api/Treatment/getWeeklyAppointments`;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      }),
+    };
+    return this.http.get(uri, httpOptions);
+  }
+
 }

@@ -11,6 +11,7 @@ import { DialogModule } from 'primeng/dialog';
 import { DropdownModule } from 'primeng/dropdown';
 import { ToastrService } from 'ngx-toastr';
 import { PatientService } from '../_services/patient.service';
+import { TreatmentsService } from '../_services/treatments.service';
 @Component({
   selector: 'app-appointment',
   standalone: true,
@@ -20,7 +21,6 @@ import { PatientService } from '../_services/patient.service';
 })
 export class AppointmentComponent {
   private _selectedDate: Date | null = null;
-  private patientService: PatientService;
 
   appointmentsData: any = [];
   today: any;
@@ -66,6 +66,8 @@ export class AppointmentComponent {
   constructor(
     private userService: UserService,
     private toastR: ToastrService,
+    private treatmentService: TreatmentsService,
+    private patientService: PatientService
   ) {
   }
 
@@ -85,6 +87,7 @@ export class AppointmentComponent {
     await this.getAppointment(this.today);
     this.today = this.today._d;
     this.getCurrentWeek();
+    this.getWeeklyAppointments();
   }
 
   changeDate(status: number) {
@@ -116,11 +119,18 @@ export class AppointmentComponent {
 
   async getAppointment(date: any) {
     const shamsiTimePipe = new ShamsiUTCPipe()
-
     this.hours.forEach(hour => this.timeSheetData[hour] = []);
     try {
-      let formattedDate = moment(date).format('YYYY-MM-DD');
-      let res: any = await this.userService.getAppointments(this.selectedClinic.code, formattedDate).toPromise();
+      let formattedDate = moment(date).utc().toISOString();
+
+      let model = {
+
+        "clinicId": this.selectedClinic.code,
+        "date": formattedDate,
+        "doctorId": null
+      }
+      // let formattedDate = moment(date).format('YYYY-MM-DD');
+      let res: any = await this.userService.getAppointments(model).toPromise();
       this.appointmentsData = res;
       this.appointmentsData.forEach((appointment: any) => {
         appointment.typeName = this.appointmentTypes.filter((type: any) => type.id == appointment.appointmentTypeId)[0].name;
@@ -141,7 +151,7 @@ export class AppointmentComponent {
   async createAppointment() {
     try {
       let model = {
-        "businessId": 1,
+        "businessId": this.selectedClinic.code,
         "practitionerId": null,
         "patientId": this.newAppointmentModel.selectedPatient.code,
         "appointmentTypeId": this.newAppointmentModel.selectedType.code,
@@ -300,5 +310,12 @@ export class AppointmentComponent {
     this.newAppointmentModel.appointmentStartTime = this.combineDateAndTime(date, time);
     this.newAppointmentModel.appointmentEndTime = this.combineDateAndTime(date, this.getEndTime(time))
     this.showNewAppointment = true;
+  }
+
+
+  async getWeeklyAppointments() {
+    let res: any = await this.treatmentService.getWeeklyAppointments().toPromise();
+    console.log(res);
+
   }
 }
