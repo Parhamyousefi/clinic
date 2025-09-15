@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Clinic.Api.Application.DTOs;
 using Clinic.Api.Application.DTOs.Contacts;
 using Clinic.Api.Application.Interfaces;
 using Clinic.Api.Domain.Entities;
@@ -20,9 +21,10 @@ namespace Clinic.Api.Infrastructure.Services
             _mapper = mapper;
         }
 
-        public async Task<string> SaveContact(SaveContactDto model)
+        public async Task<GlobalResponse> SaveContact(SaveContactDto model)
         {
             var userId = _token.GetUserId();
+            var result = new GlobalResponse();
 
             try
             {
@@ -33,7 +35,8 @@ namespace Clinic.Api.Infrastructure.Services
                     contact.CreatedOn = DateTime.UtcNow;
                     _context.Contacts.Add(contact);
                     await _context.SaveChangesAsync();
-                    return "Contacts Saved Successfully";
+                    result.Data = "Contact Saved Successfully";
+                    return result;
                 }
                 else
                 {
@@ -46,7 +49,8 @@ namespace Clinic.Api.Infrastructure.Services
                     existingContact.LastUpdated = DateTime.UtcNow;
                     _context.Contacts.Update(existingContact);
                     await _context.SaveChangesAsync();
-                    return "Contact Updated Successfully";
+                    result.Data = "Contact Updated Successfully";
+                    return result;
                 }
             }
             catch (Exception ex)
@@ -68,8 +72,9 @@ namespace Clinic.Api.Infrastructure.Services
             }
         }
 
-        public async Task<string> DeleteContact(int id)
+        public async Task<GlobalResponse> DeleteContact(int id)
         {
+            var result = new GlobalResponse();
             try
             {
                 var contact = await _context.Contacts.FindAsync(id);
@@ -77,7 +82,8 @@ namespace Clinic.Api.Infrastructure.Services
 
                 _context.Contacts.Remove(contact);
                 await _context.SaveChangesAsync();
-                return "Contact Deleted Successfully";
+                result.Data = "Contact Deleted Successfully";
+                return result;
             }
             catch (Exception ex)
             {

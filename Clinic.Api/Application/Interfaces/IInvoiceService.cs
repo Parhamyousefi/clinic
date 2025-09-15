@@ -1,15 +1,16 @@
-﻿using Clinic.Api.Application.DTOs.Invoices;
+﻿using Clinic.Api.Application.DTOs;
+using Clinic.Api.Application.DTOs.Invoices;
 using Clinic.Api.Domain.Entities;
 
 namespace Clinic.Api.Application.Interfaces
 {
     public interface IInvoiceService
     {
-        Task<string> SaveInvoice(SaveInvoiceDto model);
+        Task<GlobalResponse> SaveInvoice(SaveInvoiceDto model);
         Task<IEnumerable<InvoicesContext>> GetInvoices();
-        Task<string> SaveInvoiceItem(SaveInvoiceItemDto model);
+        Task<GlobalResponse> SaveInvoiceItem(SaveInvoiceItemDto model);
         Task<IEnumerable<InvoiceItemsContext>> GetInvoiceItems();
-        Task<string> DeleteInvoice(int id);
-        Task<string> DeleteInvoiceItem(int id);
+        Task<GlobalResponse> DeleteInvoice(int id);
+        Task<GlobalResponse> DeleteInvoiceItem(int id);
     }
 }

@@ -6,17 +6,17 @@ namespace Clinic.Api.Application.Interfaces
 {
     public interface ITreatmentService
     {
-        Task<int> CreateAppointmentAsync(CreateAppointmentDto model);
-        Task<string> DeleteAppointment(int id);
+        Task<GlobalResponse> CreateAppointmentAsync(CreateAppointmentDto model);
+        Task<GlobalResponse> DeleteAppointment(int id);
         Task<IEnumerable<AppointmentsContext>> GetAppointments(GetAppointmentsDto model);
         Task<IEnumerable<TreatmentsContext>> GetTreatments(int appointmentId);
-        Task<string> SaveTreatment(SaveTreatmentDto model);
-        Task<string> DeleteTreatment(int id);
+        Task<GlobalResponse> SaveTreatment(SaveTreatmentDto model);
+        Task<GlobalResponse> DeleteTreatment(int id);
         Task<IEnumerable<GetTodayAppointmentsInfoDto>> GetTodayAppointments(GetTodayAppointmentsDto model);
         Task<IEnumerable<GetAppointmentTypesDto>> GetAppointmentTypes();
         Task<Dictionary<string, List<GetTodayAppointmentsInfoDto>>> GetWeekAppointments();
         Task<IEnumerable<BillableItemsContext>> GetBillableItems();
-        Task<string> SaveBillableItem(SaveBillableItemsDto model);
-        Task<string> DeleteBillableItem(int id);
+        Task<GlobalResponse> SaveBillableItem(SaveBillableItemsDto model);
+        Task<GlobalResponse> DeleteBillableItem(int id);
     }
 }

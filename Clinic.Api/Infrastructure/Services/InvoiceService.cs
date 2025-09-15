@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Clinic.Api.Application.DTOs;
 using Clinic.Api.Application.DTOs.Invoices;
 using Clinic.Api.Application.Interfaces;
 using Clinic.Api.Domain.Entities;
@@ -20,8 +21,10 @@ namespace Clinic.Api.Infrastructure.Services
             _token = token;
         }
 
-        public async Task<string> SaveInvoice(SaveInvoiceDto model)
+        public async Task<GlobalResponse> SaveInvoice(SaveInvoiceDto model)
         {
+            var result = new GlobalResponse();
+
             try
             {
                 var userId = _token.GetUserId();
@@ -33,7 +36,8 @@ namespace Clinic.Api.Infrastructure.Services
                     invoice.CreatedOn = DateTime.UtcNow;
                     _context.Invoices.Add(invoice);
                     await _context.SaveChangesAsync();
-                    return "Invoice Saved Successfully";
+                    result.Data = "Invoice Saved Successfully";
+                    return result;
                 }
                 else
                 {
@@ -49,7 +53,8 @@ namespace Clinic.Api.Infrastructure.Services
                     existingInvoice.LastUpdated = DateTime.UtcNow;
                     _context.Invoices.Update(existingInvoice);
                     await _context.SaveChangesAsync();
-                    return "Invoice Updated Successfully";
+                    result.Data = "Invoice Updated Successfully";
+                    return result;
                 }
             }
             catch (Exception ex)
@@ -71,8 +76,10 @@ namespace Clinic.Api.Infrastructure.Services
             }
         }
 
-        public async Task<string> SaveInvoiceItem(SaveInvoiceItemDto model)
+        public async Task<GlobalResponse> SaveInvoiceItem(SaveInvoiceItemDto model)
         {
+            var result = new GlobalResponse();
+
             try
             {
                 var userId = _token.GetUserId();
@@ -84,7 +91,8 @@ namespace Clinic.Api.Infrastructure.Services
                     invoiceItem.CreatedOn = DateTime.UtcNow;
                     _context.InvoiceItems.Add(invoiceItem);
                     await _context.SaveChangesAsync();
-                    return "Invoice Item Saved Successfully";
+                    result.Data = "Invoice Item Saved Successfully";
+                    return result;
                 }
                 else
                 {
@@ -100,7 +108,8 @@ namespace Clinic.Api.Infrastructure.Services
                     existingInvoiceItem.LastUpdated = DateTime.UtcNow;
                     _context.InvoiceItems.Update(existingInvoiceItem);
                     await _context.SaveChangesAsync();
-                    return "Invoice Item Updated Successfully";
+                    result.Data = "Invoice Item Updated Successfully";
+                    return result;
                 }
             }
             catch (Exception ex)
@@ -122,8 +131,10 @@ namespace Clinic.Api.Infrastructure.Services
             }
         }
 
-        public async Task<string> DeleteInvoice(int id)
+        public async Task<GlobalResponse> DeleteInvoice(int id)
         {
+            var result = new GlobalResponse();
+
             try
             {
                 var invoice = await _context.Invoices.FindAsync(id);
@@ -133,8 +144,8 @@ namespace Clinic.Api.Infrastructure.Services
 
                 _context.Invoices.Remove(invoice);
                 await _context.SaveChangesAsync();
-
-                return "Invoice Deleted Successfully";
+                result.Data = "Invoice Deleted Successfully";
+                return result;
             }
             catch (Exception ex)
             {
@@ -142,8 +153,10 @@ namespace Clinic.Api.Infrastructure.Services
             }
         }
 
-        public async Task<string> DeleteInvoiceItem(int id)
+        public async Task<GlobalResponse> DeleteInvoiceItem(int id)
         {
+            var result = new GlobalResponse();
+
             try
             {
                 var invoiceItems = await _context.InvoiceItems.FindAsync(id);
@@ -152,7 +165,8 @@ namespace Clinic.Api.Infrastructure.Services
 
                 _context.InvoiceItems.Remove(invoiceItems);
                 await _context.SaveChangesAsync();
-                return "Invoice Item Deleted Successfully";
+                result.Data = "Invoice Item Deleted Successfully";
+                return result;
             }
             catch (Exception ex)
             {

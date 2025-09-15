@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Clinic.Api.Application.DTOs;
 using Clinic.Api.Application.DTOs.Questions;
 using Clinic.Api.Application.Interfaces;
 using Clinic.Api.Domain.Entities;
@@ -31,8 +32,10 @@ namespace Clinic.Api.Infrastructure.Services
             }
         }
 
-        public async Task<string> SaveQuestionValue(SaveQuestionValueDto model)
+        public async Task<GlobalResponse> SaveQuestionValue(SaveQuestionValueDto model)
         {
+            var result = new GlobalResponse();
+
             try
             {
                 if (model.EditOrNew == -1)
@@ -40,7 +43,9 @@ namespace Clinic.Api.Infrastructure.Services
                     var questionValue = _mapper.Map<QuestionValuesContext>(model);
                     _context.QuestionValues.Add(questionValue);
                     await _context.SaveChangesAsync();
-                    return "Successfully Saved QuestionValue";
+                    result.Data = "QuestionValue Saved Successfully";
+                    result.Status = 0;
+                    return result;
                 }
                 else
                 {
@@ -54,7 +59,9 @@ namespace Clinic.Api.Infrastructure.Services
                     _mapper.Map(model, existingQuestionValue);
                     _context.QuestionValues.Update(existingQuestionValue);
                     await _context.SaveChangesAsync();
-                    return "Question Value Update Successfully";
+                    result.Data = "QuestionValue Updated Successfully";
+                    result.Status = 0;
+                    return result;
                 }
             }
             catch (Exception ex)
@@ -63,8 +70,10 @@ namespace Clinic.Api.Infrastructure.Services
             }
         }
 
-        public async Task<string> DeleteQuestionValue(int id)
+        public async Task<GlobalResponse> DeleteQuestionValue(int id)
         {
+            var result = new GlobalResponse();
+
             try
             {
                 var questionValue = await _context.QuestionValues.FindAsync(id);
@@ -73,7 +82,9 @@ namespace Clinic.Api.Infrastructure.Services
 
                 _context.QuestionValues.Remove(questionValue);
                 await _context.SaveChangesAsync();
-                return "Question Value Deleted Successfully";
+                result.Data = "QuestionValue Deleted Successfully";
+                result.Status = 0;
+                return result;
             }
             catch (Exception ex)
             {

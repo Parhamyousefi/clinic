@@ -21,7 +21,6 @@ namespace Clinic.Api.Controllers
         public async Task<IActionResult> SavePayment(SavePaymentDto model)
         {
             var result = await _paymentService.SavePayment(model);
-
             return Ok(result);
         }
 
@@ -47,13 +46,6 @@ namespace Clinic.Api.Controllers
         {
             var result = await _paymentService.DeletePayment(id);
             return Ok(result);
-        }
-
-        [HttpPost("saveExpense")]
-        [Authorize("Admin", "Doctor")]
-        public async Task<IActionResult> SaveExpense()
-        {
-
         }
     }
 }

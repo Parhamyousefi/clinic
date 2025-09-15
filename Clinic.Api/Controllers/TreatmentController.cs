@@ -2,7 +2,6 @@
 using Clinic.Api.Application.DTOs.Appointments;
 using Clinic.Api.Application.Interfaces;
 using Clinic.Api.Authorization;
-using Clinic.Api.Infrastructure.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Clinic.Api.Controllers

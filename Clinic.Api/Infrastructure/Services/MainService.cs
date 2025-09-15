@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Clinic.Api.Application.DTOs.Contacts;
+using Clinic.Api.Application.DTOs;
 using Clinic.Api.Application.DTOs.Main;
 using Clinic.Api.Application.Interfaces;
 using Clinic.Api.Domain.Entities;
@@ -35,8 +35,10 @@ namespace Clinic.Api.Infrastructure.Services
             }
         }
 
-        public async Task<string> SaveReceipt(SaveReceiptDto model)
+        public async Task<GlobalResponse> SaveReceipt(SaveReceiptDto model)
         {
+            var result = new GlobalResponse();
+
             try
             {
                 var userId = _token.GetUserId();
@@ -50,8 +52,9 @@ namespace Clinic.Api.Infrastructure.Services
                     mappReceipt.CreatedOn = DateTime.UtcNow;
                     _context.Receipts.Add(mappReceipt);
                     await _context.SaveChangesAsync();
-
-                    return "Receipt Saved Successfully";
+                    result.Data = "Receipt Saved Successfully";
+                    result.Status = 0;
+                    return result;
                 }
 
                 _mapper.Map(model, receipt);
@@ -59,7 +62,9 @@ namespace Clinic.Api.Infrastructure.Services
                 receipt.LastUpdated = DateTime.UtcNow;
                 _context.Receipts.Update(receipt);
                 await _context.SaveChangesAsync();
-                return "Receipt Updated Successfully";
+                result.Data = "Receipt Updated Successfully";
+                result.Status = 0;
+                return result;
             }
             catch (Exception ex)
             {
@@ -86,8 +91,10 @@ namespace Clinic.Api.Infrastructure.Services
             }
         }
 
-        public async Task<string> DeleteReceipt(int patientId)
+        public async Task<GlobalResponse> DeleteReceipt(int patientId)
         {
+            var result = new GlobalResponse();
+
             try
             {
                 var receipt = await _context.Receipts.FirstOrDefaultAsync(r => r.PatientId == patientId);
@@ -96,7 +103,9 @@ namespace Clinic.Api.Infrastructure.Services
 
                 _context.Receipts.Remove(receipt);
                 await _context.SaveChangesAsync();
-                return "Receipt Deleted Successfully";
+                result.Data = "Receipt Deleted Successfully";
+                result.Status = 0;
+                return result;
             }
             catch (Exception ex)
             {
@@ -121,8 +130,10 @@ namespace Clinic.Api.Infrastructure.Services
             }
         }
 
-        public async Task<string> SaveJob(SaveJobDto model)
+        public async Task<GlobalResponse> SaveJob(SaveJobDto model)
         {
+            var result = new GlobalResponse();
+
             try
             {
                 var userId = _token.GetUserId();
@@ -134,7 +145,9 @@ namespace Clinic.Api.Infrastructure.Services
                     job.CreatedOn = DateTime.UtcNow;
                     _context.Jobs.Add(job);
                     await _context.SaveChangesAsync();
-                    return "Job Saved Successfully";
+                    result.Data = "Job Saved Successfully";
+                    result.Status = 0;
+                    return result;
                 }
                 else
                 {
@@ -149,7 +162,9 @@ namespace Clinic.Api.Infrastructure.Services
                     existingJob.LastUpdated = DateTime.UtcNow;
                     _context.Jobs.Update(existingJob);
                     await _context.SaveChangesAsync();
-                    return "Job Updated Successfully";
+                    result.Data = "Job Updated Successfully";
+                    result.Status = 0;
+                    return result;
                 }
             }
             catch (Exception ex)
@@ -171,8 +186,10 @@ namespace Clinic.Api.Infrastructure.Services
             }
         }
 
-        public async Task<string> DeleteJob(int id)
+        public async Task<GlobalResponse> DeleteJob(int id)
         {
+            var result = new GlobalResponse();
+
             try
             {
                 var job = await _context.Jobs.FindAsync(id);
@@ -182,7 +199,9 @@ namespace Clinic.Api.Infrastructure.Services
 
                 _context.Jobs.Remove(job);
                 await _context.SaveChangesAsync();
-                return "Job Deleted Successfully";
+                result.Data = "Job Deleted Successfully";
+                result.Status = 0;
+                return result;
             }
             catch (Exception ex)
             {

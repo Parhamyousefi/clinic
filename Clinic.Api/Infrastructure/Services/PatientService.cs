@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Clinic.Api.Application.DTOs;
 using Clinic.Api.Application.DTOs.Patients;
 using Clinic.Api.Application.Interfaces;
 using Clinic.Api.Domain.Entities;
@@ -20,8 +21,9 @@ namespace Clinic.Api.Infrastructure.Services
             _mapper = mapper;
         }
 
-        public async Task<string> SavePatient(SavePatientDto model)
+        public async Task<GlobalResponse> SavePatient(SavePatientDto model)
         {
+            var result = new GlobalResponse();
             try
             {
                 var userId = _token.GetUserId();
@@ -34,8 +36,9 @@ namespace Clinic.Api.Infrastructure.Services
                     patient.CreatedOn = DateTime.UtcNow;
                     _context.Patients.Add(patient);
                     await _context.SaveChangesAsync();
-
-                    return "Patient Saved Successfully";
+                    result.Data = "Patient Saved Successfully";
+                    result.Status = 0;
+                    return result;
                 }
                 else
                 {
@@ -52,7 +55,9 @@ namespace Clinic.Api.Infrastructure.Services
                     existingPatient.LastUpdated = DateTime.UtcNow;
                     _context.Patients.Update(existingPatient);
                     await _context.SaveChangesAsync();
-                    return "Patient Updated Successfully";
+                    result.Data = "Patient Updated Successfully";
+                    result.Status = 0;
+                    return result;
                 }
             }
             catch (Exception ex)
@@ -61,8 +66,10 @@ namespace Clinic.Api.Infrastructure.Services
             }
         }
 
-        public async Task<string> DeletePatient(int id)
+        public async Task<GlobalResponse> DeletePatient(int id)
         {
+            var result = new GlobalResponse();
+
             try
             {
                 var patient = await _context.Patients.FindAsync(id);
@@ -71,7 +78,9 @@ namespace Clinic.Api.Infrastructure.Services
 
                 _context.Patients.Remove(patient);
                 await _context.SaveChangesAsync();
-                return "Patient Deleted Successfully";
+                result.Data = "Patient Deleted Successfully";
+                result.Status = 0;
+                return result;
             }
             catch (Exception ex)
             {
@@ -95,8 +104,10 @@ namespace Clinic.Api.Infrastructure.Services
             }
         }
 
-        public async Task<string> SavePatientPhone(SavePatientPhoneDto model)
+        public async Task<GlobalResponse> SavePatientPhone(SavePatientPhoneDto model)
         {
+            var result = new GlobalResponse();
+
             try
             {
                 var userId = _token.GetUserId();
@@ -110,8 +121,9 @@ namespace Clinic.Api.Infrastructure.Services
                         mappPatient.CreatorId = userId;
                         _context.PatientPhones.Add(mappPatient);
                         await _context.SaveChangesAsync();
-
-                        return "Patient Phone Saved Successfully";
+                        result.Data = "Patient Phone Saved Successfully";
+                        result.Status = 0;
+                        return result;
                     }
                     else
                     {
@@ -132,7 +144,9 @@ namespace Clinic.Api.Infrastructure.Services
                     existingPatientPhone.LastUpdated = DateTime.UtcNow;
                     _context.PatientPhones.Update(existingPatientPhone);
                     await _context.SaveChangesAsync();
-                    return "Patient Updated Successfully";
+                    result.Data = "Patient Phone Updated Successfully";
+                    result.Status = 0;
+                    return result;
                 }
             }
             catch (Exception ex)
@@ -141,8 +155,10 @@ namespace Clinic.Api.Infrastructure.Services
             }
         }
 
-        public async Task<string> DeletePatientPhone(int id)
+        public async Task<GlobalResponse> DeletePatientPhone(int id)
         {
+            var result = new GlobalResponse();
+
             try
             {
                 var patientPhone = await _context.PatientPhones.FindAsync(id);
@@ -151,7 +167,9 @@ namespace Clinic.Api.Infrastructure.Services
 
                 _context.PatientPhones.Remove(patientPhone);
                 await _context.SaveChangesAsync();
-                return "Patient Phone Deleted Successfully";
+                result.Data = "Patient Phone Deleted Successfully";
+                result.Status = 0;
+                return result;
             }
             catch (Exception ex)
             {

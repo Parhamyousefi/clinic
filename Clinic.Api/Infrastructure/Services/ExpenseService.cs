@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Clinic.Api.Application.DTOs;
 using Clinic.Api.Application.DTOs.Expenses;
 using Clinic.Api.Application.Interfaces;
 using Clinic.Api.Domain.Entities;
@@ -20,8 +21,10 @@ namespace Clinic.Api.Infrastructure.Services
             _mapper = mapper;
         }
 
-        public async Task<string> SaveExpense(SaveExpenseDto model)
+        public async Task<GlobalResponse> SaveExpense(SaveExpenseDto model)
         {
+            var result = new GlobalResponse();
+
             try
             {
                 var userId = _token.GetUserId();
@@ -33,7 +36,8 @@ namespace Clinic.Api.Infrastructure.Services
                     expense.CreatorId = userId;
                     _context.Expenses.Add(expense);
                     await _context.SaveChangesAsync();
-                    return "Expense Saved Successfully";
+                    result.Data = "Expense Saved Successfully";
+                    return result;
                 }
                 else
                 {
@@ -48,7 +52,8 @@ namespace Clinic.Api.Infrastructure.Services
                     existingExpense.LastUpdated = DateTime.UtcNow;
                     _context.Expenses.Update(existingExpense);
                     await _context.SaveChangesAsync();
-                    return "Expense Saved Successfully";
+                    result.Data = "Expense Updated Successfully";
+                    return result;
                 }
             }
             catch (Exception ex)
