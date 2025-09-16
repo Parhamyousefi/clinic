@@ -445,3 +445,8 @@ Content-Type: application/json
 GET {{Clinic_Api_Host}}/api/treatment/deleteBillableItem/1
 Authorization: Bearer
 Content-Type: application/json
+
+### Get Patient ById
+GET {{Clinic_Api_Host}}/api/patient/getPatientById/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTg2Mjc0MDUsImlhdCI6MTc1ODAyMjYwNSwidXNlcklkIjoiMiIsInVzZXJuYW1lIjoibmltYSIsInVzZXJSb2xlIjoiQWRtaW4iLCJuYmYiOjE3NTgwMjI2MDV9.Bn_rBQnDX91i78gu4NdJPaL5PWHqnh-dMhZnvzJss1U
+Content-Type: application/json
