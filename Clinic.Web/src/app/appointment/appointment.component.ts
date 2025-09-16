@@ -53,6 +53,16 @@ export class AppointmentComponent {
   clinicsList: any = [];
   selectedClinic: any;
   weekMode: any = 0;
+  dayIndexMap = {
+    Saturday: 0,
+    Sunday: 1,
+    Monday: 2,
+    Tuesday: 3,
+    Wednesday: 4,
+    Thursday: 5
+  };
+  weeklyTimetable: any = [];
+  weeklyAppointments: any = [];
   get selectedDate(): any {
     return this._selectedDate;
   }
@@ -81,6 +91,7 @@ export class AppointmentComponent {
 
   dateNew: any;
   async ngOnInit() {
+    this.getWeeklyAppointments();
     this.dateNew = new FormControl(moment().format('jYYYY/jMM/jDD'));
     this.dateNew.valueChanges.subscribe(date => {
       this.onDateSelect(date);
@@ -144,12 +155,15 @@ export class AppointmentComponent {
         appointment.typeName = this.appointmentTypes.filter((type: any) => type.id == appointment.appointmentTypeId)[0].name;
         appointment.patientName = this.patientsList.filter((patient: any) => patient.patientCode == appointment.patientId)[0].name;
         appointment.showStartTime = shamsiTimePipe.transform(appointment.start);
+        appointment.weekOfDay = 2
         let startIndex = this.hours.indexOf(appointment.showStartTime);
         if (startIndex !== -1) {
           this.timeSheetData[this.hours[startIndex]].push(appointment);
+
         }
       });
       this.timeSheetHeaderDate = date._d;
+
 
     }
     catch { }
@@ -195,7 +209,6 @@ export class AppointmentComponent {
     }
     catch (err) {
       this.toastR.error('خطا!', 'خطا در ثبت وقت')
-
     }
   }
 
@@ -322,8 +335,20 @@ export class AppointmentComponent {
 
 
   async getWeeklyAppointments() {
+    const shamsiTimePipe = new ShamsiUTCPipe()
+    this.hours.forEach(hour => this.weeklyTimetable[hour] = Array.from({ length: 6 }, () => []));
     let res: any = await this.treatmentService.getWeeklyAppointments().toPromise();
-    console.log(res);
+    this.weeklyAppointments = this.transformAppointments(res);
+    this.weeklyAppointments.forEach(appointment => {
+      appointment.patientName = this.patientsList.filter((patient: any) => patient.patientCode == appointment.patientId)[0].name;
+      let startIndex = this.hours.indexOf(appointment.time);
+      this.weeklyTimetable[this.hours[startIndex]][appointment.dayOfWeek].push(appointment);
+    });
+    console.log(this.weeklyTimetable);
+
+
+
+
 
   }
   onDateSelect(date: string) {
@@ -332,6 +357,35 @@ export class AppointmentComponent {
       this.isCalendarVisible = true;
     }, 10);
     this.changeDate(0);
+  }
+
+
+  addEventsToTimetable() {
+    console.log(this.weeklyTimetable);
+  }
+
+
+
+
+  transformAppointments(data: any) {
+    const dayMap: Record<string, number> = {
+      Saturday: 0,
+      Sunday: 1,
+      Monday: 2,
+      Tuesday: 3,
+      Wednesday: 4,
+      Thursday: 5
+    };
+
+    const result = Object.entries(data)
+      .flatMap(([day, appointments]) =>
+        (appointments as any[]).map((appointment) => ({
+          ...appointment,
+          dayOfWeek: dayMap[day] ?? null,
+        }))
+      );
+
+    return result;
   }
 
 }
