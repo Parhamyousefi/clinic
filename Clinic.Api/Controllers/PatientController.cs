@@ -21,7 +21,6 @@ namespace Clinic.Api.Controllers
         public async Task<IActionResult> SavePatient(SavePatientDto model)
         {
             var result = await _patientService.SavePatient(model);
-
             return Ok(result);
         }
 
@@ -39,6 +38,14 @@ namespace Clinic.Api.Controllers
         {
             var result = await _patientService.GetPatients();
 
+            return Ok(result);
+        }
+
+        [HttpGet("getPatientById/{patientId}")]
+        [Authorize("Admin","Doctor")]
+        public async Task<IActionResult> GetPatientById(int patientId)
+        {
+            var result = await _patientService.GetPatientById(patientId);
             return Ok(result);
         }
 
@@ -63,6 +70,14 @@ namespace Clinic.Api.Controllers
         public async Task<IActionResult> GetPatientPhone(int patientId)
         {
             var result = await _patientService.GetPatientPhones(patientId);
+            return Ok(result);
+        }
+
+        [HttpGet("getPatientAppointments/{patientId}")]
+        [Authorize("Admin","Doctor")]
+        public async Task<IActionResult> GetPatientAppointments(int patientId)
+        {
+            var result = await _patientService.GetPatientAppointments(patientId);
             return Ok(result);
         }
     }

@@ -87,11 +87,35 @@ namespace Clinic.Api.Controllers
             return Ok(result);
         }
 
-        [HttpGet("getWeekAppointments")]
+        [HttpGet("getWeeklyAppointments")]
         [Authorize("Admin", "Doctor")]
         public async Task<IActionResult> GetWeekAppointments()
         {
             var result = await _treatmentsService.GetWeekAppointments();
+            return Ok(result);
+        }
+
+        [HttpGet("getBillableItems")]
+        [Authorize("Admin", "Doctor")]
+        public async Task<IActionResult> GetBillableItems()
+        {
+            var result = await _treatmentsService.GetBillableItems();
+            return Ok(result);
+        }
+
+        [HttpPost("saveBillableItem")]
+        [Authorize("Admin", "Doctor")]
+        public async Task<IActionResult> SaveBillableItem(SaveBillableItemsDto model)
+        {
+            var result = await _treatmentsService.SaveBillableItem(model);
+            return Ok(result);
+        }
+
+        [HttpGet("deleteBillableItem/{id}")]
+        [Authorize("Admin", "Doctor")]
+        public async Task<IActionResult> DeleteBillableItem(int id)
+        {
+            var result = await _treatmentsService.DeleteBillableItem(id);
             return Ok(result);
         }
     }

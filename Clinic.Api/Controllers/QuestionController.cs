@@ -29,7 +29,6 @@ namespace Clinic.Api.Controllers
         public async Task<IActionResult> SaveQuestionValue(SaveQuestionValueDto model)
         {
             var result = await _questionsService.SaveQuestionValue(model);
-
             return Ok(result);
         }
 

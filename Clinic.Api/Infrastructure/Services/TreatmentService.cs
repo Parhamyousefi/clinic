@@ -22,8 +22,10 @@ namespace Clinic.Api.Infrastructure.Services
             _token = token;
         }
 
-        public async Task<int> CreateAppointmentAsync(CreateAppointmentDto model)
+        public async Task<GlobalResponse> CreateAppointmentAsync(CreateAppointmentDto model)
         {
+            var result = new GlobalResponse();
+
             try
             {
                 var userRole = _token.GetUserRole();
@@ -61,8 +63,9 @@ namespace Clinic.Api.Infrastructure.Services
                     appointment.CreatedOn = DateTime.UtcNow;
                     _context.Appointments.Add(appointment);
                     await _context.SaveChangesAsync();
-
-                    return appointment.Id;
+                    result.Data = appointment.Id;
+                    result.Status = 0;
+                    return result;
                 }
                 else
                 {
@@ -78,7 +81,9 @@ namespace Clinic.Api.Infrastructure.Services
                     existingAppointment.LastUpdated = DateTime.UtcNow;
                     _context.Appointments.Update(existingAppointment);
                     await _context.SaveChangesAsync();
-                    return existingAppointment.Id;
+                    result.Data = existingAppointment.Id;
+                    result.Status = 0;
+                    return result;
                 }
             }
             catch (Exception ex)
@@ -87,8 +92,10 @@ namespace Clinic.Api.Infrastructure.Services
             }
         }
 
-        public async Task<string> DeleteAppointment(int id)
+        public async Task<GlobalResponse> DeleteAppointment(int id)
         {
+            var result = new GlobalResponse();
+
             try
             {
                 var appointment = await _context.Appointments.FindAsync(id);
@@ -97,7 +104,9 @@ namespace Clinic.Api.Infrastructure.Services
 
                 _context.Appointments.Remove(appointment);
                 await _context.SaveChangesAsync();
-                return "Appointment Deleted Successfully";
+                result.Data = "Appointment Deleted Successfully";
+                result.Status = 0;
+                return result;
             }
             catch (Exception ex)
             {
@@ -146,8 +155,10 @@ namespace Clinic.Api.Infrastructure.Services
             }
         }
 
-        public async Task<string> SaveTreatment(SaveTreatmentDto model)
+        public async Task<GlobalResponse> SaveTreatment(SaveTreatmentDto model)
         {
+            var result = new GlobalResponse();
+
             try
             {
                 var userId = _token.GetUserId();
@@ -159,7 +170,9 @@ namespace Clinic.Api.Infrastructure.Services
                     treatment.CreatedOn = DateTime.UtcNow;
                     _context.Treatments.Add(treatment);
                     await _context.SaveChangesAsync();
-                    return "Successfully Saved Treatment";
+                    result.Data = "Treatment Saved Successfully";
+                    result.Status = 0;
+                    return result;
                 }
                 else
                 {
@@ -175,7 +188,8 @@ namespace Clinic.Api.Infrastructure.Services
                     existingTreatment.CreatedOn = DateTime.UtcNow;
                     _context.Treatments.Update(existingTreatment);
                     await _context.SaveChangesAsync();
-                    return "Treatment Updated Successfully";
+                    result.Data = "Treatment Updated Successfully";
+                    return result;
                 }
             }
             catch (Exception ex)
@@ -184,8 +198,10 @@ namespace Clinic.Api.Infrastructure.Services
             }
         }
 
-        public async Task<string> DeleteTreatment(int id)
+        public async Task<GlobalResponse> DeleteTreatment(int id)
         {
+            var result = new GlobalResponse();
+
             try
             {
                 var treatment = await _context.Treatments.FindAsync(id);
@@ -194,7 +210,8 @@ namespace Clinic.Api.Infrastructure.Services
 
                 _context.Treatments.Remove(treatment);
                 await _context.SaveChangesAsync();
-                return "Treatment Deleted Successfully";
+                result.Data = "Treatment Deleted Successfully";
+                return result;
             }
             catch (Exception ex)
             {
@@ -317,8 +334,8 @@ namespace Clinic.Api.Infrastructure.Services
                 var query = _context.Appointments.AsQueryable();
 
                 var appointments = await _context.Appointments
-       .Where(a => a.Start.Date <= today && a.End.Date >= weekEnd)
-       .ToListAsync();
+        .Where(a => a.Start.Date >= today && a.Start.Date <= weekEnd)
+        .ToListAsync();
 
                 var result = new Dictionary<string, List<GetTodayAppointmentsInfoDto>>();
 
@@ -362,6 +379,85 @@ namespace Clinic.Api.Infrastructure.Services
 
                     result[dayName] = dayAppointments;
                 }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<IEnumerable<BillableItemsContext>> GetBillableItems()
+        {
+            try
+            {
+                var result = await _context.BillableItems.ToListAsync();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<GlobalResponse> SaveBillableItem(SaveBillableItemsDto model)
+        {
+            var result = new GlobalResponse();
+
+            try
+            {
+                var userId = _token.GetUserId();
+
+                if (model.EditOrNew == -1)
+                {
+                    var billableItems = _mapper.Map<BillableItemsContext>(model);
+                    billableItems.CreatorId = userId;
+                    billableItems.CreatedOn = DateTime.UtcNow;
+                    _context.BillableItems.Add(billableItems);
+                    await _context.SaveChangesAsync();
+                    result.Data = "BillableItem Saved Successfully";
+                    return result;
+                }
+                else
+                {
+                    var existingBillable = await _context.BillableItems.FirstOrDefaultAsync(b => b.Id == model.EditOrNew);
+
+                    if (existingBillable == null)
+                    {
+                        throw new Exception("BillableItem Not Found");
+                    }
+
+                    _mapper.Map(model, existingBillable);
+                    existingBillable.ModifierId = userId;
+                    existingBillable.LastUpdated = DateTime.UtcNow;
+                    _context.BillableItems.Update(existingBillable);
+                    await _context.SaveChangesAsync();
+                    result.Data = "BillableItem Updated Successfully";
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<GlobalResponse> DeleteBillableItem(int id)
+        {
+            var result = new GlobalResponse();
+
+            try
+            {
+                var billableItem = await _context.BillableItems.FindAsync(id);
+
+                if (billableItem == null)
+                {
+                    throw new Exception("BillableItem Not Found");
+                }
+
+                _context.BillableItems.Remove(billableItem);
+                await _context.SaveChangesAsync();
+                result.Data = "BillableItem Deleted Successfully";
                 return result;
             }
             catch (Exception ex)

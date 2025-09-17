@@ -21,7 +21,6 @@ namespace Clinic.Api.Controllers
         public async Task<IActionResult> SavePayment(SavePaymentDto model)
         {
             var result = await _paymentService.SavePayment(model);
-
             return Ok(result);
         }
 
