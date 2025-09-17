@@ -15,5 +15,8 @@ namespace Clinic.Api.Application.Interfaces
         Task<IEnumerable<JobsContext>> GetJobs();
         Task<GlobalResponse> DeleteJob(int id);
         Task<IEnumerable<CountriesContext>> GetCountries();
+        Task<GlobalResponse> SaveProduct(SaveProductDto model);
+        Task<IEnumerable<ProductsContext>> GetProducts();
+        Task<GlobalResponse> DeleteProduct(int id);
     }
 }
