@@ -81,7 +81,7 @@ export class TodayAppointmentsComponent implements OnInit {
 
   async getBillableItems() {
     try {
-      let res = await this.mainService.getBillableItems().toPromise();
+      let res = await this.treatmentsService.getBillableItems().toPromise();
       this.servicesList = res;
       this.servicesList.forEach((service: any) => {
         service.code = service.id;

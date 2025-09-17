@@ -2,11 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../../_services/user.service';
 import { SharedModule } from '../../../share/shared.module';
 import { PatientService } from '../../../_services/patient.service';
+import { InvoiceItemsComponent } from '../invoice-items/invoice-items.component';
 
 @Component({
   selector: 'app-new-invoice',
   standalone: true,
-  imports: [SharedModule],
+  imports: [SharedModule,InvoiceItemsComponent],
   templateUrl: './new-invoice.component.html',
   styleUrl: './new-invoice.component.css'
 })
