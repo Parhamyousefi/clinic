@@ -63,6 +63,7 @@ export class AppointmentComponent {
   };
   weeklyTimetable: any = [];
   weeklyAppointments: any = [];
+  weekDaysAppointmentCount: any = [];
   get selectedDate(): any {
     return this._selectedDate;
   }
@@ -153,13 +154,11 @@ export class AppointmentComponent {
       this.appointmentsData = res;
       this.appointmentsData.forEach((appointment: any) => {
         appointment.typeName = this.appointmentTypes.filter((type: any) => type.id == appointment.appointmentTypeId)[0].name;
-        appointment.patientName = this.patientsList.filter((patient: any) => patient.patientCode == appointment.patientId)[0].name;
+        appointment.patientName = this.patientsList.filter((patient: any) => patient.id == appointment.patientId)[0].name;
         appointment.showStartTime = shamsiTimePipe.transform(appointment.start);
-        appointment.weekOfDay = 2
         let startIndex = this.hours.indexOf(appointment.showStartTime);
         if (startIndex !== -1) {
           this.timeSheetData[this.hours[startIndex]].push(appointment);
-
         }
       });
       this.timeSheetHeaderDate = date._d;
@@ -202,7 +201,8 @@ export class AppointmentComponent {
       }
       let res = await this.userService.createAppointment(model).toPromise();
       this.toastR.success('با موفقیت ثبت شد')
-      this.getAppointment(this.appointmentDate)
+      this.getAppointment(this.appointmentDate);
+      this.getWeeklyAppointments()
       this.newAppointmentModel = [];
       this.showNewAppointment = false;
       this.editmode = false;
@@ -227,7 +227,7 @@ export class AppointmentComponent {
         this.patientsList = res;
         this.patientsList.forEach((patient: any) => {
           patient.name = patient.firstName + ' ' + patient.lastName;
-          patient.code = patient.patientCode;
+          patient.code = patient.id;
         });
       }
     }
@@ -318,12 +318,13 @@ export class AppointmentComponent {
         dayNumber: weekStart.format('jDD'),
         fullDate: weekStart.toDate(),
         isToday: weekStart.isSame(moment(), 'day'),
+        dayAppointments: []
       });
       weekStart.add(1, 'day');
     }
 
     this.weekDays = daysOfWeek;
-    console.log(this.weekDays);
+    return this.weekDays;
   }
 
 
@@ -333,35 +334,24 @@ export class AppointmentComponent {
     this.showNewAppointment = true;
   }
 
-
   async getWeeklyAppointments() {
     const shamsiTimePipe = new ShamsiUTCPipe()
-    this.hours.forEach(hour => this.weeklyTimetable[hour] = Array.from({ length: 6 }, () => []));
+    this.hours.forEach(hour => this.weeklyTimetable[hour] = this.getCurrentWeek());
     let res: any = await this.treatmentService.getWeeklyAppointments().toPromise();
     this.weeklyAppointments = this.transformAppointments(res);
     this.weeklyAppointments.forEach(appointment => {
       appointment.patientName = this.patientsList.filter((patient: any) => patient.patientCode == appointment.patientId)[0].name;
       let startIndex = this.hours.indexOf(appointment.time);
-      this.weeklyTimetable[this.hours[startIndex]][appointment.dayOfWeek].push(appointment);
+      this.weeklyTimetable[this.hours[startIndex]][appointment.dayOfWeek].dayAppointments.push(appointment);
     });
-    console.log(this.weeklyTimetable);
-
-
-
-
-
   }
+
   onDateSelect(date: string) {
     this.isCalendarVisible = false;
     setTimeout(() => {
       this.isCalendarVisible = true;
     }, 10);
     this.changeDate(0);
-  }
-
-
-  addEventsToTimetable() {
-    console.log(this.weeklyTimetable);
   }
 
 
@@ -387,5 +377,4 @@ export class AppointmentComponent {
 
     return result;
   }
-
 }

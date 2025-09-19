@@ -79,8 +79,6 @@ export class PatientsComponent {
       patient.patientPhone = await this.getPatientPhone(patient.id);
       patient.phoneNum = patient.patientPhone.number;
     });
-    console.log(this.patientsList);
-
   }
 
   createPatientModal() {
@@ -116,6 +114,7 @@ export class PatientsComponent {
       if (res) {
         this.toastR.success('با موفقیت ثبت شد!');
         this.closeCreatePatientModal();
+        this.getPatients();
       }
     }
     else {
@@ -142,8 +141,6 @@ export class PatientsComponent {
         contact.code = contact.id,
           contact.name = contact.firstName
       });
-      console.log(this.contactsList);
-
     }
   }
 
@@ -159,9 +156,12 @@ export class PatientsComponent {
       editOrNew: this.patientPhoneEditMode ? this.selectedEditPhoneNum : -1
     }
     let res = await this.patientService.savePatientPhone(model).toPromise();
-    this.toastR.success("با موفقیت ثبت شد!")
-    this.patientPhoneEditMode = false;
-    this.getPatients();
+    if (res['status'] == 0) {
+      this.toastR.success("با موفقیت ثبت شد!")
+      this.patientPhoneEditMode = false;
+      this.getPatients();
+      this.closeAddPhoneNum();
+    }
   }
 
   closeAddPhoneNum() {
@@ -172,8 +172,6 @@ export class PatientsComponent {
 
   async getContactTypes() {
     let res = await this.contactService.getContactTypes().toPromise();
-    console.log(res);
-
   }
 
   openAddPhoneNumModal(patientId) {
@@ -200,7 +198,7 @@ export class PatientsComponent {
     this.newPatient.title = this.titleList.filter(title => title.code == patient.titleId)[0];
     this.newPatient.firstName = patient.firstName;
     this.newPatient.lastName = patient.lastName;
-    this.newPatient.gender = this.genderList.filter(gender => gender.value == patient.gender)[0];
+    this.newPatient.gender = this.genderList.filter(gender => gender.value == patient.gender)[0].value;
     this.newPatient.fatherName = patient.fatherName;
     this.newPatient.birthDate = patient.birthDate;
     this.newPatient.city = patient.city;
@@ -213,8 +211,7 @@ export class PatientsComponent {
     this.newPatient.nationalCode = patient.nationalCode;
     this.newPatient.job = this.jobList.filter(job => job.code == patient.jobId)[0];
     this.newPatient.referringInpatientInsurerId = patient.referringInpatientInsurerId;
-    console.log(this.newPatient);
-
+    this.newPatient.id = patient.id
   }
 
   editPhoneNum(patientPhone) {

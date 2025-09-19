@@ -7,7 +7,6 @@ import { TodayAppointmentsComponent } from './components/today-appointments/toda
 import { InvoiceListComponent } from './components/invoice-list/invoice-list.component';
 import { NewInvoiceComponent } from './components/invoice-list/new-invoice/new-invoice.component';
 import { PatientsComponent } from './components/patients/patients.component';
-import { CreatePatientComponent } from './components/patients/create-patient/create-patient.component';
 
 export const routes: Routes = [
     { path: '', component: LoginComponent },
@@ -21,10 +20,6 @@ export const routes: Routes = [
     },
     {
         path: 'patients', component: PatientsComponent,
-        canActivate: [AuthGuard]
-    },
-    {
-        path: 'create-patient', component: CreatePatientComponent,
         canActivate: [AuthGuard]
     },
     {
