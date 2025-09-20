@@ -7,6 +7,7 @@ import { TodayAppointmentsComponent } from './components/today-appointments/toda
 import { InvoiceListComponent } from './components/invoice-list/invoice-list.component';
 import { NewInvoiceComponent } from './components/invoice-list/new-invoice/new-invoice.component';
 import { PatientsComponent } from './components/patients/patients.component';
+import { NewContactComponent } from './components/new-contact/new-contact.component';
 
 export const routes: Routes = [
     { path: '', component: LoginComponent },
@@ -28,6 +29,10 @@ export const routes: Routes = [
     },
     {
         path: 'new-invoice', component: NewInvoiceComponent,
+        canActivate: [AuthGuard]
+    },
+    {
+        path: 'new-contact', component: NewContactComponent,
         canActivate: [AuthGuard]
     },
 ];

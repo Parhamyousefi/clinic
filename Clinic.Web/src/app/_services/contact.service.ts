@@ -42,4 +42,16 @@ export class ContactService {
     };
     return this.http.get(uri, httpOptions);
   }
+
+  saveContact(data) {
+    const uri = this.url + `api/Contact/saveContact`;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + this.token,
+        responseType: 'text'
+      }),
+    };
+    return this.http.post(uri, data, httpOptions);
+  }
 }

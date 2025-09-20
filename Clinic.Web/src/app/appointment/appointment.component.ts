@@ -344,6 +344,8 @@ export class AppointmentComponent {
       let startIndex = this.hours.indexOf(appointment.time);
       this.weeklyTimetable[this.hours[startIndex]][appointment.dayOfWeek].dayAppointments.push(appointment);
     });
+    console.log(this.weeklyTimetable);
+
   }
 
   onDateSelect(date: string) {

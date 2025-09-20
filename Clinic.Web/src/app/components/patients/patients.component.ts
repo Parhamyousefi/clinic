@@ -31,7 +31,6 @@ export class PatientsComponent {
     { name: "خانم", code: "4" },
     { name: "پروفسور", code: "5" },
     { name: "مهندس", code: "6" },
-
   ];
   jobs: any;
   mainInsurance: any;
@@ -68,7 +67,6 @@ export class PatientsComponent {
     this.getPatients();
     this.getJobs();
     this.getContacts();
-    this.getContactTypes();
   }
   async getPatients() {
     let res: any = await this.patientService.getPatients().toPromise();
@@ -85,7 +83,6 @@ export class PatientsComponent {
     this.showCreatePatient = true;
     this.getJobs();
     this.getContacts();
-    this.getContactTypes();
   }
 
 
@@ -170,9 +167,6 @@ export class PatientsComponent {
     this.selectedPatientAddPhoneId = '';
   }
 
-  async getContactTypes() {
-    let res = await this.contactService.getContactTypes().toPromise();
-  }
 
   openAddPhoneNumModal(patientId) {
     this.showAddPhoneNum = true;
@@ -211,7 +205,7 @@ export class PatientsComponent {
     this.newPatient.nationalCode = patient.nationalCode;
     this.newPatient.job = this.jobList.filter(job => job.code == patient.jobId)[0];
     this.newPatient.referringInpatientInsurerId = patient.referringInpatientInsurerId;
-    this.newPatient.id = patient.id
+    this.newPatient.id = patient.id;
   }
 
   editPhoneNum(patientPhone) {
@@ -220,5 +214,30 @@ export class PatientsComponent {
     this.phoneNum.phoneNumber = patientPhone.number;
     this.phoneNum.phoneType = this.phoneTypeList.filter(type => type.code == patientPhone.phoneNoTypeId)[0];
     this.openAddPhoneNumModal(patientPhone.patientId);
+  }
+
+  async deletePatient(patientId) {
+    try {
+      let res: any = await this.patientService.deletePatient(patientId).toPromise();
+      if (res['status'] == 0) {
+        this.toastR.success('با موفقیت حذف گردید');
+        this.getPatients();
+      }
+    }
+    catch {
+      this.toastR.error('خطایی رخ داد', 'خطا!')
+    }
+  }
+
+  async deletePatientPhone(patientId) {
+    try {
+      let res: any = await this.patientService.deletePatientPhone(patientId);
+      if (res['status'] == 0) {
+        this.toastR.success('با موفقیت حذف گردید');
+      }
+    }
+    catch {
+      this.toastR.error('خطایی رخ داد', 'خطا!')
+    }
   }
 }
