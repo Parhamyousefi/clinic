@@ -41,6 +41,14 @@ namespace Clinic.Api.Controllers
             return Ok(result);
         }
 
+        [HttpGet("getPatientById/{patientId}")]
+        [Authorize("Admin","Doctor")]
+        public async Task<IActionResult> GetPatientById(int patientId)
+        {
+            var result = await _patientService.GetPatientById(patientId);
+            return Ok(result);
+        }
+
         [HttpPost("savePatientPhone")]
         [Authorize("Admin", "Doctor")]
         public async Task<IActionResult> SavePatientPhone(SavePatientPhoneDto model)
@@ -62,6 +70,38 @@ namespace Clinic.Api.Controllers
         public async Task<IActionResult> GetPatientPhone(int patientId)
         {
             var result = await _patientService.GetPatientPhones(patientId);
+            return Ok(result);
+        }
+
+        [HttpGet("getPatientAppointments/{patientId}")]
+        [Authorize("Admin","Doctor")]
+        public async Task<IActionResult> GetPatientAppointments(int patientId)
+        {
+            var result = await _patientService.GetPatientAppointments(patientId);
+            return Ok(result);
+        }
+
+        [HttpGet("getPatientInvoices/{patientId}")]
+        [Authorize("Admin","Doctor")]
+        public async Task<IActionResult> GetPatientInvoices(int patientId)
+        {
+            var result = await _patientService.GetPatientInvoices(patientId);
+            return Ok(result);
+        }
+
+        [HttpGet("getPatientReceipts/{patientId}")]
+        [Authorize("Admin","Doctor")]
+        public async Task<IActionResult> GetPatientReceipts(int patientId)
+        {
+            var result = await _patientService.GetPatientReceipts(patientId);
+            return Ok(result);
+        }
+
+        [HttpGet("getPatientPayments/{patientId}")]
+        [Authorize("Admin","Doctor")]
+        public async Task<IActionResult> GetPatientPayments(int patientId)
+        {
+            var result = await _patientService.GetPatientPayments(patientId);
             return Ok(result);
         }
     }

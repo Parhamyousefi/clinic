@@ -324,29 +324,31 @@ namespace Clinic.Api.Infrastructure.Services
             }
         }
 
-        public async Task<Dictionary<string, List<GetTodayAppointmentsInfoDto>>> GetWeekAppointments()
+        public async Task<List<GetTodayAppointmentsInfoDto>> GetWeekAppointments()
         {
             try
             {
-                var today = DateTime.Today;
+                var iranTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Iran Standard Time");
+                var iranNow = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, iranTimeZone);
+                var today = iranNow.Date;
+
                 var weekEnd = today.AddDays(6);
 
-                var query = _context.Appointments.AsQueryable();
-
                 var appointments = await _context.Appointments
-        .Where(a => a.Start.Date >= today && a.Start.Date <= weekEnd)
-        .ToListAsync();
+                    .Where(a => a.Start.Date >= today && a.Start.Date <= weekEnd)
+                    .ToListAsync();
 
-                var result = new Dictionary<string, List<GetTodayAppointmentsInfoDto>>();
+                var result = new List<GetTodayAppointmentsInfoDto>();
 
                 for (int i = 0; i < 7; i++)
                 {
                     var day = today.AddDays(i);
 
                     if (day.DayOfWeek == DayOfWeek.Friday)
-                        continue; 
+                        continue;
 
-                    string dayName = day.ToString("dddd"); 
+                    int dayNumber = ((int)day.DayOfWeek + 1) % 7;
+                    if (dayNumber == 0) dayNumber = 7;
 
                     var dayAppointments = appointments
                         .Where(a => a.Start.Date == day.Date)
@@ -355,30 +357,32 @@ namespace Clinic.Api.Infrastructure.Services
                             Id = a.Id,
                             Time = a.Start.ToString("HH:mm"),
                             PatientName = _context.Patients
-                               .Where(p => p.Id == a.PatientId)
-                               .Select(p => p.FirstName + " " + p.LastName)
-                               .FirstOrDefault() ?? string.Empty,
+                                .Where(p => p.Id == a.PatientId)
+                                .Select(p => p.FirstName + " " + p.LastName)
+                                .FirstOrDefault() ?? string.Empty,
                             AppointmentTypeName = _context.AppointmentTypes
-                                       .Where(at => at.Id == a.AppointmentTypeId)
-                                       .Select(at => at.Name)
-                                       .FirstOrDefault() ?? string.Empty,
+                                .Where(at => at.Id == a.AppointmentTypeId)
+                                .Select(at => at.Name)
+                                .FirstOrDefault() ?? string.Empty,
                             BillableItemName = _context.Treatments
-                                   .Where(t => t.AppointmentId == a.Id)
-                                   .Join(_context.BillableItems,
-                                       t => t.TreatmentTemplateId,
-                                       b => b.TreatmentTemplateId,
-                                       (t, b) => b.Name)
-                                   .FirstOrDefault() ?? string.Empty,
+                                .Where(t => t.AppointmentId == a.Id)
+                                .Join(_context.BillableItems,
+                                    t => t.TreatmentTemplateId,
+                                    b => b.TreatmentTemplateId,
+                                    (t, b) => b.Name)
+                                .FirstOrDefault() ?? string.Empty,
                             PractitionerName = _context.Users
-                                   .Where(u => u.Id == a.PractitionerId)
-                                   .Select(u => u.FirstName + " " + u.LastName)
-                                   .FirstOrDefault() ?? string.Empty,
-                            Date = a.Start.Date
+                                .Where(u => u.Id == a.PractitionerId)
+                                .Select(u => u.FirstName + " " + u.LastName)
+                                .FirstOrDefault() ?? string.Empty,
+                            Date = a.Start.Date,
+                            DayNumber = dayNumber
                         })
                         .ToList();
 
-                    result[dayName] = dayAppointments;
+                    result.AddRange(dayAppointments);
                 }
+
                 return result;
             }
             catch (Exception ex)

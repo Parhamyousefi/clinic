@@ -104,6 +104,35 @@ namespace Clinic.Api.Infrastructure.Services
             }
         }
 
+        public async Task<IEnumerable<GetPatientInfoResponse>> GetPatientById(int patientId)
+        {
+            try
+            {
+                var query = _context.Patients.AsQueryable();
+                var result = await query
+                    .Where(p => p.Id == patientId)
+                    .Select(a => new GetPatientInfoResponse
+                    {
+                        Mobile = _context.PatientPhones
+                            .Where(p => p.PatientId == patientId)
+                            .Select(p => p.Number)
+                            .FirstOrDefault() ?? string.Empty,
+                        FirstName = a.FirstName,
+                        LastName = a.LastName,
+                        Gender = a.Gender,
+                        BirthDate = a.BirthDate,
+                        FatherName = a.FatherName,
+                        NationalCode = a.NationalCode,
+                        PatientCode = a.PatientCode.ToString()
+                    }).ToListAsync();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
         public async Task<GlobalResponse> SavePatientPhone(SavePatientPhoneDto model)
         {
             var result = new GlobalResponse();
@@ -183,6 +212,58 @@ namespace Clinic.Api.Infrastructure.Services
             {
                 var patientPhone = await _context.PatientPhones.Where(p => p.PatientId == patientId).ToListAsync();
                 return patientPhone;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<IEnumerable<AppointmentsContext>> GetPatientAppointments(int patientId)
+        {
+            try
+            {
+                var result = await _context.Appointments.Where(p => p.PatientId == patientId).ToListAsync();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<IEnumerable<InvoicesContext>> GetPatientInvoices(int patientId)
+        {
+            try
+            {
+                var result = await _context.Invoices.Where(i => i.PatientId == patientId).ToListAsync();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<IEnumerable<ReceiptsContext>> GetPatientReceipts(int patientId)
+        {
+            try
+            {
+                var result = await _context.Receipts.Where(r => r.PatientId == patientId).ToListAsync();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<IEnumerable<PaymentsContext>> GetPatientPayments(int patientId)
+        {
+            try
+            {
+                var result = await _context.Payments.Where(p => p.PatientId == patientId).ToListAsync();
+                return result;
             }
             catch (Exception ex)
             {
