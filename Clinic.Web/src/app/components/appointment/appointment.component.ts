@@ -1,20 +1,19 @@
 import { Component } from '@angular/core';
-import { SharedModule, ShamsiUTCPipe } from "../share/shared.module";
+import { SharedModule, ShamsiUTCPipe } from "../../share/shared.module";
 import { FormControl, FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { UserService } from '../_services/user.service';
+import { UserService } from '../../_services/user.service';
 import { MatCardModule } from '@angular/material/card';
-import { MatCalendar, MatCalendarBody } from '@angular/material/datepicker';
 import moment from 'moment-jalaali';
 import { DialogModule } from 'primeng/dialog';
 import { DropdownModule } from 'primeng/dropdown';
 import { ToastrService } from 'ngx-toastr';
-import { PatientService } from '../_services/patient.service';
-import { TreatmentsService } from '../_services/treatments.service';
+import { PatientService } from '../../_services/patient.service';
+import { TreatmentsService } from '../../_services/treatments.service';
 @Component({
   selector: 'app-appointment',
   standalone: true,
-  imports: [SharedModule, FormsModule, CommonModule, MatCardModule, MatCalendarBody, MatCalendar, DialogModule, DropdownModule],
+  imports: [SharedModule, FormsModule, CommonModule, MatCardModule, DialogModule, DropdownModule],
   templateUrl: './appointment.component.html',
   styleUrl: './appointment.component.css'
 })

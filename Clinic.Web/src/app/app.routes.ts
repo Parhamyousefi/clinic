@@ -1,7 +1,6 @@
 import { Routes } from '@angular/router';
 import { LoginComponent } from './login/login.component';
-import { DashboardComponent } from './dashboard/dashboard.component';
-import { AppointmentComponent } from './appointment/appointment.component';
+import { AppointmentComponent } from './components/appointment/appointment.component';
 import { AuthGuard } from './auth.guard';
 import { TodayAppointmentsComponent } from './components/today-appointments/today-appointments.component';
 import { InvoiceListComponent } from './components/invoice-list/invoice-list.component';
