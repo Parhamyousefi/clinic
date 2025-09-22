@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Clinic.Api.Application.DTOs;
-using Clinic.Api.Application.DTOs.Payments;
+using Clinic.Api.Application.DTOs.Invoices;
 using Clinic.Api.Application.Interfaces;
 using Clinic.Api.Domain.Entities;
 using Clinic.Api.Infrastructure.Data;
@@ -10,15 +10,15 @@ namespace Clinic.Api.Infrastructure.Services
 {
     public class PaymentService : IPaymentService
     {
-        private readonly IMapper _mapper;
-        private readonly ApplicationDbContext _context;
         private readonly IReadTokenClaims _token;
+        private readonly ApplicationDbContext _context;
+        private readonly IMapper _mapper;
 
-        public PaymentService(IMapper mapper, ApplicationDbContext context, IReadTokenClaims token)
+        public PaymentService(IReadTokenClaims token,ApplicationDbContext context,IMapper mapper)
         {
-            _mapper = mapper;
             _context = context;
             _token = token;
+            _mapper = mapper;
         }
 
         public async Task<GlobalResponse> SavePayment(SavePaymentDto model)
@@ -49,7 +49,7 @@ namespace Clinic.Api.Infrastructure.Services
                         throw new Exception("Payment Not Found");
                     }
 
-                 
+
                     _mapper.Map(model, existingPayments);
                     existingPayments.ModifierId = userId;
                     existingPayments.LastUpdated = DateTime.UtcNow;

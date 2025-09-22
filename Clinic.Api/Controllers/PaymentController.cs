@@ -1,4 +1,4 @@
-﻿using Clinic.Api.Application.DTOs.Payments;
+﻿using Clinic.Api.Application.DTOs.Invoices;
 using Clinic.Api.Application.Interfaces;
 using Clinic.Api.Authorization;
 using Microsoft.AspNetCore.Mvc;
