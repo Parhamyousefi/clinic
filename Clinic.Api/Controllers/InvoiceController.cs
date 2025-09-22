@@ -64,38 +64,6 @@ namespace Clinic.Api.Controllers
             return Ok(result);
         }
 
-        [HttpPost("savePayment")]
-        [Authorize("Admin", "Doctor")]
-        public async Task<IActionResult> SavePayment(SavePaymentDto model)
-        {
-            var result = await _invoicesService.SavePayment(model);
-            return Ok(result);
-        }
-
-        [HttpGet("getAllPayments")]
-        [Authorize("Admin", "Doctor")]
-        public async Task<IActionResult> GetAllPayments()
-        {
-            var result = await _invoicesService.GetAllPayments();
-            return Ok(result);
-        }
-
-        [HttpGet("getPayment/{patientId}")]
-        [Authorize("Admin", "Doctor")]
-        public async Task<IActionResult> GetPayment(int patientId)
-        {
-            var result = await _invoicesService.GetPayment(patientId);
-            return Ok(result);
-        }
-
-        [HttpGet("deletePayment/{id}")]
-        [Authorize("Admin", "Doctor")]
-        public async Task<IActionResult> DeletePayment(int id)
-        {
-            var result = await _invoicesService.DeletePayment(id);
-            return Ok(result);
-        }
-
         [HttpPost("saveReceipt")]
         [Authorize("Admin", "Doctor")]
         public async Task<IActionResult> SaveReceipt(SaveReceiptDto model)
