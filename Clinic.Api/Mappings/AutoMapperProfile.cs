@@ -2,11 +2,9 @@
 using Clinic.Api.Application.DTOs;
 using Clinic.Api.Application.DTOs.Appointments;
 using Clinic.Api.Application.DTOs.Contacts;
-using Clinic.Api.Application.DTOs.Expenses;
 using Clinic.Api.Application.DTOs.Invoices;
 using Clinic.Api.Application.DTOs.Main;
 using Clinic.Api.Application.DTOs.Patients;
-using Clinic.Api.Application.DTOs.Payments;
 using Clinic.Api.Application.DTOs.Questions;
 using Clinic.Api.Application.DTOs.Users;
 using Clinic.Api.Domain.Entities;

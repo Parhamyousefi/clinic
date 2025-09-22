@@ -56,11 +56,83 @@ namespace Clinic.Api.Controllers
             return Ok(result);
         }
 
-        [HttpGet("getInvoiceItems")]
+        [HttpGet("getInvoiceItems/{invoiceId}")]
         [Authorize("Admin", "Doctor")]
-        public async Task<IActionResult> GetInvoiceItems()
+        public async Task<IActionResult> GetInvoiceItems(int invoiceId)
         {
-            var result = await _invoicesService.GetInvoiceItems();
+            var result = await _invoicesService.GetInvoiceItems(invoiceId);
+            return Ok(result);
+        }
+
+        [HttpPost("savePayment")]
+        [Authorize("Admin", "Doctor")]
+        public async Task<IActionResult> SavePayment(SavePaymentDto model)
+        {
+            var result = await _invoicesService.SavePayment(model);
+            return Ok(result);
+        }
+
+        [HttpGet("getAllPayments")]
+        [Authorize("Admin", "Doctor")]
+        public async Task<IActionResult> GetAllPayments()
+        {
+            var result = await _invoicesService.GetAllPayments();
+            return Ok(result);
+        }
+
+        [HttpGet("getPayment/{patientId}")]
+        [Authorize("Admin", "Doctor")]
+        public async Task<IActionResult> GetPayment(int patientId)
+        {
+            var result = await _invoicesService.GetPayment(patientId);
+            return Ok(result);
+        }
+
+        [HttpGet("deletePayment/{id}")]
+        [Authorize("Admin", "Doctor")]
+        public async Task<IActionResult> DeletePayment(int id)
+        {
+            var result = await _invoicesService.DeletePayment(id);
+            return Ok(result);
+        }
+
+        [HttpPost("saveReceipt")]
+        [Authorize("Admin", "Doctor")]
+        public async Task<IActionResult> SaveReceipt(SaveReceiptDto model)
+        {
+            var result = await _invoicesService.SaveReceipt(model);
+            return Ok(result);
+        }
+
+        [HttpGet("getReceipts/{patientId?}")]
+        [Authorize("Admin", "Doctor")]
+        public async Task<IActionResult> GetReceipts(int? patientId)
+        {
+            var result = await _invoicesService.GetReceipts(patientId);
+            return Ok(result);
+        }
+
+        [HttpGet("deleteReceipt/{patientId}")]
+        [Authorize("Admin", "Doctor")]
+        public async Task<IActionResult> DeleteReceipt(int patientId)
+        {
+            var result = await _invoicesService.DeleteReceipt(patientId);
+            return Ok(result);
+        }
+
+        [HttpPost("saveExpense")]
+        [Authorize("Admin", "Doctor")]
+        public async Task<IActionResult> SaveExpense(SaveExpenseDto model)
+        {
+            var result = await _invoicesService.SaveExpense(model);
+            return Ok(result);
+        }
+
+        [HttpGet("getExpenses")]
+        [Authorize("Admin", "Doctor")]
+        public async Task<IActionResult> GetExpenses()
+        {
+            var result = await _invoicesService.GetExpenses();
             return Ok(result);
         }
     }

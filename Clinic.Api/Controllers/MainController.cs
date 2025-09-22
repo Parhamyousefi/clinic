@@ -24,30 +24,6 @@ namespace Clinic.Api.Controllers
             return Ok(result);
         }
 
-        [HttpPost("saveReceipt")]
-        [Authorize("Admin", "Doctor")]
-        public async Task<IActionResult> SaveReceipt(SaveReceiptDto model)
-        {
-            var result = await _mainService.SaveReceipt(model);
-            return Ok(result);
-        }
-
-        [HttpGet("getReceipts/{patientId?}")]
-        [Authorize("Admin", "Doctor")]
-        public async Task<IActionResult> GetReceipts(int? patientId)
-        {
-            var result = await _mainService.GetReceipts(patientId);
-            return Ok(result);
-        }
-
-        [HttpGet("deleteReceipt/{patientId}")]
-        [Authorize("Admin", "Doctor")]
-        public async Task<IActionResult> DeleteReceipt(int patientId)
-        {
-            var result = await _mainService.DeleteReceipt(patientId);
-            return Ok(result);
-        }
-
         [HttpGet("getClinics")]
         [Authorize("Admin", "Doctor")]
         public async Task<IActionResult> GetClinics()
