@@ -11,21 +11,23 @@
             </div>
             <div class="col-lg-4 col-12">
                 <p-dropdown [options]="patientsList" placeholder="بیمار" [(ngModel)]="selectedPatient"
-                    optionLabel="name" dataKey="id" class="full-width text-right" />
+                    optionLabel="name" dataKey="id" class="full-width text-right"
+                    (ngModelChange)="getPatientAppointments()" />
             </div>
             <div class="col-lg-4 col-12">
-                <p-dropdown [options]="hours" placeholder="وقت" [(ngModel)]="selectedPatient" optionLabel="name"
-                    dataKey="id" class="full-width text-right" />
+                <p-dropdown [options]="patientAppointmentsList" placeholder="وقت"
+                    [(ngModel)]="selectedPatientAppointment" optionLabel="name" dataKey="id"
+                    class="full-width text-right" />
             </div>
         </div>
         <div class="col-lg-8 col-12 my-3">
-            <textarea class="form-control" placeholder="یادداشت" name="" id=""></textarea>
+            <textarea class="form-control" placeholder="یادداشت" [(ngModel)]="note" name="" id=""></textarea>
         </div>
         <div class="col-12 text-center">
-            <button class="btn btn-danger">ذخیره</button>
+            <button class="btn btn-danger" (click)="saveInvoice()">ذخیره</button>
         </div>
     </div>
     <div class="col-12 mt-3">
-        <app-invoice-items></app-invoice-items>
+        <app-invoice-items [invoiceId]="editOrNew"></app-invoice-items>
     </div>
 </div>

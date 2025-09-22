@@ -25,4 +25,29 @@ export class InvoiceService {
     };
     return this.http.get(uri, httpOptions);
   }
+
+  saveInvoice(data) {
+    const uri = this.url + `api/Invoice/saveInvoice`;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + this.token,
+        responseType: 'text'
+      }),
+    };
+    return this.http.post(uri, data, httpOptions);
+  }
+
+
+  saveInvoiceItem(data) {
+    const uri = this.url + `api/Invoice/saveInvoiceItem`;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + this.token,
+        responseType: 'text'
+      }),
+    };
+    return this.http.post(uri, data, httpOptions);
+  }
 }

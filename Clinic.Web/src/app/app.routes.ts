@@ -32,6 +32,11 @@ export const routes: Routes = [
         canActivate: [AuthGuard]
     },
     {
+        path: 'new-invoice/:id',
+        component: NewInvoiceComponent,
+        canActivate: [AuthGuard]
+    },
+    {
         path: 'new-contact', component: NewContactComponent,
         canActivate: [AuthGuard]
     },
