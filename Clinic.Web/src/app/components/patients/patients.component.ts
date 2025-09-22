@@ -12,6 +12,7 @@ import { InputMaskModule } from 'primeng/inputmask';
 import { DropdownModule } from 'primeng/dropdown';
 import { ToastrModule, ToastrService } from 'ngx-toastr';
 import { firstValueFrom } from 'rxjs';
+import swal from 'sweetalert2';
 @Component({
   selector: 'app-patients',
   standalone: true,
@@ -54,6 +55,8 @@ export class PatientsComponent {
   selectedPatientAddPhoneId: any;
   patientPhoneEditMode: boolean = false;
   selectedEditPhoneNum: any;
+  selectedEditPhonePatientId: any;
+  hasPhoneNum: boolean;
   constructor(
     private patientService: PatientService,
     private router: Router,
@@ -165,12 +168,20 @@ export class PatientsComponent {
     this.showAddPhoneNum = false;
     this.phoneNum = [];
     this.selectedPatientAddPhoneId = '';
+    this.selectedEditPhoneNum = '';
+    this.patientPhoneEditMode = false;
   }
 
 
   openAddPhoneNumModal(patientId) {
+    if (this.patientPhoneEditMode) {
+      this.hasPhoneNum = true;
+    }
+    else {
+      this.hasPhoneNum = false;
+    }
     this.showAddPhoneNum = true;
-    this.selectedPatientAddPhoneId = patientId
+    this.selectedPatientAddPhoneId = patientId;
   }
 
   async getPatientPhone(patientId) {
@@ -217,27 +228,49 @@ export class PatientsComponent {
   }
 
   async deletePatient(patientId) {
-    try {
-      let res: any = await this.patientService.deletePatient(patientId).toPromise();
-      if (res['status'] == 0) {
-        this.toastR.success('با موفقیت حذف گردید');
-        this.getPatients();
+    swal.fire({
+      title: "آیا از حذف این بیمار مطمئن هستید ؟",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "بله انجام بده",
+      cancelButtonText: "منصرف شدم",
+      reverseButtons: false,
+    }).then(async (result) => {
+      try {
+        if (result.value) {
+          let res: any = await this.patientService.deletePatient(patientId).toPromise();
+          if (res['status'] == 0) {
+            this.toastR.success('با موفقیت حذف گردید');
+            this.getPatients();
+          }
+        }
       }
-    }
-    catch {
-      this.toastR.error('خطایی رخ داد', 'خطا!')
-    }
+      catch {
+        this.toastR.error('خطایی رخ داد', 'خطا!')
+      }
+    })
   }
 
-  async deletePatientPhone(patientId) {
-    try {
-      let res: any = await this.patientService.deletePatientPhone(patientId);
-      if (res['status'] == 0) {
-        this.toastR.success('با موفقیت حذف گردید');
+  async deletePatientPhone(phoneId) {
+    swal.fire({
+      title: "آیا از حذف شماره تلفن بیمار مطمئن هستید ؟",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "بله انجام بده",
+      cancelButtonText: "منصرف شدم",
+      reverseButtons: false,
+    }).then(async (result) => {
+      try {
+        let res: any = await this.patientService.deletePatientPhone(phoneId).toPromise();
+        if (res['status'] == 0) {
+          this.getPatients();
+          this.toastR.success('با موفقیت حذف گردید');
+          this.closeAddPhoneNum();
+        }
       }
-    }
-    catch {
-      this.toastR.error('خطایی رخ داد', 'خطا!')
-    }
+      catch {
+        this.toastR.error('خطایی رخ داد', 'خطا!')
+      }
+    })
   }
 }

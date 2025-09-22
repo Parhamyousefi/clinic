@@ -88,3 +88,7 @@
 .add-phone-modal {
     direction: rtl;
 }
+
+::ng-deep .p-dialog-title {
+    width: 100% !important;
+}

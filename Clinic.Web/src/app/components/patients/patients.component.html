@@ -195,9 +195,10 @@
     <p-dialog id="add-phone-modal" [(visible)]="showAddPhoneNum" [closable]="false"
         [ngClass]="{'modalShadow' : showAddPhoneNum}" class="p-2">
         <p-header>
-            <div class="col-12">
-                <div class="col-6">شماره تلفن</div>
-                <div class="col-6"><button class="btn-outline-danger">حذف شماره
+            <div class="col-12 d-flex justify-content-between p-0">
+                <div class="col-6 text-right d-flex align-items-center">شماره تلفن</div>
+                <div class="col-6"><button class="btn btn-outline-danger"
+                        (click)="deletePatientPhone(selectedEditPhoneNum)" *ngIf="hasPhoneNum">حذف شماره
                         تلفن</button></div>
             </div>
         </p-header>

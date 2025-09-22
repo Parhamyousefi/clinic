@@ -6,7 +6,8 @@ import { TodayAppointmentsComponent } from './components/today-appointments/toda
 import { InvoiceListComponent } from './components/invoice-list/invoice-list.component';
 import { NewInvoiceComponent } from './components/invoice-list/new-invoice/new-invoice.component';
 import { PatientsComponent } from './components/patients/patients.component';
-import { NewContactComponent } from './components/new-contact/new-contact.component';
+import { NewContactComponent } from './components/contacts/new-contact/new-contact.component';
+import { ContactsComponent } from './components/contacts/contacts.component';
 
 export const routes: Routes = [
     { path: '', component: LoginComponent },
@@ -32,6 +33,10 @@ export const routes: Routes = [
     },
     {
         path: 'new-contact', component: NewContactComponent,
+        canActivate: [AuthGuard]
+    },
+    {
+        path: 'contacts', component: ContactsComponent,
         canActivate: [AuthGuard]
     },
 ];

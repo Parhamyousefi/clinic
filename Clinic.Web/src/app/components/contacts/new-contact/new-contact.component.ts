@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { DropdownModule } from "primeng/dropdown";
-import { ContactService } from '../../_services/contact.service';
+import { ContactService } from '../../../_services/contact.service';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { CommonModule } from '@angular/common';
-import { MainService } from '../../_services/main.service';
+import { MainService } from '../../../_services/main.service';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
