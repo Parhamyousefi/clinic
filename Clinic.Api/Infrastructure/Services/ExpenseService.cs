@@ -37,6 +37,7 @@ namespace Clinic.Api.Infrastructure.Services
                     _context.Expenses.Add(expense);
                     await _context.SaveChangesAsync();
                     result.Data = "Expense Saved Successfully";
+                    result.Status = 0;
                     return result;
                 }
                 else
@@ -53,6 +54,7 @@ namespace Clinic.Api.Infrastructure.Services
                     _context.Expenses.Update(existingExpense);
                     await _context.SaveChangesAsync();
                     result.Data = "Expense Updated Successfully";
+                    result.Status = 0;
                     return result;
                 }
             }

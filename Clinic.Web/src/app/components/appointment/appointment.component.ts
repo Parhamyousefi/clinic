@@ -1,19 +1,19 @@
 import { Component } from '@angular/core';
-import { SharedModule, ShamsiUTCPipe } from "../share/shared.module";
+import { SharedModule, ShamsiUTCPipe } from "../../share/shared.module";
 import { FormControl, FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { UserService } from '../_services/user.service';
+import { UserService } from '../../_services/user.service';
 import { MatCardModule } from '@angular/material/card';
-import { MatCalendar, MatCalendarBody } from '@angular/material/datepicker';
 import moment from 'moment-jalaali';
 import { DialogModule } from 'primeng/dialog';
 import { DropdownModule } from 'primeng/dropdown';
 import { ToastrService } from 'ngx-toastr';
-import { PatientService } from '../_services/patient.service';
+import { PatientService } from '../../_services/patient.service';
+import { TreatmentsService } from '../../_services/treatments.service';
 @Component({
   selector: 'app-appointment',
   standalone: true,
-  imports: [SharedModule, FormsModule, CommonModule, MatCardModule, MatCalendarBody, MatCalendar, DialogModule, DropdownModule],
+  imports: [SharedModule, FormsModule, CommonModule, MatCardModule, DialogModule, DropdownModule],
   templateUrl: './appointment.component.html',
   styleUrl: './appointment.component.css'
 })
@@ -52,6 +52,17 @@ export class AppointmentComponent {
   clinicsList: any = [];
   selectedClinic: any;
   weekMode: any = 0;
+  dayIndexMap = {
+    Saturday: 0,
+    Sunday: 1,
+    Monday: 2,
+    Tuesday: 3,
+    Wednesday: 4,
+    Thursday: 5
+  };
+  weeklyTimetable: any = [];
+  weeklyAppointments: any = [];
+  weekDaysAppointmentCount: any = [];
   get selectedDate(): any {
     return this._selectedDate;
   }
@@ -66,6 +77,7 @@ export class AppointmentComponent {
   constructor(
     private userService: UserService,
     private toastR: ToastrService,
+    private treatmentService: TreatmentsService,
     private patientService: PatientService
   ) {
   }
@@ -79,6 +91,7 @@ export class AppointmentComponent {
 
   dateNew: any;
   async ngOnInit() {
+    this.getWeeklyAppointments();
     this.dateNew = new FormControl(moment().format('jYYYY/jMM/jDD'));
     this.dateNew.valueChanges.subscribe(date => {
       this.onDateSelect(date);
@@ -92,9 +105,7 @@ export class AppointmentComponent {
     await this.getAppointment(this.today);
     this.today = this.today._d;
     this.getCurrentWeek();
-
-
-
+    this.getWeeklyAppointments();
   }
 
   changeDate(status: number) {
@@ -127,20 +138,22 @@ export class AppointmentComponent {
 
   async getAppointment(date: any) {
     const shamsiTimePipe = new ShamsiUTCPipe()
-
     this.hours.forEach(hour => this.timeSheetData[hour] = []);
     try {
-      let formattedDate = moment(date).format('YYYY-MM-DD');
+      let formattedDate = moment(date).utc().toISOString();
+
       let model = {
-        clinicId: this.selectedClinic.code,
-        date: formattedDate,
-        doctorId: null
+
+        "clinicId": this.selectedClinic.code,
+        "date": formattedDate,
+        "doctorId": null
       }
+      // let formattedDate = moment(date).format('YYYY-MM-DD');
       let res: any = await this.userService.getAppointments(model).toPromise();
       this.appointmentsData = res;
       this.appointmentsData.forEach((appointment: any) => {
         appointment.typeName = this.appointmentTypes.filter((type: any) => type.id == appointment.appointmentTypeId)[0].name;
-        appointment.patientName = this.patientsList.filter((patient: any) => patient.patientCode == appointment.patientId)[0].name;
+        appointment.patientName = this.patientsList.filter((patient: any) => patient.id == appointment.patientId)[0].name;
         appointment.showStartTime = shamsiTimePipe.transform(appointment.start);
         let startIndex = this.hours.indexOf(appointment.showStartTime);
         if (startIndex !== -1) {
@@ -148,6 +161,7 @@ export class AppointmentComponent {
         }
       });
       this.timeSheetHeaderDate = date._d;
+
 
     }
     catch { }
@@ -186,14 +200,14 @@ export class AppointmentComponent {
       }
       let res = await this.userService.createAppointment(model).toPromise();
       this.toastR.success('با موفقیت ثبت شد')
-      this.getAppointment(this.appointmentDate)
+      this.getAppointment(this.appointmentDate);
+      this.getWeeklyAppointments()
       this.newAppointmentModel = [];
       this.showNewAppointment = false;
       this.editmode = false;
     }
     catch (err) {
       this.toastR.error('خطا!', 'خطا در ثبت وقت')
-
     }
   }
 
@@ -212,7 +226,7 @@ export class AppointmentComponent {
         this.patientsList = res;
         this.patientsList.forEach((patient: any) => {
           patient.name = patient.firstName + ' ' + patient.lastName;
-          patient.code = patient.patientCode;
+          patient.code = patient.id;
         });
       }
     }
@@ -303,12 +317,13 @@ export class AppointmentComponent {
         dayNumber: weekStart.format('jDD'),
         fullDate: weekStart.toDate(),
         isToday: weekStart.isSame(moment(), 'day'),
+        dayAppointments: []
       });
       weekStart.add(1, 'day');
     }
 
     this.weekDays = daysOfWeek;
-    console.log(this.weekDays);
+    return this.weekDays;
   }
 
 
@@ -316,6 +331,18 @@ export class AppointmentComponent {
     this.newAppointmentModel.appointmentStartTime = this.combineDateAndTime(date, time);
     this.newAppointmentModel.appointmentEndTime = this.combineDateAndTime(date, this.getEndTime(time))
     this.showNewAppointment = true;
+  }
+
+  async getWeeklyAppointments() {
+    const shamsiTimePipe = new ShamsiUTCPipe()
+    this.hours.forEach(hour => this.weeklyTimetable[hour] = this.getCurrentWeek());
+    let res: any = await this.treatmentService.getWeeklyAppointments().toPromise();
+    this.weeklyAppointments = this.transformAppointments(res);
+    this.weeklyAppointments.forEach(appointment => {
+      appointment.patientName = this.patientsList.filter((patient: any) => patient.patientCode == appointment.patientId)[0].name;
+      let startIndex = this.hours.indexOf(appointment.time);
+      this.weeklyTimetable[this.hours[startIndex]][appointment.dayOfWeek].dayAppointments.push(appointment);
+    });
   }
 
   onDateSelect(date: string) {
@@ -326,4 +353,27 @@ export class AppointmentComponent {
     this.changeDate(0);
   }
 
+
+
+
+  transformAppointments(data: any) {
+    const dayMap: Record<string, number> = {
+      Saturday: 0,
+      Sunday: 1,
+      Monday: 2,
+      Tuesday: 3,
+      Wednesday: 4,
+      Thursday: 5
+    };
+
+    const result = Object.entries(data)
+      .flatMap(([day, appointments]) =>
+        (appointments as any[]).map((appointment) => ({
+          ...appointment,
+          dayOfWeek: dayMap[day] ?? null,
+        }))
+      );
+
+    return result;
+  }
 }

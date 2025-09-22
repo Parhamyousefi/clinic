@@ -5,48 +5,54 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 @Injectable({
   providedIn: 'root'
 })
-export class TreatmentsService {
+export class ContactService {
 
   constructor(
     private http: HttpClient
-  ) { }
+
+  ) {
+
+
+  }
 
   url = environment.url;
   token: any = localStorage.getItem("token");
 
-  getTodayAppointments(data: any) {
-    const uri = this.url + `api/Treatment/getTodayAppointments`;
+
+  getContacts() {
+    const token: any = localStorage.getItem("token");
+    const uri = this.url + `api/Contact/getContacts`;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      }),
+    };
+    return this.http.get(uri, httpOptions);
+  }
+
+  getContactTypes() {
+    const token: any = localStorage.getItem("token");
+    const uri = this.url + `api/Contact/getContactTypes`;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      }),
+    };
+    return this.http.get(uri, httpOptions);
+  }
+
+  saveContact(data) {
+    const uri = this.url + `api/Contact/saveContact`;
     const httpOptions = {
       headers: new HttpHeaders({
         "Content-Type": "application/json",
         Authorization: "Bearer " + this.token,
+        responseType: 'text'
       }),
     };
     return this.http.post(uri, data, httpOptions);
-  }
-
-  getBillableItems() {
-    const token: any = localStorage.getItem("token");
-    const uri = this.url + `api/Treatment/getBillableItems`;
-    const httpOptions = {
-      headers: new HttpHeaders({
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + token,
-      }),
-    };
-    return this.http.get(uri, httpOptions);
-  }
-  
-  getWeeklyAppointments() {
-    const token: any = localStorage.getItem("token");
-    const uri = this.url + `api/Treatment/getWeeklyAppointments`;
-    const httpOptions = {
-      headers: new HttpHeaders({
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + token,
-      }),
-    };
-    return this.http.get(uri, httpOptions);
   }
 
 }

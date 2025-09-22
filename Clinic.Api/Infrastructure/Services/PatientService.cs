@@ -142,7 +142,7 @@ namespace Clinic.Api.Infrastructure.Services
                 var userId = _token.GetUserId();
                 if (model.EditOrNew == -1)
                 {
-                    var patient = await _context.PatientPhones.Where(p => p.PatientId == model.PatientId).ToListAsync();
+                    var patient = await _context.PatientPhones.FindAsync(model.PatientId);
 
                     if (patient == null)
                     {
@@ -224,6 +224,45 @@ namespace Clinic.Api.Infrastructure.Services
             try
             {
                 var result = await _context.Appointments.Where(p => p.PatientId == patientId).ToListAsync();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<IEnumerable<InvoicesContext>> GetPatientInvoices(int patientId)
+        {
+            try
+            {
+                var result = await _context.Invoices.Where(i => i.PatientId == patientId).ToListAsync();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<IEnumerable<ReceiptsContext>> GetPatientReceipts(int patientId)
+        {
+            try
+            {
+                var result = await _context.Receipts.Where(r => r.PatientId == patientId).ToListAsync();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<IEnumerable<PaymentsContext>> GetPatientPayments(int patientId)
+        {
+            try
+            {
+                var result = await _context.Payments.Where(p => p.PatientId == patientId).ToListAsync();
                 return result;
             }
             catch (Exception ex)

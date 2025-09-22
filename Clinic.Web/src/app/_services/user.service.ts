@@ -21,16 +21,15 @@ export class UserService {
     return this.http.post(uri, data, httpOptions);
   }
 
-  getAppointments(data) {
-    const token: any = localStorage.getItem("token");
-    const uri = this.url + `api/Treatment/getAppointments`
+  getAppointments(data: any) {
+    const uri = this.url + `api/Treatment/getAppointments`;
     const httpOptions = {
       headers: new HttpHeaders({
         "Content-Type": "application/json",
-        Authorization: "Bearer " + token,
+        Authorization: "Bearer " + this.token,
       }),
     };
-    return this.http.post(uri,data, httpOptions);
+    return this.http.post(uri, data, httpOptions);
   }
 
   createAppointment(data: any) {

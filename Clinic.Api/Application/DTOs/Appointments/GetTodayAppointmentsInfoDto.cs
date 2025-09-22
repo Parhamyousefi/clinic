@@ -9,5 +9,6 @@
         public string BillableItemName { get; set; } = string.Empty;
         public string PractitionerName { get; set; } = string.Empty;
         public DateTime? Date { get; set; }
+        public int DayNumber { get; set; }
     }
 }

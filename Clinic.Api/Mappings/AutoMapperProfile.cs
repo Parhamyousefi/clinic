@@ -33,6 +33,7 @@ namespace Clinic.Api.Mappings
             CreateMap<SaveContactDto, ContactsContext>().ReverseMap();
             CreateMap<SaveExpenseDto, ExpensesContext>().ReverseMap();
             CreateMap<SaveBillableItemsDto, BillableItemsContext>().ReverseMap();
+            CreateMap<SaveContactPhoneDto, ContactPhonesContext>().ReverseMap();
         }
     }
 }
