@@ -37,6 +37,7 @@ namespace Clinic.Api.Infrastructure.Services
                     _context.Invoices.Add(invoice);
                     await _context.SaveChangesAsync();
                     result.Data = "Invoice Saved Successfully";
+                    result.Status = 0;
                     return result;
                 }
                 else
@@ -54,6 +55,7 @@ namespace Clinic.Api.Infrastructure.Services
                     _context.Invoices.Update(existingInvoice);
                     await _context.SaveChangesAsync();
                     result.Data = "Invoice Updated Successfully";
+                    result.Status = 0;
                     return result;
                 }
             }
@@ -92,6 +94,7 @@ namespace Clinic.Api.Infrastructure.Services
                     _context.InvoiceItems.Add(invoiceItem);
                     await _context.SaveChangesAsync();
                     result.Data = "Invoice Item Saved Successfully";
+                    result.Status = 0;
                     return result;
                 }
                 else
@@ -109,6 +112,7 @@ namespace Clinic.Api.Infrastructure.Services
                     _context.InvoiceItems.Update(existingInvoiceItem);
                     await _context.SaveChangesAsync();
                     result.Data = "Invoice Item Updated Successfully";
+                    result.Status = 0;
                     return result;
                 }
             }
@@ -145,6 +149,7 @@ namespace Clinic.Api.Infrastructure.Services
                 _context.Invoices.Remove(invoice);
                 await _context.SaveChangesAsync();
                 result.Data = "Invoice Deleted Successfully";
+                result.Status = 0;
                 return result;
             }
             catch (Exception ex)
@@ -166,6 +171,7 @@ namespace Clinic.Api.Infrastructure.Services
                 _context.InvoiceItems.Remove(invoiceItems);
                 await _context.SaveChangesAsync();
                 result.Data = "Invoice Item Deleted Successfully";
+                result.Status = 0;
                 return result;
             }
             catch (Exception ex)

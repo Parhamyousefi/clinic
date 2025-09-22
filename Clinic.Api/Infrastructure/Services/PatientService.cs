@@ -231,5 +231,44 @@ namespace Clinic.Api.Infrastructure.Services
                 throw new Exception(ex.Message);
             }
         }
+
+        public async Task<IEnumerable<InvoicesContext>> GetPatientInvoices(int patientId)
+        {
+            try
+            {
+                var result = await _context.Invoices.Where(i => i.PatientId == patientId).ToListAsync();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<IEnumerable<ReceiptsContext>> GetPatientReceipts(int patientId)
+        {
+            try
+            {
+                var result = await _context.Receipts.Where(r => r.PatientId == patientId).ToListAsync();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<IEnumerable<PaymentsContext>> GetPatientPayments(int patientId)
+        {
+            try
+            {
+                var result = await _context.Payments.Where(p => p.PatientId == patientId).ToListAsync();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }

@@ -221,5 +221,84 @@ namespace Clinic.Api.Infrastructure.Services
                 throw new Exception(ex.Message);
             }
         }
+
+        public async Task<GlobalResponse> SaveProduct(SaveProductDto model)
+        {
+            var result = new GlobalResponse();
+
+            try
+            {
+                var userId = _token.GetUserId();
+
+                if (model.EditOrNew == -1)
+                {
+                    var product = _mapper.Map<ProductsContext>(model);
+                    product.CreatorId = userId;
+                    product.CreatedOn = DateTime.UtcNow;
+                    _context.Products.Add(product);
+                    await _context.SaveChangesAsync();
+                    result.Data = "Product Saved Successfully";
+                    result.Status = 0;
+                    return result;
+                }
+                else
+                {
+                    var existingProduct = await _context.Products.FirstOrDefaultAsync(j => j.Id == model.EditOrNew);
+                    if (existingProduct == null)
+                    {
+                        throw new Exception("Product Not Found");
+                    }
+
+                    _mapper.Map(model, existingProduct);
+                    existingProduct.ModifierId = userId;
+                    existingProduct.LastUpdated = DateTime.UtcNow;
+                    _context.Products.Update(existingProduct);
+                    await _context.SaveChangesAsync();
+                    result.Data = "Product Updated Successfully";
+                    result.Status = 0;
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<IEnumerable<ProductsContext>> GetProducts()
+        {
+            try
+            {
+                var result = await _context.Products.ToListAsync();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<GlobalResponse> DeleteProduct(int id)
+        {
+            var result = new GlobalResponse();
+
+            try
+            {
+                var product = await _context.Products.FindAsync(id);
+
+                if (product == null)
+                    throw new Exception("Product Not Found");
+
+                _context.Products.Remove(product);
+                await _context.SaveChangesAsync();
+                result.Data = "Product Deleted Successfully";
+                result.Status = 0;
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }

@@ -80,5 +80,29 @@ namespace Clinic.Api.Controllers
             var result = await _patientService.GetPatientAppointments(patientId);
             return Ok(result);
         }
+
+        [HttpGet("getPatientInvoices/{patientId}")]
+        [Authorize("Admin","Doctor")]
+        public async Task<IActionResult> GetPatientInvoices(int patientId)
+        {
+            var result = await _patientService.GetPatientInvoices(patientId);
+            return Ok(result);
+        }
+
+        [HttpGet("getPatientReceipts/{patientId}")]
+        [Authorize("Admin","Doctor")]
+        public async Task<IActionResult> GetPatientReceipts(int patientId)
+        {
+            var result = await _patientService.GetPatientReceipts(patientId);
+            return Ok(result);
+        }
+
+        [HttpGet("getPatientPayments/{patientId}")]
+        [Authorize("Admin","Doctor")]
+        public async Task<IActionResult> GetPatientPayments(int patientId)
+        {
+            var result = await _patientService.GetPatientPayments(patientId);
+            return Ok(result);
+        }
     }
 }

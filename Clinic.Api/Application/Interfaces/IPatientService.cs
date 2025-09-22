@@ -14,5 +14,8 @@ namespace Clinic.Api.Application.Interfaces
         Task<GlobalResponse> DeletePatientPhone(int id);
         Task<IEnumerable<PatientPhonesContext>> GetPatientPhones(int patientId);
         Task<IEnumerable<AppointmentsContext>> GetPatientAppointments(int patientId);
+        Task<IEnumerable<InvoicesContext>> GetPatientInvoices(int patientId);
+        Task<IEnumerable<ReceiptsContext>> GetPatientReceipts(int patientId);
+        Task<IEnumerable<PaymentsContext>> GetPatientPayments(int patientId);
     }
 }

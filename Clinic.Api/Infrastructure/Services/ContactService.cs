@@ -36,6 +36,7 @@ namespace Clinic.Api.Infrastructure.Services
                     _context.Contacts.Add(contact);
                     await _context.SaveChangesAsync();
                     result.Data = "Contact Saved Successfully";
+                    result.Status = 0;
                     return result;
                 }
                 else
@@ -50,6 +51,7 @@ namespace Clinic.Api.Infrastructure.Services
                     _context.Contacts.Update(existingContact);
                     await _context.SaveChangesAsync();
                     result.Data = "Contact Updated Successfully";
+                    result.Status = 0;
                     return result;
                 }
             }
@@ -83,6 +85,7 @@ namespace Clinic.Api.Infrastructure.Services
                 _context.Contacts.Remove(contact);
                 await _context.SaveChangesAsync();
                 result.Data = "Contact Deleted Successfully";
+                result.Status = 0;
                 return result;
             }
             catch (Exception ex)
@@ -97,6 +100,49 @@ namespace Clinic.Api.Infrastructure.Services
             {
                 var contactTypes = await _context.ContactTypes.ToListAsync();
                 return contactTypes;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<GlobalResponse> SaveContactPhone(SaveContactPhoneDto model)
+        {
+            var result = new GlobalResponse();
+
+            try
+            {
+                var userId = _token.GetUserId();
+
+                if (model.EditOrNew == -1)
+                {
+                    var contactPhone = _mapper.Map<ContactPhonesContext>(model);
+                    contactPhone.CreatorId = userId;
+                    contactPhone.CreatedOn = DateTime.UtcNow;
+                    _context.ContactPhones.Add(contactPhone);
+                    await _context.SaveChangesAsync();
+                    result.Data = "Contact Phone Saved Successfully";
+                    result.Status = 0;
+                    return result;
+                }
+                else
+                {
+                    var existingContactPhone = await _context.ContactPhones.FirstOrDefaultAsync(c => c.Id == model.EditOrNew);
+                    if (existingContactPhone == null)
+                    {
+                        throw new Exception("Contact Phone Not Found");
+                    }
+
+                    _mapper.Map(model, existingContactPhone);
+                    existingContactPhone.ModifierId = userId;
+                    existingContactPhone.LastUpdated = DateTime.UtcNow;
+                    _context.ContactPhones.Update(existingContactPhone);
+                    await _context.SaveChangesAsync();
+                    result.Data = "Contact Phone Updated Successfully";
+                    result.Status = 0;
+                    return result;
+                }
             }
             catch (Exception ex)
             {
