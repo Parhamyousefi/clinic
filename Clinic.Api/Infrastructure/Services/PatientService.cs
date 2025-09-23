@@ -238,6 +238,7 @@ namespace Clinic.Api.Infrastructure.Services
                                 AppointmentTypeName = t != null ? t.Name : null
                             }
                         ).ToListAsync();
+                return result;
             }
             catch (Exception ex)
             {
