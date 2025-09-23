@@ -50,4 +50,28 @@ export class InvoiceService {
     };
     return this.http.post(uri, data, httpOptions);
   }
+
+  getInvoiceItems(invoiceId) {
+    const token: any = localStorage.getItem("token");
+    const uri = this.url + `api/Invoice/getInvoiceItems/${invoiceId}`;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      }),
+    };
+    return this.http.get(uri, httpOptions);
+  }
+
+  deleteInvoiceItem(id) {
+    const token: any = localStorage.getItem("token");
+    const uri = this.url + `api/Invoice/deleteInvoiceItem/${id}`;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      }),
+    };
+    return this.http.get(uri, httpOptions);
+  }
 }

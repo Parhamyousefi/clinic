@@ -6,7 +6,7 @@ import { PatientService } from '../../../_services/patient.service';
 import { InvoiceItemsComponent } from '../invoice-items/invoice-items.component';
 import { ToastrService } from 'ngx-toastr';
 import { firstValueFrom } from 'rxjs';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import moment from 'moment-jalaali';
 
 @Component({
@@ -23,7 +23,8 @@ export class NewInvoiceComponent implements OnInit {
     private patientService: PatientService,
     private invoiceService: InvoiceService,
     private toastR: ToastrService,
-    private activeRoute: ActivatedRoute
+    private activeRoute: ActivatedRoute,
+    private router: Router
   ) { }
 
   patientsList: any = [];
@@ -35,11 +36,11 @@ export class NewInvoiceComponent implements OnInit {
   hasInviceId: number;
   note: string;
   patientAppointmentsList: any = []
-  
-  ngOnInit(): void {
+
+  async ngOnInit() {
     this.editOrNew = +this.activeRoute.snapshot.paramMap.get('id') || -1;
-    this.getPatients();
-    this.getClinics();
+    await this.getPatients();
+    await this.getClinics();
     if (this.editOrNew != -1) {
       this.getInvoices();
     }
@@ -86,6 +87,11 @@ export class NewInvoiceComponent implements OnInit {
       let res: any = await firstValueFrom(this.invoiceService.saveInvoice(model));
       if (res.status == 0) {
         this.toastR.success('با موفقیت ثبت شد!');
+        if (this.editOrNew == -1) {
+          const match = res.data.match(/Id\s*:\s*(\d+)/);
+          const id = match ? parseInt(match[1], 10) : null;
+          this.router.navigate(['/new-invoice/' + id]);
+        }
       } else {
         this.toastR.error('خطا');
       }
@@ -102,7 +108,8 @@ export class NewInvoiceComponent implements OnInit {
       this.patientAppointmentsList = res;
       this.patientAppointmentsList.forEach((item: any) => {
         item.code = item.id;
-        item.name = moment(item.start).format('HH:mm - jYYYY/jMM/jDD');
+        let time = moment(item.start).format('HH:mm - jYYYY/jMM/jDD')
+        item.name = time + " " + item.appointmentTypeName;
       });
     }
     catch { }
@@ -114,8 +121,11 @@ export class NewInvoiceComponent implements OnInit {
     try {
       let res: any = await this.invoiceService.getInvoices().toPromise();
       let item = res.filter(x => x.id == this.editOrNew);
-      console.log(item);
-
+      this.selectedClinic = this.clinicsList.filter(x => x.id == item[0]['businessId'])[0];
+      this.selectedPatient = this.patientsList.filter(x => x.id == item[0]['patientId'])[0];
+      this.note = item[0]['notes'];
+      await this.getPatientAppointments();
+      this.selectedPatientAppointment = this.patientAppointmentsList.filter(x => x.id == item[0]['appointmentId'])[0];
     }
     catch { }
 
