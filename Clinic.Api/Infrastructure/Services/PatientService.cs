@@ -219,12 +219,25 @@ namespace Clinic.Api.Infrastructure.Services
             }
         }
 
-        public async Task<IEnumerable<AppointmentsContext>> GetPatientAppointments(int patientId)
+        public async Task<IEnumerable<GetPatientAppointmentsResponse>> GetPatientAppointments(int patientId)
         {
             try
             {
-                var result = await _context.Appointments.Where(p => p.PatientId == patientId).ToListAsync();
-                return result;
+                var result = await (
+                            from a in _context.Appointments
+                            join t in _context.AppointmentTypes on a.AppointmentTypeId equals t.Id into typeJoin
+                            from t in typeJoin.DefaultIfEmpty()
+                            where a.PatientId == patientId
+                            select new GetPatientAppointmentsResponse
+                            {
+                                Id = a.Id,
+                                Start = a.Start,
+                                End = a.End,
+                                PatientId = a.PatientId,
+                                AppointmentTypeId = a.AppointmentTypeId,
+                                AppointmentTypeName = t != null ? t.Name : null
+                            }
+                        ).ToListAsync();
             }
             catch (Exception ex)
             {
