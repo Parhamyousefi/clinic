@@ -1,5 +1,5 @@
 ﻿using Clinic.Api.Application.DTOs;
-using Clinic.Api.Application.DTOs.Payments;
+using Clinic.Api.Application.DTOs.Invoices;
 using Clinic.Api.Domain.Entities;
 
 namespace Clinic.Api.Application.Interfaces

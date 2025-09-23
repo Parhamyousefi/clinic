@@ -11,5 +11,6 @@ namespace Clinic.Api.Application.Interfaces
         Task<GlobalResponse> DeleteContact(int id);
         Task<IEnumerable<ContactTypesContext>> GetContactTypes();
         Task<GlobalResponse> SaveContactPhone(SaveContactPhoneDto model);
+        Task<IEnumerable<ContactPhonesContext>> GetContactPhone(int contactId);
     }
 }

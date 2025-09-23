@@ -1,4 +1,4 @@
-﻿namespace Clinic.Api.Application.DTOs.Expenses
+﻿namespace Clinic.Api.Application.DTOs.Invoices
 {
     public class SaveExpenseDto
     {
