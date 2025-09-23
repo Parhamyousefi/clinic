@@ -161,11 +161,8 @@ export class AppointmentComponent {
         }
       });
       this.timeSheetHeaderDate = date._d;
-
-
     }
     catch { }
-
   }
 
   async createAppointment() {
