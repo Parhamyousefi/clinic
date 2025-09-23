@@ -32,7 +32,7 @@ export const routes: Routes = [
         canActivate: [AuthGuard]
     },
     {
-        path: 'new-contact', component: NewContactComponent,
+        path: 'new-contact/:id', component: NewContactComponent,
         canActivate: [AuthGuard]
     },
     {

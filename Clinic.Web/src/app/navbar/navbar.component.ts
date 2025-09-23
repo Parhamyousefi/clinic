@@ -20,9 +20,8 @@ export const Menu: imenu[] = [
   { id: 6, text: "کالاهای مصرفی", link: '/', roleAccess: [], icon: '' },
   { id: 7, text: "هزینه ها", link: '/', roleAccess: [], icon: '' },
   { id: 8, text: "اشخاص", link: '/contacts', roleAccess: [], icon: '' },
-  { id: 9, text: "نامه ها", link: '/', roleAccess: [], icon: '' },
-  { id: 10, text: "گزارشات", link: '/', roleAccess: [], icon: '' },
-  { id: 11, text: "راهنما", link: '/', roleAccess: [], icon: '' },
+  { id: 9, text: "گزارشات", link: '/', roleAccess: [], icon: '' },
+  { id: 10, text: "راهنما", link: '/', roleAccess: [], icon: '' },
 ];
 @Component({
   selector: 'app-navbar',
