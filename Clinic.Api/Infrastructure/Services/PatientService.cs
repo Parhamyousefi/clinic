@@ -142,7 +142,7 @@ namespace Clinic.Api.Infrastructure.Services
                 var userId = _token.GetUserId();
                 if (model.EditOrNew == -1)
                 {
-                    var patient = await _context.PatientPhones.Where(p => p.PatientId == model.PatientId).ToListAsync();
+                    var patient = await _context.PatientPhones.FindAsync(model.PatientId);
 
                     if (patient == null)
                     {

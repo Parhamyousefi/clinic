@@ -9,7 +9,7 @@
 }
 
 
-/* * {
+/* * { 
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -119,4 +119,33 @@ mat-label {
 
 .p-datatable.p-datatable-gridlines:has(.p-datatable-thead):has(.p-datatable-tbody) .p-datatable-tbody>tr>td {
     text-align: center;
+}
+
+/* calender */
+#appointment .day-col {
+    padding: 0.8rem !important;
+}
+
+#appointment .datepicker-outer-container .datepicker-inner-container .dp-btn {
+    border-radius: 50% !important;
+    width: 30px;
+    height: 30px;
+    margin: auto;
+}
+
+.datepicker-outer-container .datepicker-inner-container .dp-btn.selected {
+    background-color: rgb(0 196 180) !important;
+}
+
+.p-dropdown {
+    width: 100%;
+}
+
+p-dropdown.p-element {
+    padding: 0.4rem;
+}
+
+.p-dropdown-label {
+    padding: 0.4rem;
+
 }

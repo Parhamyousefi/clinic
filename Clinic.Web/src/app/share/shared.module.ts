@@ -10,14 +10,14 @@ import {
   PriceWithoutTaxPipe,
   JustDateZone
 } from './custom.pipe';
-import { MatDatepickerModulePersian } from 'ngx-persian-datepicker';
 import { TableModule } from 'primeng/table';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DropdownModule } from 'primeng/dropdown';
 import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
+import { NgPersianDatepickerModule } from 'ng-persian-datepicker';
 
 
 @NgModule({
@@ -55,7 +55,9 @@ import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
     MatInputModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    NgxMaterialTimepickerModule
+    NgxMaterialTimepickerModule,
+    NgPersianDatepickerModule,
+    ReactiveFormsModule
   ],
   exports: [
     NumberSplitPipe,
@@ -87,7 +89,9 @@ import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
     DropdownModule,
     MatInputModule,
     MatDatepickerModule,
-    NgxMaterialTimepickerModule
+    NgxMaterialTimepickerModule,
+    NgPersianDatepickerModule,
+    ReactiveFormsModule
   ]
 })
 export class SharedModule { }

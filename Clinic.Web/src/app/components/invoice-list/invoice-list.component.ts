@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { InvoiceService } from '../../_services/invoice.service';
 import { SharedModule } from '../../share/shared.module';
-import { RouterLink } from "@angular/router";
+import { Router, RouterLink } from "@angular/router";
 
 @Component({
   selector: 'app-invoice-list',
@@ -13,7 +13,8 @@ import { RouterLink } from "@angular/router";
 export class InvoiceListComponent implements OnInit {
 
   constructor(
-    private InvoiceService: InvoiceService
+    private InvoiceService: InvoiceService,
+    private router: Router
   ) { }
 
   InvoiceList: any = [];
@@ -29,5 +30,9 @@ export class InvoiceListComponent implements OnInit {
     }
     catch { }
 
+  }
+
+  goToEditPage(id) {
+    this.router.navigate(['/new-invoice/' + id])
   }
 }
