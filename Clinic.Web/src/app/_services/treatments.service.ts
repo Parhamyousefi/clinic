@@ -36,7 +36,7 @@ export class TreatmentsService {
     };
     return this.http.get(uri, httpOptions);
   }
-  
+
   getWeeklyAppointments() {
     const token: any = localStorage.getItem("token");
     const uri = this.url + `api/Treatment/getWeeklyAppointments`;
@@ -48,5 +48,4 @@ export class TreatmentsService {
     };
     return this.http.get(uri, httpOptions);
   }
-
 }

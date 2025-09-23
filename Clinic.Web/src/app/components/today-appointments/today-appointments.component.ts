@@ -78,9 +78,6 @@ export class TodayAppointmentsComponent implements OnInit {
       this.servicesList.forEach((service: any) => {
         service.code = service.id;
       });
-      // setTimeout(() => {
-      //   this.selectedservice = this.servicesList[0];
-      // }, 1000);
     }
     catch { }
   }

@@ -22,7 +22,7 @@ export class AppComponent {
       let url = location.pathname.split('?')[0];
       if (event instanceof NavigationEnd) {
         if ((url == '/')) {
-          this.isLogin = false;
+          this.showNavbar = false;
           return;
         }
         this.showNavbar = true;
@@ -30,6 +30,3 @@ export class AppComponent {
     })
   }
 }
-
-
-
