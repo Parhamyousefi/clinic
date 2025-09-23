@@ -1,0 +1,38 @@
+<div class="appContainer">
+    <div class="col-12 text-right">
+        <h4>اشخاص</h4>
+    </div>
+    <hr>
+    <div class="col-12">
+        <p-table id="contactsTable" #dt styleClass="" class="contacts-table" [value]="contactList" [pageLinks]="20"
+            [autoLayout]="true" [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
+            currentPageReportTemplate="نمایش {first} تا {last} " [rowsPerPageOptions]="[10,25,50]">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>ردیف</th>
+                    <th>نام و نام خانوادگی</th>
+                    <th>شهر</th>
+                    <th>ایمیل</th>
+                    <th>عملیات</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-contact let-rowIndex="rowIndex">
+                <tr>
+                    <td> {{rowIndex+1}}</td>
+                    <td class="text-center">
+                        {{contact.firstName}} {{contact.lastName}}
+                    </td>
+                    <td class="text-center">
+                        {{contact.city}}
+                    </td>
+                    <td class="text-center">
+                        {{contact.email}}
+                    </td>
+                    <td class="text-center">
+                        <button class="btn btn-outline-secondary" (click)="deleteContact(contact.id)">حذف</button>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</div>

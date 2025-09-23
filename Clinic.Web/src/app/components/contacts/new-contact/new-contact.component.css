@@ -1,0 +1,27 @@
+::ng-deep .select-btn .p-button {
+    padding: 0.5rem 1.6rem;
+}
+
+::ng-deep .p-button:focus {
+    box-shadow: none !important;
+}
+
+::ng-deep .p-selectbutton .p-button.p-highlight {
+    background-color: #00c4b4;
+    border: 1px solid #00c4b4;
+}
+
+::ng-deep .full-width .p-dropdown {
+    width: 100%;
+    padding: 5px;
+    max-height: 40px;
+}
+
+.main-btn {
+    background-color: #00c4b4;
+    color: #FFFFFF;
+}
+
+::ng-deep .full-width .p-element {
+    padding: 0;
+}

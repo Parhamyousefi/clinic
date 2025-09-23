@@ -1,4 +1,4 @@
-﻿namespace Clinic.Api.Application.DTOs.Main
+﻿namespace Clinic.Api.Application.DTOs.Invoices
 {
     public class SaveReceiptDto
     {
@@ -8,11 +8,7 @@
         public decimal? EFTPos { get; set; }
         public decimal? Other { get; set; }
         public string? Notes { get; set; }
-        public int? ModifierId { get; set; }
-        public DateTime? CreatedOn { get; set; }
-        public DateTime? LastUpdated { get; set; }
         public bool AllowEdit { get; set; }
-        public int? CreatorId { get; set; }
         public int ReceiptTypeId { get; set; }
     }
 }

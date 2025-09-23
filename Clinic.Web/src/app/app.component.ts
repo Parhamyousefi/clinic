@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { NavigationEnd, Router, RouterOutlet, Event } from '@angular/router';
 import { NavbarComponent } from "./navbar/navbar.component";
 import { NgIf } from "@angular/common";
+import { OnlyNumber } from './_directives/onlynumber.directive';
 
 @Component({
   selector: 'app-root',
@@ -17,12 +18,11 @@ export class AppComponent {
   constructor(
     private router: Router,
   ) {
-
     router.events.subscribe((event: Event) => {
       let url = location.pathname.split('?')[0];
       if (event instanceof NavigationEnd) {
-        if ((url.startsWith("/login") || url == '')) {
-          this.showNavbar = false;
+        if ((url == '/')) {
+          this.isLogin = false;
           return;
         }
         this.showNavbar = true;

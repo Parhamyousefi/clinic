@@ -6,7 +6,7 @@
         public DateTime? ToDate { get; set; }
         public int? Clinic { get; set; }
         public int? Service { get; set; }
-        public int? From { get; set; }
-        public int? To { get; set; }
+        public TimeOnly? From { get; set; }
+        public TimeOnly? To { get; set; }
     }
 }

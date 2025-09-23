@@ -27,4 +27,29 @@ export class MainService {
   }
 
 
+
+  getCountries() {
+    const token: any = localStorage.getItem("token");
+    const uri = this.url + `api/Main/getCountries`;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      }),
+    };
+    return this.http.get(uri, httpOptions);
+  }
+
+  getProducts() {
+    const token: any = localStorage.getItem("token");
+    const uri = this.url + `api/Main/getProducts`;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      }),
+    };
+    return this.http.get(uri, httpOptions);
+  }
+
 }

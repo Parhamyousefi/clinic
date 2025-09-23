@@ -15,7 +15,7 @@ export class TreatmentsService {
   token: any = localStorage.getItem("token");
 
   getTodayAppointments(data: any) {
-    const uri = this.url + `api/Treatments/getTodayAppointments`;
+    const uri = this.url + `api/Treatment/getTodayAppointments`;
     const httpOptions = {
       headers: new HttpHeaders({
         "Content-Type": "application/json",
@@ -24,4 +24,29 @@ export class TreatmentsService {
     };
     return this.http.post(uri, data, httpOptions);
   }
+
+  getBillableItems() {
+    const token: any = localStorage.getItem("token");
+    const uri = this.url + `api/Treatment/getBillableItems`;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      }),
+    };
+    return this.http.get(uri, httpOptions);
+  }
+  
+  getWeeklyAppointments() {
+    const token: any = localStorage.getItem("token");
+    const uri = this.url + `api/Treatment/getWeeklyAppointments`;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      }),
+    };
+    return this.http.get(uri, httpOptions);
+  }
+
 }
