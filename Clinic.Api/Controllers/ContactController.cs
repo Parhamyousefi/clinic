@@ -55,5 +55,13 @@ namespace Clinic.Api.Controllers
             var result = await _contactsService.SaveContactPhone(model);
             return Ok(result);
         }
+
+        [HttpGet("getContactPhone/{contactId}")]
+        [Authorize("Admin", "Doctor")]
+        public async Task<IActionResult> GetContactPhone(int contactId)
+        {
+            var result = await _contactsService.GetContactPhone(contactId);
+            return Ok(result);
+        }
     }
 }

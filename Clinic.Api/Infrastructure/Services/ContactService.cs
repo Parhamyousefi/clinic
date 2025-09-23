@@ -149,5 +149,18 @@ namespace Clinic.Api.Infrastructure.Services
                 throw new Exception(ex.Message);
             }
         }
+
+        public async Task<IEnumerable<ContactPhonesContext>> GetContactPhone(int contactId)
+        {
+            try
+            {
+                var res = await _context.ContactPhones.Where(c => c.ContactId == contactId).ToListAsync();
+                return res;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }

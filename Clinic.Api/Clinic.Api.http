@@ -491,3 +491,8 @@ Content-Type: application/json
 GET {{Clinic_Api_Host}}/api/main/deleteProduct/1
 Authorization: Bearer
 Content-Type: application/json
+
+### Get Contact Phone
+GET {{Clinic_Api_Host}}/api/contact/getContactPhone/1
+Authorization: Bearer
+Content-Type: application/json
