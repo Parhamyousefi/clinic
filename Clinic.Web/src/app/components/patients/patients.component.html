@@ -1,0 +1,68 @@
+<div class="appContainer">
+    <div class="col-12 text-right">
+        <h4>بیماران</h4>
+    </div>
+    <hr>
+
+    <div class="col-12 mt-3 mb-4 d-flex flex-wrap new-appointment-containter">
+        <div class="col-4 d-flex flex-column">
+            <label for="firstName" class="text-right">
+                نام
+            </label>
+            <input type="text" id="firstName" class="form-control" [(ngModel)]="newPatient.firstName">
+        </div>
+        <div class="col-4 d-flex flex-column">
+            <label for="lastName" class="text-right">
+                نام خانوادگی
+            </label>
+            <input type="text" id="lastName" class="form-control" [(ngModel)]="newPatient.lastName">
+        </div>
+        <div class="col-4 d-flex flex-column">
+            <label for="lastName" class="text-right">
+                جنسیت
+            </label>
+            <div class="d-flex justify-content-center">
+                <p-selectButton [options]="genderList" [(ngModel)]="newPatient.gender" optionLabel="label"
+                    optionValue="value" class="select-btn" />
+            </div>
+
+        </div>
+    </div>
+    <hr>
+    <div class="col-12 mt-5">
+        <p-table id="patientsTable" #dt styleClass="" class="patients-table" [value]="patientsList" [pageLinks]="20"
+            [autoLayout]="true" [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
+            currentPageReportTemplate="نمایش {first} تا {last} " [rowsPerPageOptions]="[10,25,50]">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>ردیف</th>
+                    <th>نام و نام خانوادگی</th>
+                    <th>شهر</th>
+                    <th>ایمیل</th>
+                    <th>کد ملی</th>
+                    <th>توضیحات</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-patient let-rowIndex="rowIndex">
+                <tr>
+                    <td> {{rowIndex+1}}</td>
+                    <td>
+                        {{patient.firstName}} {{patient.lastName}}
+                    </td>
+                    <td>
+                        {{patient.city}}
+                    </td>
+                    <td>
+                        {{patient.email}}
+                    </td>
+                    <td>
+                        {{patient.nationalCode}}
+                    </td>
+                    <td>
+                        {{patient.notes}}
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</div>

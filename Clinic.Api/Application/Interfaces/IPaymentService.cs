@@ -1,13 +1,14 @@
-﻿using Clinic.Api.Application.DTOs.Payments;
+﻿using Clinic.Api.Application.DTOs;
+using Clinic.Api.Application.DTOs.Invoices;
 using Clinic.Api.Domain.Entities;
 
 namespace Clinic.Api.Application.Interfaces
 {
     public interface IPaymentService
     {
-        Task<string> SavePayment(SavePaymentDto model);
+        Task<GlobalResponse> SavePayment(SavePaymentDto model);
         Task<IEnumerable<PaymentsContext>> GetAllPayments();
         Task<IEnumerable<PaymentsContext>> GetPayment(int patientId);
-        Task<string> DeletePayment(int id);
+        Task<GlobalResponse> DeletePayment(int id);
     }
 }

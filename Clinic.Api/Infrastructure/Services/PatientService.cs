@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Clinic.Api.Application.DTOs;
 using Clinic.Api.Application.DTOs.Patients;
 using Clinic.Api.Application.Interfaces;
 using Clinic.Api.Domain.Entities;
@@ -20,21 +21,24 @@ namespace Clinic.Api.Infrastructure.Services
             _mapper = mapper;
         }
 
-        public async Task<string> SavePatient(SavePatientDto model)
+        public async Task<GlobalResponse> SavePatient(SavePatientDto model)
         {
+            var result = new GlobalResponse();
             try
             {
                 var userId = _token.GetUserId();
 
                 if (model.EditOrNew == -1)
-                {   
+                {
                     var patient = _mapper.Map<PatientsContext>(model);
                     patient.CreatorId = userId;
+                    patient.ReferringDoctorId = userId;
                     patient.CreatedOn = DateTime.UtcNow;
                     _context.Patients.Add(patient);
                     await _context.SaveChangesAsync();
-
-                    return "Patient Saved Successfully";
+                    result.Data = "Patient Saved Successfully";
+                    result.Status = 0;
+                    return result;
                 }
                 else
                 {
@@ -47,10 +51,13 @@ namespace Clinic.Api.Infrastructure.Services
 
                     _mapper.Map(model, existingPatient);
                     existingPatient.ModifierId = userId;
+                    existingPatient.ReferringDoctorId = userId;
                     existingPatient.LastUpdated = DateTime.UtcNow;
                     _context.Patients.Update(existingPatient);
                     await _context.SaveChangesAsync();
-                    return "Patient Updated Successfully";
+                    result.Data = "Patient Updated Successfully";
+                    result.Status = 0;
+                    return result;
                 }
             }
             catch (Exception ex)
@@ -59,8 +66,10 @@ namespace Clinic.Api.Infrastructure.Services
             }
         }
 
-        public async Task<string> DeletePatient(int id)
+        public async Task<GlobalResponse> DeletePatient(int id)
         {
+            var result = new GlobalResponse();
+
             try
             {
                 var patient = await _context.Patients.FindAsync(id);
@@ -69,7 +78,9 @@ namespace Clinic.Api.Infrastructure.Services
 
                 _context.Patients.Remove(patient);
                 await _context.SaveChangesAsync();
-                return "Patient Deleted Successfully";
+                result.Data = "Patient Deleted Successfully";
+                result.Status = 0;
+                return result;
             }
             catch (Exception ex)
             {
@@ -93,34 +104,28 @@ namespace Clinic.Api.Infrastructure.Services
             }
         }
 
-        public async Task<string> SavePatientPhone(SavePatientPhoneDto model)
+        public async Task<IEnumerable<GetPatientInfoResponse>> GetPatientById(int patientId)
         {
             try
             {
-                var userId = _token.GetUserId();
-
-                var patient = await _context.PatientPhones.Where(p => p.PatientId == model.PatientId).ToListAsync();
-
-                if (patient == null)
-                {
-                    var mappPatient = _mapper.Map<PatientPhonesContext>(model);
-                    mappPatient.CreatorId = userId;
-                    _context.PatientPhones.Add(mappPatient);
-                    await _context.SaveChangesAsync();
-
-                    return "Patient Phone Saved Successfully";
-                }
-
-                await _context.PatientPhones.Where(p => p.PatientId == model.PatientId)
-                    .ExecuteUpdateAsync(setters => setters
-                    .SetProperty(x => x.PhoneNoTypeId, model.PhoneNoTypeId)
-                    .SetProperty(x => x.Number, model.Number)
-                    .SetProperty(x => x.ModifierId, model.ModifierId)
-                    .SetProperty(x => x.CreatedOn, model.CreatedOn)
-                    .SetProperty(x => x.LastUpdated, model.LastUpdated)
-                    .SetProperty(x => x.ModifierId, userId));
-                await _context.SaveChangesAsync();
-                return "Patient Phone Updated Successfully";
+                var query = _context.Patients.AsQueryable();
+                var result = await query
+                    .Where(p => p.Id == patientId)
+                    .Select(a => new GetPatientInfoResponse
+                    {
+                        Mobile = _context.PatientPhones
+                            .Where(p => p.PatientId == patientId)
+                            .Select(p => p.Number)
+                            .FirstOrDefault() ?? string.Empty,
+                        FirstName = a.FirstName,
+                        LastName = a.LastName,
+                        Gender = a.Gender,
+                        BirthDate = a.BirthDate,
+                        FatherName = a.FatherName,
+                        NationalCode = a.NationalCode,
+                        PatientCode = a.PatientCode.ToString()
+                    }).ToListAsync();
+                return result;
             }
             catch (Exception ex)
             {
@@ -128,8 +133,61 @@ namespace Clinic.Api.Infrastructure.Services
             }
         }
 
-        public async Task<string> DeletePatientPhone(int id)
+        public async Task<GlobalResponse> SavePatientPhone(SavePatientPhoneDto model)
         {
+            var result = new GlobalResponse();
+
+            try
+            {
+                var userId = _token.GetUserId();
+                if (model.EditOrNew == -1)
+                {
+                    var patient = await _context.PatientPhones.Where(p => p.PatientId == model.PatientId).ToListAsync();
+
+                    if (patient == null)
+                    {
+                        var mappPatient = _mapper.Map<PatientPhonesContext>(model);
+                        mappPatient.CreatorId = userId;
+                        _context.PatientPhones.Add(mappPatient);
+                        await _context.SaveChangesAsync();
+                        result.Data = "Patient Phone Saved Successfully";
+                        result.Status = 0;
+                        return result;
+                    }
+                    else
+                    {
+                        throw new Exception("Patient Phone Already Exists");
+                    }
+                }
+                else
+                {
+                    var existingPatientPhone = await _context.PatientPhones.FirstOrDefaultAsync(p => p.Id == model.EditOrNew);
+
+                    if (existingPatientPhone == null)
+                    {
+                        throw new Exception("Patient Not Found");
+                    }
+
+                    _mapper.Map(model, existingPatientPhone);
+                    existingPatientPhone.ModifierId = userId;
+                    existingPatientPhone.LastUpdated = DateTime.UtcNow;
+                    _context.PatientPhones.Update(existingPatientPhone);
+                    await _context.SaveChangesAsync();
+                    result.Data = "Patient Phone Updated Successfully";
+                    result.Status = 0;
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<GlobalResponse> DeletePatientPhone(int id)
+        {
+            var result = new GlobalResponse();
+
             try
             {
                 var patientPhone = await _context.PatientPhones.FindAsync(id);
@@ -138,7 +196,9 @@ namespace Clinic.Api.Infrastructure.Services
 
                 _context.PatientPhones.Remove(patientPhone);
                 await _context.SaveChangesAsync();
-                return "Patient Phone Deleted Successfully";
+                result.Data = "Patient Phone Deleted Successfully";
+                result.Status = 0;
+                return result;
             }
             catch (Exception ex)
             {
@@ -159,12 +219,65 @@ namespace Clinic.Api.Infrastructure.Services
             }
         }
 
-        public async Task<IEnumerable<ContactTypesContext>> GetContactTypes()
+        public async Task<IEnumerable<GetPatientAppointmentsResponse>> GetPatientAppointments(int patientId)
         {
             try
             {
-                var patientPhone = await _context.ContactTypes.ToListAsync();
-                return patientPhone;
+                var result = await (
+                            from a in _context.Appointments
+                            join t in _context.AppointmentTypes on a.AppointmentTypeId equals t.Id into typeJoin
+                            from t in typeJoin.DefaultIfEmpty()
+                            where a.PatientId == patientId
+                            select new GetPatientAppointmentsResponse
+                            {
+                                Id = a.Id,
+                                Start = a.Start,
+                                End = a.End,
+                                PatientId = a.PatientId,
+                                AppointmentTypeId = a.AppointmentTypeId,
+                                AppointmentTypeName = t != null ? t.Name : null
+                            }
+                        ).ToListAsync();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<IEnumerable<InvoicesContext>> GetPatientInvoices(int patientId)
+        {
+            try
+            {
+                var result = await _context.Invoices.Where(i => i.PatientId == patientId).ToListAsync();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<IEnumerable<ReceiptsContext>> GetPatientReceipts(int patientId)
+        {
+            try
+            {
+                var result = await _context.Receipts.Where(r => r.PatientId == patientId).ToListAsync();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<IEnumerable<PaymentsContext>> GetPatientPayments(int patientId)
+        {
+            try
+            {
+                var result = await _context.Payments.Where(p => p.PatientId == patientId).ToListAsync();
+                return result;
             }
             catch (Exception ex)
             {

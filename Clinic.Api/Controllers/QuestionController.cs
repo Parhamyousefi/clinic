@@ -9,9 +9,9 @@ namespace Clinic.Api.Controllers
     [ApiController]
     public class QuestionController : ControllerBase
     {
-        private readonly IQuestionsService _questionsService;
+        private readonly IQuestionService _questionsService;
 
-        public QuestionController(IQuestionsService questionsService)
+        public QuestionController(IQuestionService questionsService)
         {
             _questionsService = questionsService;
         }
@@ -29,7 +29,6 @@ namespace Clinic.Api.Controllers
         public async Task<IActionResult> SaveQuestionValue(SaveQuestionValueDto model)
         {
             var result = await _questionsService.SaveQuestionValue(model);
-
             return Ok(result);
         }
 

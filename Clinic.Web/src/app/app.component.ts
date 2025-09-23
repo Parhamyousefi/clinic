@@ -17,12 +17,11 @@ export class AppComponent {
   constructor(
     private router: Router,
   ) {
-
     router.events.subscribe((event: Event) => {
       let url = location.pathname.split('?')[0];
       if (event instanceof NavigationEnd) {
-        if ((url.startsWith("/login") || url == '')) {
-          this.showNavbar = false;
+        if ((url == '/')) {
+          this.isLogin = false;
           return;
         }
         this.showNavbar = true;

@@ -9,18 +9,18 @@ namespace Clinic.Api.Controllers
     [ApiController]
     public class ContactController : ControllerBase
     {
-        private readonly IContactsService _contactsService;
+        private readonly IContactService _contactsService;
 
-        public ContactController(IContactsService contactsService)
+        public ContactController(IContactService contactsService)
         {
             _contactsService = contactsService;
         }
 
-        [HttpPost("saveContacts")]
+        [HttpPost("saveContact")]
         [Authorize("Admin", "Doctor")]
-        public async Task<IActionResult> SaveContacts(SaveContactsDto model)
+        public async Task<IActionResult> SaveContact(SaveContactDto model)
         {
-            var result = await _contactsService.SaveContacts(model);
+            var result = await _contactsService.SaveContact(model);
             return Ok(result);
         }
 
@@ -32,11 +32,11 @@ namespace Clinic.Api.Controllers
             return Ok(result);
         }
 
-        [HttpGet("deleteContacts/{id}")]
+        [HttpGet("deleteContact/{id}")]
         [Authorize("Admin", "Doctor")]
-        public async Task<IActionResult> DeleteContacts(int id)
+        public async Task<IActionResult> DeleteContact(int id)
         {
-            var result = await _contactsService.DeleteContacts(id);
+            var result = await _contactsService.DeleteContact(id);
             return Ok(result);
         }
 
@@ -45,6 +45,22 @@ namespace Clinic.Api.Controllers
         public async Task<IActionResult> GetContactTypes()
         {
             var result = await _contactsService.GetContactTypes();
+            return Ok(result);
+        }
+
+        [HttpPost("saveContactPhone")]
+        [Authorize("Admin", "Doctor")]
+        public async Task<IActionResult> SaveContactPhone(SaveContactPhoneDto model)
+        {
+            var result = await _contactsService.SaveContactPhone(model);
+            return Ok(result);
+        }
+
+        [HttpGet("getContactPhone/{contactId}")]
+        [Authorize("Admin", "Doctor")]
+        public async Task<IActionResult> GetContactPhone(int contactId)
+        {
+            var result = await _contactsService.GetContactPhone(contactId);
             return Ok(result);
         }
     }

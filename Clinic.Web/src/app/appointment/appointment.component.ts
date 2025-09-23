@@ -9,6 +9,8 @@ import { MatCalendar, MatCalendarBody } from '@angular/material/datepicker';
 import moment from 'moment-jalaali';
 import { DialogModule } from 'primeng/dialog';
 import { DropdownModule } from 'primeng/dropdown';
+import { ToastrService } from 'ngx-toastr';
+import { PatientService } from '../_services/patient.service';
 @Component({
   selector: 'app-appointment',
   standalone: true,
@@ -18,6 +20,7 @@ import { DropdownModule } from 'primeng/dropdown';
 })
 export class AppointmentComponent {
   private _selectedDate: Date | null = null;
+  private patientService: PatientService;
 
   appointmentsData: any = [];
   today: any;
@@ -62,6 +65,7 @@ export class AppointmentComponent {
 
   constructor(
     private userService: UserService,
+    private toastR: ToastrService,
   ) {
   }
 
@@ -165,12 +169,15 @@ export class AppointmentComponent {
         "editOrNew": this.editmode == true ? this.newAppointmentModel.id : -1
       }
       let res = await this.userService.createAppointment(model).toPromise();
+      this.toastR.success('با موفقیت ثبت شد')
       this.getAppointment(this.appointmentDate)
       this.newAppointmentModel = [];
       this.showNewAppointment = false;
       this.editmode = false;
     }
     catch (err) {
+      this.toastR.error('خطا!', 'خطا در ثبت وقت')
+
     }
   }
 
@@ -184,7 +191,7 @@ export class AppointmentComponent {
 
   async getPatients() {
     try {
-      let res: any = await this.userService.getPatients().toPromise();
+      let res: any = await this.patientService.getPatients().toPromise();
       if (res.length > 0) {
         this.patientsList = res;
         this.patientsList.forEach((patient: any) => {
@@ -193,7 +200,10 @@ export class AppointmentComponent {
         });
       }
     }
-    catch { }
+    catch {
+      this.toastR.error('خطا!', 'خطا در دریافت اطلاعات')
+
+    }
   }
 
   async getAppointmentTypes() {
@@ -207,7 +217,9 @@ export class AppointmentComponent {
       }
 
     }
-    catch { }
+    catch {
+      this.toastR.error('خطا!', 'خطا در دریافت اطلاعات')
+    }
   }
 
 
@@ -253,7 +265,9 @@ export class AppointmentComponent {
       });
       this.selectedClinic = this.clinicsList[0];
     }
-    catch { }
+    catch {
+      this.toastR.error('خطا!', 'خطا در دریافت اطلاعات')
+    }
   }
 
   closeNewAppointmentModal() {
@@ -262,24 +276,29 @@ export class AppointmentComponent {
   }
 
 
-
   getCurrentWeek() {
     let currentDate = moment(this.appointmentDate);
-    let weekStart: any = currentDate.locale('fa').startOf('week');
+    let weekStart: any = currentDate.clone().locale('fa').startOf('week');
     let daysOfWeek = [];
-    for (let i = 0; i < 7; i++) {
-      let currentDate = moment().format('jYYYY/jMM/jDD') == weekStart.format('jYYYY/jMM/jDD');
-      daysOfWeek.push(
-        {
-          dayName: weekStart.locale('fa').format('dddd'),
-          dayNumber: weekStart.format('jDD'),
-          currentDate: currentDate,
-          fullDate: weekStart._d
-        });
+
+    for (let i = 0; i < 6; i++) {
+      daysOfWeek.push({
+        dayName: weekStart.locale('fa').format('dddd'),
+        dayNumber: weekStart.format('jDD'),
+        fullDate: weekStart.toDate(),
+        isToday: weekStart.isSame(moment(), 'day'),
+      });
       weekStart.add(1, 'day');
     }
+
     this.weekDays = daysOfWeek;
     console.log(this.weekDays);
+  }
 
+
+  setWeeklyNewAppointment(date: any, time: any) {
+    this.newAppointmentModel.appointmentStartTime = this.combineDateAndTime(date, time);
+    this.newAppointmentModel.appointmentEndTime = this.combineDateAndTime(date, this.getEndTime(time))
+    this.showNewAppointment = true;
   }
 }

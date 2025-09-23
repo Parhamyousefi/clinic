@@ -25,25 +25,26 @@ export class TodayAppointmentsComponent implements OnInit {
   todayAppointmentsList: any = [];
   servicesList: any = [];
   selectedservice: any;
-  selectedDatefrom: Date | null = null;
-  selectedTimefrom: any;
-  selectedDateTo: Date | null = null;
-  selectedTimeTo: any;
+  selectedDatefrom: any = new Date(new Date().setHours(0, 0, 0, 0));
+  selectedTimefrom: any = '08:00';
+  selectedDateTo: any = new Date(new Date().setHours(0, 0, 0, 0));
+  selectedTimeTo: any = '23:00';
   async ngOnInit() {
     await this.getClinics();
-    await this.getJobs();
-    await this.getAppointment();
+    await this.getBillableItems();
+    setTimeout(() => {
+      this.getAppointment();
+    }, 1000);
   }
 
   async getAppointment() {
-    let today = moment();
     let model = {
-      date: today,
-      arrived: null,
+      fromDate: this.selectedDatefrom,
+      toDate: this.selectedDateTo,
       clinic: this.selectedClinic?.code,
       service: this.selectedservice?.code,
-      from: null,
-      to: null
+      from: this.convertTimeToUTC(this.selectedTimefrom),
+      to: this.convertTimeToUTC(this.selectedTimeTo)
     }
     try {
       let res: any = await this.treatmentsService.getTodayAppointments(model).toPromise();
@@ -59,20 +60,40 @@ export class TodayAppointmentsComponent implements OnInit {
       this.clinicsList.forEach((clinic: any) => {
         clinic.code = clinic.id;
       });
-      this.selectedClinic = this.clinicsList[0];
+      setTimeout(() => {
+        this.selectedClinic = this.clinicsList[0];
+      }, 1000);
     }
     catch { }
   }
 
-  async getJobs() {
+  async getBillableItems() {
     try {
-      let res = await this.mainService.getJobs().toPromise();
+      let res = await this.mainService.getBillableItems().toPromise();
       this.servicesList = res;
       this.servicesList.forEach((service: any) => {
         service.code = service.id;
       });
-      this.selectedClinic = this.servicesList[0];
+      // setTimeout(() => {
+      //   this.selectedservice = this.servicesList[0];
+      // }, 1000);
     }
     catch { }
+  }
+
+  convertTimeToUTC(time: string): string {
+    let [hours, minutes] = time.split(":").map(Number);
+    const now = new Date();
+    const date = new Date(Date.UTC(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate(),
+      hours,
+      minutes,
+      0,
+      0
+    ));
+    const timePart = date.toISOString().split("T")[1];
+    return timePart.replace("Z", "");
   }
 }

@@ -1,0 +1,19 @@
+<div class="appContainer">
+    <div class="col-12 text-right">
+        <h4> صورت حساب جدید</h4>
+    </div>
+    <hr>
+    <div class="col-12">
+        <div class="d-lg-flex align-items-baseline my-3">
+            <div class="col-lg-4 col-12">
+                <p-dropdown [options]="clinicsList" placeholder="مکان" [(ngModel)]="selectedClinic" optionLabel="name" dataKey="id" class="full-width text-right" />
+            </div>
+            <div class="col-lg-4 col-12">
+                <p-dropdown [options]="patientsList" placeholder="بیمار" [(ngModel)]="selectedPatient" optionLabel="name" dataKey="id" class="full-width text-right" />
+            </div>
+            <div class="col-lg-4 col-12">
+                <p-dropdown [options]="hours" placeholder="وقت" [(ngModel)]="selectedPatient" optionLabel="name" dataKey="id" class="full-width text-right" />
+            </div>
+        </div>
+    </div>
+</div>

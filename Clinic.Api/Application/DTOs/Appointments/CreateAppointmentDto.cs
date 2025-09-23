@@ -18,14 +18,10 @@
         public int? AppointmentCancelTypeId { get; set; }
         public string? CancelNotes { get; set; }
         public bool? IsUnavailbleBlock { get; set; }
-        public int? ModifierId { get; set; }
-        public DateTime? CreatedOn { get; set; }
-        public DateTime? LastUpdated { get; set; }
         public bool? IsAllDay { get; set; }
         public bool? SendReminder { get; set; }
         public DateTime? AppointmentSMS { get; set; }
         public bool? IgnoreDidNotCome { get; set; }
-        public int? CreatorId { get; set; }
         public bool? ByInvoice { get; set; }
         public int EditOrNew { get; set; }
     }

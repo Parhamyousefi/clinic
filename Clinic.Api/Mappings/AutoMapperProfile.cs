@@ -5,7 +5,6 @@ using Clinic.Api.Application.DTOs.Contacts;
 using Clinic.Api.Application.DTOs.Invoices;
 using Clinic.Api.Application.DTOs.Main;
 using Clinic.Api.Application.DTOs.Patients;
-using Clinic.Api.Application.DTOs.Payments;
 using Clinic.Api.Application.DTOs.Questions;
 using Clinic.Api.Application.DTOs.Users;
 using Clinic.Api.Domain.Entities;
@@ -29,7 +28,10 @@ namespace Clinic.Api.Mappings
             CreateMap<SaveReceiptDto, ReceiptsContext>().ReverseMap();
             CreateMap<SavePaymentDto, PaymentsContext>().ReverseMap();
             CreateMap<SaveJobDto, JobsContext>().ReverseMap();
-            CreateMap<SaveContactsDto, ContactsContext>().ReverseMap();
+            CreateMap<SaveContactDto, ContactsContext>().ReverseMap();
+            CreateMap<SaveExpenseDto, ExpensesContext>().ReverseMap();
+            CreateMap<SaveBillableItemsDto, BillableItemsContext>().ReverseMap();
+            CreateMap<SaveContactPhoneDto, ContactPhonesContext>().ReverseMap();
         }
     }
 }

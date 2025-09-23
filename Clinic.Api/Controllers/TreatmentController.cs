@@ -10,9 +10,9 @@ namespace Clinic.Api.Controllers
     [ApiController]
     public class TreatmentController : ControllerBase
     {
-        private readonly ITreatmentsService _treatmentsService;
+        private readonly ITreatmentService _treatmentsService;
 
-        public TreatmentController(ITreatmentsService treatmentsService)
+        public TreatmentController(ITreatmentService treatmentsService)
         {
             _treatmentsService = treatmentsService;
         }
@@ -36,11 +36,11 @@ namespace Clinic.Api.Controllers
             return Ok(result);
         }
 
-        [HttpGet("getAppointments/{clinicId}/{date?}/{docId?}")]
+        [HttpPost("getAppointments")]
         [Authorize("Admin", "Doctor")]
-        public async Task<IActionResult> GetAppointments(int clinicId, DateTime? date, int? docId)
+        public async Task<IActionResult> GetAppointments(GetAppointmentsDto model)
         {
-            var result = await _treatmentsService.GetAppointments(clinicId, date, docId);
+            var result = await _treatmentsService.GetAppointments(model);
             return Ok(result);
         }
 
@@ -84,6 +84,38 @@ namespace Clinic.Api.Controllers
         {
             var result = await _treatmentsService.GetAppointmentTypes();
 
+            return Ok(result);
+        }
+
+        [HttpGet("getWeeklyAppointments")]
+        [Authorize("Admin", "Doctor")]
+        public async Task<IActionResult> GetWeekAppointments()
+        {
+            var result = await _treatmentsService.GetWeekAppointments();
+            return Ok(result);
+        }
+
+        [HttpGet("getBillableItems")]
+        [Authorize("Admin", "Doctor")]
+        public async Task<IActionResult> GetBillableItems()
+        {
+            var result = await _treatmentsService.GetBillableItems();
+            return Ok(result);
+        }
+
+        [HttpPost("saveBillableItem")]
+        [Authorize("Admin", "Doctor")]
+        public async Task<IActionResult> SaveBillableItem(SaveBillableItemsDto model)
+        {
+            var result = await _treatmentsService.SaveBillableItem(model);
+            return Ok(result);
+        }
+
+        [HttpGet("deleteBillableItem/{id}")]
+        [Authorize("Admin", "Doctor")]
+        public async Task<IActionResult> DeleteBillableItem(int id)
+        {
+            var result = await _treatmentsService.DeleteBillableItem(id);
             return Ok(result);
         }
     }
