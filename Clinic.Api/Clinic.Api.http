@@ -496,3 +496,28 @@ Content-Type: application/json
 GET {{Clinic_Api_Host}}/api/contact/getContactPhone/1
 Authorization: Bearer
 Content-Type: application/json
+
+### Get Section Per Service
+GET {{Clinic_Api_Host}}/api/treatment/getSectionPerService/1
+Authorization: Bearer
+Content-Type: application/json
+
+### Get Question Per Section
+GET {{Clinic_Api_Host}}/api/treatment/getQuestionsPerSection/1
+Authorization: Bearer
+Content-Type: application/json
+
+### Get Answers Per Question
+GET {{Clinic_Api_Host}}/api/treatment/getAnswersPerQuestion/1
+Authorization: Bearer
+Content-Type: application/json
+
+### Get Patient Services 
+GET {{Clinic_Api_Host}}/api/treatment/getPatientServices/1
+Authorization: Bearer
+Content-Type: application/json
+
+### Delete ContactPhone 
+GET {{Clinic_Api_Host}}/api/contact/deleteContactPhone/1
+Authorization: Bearer
+Content-Type: application/json

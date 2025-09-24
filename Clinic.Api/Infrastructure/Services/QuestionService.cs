@@ -12,11 +12,13 @@ namespace Clinic.Api.Infrastructure.Services
     {
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
+        private readonly IReadTokenClaims _token;
 
-        public QuestionService(ApplicationDbContext context, IMapper mapper)
+        public QuestionService(ApplicationDbContext context, IMapper mapper, IReadTokenClaims token)
         {
             _context = context;
             _mapper = mapper;
+            _token = token;
         }
 
         public async Task<IEnumerable<QuestionsContext>> GetQuestions()
@@ -35,12 +37,14 @@ namespace Clinic.Api.Infrastructure.Services
         public async Task<GlobalResponse> SaveQuestionValue(SaveQuestionValueDto model)
         {
             var result = new GlobalResponse();
+            var userId = _token.GetUserId();
 
             try
             {
                 if (model.EditOrNew == -1)
                 {
                     var questionValue = _mapper.Map<QuestionValuesContext>(model);
+                    questionValue.CreatorId = userId;
                     _context.QuestionValues.Add(questionValue);
                     await _context.SaveChangesAsync();
                     result.Data = "QuestionValue Saved Successfully";
