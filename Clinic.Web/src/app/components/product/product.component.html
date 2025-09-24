@@ -1,0 +1,43 @@
+<div class="appContainer">
+    <div class="col-12">
+        <h4 class="col-12 text-right">اطلاعات</h4>
+        <hr>
+        <div class="col-12 flex-wrap d-flex mt-3">
+            <div class="col-4 d-flex flex-column justify-content-center my-3">
+                <label for="code" class="text-right">کد</label>
+                <input class="form-control" OnlyNumber="true" type="text" id="code" [(ngModel)]="newContactModel.code">
+            </div>
+            <div class="col-4 d-flex flex-column justify-content-center my-3">
+                <label for="name" class="text-right">نام</label>
+                <input class="form-control" type="text" id="name" [(ngModel)]="newContactModel.name">
+            </div>
+            <div class="col-4 d-flex flex-column justify-content-center my-3">
+                <label for="serialnumber" class="text-right">شماره سریال</label>
+                <input class="form-control" OnlyNumber="true" type="text" id="serialnumber"
+                    [(ngModel)]="newContactModel.serialnumber">
+            </div>
+            <div class="col-4 d-flex flex-column justify-content-center my-3">
+                <label for="supplier" class="text-right">تامین کننده</label>
+                <input class="form-control" type="text" id="supplier" [(ngModel)]="newContactModel.supplier">
+            </div>
+            <div class="col-4 d-flex flex-column justify-content-center my-3">
+                <label for="price" class="text-right">قیمت</label>
+                <input class="form-control" OnlyNumber="true" type="text" id="price"
+                    [(ngModel)]="newContactModel.price">
+
+            </div>
+            <div class="col-4 d-flex flex-column justify-content-center my-3">
+                <label for="inventory" class="text-right">موجودی</label>
+                <input class="form-control" OnlyNumber="true" type="text" id="inventory"
+                    [(ngModel)]="newContactModel.inventory">
+            </div>
+            <div class="col-4 d-flex flex-column justify-content-center my-3">
+                <label for="note" class="text-right">یادداشت</label>
+                <textarea name="note" id="note" [(ngModel)]="newContactModel.note"></textarea>
+            </div>
+        </div>
+        <div class="col-12 d-flex justify-content-center mt-4">
+            <button class="btn main-btn px-4 py-2">ثبت</button>
+        </div>
+    </div>
+</div>

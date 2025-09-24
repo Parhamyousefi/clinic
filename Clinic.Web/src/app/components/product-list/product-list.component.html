@@ -1,0 +1,47 @@
+<!-- <div class="col-12 mt-5">
+    <p-table id="productsTable" #dt styleClass="" class="products-table" [value]="productsList" [pageLinks]="20"
+        [autoLayout]="true" [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
+        currentPageReportTemplate="نمایش {first} تا {last} " [rowsPerPageOptions]="[10,25,50]">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>ردیف</th>
+                <th>نام</th>
+                <th>شماره سریال</th>
+                <th>تامین کننده</th>
+                <th>قیمت</th>
+                <th>موجودی</th>
+                <th>یادداشت</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-product let-rowIndex="rowIndex">
+            <tr>
+                <td> {{rowIndex+1}}</td>
+                <td>
+                    {{product.firstName}} {{product.lastName}}
+                </td>
+                <td>
+                    {{product.city}}
+                </td>
+                <td>
+                    {{product.email}}
+                </td>
+                <td>
+                    {{product.nationalCode}}
+                </td>
+                <td>
+                    {{product.notes}}
+                </td>
+                <td>
+                    <button class="btn main-btn" *ngIf="!product.phoneNum"
+                        (click)="openAddPhoneNumModal(product.id)">افزودن شماره
+                        تلفن</button>
+                    <button class="btn main-btn" *ngIf="product.phoneNum"
+                        (click)="editPhoneNum(product.productPhone)">ویرایش
+                        شماره تلفن</button>
+                    <button class="btn main-outline-btn mx-1" (click)="editproduct(product)">ویرایش</button>
+                    <button class="btn btn-outline-danger" (click)="deleteproduct(product.id)">حذف</button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div> -->
