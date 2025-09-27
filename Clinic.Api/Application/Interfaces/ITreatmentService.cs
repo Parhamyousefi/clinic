@@ -18,5 +18,9 @@ namespace Clinic.Api.Application.Interfaces
         Task<IEnumerable<BillableItemsContext>> GetBillableItems();
         Task<GlobalResponse> SaveBillableItem(SaveBillableItemsDto model);
         Task<GlobalResponse> DeleteBillableItem(int id);
+        Task<IEnumerable<SectionsContext>> GetSectionPerService(int serviceId);
+        Task<IEnumerable<QuestionsContext>> GetQuestionsPerSection(int sectionId);
+        Task<IEnumerable<AnswersContext>> GetAnswersPerQuestion(int questionId);
+        Task<IEnumerable<GetServicesPerPatientResponse>> GetPatientServices(int patinetId);
     }
 }
