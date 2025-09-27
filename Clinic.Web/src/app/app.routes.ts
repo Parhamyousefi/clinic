@@ -32,7 +32,7 @@ export const routes: Routes = [
         canActivate: [AuthGuard]
     },
     {
-        path: 'new-invoice/:id',
+        path: 'new-invoice/:id/:type',
         component: NewInvoiceComponent,
         canActivate: [AuthGuard]
     },

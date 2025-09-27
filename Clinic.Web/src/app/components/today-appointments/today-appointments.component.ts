@@ -67,7 +67,7 @@ export class TodayAppointmentsComponent implements OnInit {
 
   async getClinics() {
     try {
-      let res = await this.userService.getClinics().toPromise();
+      let res = await this.mainService.getClinics().toPromise();
       this.clinicsList = res;
       this.clinicsList.forEach((clinic: any) => {
         clinic.code = clinic.id;
@@ -85,6 +85,10 @@ export class TodayAppointmentsComponent implements OnInit {
       this.servicesList = res;
       this.servicesList.forEach((service: any) => {
         service.code = service.id;
+      });
+      this.servicesList.unshift({
+        name: 'همه',
+        id: -1,
       });
       // setTimeout(() => {
       //   this.selectedservice = this.servicesList[0];

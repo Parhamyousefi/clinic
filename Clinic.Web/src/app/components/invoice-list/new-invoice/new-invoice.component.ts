@@ -8,6 +8,7 @@ import { ToastrService } from 'ngx-toastr';
 import { firstValueFrom } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import moment from 'moment-jalaali';
+import { MainService } from '../../../_services/main.service';
 
 @Component({
   selector: 'app-new-invoice',
@@ -24,7 +25,8 @@ export class NewInvoiceComponent implements OnInit {
     private invoiceService: InvoiceService,
     private toastR: ToastrService,
     private activeRoute: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private mainService: MainService
   ) { }
 
   patientsList: any = [];
@@ -36,14 +38,24 @@ export class NewInvoiceComponent implements OnInit {
   hasInviceId: number;
   note: string;
   patientAppointmentsList: any = []
+  type: any;
+  selectedPatientTitle: any;
+  selectedClinicTitle: any;
 
   async ngOnInit() {
-    this.editOrNew = +this.activeRoute.snapshot.paramMap.get('id') || -1;
-    await this.getPatients();
-    await this.getClinics();
-    if (this.editOrNew != -1) {
-      this.getInvoices();
-    }
+    this.activeRoute.params.subscribe(async () => {
+      this.editOrNew = +this.activeRoute.snapshot.paramMap.get('id') || -1;
+      this.type = +this.activeRoute.snapshot.paramMap.get('type') || 2;
+      console.log(this.type);
+
+      await this.getPatients();
+      await this.getClinics();
+      if (this.editOrNew != -1) {
+        this.getInvoices();
+      }
+    });
+
+
   }
 
   async getPatients() {
@@ -62,7 +74,7 @@ export class NewInvoiceComponent implements OnInit {
 
   async getClinics() {
     try {
-      let res = await this.userService.getClinics().toPromise();
+      let res = await this.mainService.getClinics().toPromise();
       this.clinicsList = res;
       this.clinicsList.forEach((clinic: any) => {
         clinic.code = clinic.id;
@@ -122,12 +134,18 @@ export class NewInvoiceComponent implements OnInit {
       let res: any = await this.invoiceService.getInvoices().toPromise();
       let item = res.filter(x => x.id == this.editOrNew);
       this.selectedClinic = this.clinicsList.filter(x => x.id == item[0]['businessId'])[0];
+      this.selectedClinicTitle = item[0]['businessName'];
       this.selectedPatient = this.patientsList.filter(x => x.id == item[0]['patientId'])[0];
+      this.selectedPatientTitle = item[0]['patientName'];
       this.note = item[0]['notes'];
       await this.getPatientAppointments();
       this.selectedPatientAppointment = this.patientAppointmentsList.filter(x => x.id == item[0]['appointmentId'])[0];
     }
     catch { }
-
   }
+
+  goToEditPage() {
+    this.router.navigate(['/new-invoice/' + this.editOrNew + '/' + 2])
+  }
+
 }

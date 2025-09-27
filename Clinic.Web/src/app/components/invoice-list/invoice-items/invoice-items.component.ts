@@ -49,6 +49,7 @@ export class InvoiceItemsComponent implements OnInit {
   productList: any = [];
   selectedProduct: any;
   invoiceItemsList: any = [];
+  @Input() viewOrEdit;
   async ngOnInit() {
     await this.getBillableItems();
     await this.getProducts();

@@ -66,8 +66,8 @@
                         </div>
                     </td>
                     <td class="px-2">
-                        <button class="btn btn-danger mx-2">مشاهده</button>
-                        <button class="btn btn-warning" (click)="goToEditPage(item.id)">ویرایش</button>
+                        <button class="btn btn-danger mx-2" (click)="goToEditPage(item.id , 1)">مشاهده</button>
+                        <button class="btn btn-warning" (click)="goToEditPage(item.id ,2)">ویرایش</button>
                     </td>
                 </tr>
             </ng-template>

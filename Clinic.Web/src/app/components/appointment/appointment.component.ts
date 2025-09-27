@@ -1,3 +1,4 @@
+import { MainService } from './../../_services/main.service';
 import { Component } from '@angular/core';
 import { SharedModule, ShamsiUTCPipe } from "../../share/shared.module";
 import { FormControl, FormsModule } from '@angular/forms';
@@ -78,7 +79,8 @@ export class AppointmentComponent {
     private userService: UserService,
     private toastR: ToastrService,
     private treatmentService: TreatmentsService,
-    private patientService: PatientService
+    private patientService: PatientService,
+    private mainService: MainService
   ) {
   }
 
@@ -149,7 +151,7 @@ export class AppointmentComponent {
         "doctorId": null
       }
       // let formattedDate = moment(date).format('YYYY-MM-DD');
-      let res: any = await this.userService.getAppointments(model).toPromise();
+      let res: any = await this.treatmentService.getAppointments(model).toPromise();
       this.appointmentsData = res;
       this.appointmentsData.forEach((appointment: any) => {
         appointment.typeName = this.appointmentTypes.filter((type: any) => type.id == appointment.appointmentTypeId)[0].name;
@@ -198,7 +200,7 @@ export class AppointmentComponent {
         "byInvoice": null,
         "editOrNew": this.editmode == true ? this.newAppointmentModel.id : -1
       }
-      let res = await this.userService.createAppointment(model).toPromise();
+      let res = await this.treatmentService.createAppointment(model).toPromise();
       this.toastR.success('با موفقیت ثبت شد')
       this.getAppointment(this.appointmentDate);
       this.getWeeklyAppointments()
@@ -238,7 +240,7 @@ export class AppointmentComponent {
 
   async getAppointmentTypes() {
     try {
-      let res: any = await this.userService.getAppointmentTypes().toPromise();
+      let res: any = await this.treatmentService.getAppointmentTypes().toPromise();
       if (res.length > 0) {
         this.appointmentTypes = res;
         this.appointmentTypes.forEach((type: any) => {
@@ -288,7 +290,7 @@ export class AppointmentComponent {
 
   async getClinics() {
     try {
-      let res = await this.userService.getClinics().toPromise();
+      let res = await this.mainService.getClinics().toPromise();
       this.clinicsList = res;
       this.clinicsList.forEach((clinic: any) => {
         clinic.code = clinic.id;

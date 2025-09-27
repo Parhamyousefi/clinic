@@ -91,7 +91,8 @@ import { NgPersianDatepickerModule } from 'ng-persian-datepicker';
     MatDatepickerModule,
     NgxMaterialTimepickerModule,
     NgPersianDatepickerModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    CommonModule
   ]
 })
 export class SharedModule { }
