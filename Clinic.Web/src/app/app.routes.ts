@@ -8,6 +8,8 @@ import { NewInvoiceComponent } from './components/invoice-list/new-invoice/new-i
 import { PatientsComponent } from './components/patients/patients.component';
 import { NewContactComponent } from './components/contacts/new-contact/new-contact.component';
 import { ContactsComponent } from './components/contacts/contacts.component';
+import { ProductComponent } from './components/product/product.component';
+import { ProductListComponent } from './components/product-list/product-list.component';
 
 export const routes: Routes = [
     { path: '', component: LoginComponent },
@@ -42,6 +44,14 @@ export const routes: Routes = [
     },
     {
         path: 'contacts', component: ContactsComponent,
+        canActivate: [AuthGuard]
+    },
+    {
+        path: 'product', component: ProductComponent,
+        canActivate: [AuthGuard]
+    },
+    {
+        path: 'product-list', component: ProductListComponent,
         canActivate: [AuthGuard]
     },
 ];

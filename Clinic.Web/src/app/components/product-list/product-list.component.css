@@ -1,0 +1,22 @@
+.products-table td {
+    text-align: center;
+}
+
+.main-btn {
+    background-color: #00c4b4;
+    color: #FFFFFF;
+}
+
+.main-outline-btn {
+    border: 1px solid #00c4b4;
+    color: #00c4b4;
+}
+
+.edit-product-modal {
+    min-width: 500px;
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
