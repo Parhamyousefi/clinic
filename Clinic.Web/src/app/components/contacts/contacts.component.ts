@@ -163,7 +163,18 @@ export class ContactsComponent {
     this.openAddPhoneNumModal(contactPhone.patientId);
   }
 
-  deletePatientPhone() {
+  async deleteContactPhone(contactId) {
+    try {
+      let res: any = await this.contactService.deleteContactPhone(contactId).toPromise();
+      if (res['status'] == 0) {
+        this.toastR.success('با موفقیت حذف گردید');
+        this.getContacts();
+        this.closeAddPhoneNum();
+      }
+    }
+    catch {
+      this.toastR.error('خطا در دریافت اطلاعات', 'خطا!')
+    }
 
   }
 }

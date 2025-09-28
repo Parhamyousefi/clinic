@@ -98,4 +98,16 @@ export class PatientService {
     };
     return this.http.get(uri, httpOptions);
   }
+
+  getPatientById(patientId) {
+    const token: any = localStorage.getItem("token");
+    const uri = this.url + `api/Patient/getPatientById/` + patientId;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      }),
+    };
+    return this.http.get(uri, httpOptions);
+  }
 }

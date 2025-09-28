@@ -93,4 +93,16 @@ export class ContactService {
     return this.http.post(uri, data, httpOptions);
   }
 
+  deleteContactPhone(contactId) {
+    const token: any = localStorage.getItem("token");
+    const uri = this.url + `api/Contact/deleteContactPhone/` + contactId;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      }),
+    };
+    return this.http.get(uri, httpOptions);
+  }
+
 }

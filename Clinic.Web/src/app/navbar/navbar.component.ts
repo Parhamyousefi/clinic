@@ -33,12 +33,14 @@ export const Menu: imenu[] = [
 export class NavbarComponent {
   sidebarMenu: any[] = [];
   selectedSideBarItem: any;
+  isMobileSize: boolean
   constructor(
     private authService: AuthService
   ) {
 
   }
   ngOnInit() {
+    this.isMobileSize = window.innerWidth <= 768 && window.innerHeight <= 1024;
     this.sidebarMenu = Menu;
 
   }

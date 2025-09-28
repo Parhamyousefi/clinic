@@ -8,6 +8,8 @@ import { NewInvoiceComponent } from './components/invoice-list/new-invoice/new-i
 import { PatientsComponent } from './components/patients/patients.component';
 import { NewContactComponent } from './components/contacts/new-contact/new-contact.component';
 import { ContactsComponent } from './components/contacts/contacts.component';
+import { PatientAppointmentsComponent } from './components/patient-appointments/patient-appointments.component';
+import { PatientInfoComponent } from './components/patient-info/patient-info.component';
 
 export const routes: Routes = [
     { path: '', component: LoginComponent },
@@ -37,6 +39,14 @@ export const routes: Routes = [
     },
     {
         path: 'contacts', component: ContactsComponent,
+        canActivate: [AuthGuard]
+    },
+    {
+        path: 'patientappointments/:id', component: PatientAppointmentsComponent,
+        canActivate: [AuthGuard]
+    },
+    {
+        path: 'patient-info/:id', component: PatientInfoComponent,
         canActivate: [AuthGuard]
     },
 ];
