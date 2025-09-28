@@ -16,7 +16,7 @@ namespace Clinic.Api.Mappings
         public AutoMapperProfile()
         {
             CreateMap<UserContext, UserDto>().ReverseMap();
-            CreateMap<LoginUserDto, UserContext>();
+            CreateMap<LoginUserDto, UserContext>().ReverseMap();
             CreateMap<CreateAppointmentDto, AppointmentsContext>().ReverseMap();
             CreateMap<SavePatientDto, PatientsContext>().ReverseMap();
             CreateMap<SaveTreatmentDto, TreatmentsContext>().ReverseMap();

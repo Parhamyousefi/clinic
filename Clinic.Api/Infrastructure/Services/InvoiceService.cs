@@ -233,6 +233,8 @@ namespace Clinic.Api.Infrastructure.Services
 
                 if (receipt == null)
                 {
+                    int? lastId = await _context.Receipts.MaxAsync(r => r.ReceiptNo);
+                    model.ReceiptNo = lastId + 1;
                     var mappReceipt = _mapper.Map<ReceiptsContext>(model);
                     mappReceipt.CreatorId = userId;
                     mappReceipt.CreatedOn = DateTime.UtcNow;
