@@ -464,5 +464,73 @@ namespace Clinic.Api.Infrastructure.Services
                 throw new Exception(ex.Message);
             }
         }
+
+        public async Task<IEnumerable<SectionsContext>> GetSectionPerService(int serviceId)
+        {
+            try
+            {
+                var res = await _context.Sections.Where(s => s.TreatmentTemplateId == serviceId).ToListAsync();
+                return res;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<IEnumerable<QuestionsContext>> GetQuestionsPerSection(int sectionId)
+        {
+            try
+            {
+                var res = await _context.Questions.Where(q => q.SectionId == sectionId).ToListAsync();
+                return res;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<IEnumerable<AnswersContext>> GetAnswersPerQuestion(int questionId)
+        {
+            try
+            {
+                var res = await _context.Answers.Where(a => a.Question_Id == questionId).ToListAsync();
+                return res;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<IEnumerable<GetServicesPerPatientResponse>> GetPatientServices(int patientId)
+        {
+            try
+            {
+                var result = await (
+                    from inv in _context.Invoices
+                    join item in _context.InvoiceItems on inv.Id equals item.InvoiceId
+                    join bill in _context.BillableItems on item.ItemId equals bill.Id
+                    where inv.PatientId == patientId
+                    select new GetServicesPerPatientResponse
+                    {
+                        InvoiceId = inv.Id,
+                        InvoiceItemId = item.Id,
+                        BillableItemName = bill.Name,
+                        BillableItemPrice = bill.Price,
+                        Quantity = item.Quantity,
+                        UnitPrice = item.UnitPrice,
+                        Amount = item.Amount
+                    }
+                ).ToListAsync();
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }

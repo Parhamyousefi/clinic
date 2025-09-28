@@ -162,5 +162,26 @@ namespace Clinic.Api.Infrastructure.Services
                 throw new Exception(ex.Message);
             }
         }
+
+        public async Task<GlobalResponse> DeleteContactPhone(int id)
+        {
+            var result = new GlobalResponse();
+
+            try
+            {
+                var contactPhone = await _context.ContactPhones.FindAsync(id);
+                if (contactPhone == null) throw new Exception("Contact Phone Not Found");
+
+                _context.ContactPhones.Remove(contactPhone);
+                await _context.SaveChangesAsync();
+                result.Data = "Contact Phone Deleted Successfully";
+                result.Status = 0;
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }
