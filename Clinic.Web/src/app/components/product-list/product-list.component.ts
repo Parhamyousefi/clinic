@@ -60,21 +60,30 @@ export class ProductListComponent {
   }
   openEditProduct(item) {
     this.editProductModal = true;
-    this.editProductModel = item;
+    this.editProductModel.code = item.code;
+    this.editProductModel.name = item.name;
+    this.editProductModel.serialnumber = item.serialNumber;
+    this.editProductModel.supplier = item.supplier;
+    this.editProductModel.price = item.price;
+    this.editProductModel.inventory = item.stockLevel;
+    this.editProductModel.note = item.notes;
+    this.editProductModel.isActive = item.isActive;
+    this.editProductModel.id = item.id;
+
   }
   async editProduct() {
-    let model = {
-      code: this.editProductModel.code,
-      name: this.editProductModel.name,
-      serialNumber: this.editProductModel.serialnumber,
-      supplier: this.editProductModel.supplier,
-      price: +this.editProductModel.price,
-      stockLevel: +this.editProductModel.inventory,
-      notes: this.editProductModel.note,
-      isActive: this.editProductModel.isActive,
-      editOrNew: this.editProductModel.id,
-    }
     try {
+      let model = {
+        code: this.editProductModel.code,
+        name: this.editProductModel.name,
+        serialNumber: this.editProductModel.serialnumber,
+        supplier: this.editProductModel.supplier,
+        price: +this.editProductModel.price,
+        stockLevel: +this.editProductModel.inventory,
+        notes: this.editProductModel.note,
+        isActive: this.editProductModel.isActive,
+        editOrNew: this.editProductModel.id,
+      }
       let data = await this.mainService.saveProduct(model).toPromise();
       if (data['status'] == 0) {
         this.toastR.success('با موفقیت ثبت شد!');
