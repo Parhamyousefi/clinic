@@ -15,7 +15,7 @@ namespace Clinic.Api.Application.Interfaces
         Task<GlobalResponse> SaveReceipt(SaveReceiptDto model);
         Task<IEnumerable<GetReciptsResponse>> GetReceipts(int? patientId);
         Task<GlobalResponse> DeleteReceipt(int patientId);
-        Task<IEnumerable<ReceiptsContext>> GetReceipts();
+        Task<IEnumerable<GetReciptsResponse>> GetReceipts();
         Task<GlobalResponse> SaveExpense(SaveExpenseDto model);
         Task<IEnumerable<ExpensesContext>> GetExpenses();
     }

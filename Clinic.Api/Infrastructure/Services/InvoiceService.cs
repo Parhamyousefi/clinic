@@ -266,6 +266,12 @@ namespace Clinic.Api.Infrastructure.Services
             try
             {
                 var query = _context.Receipts.AsQueryable();
+
+                if (patientId.HasValue)
+                {
+                    query = query.Where(r => r.PatientId == patientId.Value);
+                }
+
                 var result = await (from a in query
                                     join p in _context.Patients on a.PatientId equals p.Id
                                     
@@ -287,6 +293,7 @@ namespace Clinic.Api.Infrastructure.Services
                                         PatientName = p.FirstName + " " + p.LastName
                                     })
                                     .ToListAsync();
+
                 return result;
             }
             catch (Exception ex)
@@ -295,12 +302,33 @@ namespace Clinic.Api.Infrastructure.Services
             }
         }
 
-        public async Task<IEnumerable<ReceiptsContext>> GetReceipts()
+        public async Task<IEnumerable<GetReciptsResponse>> GetReceipts()
         {
             try
             {
-                var res = await _context.Receipts.ToListAsync();
-                return res;
+                var query = _context.Receipts.AsQueryable();
+                var result = await (from a in query
+                                    join p in _context.Patients on a.PatientId equals p.Id
+
+                                    select new GetReciptsResponse
+                                    {
+                                        Id = a.Id,
+                                        ReceiptNo = a.ReceiptNo,
+                                        PatientId = a.PatientId,
+                                        Cash = a.Cash,
+                                        EFTPos = a.EFTPos,
+                                        Other = a.Other,
+                                        Notes = a.Notes,
+                                        ModifierId = a.ModifierId,
+                                        CreatedOn = a.CreatedOn,
+                                        LastUpdated = a.LastUpdated,
+                                        AllowEdit = a.AllowEdit,
+                                        CreatorId = a.CreatorId,
+                                        ReceiptTypeId = a.ReceiptTypeId,
+                                        PatientName = p.FirstName + " " + p.LastName
+                                    })
+                                    .ToListAsync();
+                return result;
             }
             catch (Exception ex)
             {
