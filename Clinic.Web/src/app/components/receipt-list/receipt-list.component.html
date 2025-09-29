@@ -1,0 +1,101 @@
+<div class="appContainer">
+    <div class="col-12">
+        <div class="col-12 d-flex justify-content-start my-3">
+            <button class="btn main-btn" routerLink="/receipt">دریافتی جدید</button>
+        </div>
+        <p-table id="receiptsTable" #dt styleClass="" class="receipts-table" [value]="receiptsList" [pageLinks]="20"
+            [autoLayout]="true" [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
+            currentPageReportTemplate="نمایش {first} تا {last} " [rowsPerPageOptions]="[10,25,50]">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th pSortableColumn="receiptNo">شماره
+                        <p-sortIcon field="receiptNo"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="patientName">بیمار
+                        <p-sortIcon field="patientName"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="sumPrice">مبلغ کل
+                        <p-sortIcon field="sumPrice"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="createdOn">تاریخ
+                        <p-sortIcon field="createdOn"></p-sortIcon>
+                    </th>
+                    <th>عملیات
+                    </th>
+                </tr>
+                <tr>
+                    <th></th>
+                    <th>
+                        <input type="text" (input)="dt.filter($event.target?.value, 'patientName', 'contains')"
+                            class="form-control">
+                    </th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-product let-rowIndex="rowIndex">
+                <tr>
+                    <td>{{product.id}}</td>
+                    <td>{{product.patientName}}</td>
+                    <td>
+                        {{product.sumPrice}}
+                    </td>
+                    <td>
+                        {{product.createdOn}}
+                    </td>
+                    <td>
+                        <button class="btn main-outline-btn mx-1" (click)="openEditProduct(product)">ویرایش</button>
+                        <button class="btn btn-outline-danger" (click)="deleteProduct(product.id)">حذف</button>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</div>
+<p-dialog id="edit-product-modal" header="اختصاص وقت به بیمار" [(visible)]="showReceiptsModal" [closable]="true"
+    [ngClass]="{'modalShadow' : showReceiptsModal}" class="p-2">
+    <div class="col-12 edit-product-modal">
+        <div class="col-8 d-flex flex-column justify-content-center my-3">
+            <label for="code" class="text-right">کد</label>
+            <input class="form-control" OnlyNumber="true" type="text" id="code" [(ngModel)]="editReceiptsModel.code">
+        </div>
+        <div class="col-8 d-flex flex-column justify-content-center my-3">
+            <label for="name" class="text-right">نام</label>
+            <input class="form-control" type="text" id="name" [(ngModel)]="editReceiptsModel.name">
+        </div>
+        <div class="col-8 d-flex flex-column justify-content-center my-3">
+            <label for="serialnumber" class="text-right">شماره سریال</label>
+            <input class="form-control" OnlyNumber="true" type="text" id="serialnumber"
+                [(ngModel)]="editReceiptsModel.serialnumber">
+        </div>
+        <div class="col-8 d-flex flex-column justify-content-center my-3">
+            <label for="supplier" class="text-right">تامین کننده</label>
+            <input class="form-control" type="text" id="supplier" [(ngModel)]="editReceiptsModel.supplier">
+        </div>
+        <div class="col-8 d-flex flex-column justify-content-center my-3">
+            <label for="price" class="text-right">قیمت</label>
+            <input class="form-control" OnlyNumber="true" type="text" id="price" [(ngModel)]="editReceiptsModel.price">
+
+        </div>
+        <div class="col-8 d-flex flex-column justify-content-center my-3">
+            <label for="inventory" class="text-right">موجودی</label>
+            <input class="form-control" OnlyNumber="true" type="text" id="inventory"
+                [(ngModel)]="editReceiptsModel.inventory">
+        </div>
+        <div class="col-8 d-flex flex-column justify-content-center my-3">
+            <label for="note" class="text-right">یادداشت</label>
+            <textarea name="note" id="note" [(ngModel)]="editReceiptsModel.note"></textarea>
+        </div>
+        <div class="col-8 d-flex flex-column justify-content-center align-items-start my-3">
+            <input type="checkbox" class="custom-control-input" name="hasIsActive" id="hasIsActive"
+                [(ngModel)]="editReceiptsModel.isActive">
+            <label for="hasIsActive" class="custom-control-label pt-1"> فعال است ؟ </label>
+        </div>
+
+        <div class="col-12 d-flex justify-content-between my-3">
+            <!-- <button class="btn btn-outline-success col-5" (click)="editProduct()">ثبت</button>
+            <button class="btn btn-outline-secondary col-5" (click)="closeeditReceiptsModel()">انصراف</button> -->
+        </div>
+    </div>
+</p-dialog>

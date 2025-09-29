@@ -15,7 +15,7 @@ export const Menu: imenu[] = [
   { id: 1, text: "اوقات امروز", link: '/today-appointment', roleAccess: [], icon: '' },
   { id: 2, text: "بیماران", link: '/patients', roleAccess: [], icon: '' },
   { id: 3, text: "صورت حساب ها", link: '/invoice-list', roleAccess: [], icon: '' },
-  { id: 4, text: "دریافت ها", link: '/receipt', roleAccess: [], icon: '' },
+  { id: 4, text: "دریافت ها", link: '/receipt-list', roleAccess: [], icon: '' },
   { id: 5, text: "پرداخت ها", link: '/', roleAccess: [], icon: '' },
   { id: 6, text: "کالاهای مصرفی", link: '/product-list', roleAccess: [], icon: '' },
   { id: 7, text: "هزینه ها", link: '/', roleAccess: [], icon: '' },
