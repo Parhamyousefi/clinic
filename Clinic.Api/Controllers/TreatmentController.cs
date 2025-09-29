@@ -118,5 +118,37 @@ namespace Clinic.Api.Controllers
             var result = await _treatmentsService.DeleteBillableItem(id);
             return Ok(result);
         }
+
+        [HttpGet("getSectionPerService/{serviceId}")]
+        [Authorize("Admin","Doctor")]
+        public async Task<IActionResult> GetSectionPerService(int serviceId)
+        {
+            var result = await _treatmentsService.GetSectionPerService(serviceId);
+            return Ok(result);
+        }
+
+        [HttpGet("getQuestionsPerSection/{sectionId}")]
+        [Authorize("Admin","Doctor")]
+        public async Task<IActionResult> GetQuestionsPerSection(int sectionId)
+        {
+            var result = await _treatmentsService.GetQuestionsPerSection(sectionId);
+            return Ok(result);
+        }
+
+        [HttpGet("getAnswersPerQuestion/{questionId}")]
+        [Authorize("Admin","Doctor")]
+        public async Task<IActionResult> GetAnswersPerQuestion(int questionId)
+        {
+            var result = await _treatmentsService.GetAnswersPerQuestion(questionId);
+            return Ok(result);
+        }
+
+        [HttpGet("getPatientServices/{patientId}")]
+        [Authorize("Admin","Doctor")]
+        public async Task<IActionResult> GetPatientServices(int patientId)
+        {
+            var result = await _treatmentsService.GetPatientServices(patientId);
+            return Ok(result);
+        }
     }
 }

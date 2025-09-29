@@ -17,5 +17,7 @@ namespace Clinic.Api.Application.Interfaces
         Task<IEnumerable<InvoicesContext>> GetPatientInvoices(int patientId);
         Task<IEnumerable<ReceiptsContext>> GetPatientReceipts(int patientId);
         Task<IEnumerable<PaymentsContext>> GetPatientPayments(int patientId);
+        Task<GlobalResponse> SaveAttachment(SaveAttachmentsDto model);
+        Task<IEnumerable<FileAttachmentsContext>> GetAttachment(int patientId);
     }
 }

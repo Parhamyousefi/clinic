@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
+using Azure.Core;
 using Clinic.Api.Application.DTOs;
 using Clinic.Api.Application.DTOs.Patients;
 using Clinic.Api.Application.Interfaces;
 using Clinic.Api.Domain.Entities;
 using Clinic.Api.Infrastructure.Data;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Clinic.Api.Infrastructure.Services
@@ -13,12 +15,17 @@ namespace Clinic.Api.Infrastructure.Services
         private readonly ApplicationDbContext _context;
         private readonly IReadTokenClaims _token;
         private readonly IMapper _mapper;
+        private readonly IWebHostEnvironment _environment;
+        private readonly IFileService _fileService;
 
-        public PatientService(ApplicationDbContext context, IReadTokenClaims token, IMapper mapper)
+        public PatientService(ApplicationDbContext context, IReadTokenClaims token, IMapper mapper, IWebHostEnvironment environment,
+            IFileService fileService)
         {
             _context = context;
             _token = token;
             _mapper = mapper;
+            _environment = environment;
+            _fileService = fileService;
         }
 
         public async Task<GlobalResponse> SavePatient(SavePatientDto model)
@@ -278,6 +285,90 @@ namespace Clinic.Api.Infrastructure.Services
             {
                 var result = await _context.Payments.Where(p => p.PatientId == patientId).ToListAsync();
                 return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<GlobalResponse> SaveAttachment(SaveAttachmentsDto model)
+        {
+            var result = new GlobalResponse();
+            try
+            {
+                var userId = _token.GetUserId();
+
+                var allowedExtensions = new List<string> { ".png", ".jpg", ".jpeg", ".pdf" };
+                var fileExtension = Path.GetExtension(model.FileName)?.ToLower();
+
+                if (string.IsNullOrEmpty(fileExtension) || !allowedExtensions.Contains(fileExtension))
+                {
+                    result.Status = 1;
+                    result.Data = "Invalid file type. Only images and PDF are allowed.";
+                    return result;
+                }
+
+                var relativePath = await _fileService.SaveFileAsync(model.Base64, model.FileName, "Assets/Patient", _environment);
+
+                relativePath = relativePath.Replace("\\", "/");
+
+                var entity = new FileAttachmentsContext
+                {
+                    PatientId = model.PatientId,
+                    FileName = relativePath,
+                    FileSize = Convert.FromBase64String(model.Base64).LongLength,
+                    CreatedOn = DateTime.UtcNow,
+                    LastUpdated = null,
+                    CreatorId = userId
+                };
+
+                _context.FileAttachments.Add(entity);
+                await _context.SaveChangesAsync();
+                result.Data = "File Saved Successfully";
+                result.Status = 0;
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<IEnumerable<FileAttachmentsContext>> GetAttachment(int patientId)
+        {
+            try
+            {
+                var attachments = await _context.FileAttachments
+              .Where(f => f.PatientId == patientId)
+              .ToListAsync();
+
+                var existingFiles = new List<FileAttachmentsContext>();
+
+                foreach (var attachment in attachments)
+                {
+                    var fileNameOnly = Path.GetFileName(attachment.FileName);
+
+                    var fullPath = Path.Combine(_environment.ContentRootPath, "Assets/Patient", fileNameOnly);
+
+                    if (File.Exists(fullPath))
+                    {
+                        attachment.FileName = Path.Combine("Assets/Patient", fileNameOnly).Replace("\\", "/");
+                        existingFiles.Add(attachment);
+                    }
+                    else
+                    {
+                        _context.FileAttachments.Remove(attachment);
+                    }
+                }
+
+                if (_context.ChangeTracker.HasChanges())
+                    await _context.SaveChangesAsync();
+
+                if (!existingFiles.Any())
+                    throw new Exception("No attachments found for this patient or files are missing on disk.");
+
+                return existingFiles;
             }
             catch (Exception ex)
             {
