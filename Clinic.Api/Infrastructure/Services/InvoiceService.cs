@@ -238,6 +238,7 @@ namespace Clinic.Api.Infrastructure.Services
                     var mappReceipt = _mapper.Map<ReceiptsContext>(model);
                     mappReceipt.CreatorId = userId;
                     mappReceipt.CreatedOn = DateTime.UtcNow;
+                    mappReceipt.ReceiptNo = lastId + 1;
                     _context.Receipts.Add(mappReceipt);
                     await _context.SaveChangesAsync();
                     result.Data = "Receipt Saved Successfully";
@@ -260,18 +261,46 @@ namespace Clinic.Api.Infrastructure.Services
             }
         }
 
-        public async Task<IEnumerable<ReceiptsContext>> GetReceipts(int? patientId)
+        public async Task<IEnumerable<GetReciptsResponse>> GetReceipts(int? patientId)
         {
             try
             {
-                if (patientId == null)
-                {
-                    var receipts = await _context.Receipts.ToListAsync();
-                    return receipts;
-                }
+                var query = _context.Receipts.AsQueryable();
+                var result = await (from a in query
+                                    join p in _context.Patients on a.PatientId equals p.Id
+                                    
+                                    select new GetReciptsResponse
+                                    {
+                                        Id = a.Id,
+                                        ReceiptNo = a.ReceiptNo,
+                                        PatientId = a.PatientId,
+                                        Cash = a.Cash,
+                                        EFTPos = a.EFTPos,
+                                        Other = a.Other,
+                                        Notes = a.Notes,
+                                        ModifierId = a.ModifierId,
+                                        CreatedOn = a.CreatedOn,
+                                        LastUpdated = a.LastUpdated,
+                                        AllowEdit = a.AllowEdit,
+                                        CreatorId = a.CreatorId,
+                                        ReceiptTypeId = a.ReceiptTypeId,
+                                        PatientName = p.FirstName + " " + p.LastName
+                                    })
+                                    .ToListAsync();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
 
-                var receipt = await _context.Receipts.Where(r => r.PatientId == patientId).ToListAsync();
-                return receipt;
+        public async Task<IEnumerable<ReceiptsContext>> GetReceipts()
+        {
+            try
+            {
+                var res = await _context.Receipts.ToListAsync();
+                return res;
             }
             catch (Exception ex)
             {
