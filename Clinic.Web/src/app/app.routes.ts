@@ -10,6 +10,7 @@ import { NewContactComponent } from './components/contacts/new-contact/new-conta
 import { ContactsComponent } from './components/contacts/contacts.component';
 import { ProductComponent } from './components/product/product.component';
 import { ProductListComponent } from './components/product-list/product-list.component';
+import { ReceiptComponent } from './components/receipt/receipt.component';
 
 export const routes: Routes = [
     { path: '', component: LoginComponent },
@@ -52,6 +53,10 @@ export const routes: Routes = [
     },
     {
         path: 'product-list', component: ProductListComponent,
+        canActivate: [AuthGuard]
+    },
+    {
+        path: 'receipt', component: ReceiptComponent,
         canActivate: [AuthGuard]
     },
 ];

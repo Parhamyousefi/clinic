@@ -1,5 +1,8 @@
 <div class="appContainer">
     <div class="col-12">
+        <div class="col-12 d-flex justify-content-start my-3">
+            <button class="btn main-btn" routerLink="/product">کالای جدید</button>
+        </div>
         <p-table id="productsTable" #dt styleClass="" class="products-table" [value]="productsList" [pageLinks]="20"
             [autoLayout]="true" [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
             currentPageReportTemplate="نمایش {first} تا {last} " [rowsPerPageOptions]="[10,25,50]">
