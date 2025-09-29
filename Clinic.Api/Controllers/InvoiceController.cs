@@ -80,6 +80,14 @@ namespace Clinic.Api.Controllers
             return Ok(result);
         }
 
+        [HttpGet("getReceipts")]
+        [Authorize("Admin","Doctor")]
+        public async Task<IActionResult> GetReceipts()
+        {
+            var result = await _invoicesService.GetReceipts();
+            return Ok(result);
+        }
+
         [HttpGet("deleteReceipt/{patientId}")]
         [Authorize("Admin", "Doctor")]
         public async Task<IActionResult> DeleteReceipt(int patientId)
