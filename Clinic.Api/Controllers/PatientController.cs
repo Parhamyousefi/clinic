@@ -114,6 +114,12 @@ namespace Clinic.Api.Controllers
             return Ok(result);
         }
 
-
+        [HttpGet("getAttachment/{patientId}")]
+        [Authorize("Admin","Doctor")]
+        public async Task<IActionResult> GetAttachment(int patientId)
+        {
+            var result = await _patientService.GetAttachment(patientId);
+            return Ok(result);
+        }
     }
 }
