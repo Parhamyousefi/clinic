@@ -313,20 +313,50 @@ namespace Clinic.Api.Infrastructure.Services
 
                 relativePath = relativePath.Replace("\\", "/");
 
-                var entity = new FileAttachmentsContext
+                if (model.EditOrNew == -1) 
                 {
-                    PatientId = model.PatientId,
-                    FileName = relativePath,
-                    FileSize = Convert.FromBase64String(model.Base64).LongLength,
-                    CreatedOn = DateTime.UtcNow,
-                    LastUpdated = null,
-                    CreatorId = userId
-                };
+                    var entity = new FileAttachmentsContext
+                    {
+                        PatientId = model.PatientId,
+                        FileName = relativePath,
+                        FileSize = Convert.FromBase64String(model.Base64).LongLength,
+                        CreatedOn = DateTime.UtcNow,
+                        LastUpdated = null,
+                        ModifierId = null,
+                        CreatorId = userId
+                    };
 
-                _context.FileAttachments.Add(entity);
-                await _context.SaveChangesAsync();
-                result.Data = "File Saved Successfully";
-                result.Status = 0;
+                    _context.FileAttachments.Add(entity);
+                    await _context.SaveChangesAsync();
+
+                    result.Data = "File Saved Successfully";
+                    result.Status = 0;
+                }
+                else 
+                {
+                    var entity = await _context.FileAttachments
+                        .FirstOrDefaultAsync(f => f.Id == model.EditOrNew);
+
+                    if (entity == null)
+                    {
+                        result.Status = 1;
+                        result.Data = $"Attachment with Id {model.EditOrNew} not found.";
+                        return result;
+                    }
+
+                    entity.PatientId = model.PatientId;
+                    entity.FileName = relativePath;
+                    entity.FileSize = Convert.FromBase64String(model.Base64).LongLength;
+                    entity.LastUpdated = DateTime.UtcNow;
+                    entity.ModifierId = userId;
+
+                    _context.FileAttachments.Update(entity);
+                    await _context.SaveChangesAsync();
+
+                    result.Data = "File Updated Successfully";
+                    result.Status = 0;
+                }
+
                 return result;
             }
             catch (Exception ex)
@@ -356,14 +386,7 @@ namespace Clinic.Api.Infrastructure.Services
                         attachment.FileName = Path.Combine("Assets/Patient", fileNameOnly).Replace("\\", "/");
                         existingFiles.Add(attachment);
                     }
-                    else
-                    {
-                        _context.FileAttachments.Remove(attachment);
-                    }
                 }
-
-                if (_context.ChangeTracker.HasChanges())
-                    await _context.SaveChangesAsync();
 
                 if (!existingFiles.Any())
                     throw new Exception("No attachments found for this patient or files are missing on disk.");
