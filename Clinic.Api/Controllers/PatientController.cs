@@ -1,4 +1,5 @@
-﻿using Clinic.Api.Application.DTOs.Patients;
+﻿using Clinic.Api.Application.DTOs;
+using Clinic.Api.Application.DTOs.Patients;
 using Clinic.Api.Application.Interfaces;
 using Clinic.Api.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -102,6 +103,22 @@ namespace Clinic.Api.Controllers
         public async Task<IActionResult> GetPatientPayments(int patientId)
         {
             var result = await _patientService.GetPatientPayments(patientId);
+            return Ok(result);
+        }
+
+        [HttpPost("saveAttachment")]
+        [Authorize("Admin","Doctor")]
+        public async Task<IActionResult> SaveAttachment(SaveAttachmentsDto model)
+        {
+            var result = await _patientService.SaveAttachment(model);
+            return Ok(result);
+        }
+
+        [HttpGet("getAttachment/{patientId}")]
+        [Authorize("Admin","Doctor")]
+        public async Task<IActionResult> GetAttachment(int patientId)
+        {
+            var result = await _patientService.GetAttachment(patientId);
             return Ok(result);
         }
     }
