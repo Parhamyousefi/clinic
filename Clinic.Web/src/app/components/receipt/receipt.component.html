@@ -24,11 +24,11 @@
             </div>
             <div class="col-8 d-flex flex-column justify-content-center my-3">
                 <label for="name" class="text-right">نقد</label>
-                <input class="form-control" type="text" id="name" [(ngModel)]="newReceiptModel.cash">
+                <input (input)="sumNumber()" class="form-control" type="text" id="name" [(ngModel)]="newReceiptModel.cash">
             </div>
             <div class="col-8 d-flex flex-column justify-content-center my-3">
                 <label for="serialnumber" class="text-right">کارت بانکی</label>
-                <input class="form-control" OnlyNumber="true" type="text" id="serialnumber"
+                <input (input)="sumNumber()" class="form-control" OnlyNumber="true" type="text" id="serialnumber"
                     [(ngModel)]="newReceiptModel.eftPos">
             </div>
             <div class="col-8 d-flex flex-column justify-content-center my-3">

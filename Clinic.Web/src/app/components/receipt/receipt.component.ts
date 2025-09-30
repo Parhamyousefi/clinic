@@ -72,5 +72,7 @@ export class ReceiptComponent {
       this.toastR.error('خطا', 'خطا در انجام عملیات')
     }
   }
-
+  sumNumber() {
+    this.newReceiptModel.sum = (this.newReceiptModel.eftPos | 0) + (this.newReceiptModel.cash | 0);
+  }
 }

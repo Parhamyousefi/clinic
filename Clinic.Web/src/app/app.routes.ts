@@ -61,7 +61,7 @@ export const routes: Routes = [
         canActivate: [AuthGuard]
     },
     {
-        path: 'receipt-list/:id', component: ReceiptListComponent,
+        path: 'receipt-list', component: ReceiptListComponent,
         canActivate: [AuthGuard]
     },
 ];

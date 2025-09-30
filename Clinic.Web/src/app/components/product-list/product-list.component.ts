@@ -5,7 +5,7 @@ import { TableModule } from 'primeng/table';
 import { FormsModule } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { DialogModule } from 'primeng/dialog';
-import { SharedModule } from 'primeng/api';
+import { SharedModule } from "../../share/shared.module";
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 
@@ -27,7 +27,7 @@ export class ProductListComponent {
   editProductModel: any = [];
   editProductModal: boolean = false;
   ngOnInit() {
-    this.getProducts()
+    this.getProducts();
   }
 
 
