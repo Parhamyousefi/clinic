@@ -121,5 +121,13 @@ namespace Clinic.Api.Controllers
             var result = await _patientService.GetAttachment(patientId);
             return Ok(result);
         }
+
+        [HttpGet("deleteAttachment/{id}")]
+        [Authorize("Admin","Doctor")]
+        public async Task<IActionResult> DeleteAttachment(int id)
+        {
+            var result = await _patientService.DeleteAttachment(id);
+            return Ok(result);
+        }
     }
 }

@@ -67,7 +67,7 @@ namespace Clinic.Api.Infrastructure.Services
                     job.CreatedOn = DateTime.UtcNow;
                     _context.Jobs.Add(job);
                     await _context.SaveChangesAsync();
-                    result.Data = "Job Saved Successfully";
+                    result.Message = "Job Saved Successfully";
                     result.Status = 0;
                     return result;
                 }
@@ -84,7 +84,7 @@ namespace Clinic.Api.Infrastructure.Services
                     existingJob.LastUpdated = DateTime.UtcNow;
                     _context.Jobs.Update(existingJob);
                     await _context.SaveChangesAsync();
-                    result.Data = "Job Updated Successfully";
+                    result.Message = "Job Updated Successfully";
                     result.Status = 0;
                     return result;
                 }
@@ -121,7 +121,7 @@ namespace Clinic.Api.Infrastructure.Services
 
                 _context.Jobs.Remove(job);
                 await _context.SaveChangesAsync();
-                result.Data = "Job Deleted Successfully";
+                result.Message = "Job Deleted Successfully";
                 result.Status = 0;
                 return result;
             }
@@ -159,7 +159,7 @@ namespace Clinic.Api.Infrastructure.Services
                     product.CreatedOn = DateTime.UtcNow;
                     _context.Products.Add(product);
                     await _context.SaveChangesAsync();
-                    result.Data = "Product Saved Successfully";
+                    result.Message = "Product Saved Successfully";
                     result.Status = 0;
                     return result;
                 }
@@ -176,7 +176,7 @@ namespace Clinic.Api.Infrastructure.Services
                     existingProduct.LastUpdated = DateTime.UtcNow;
                     _context.Products.Update(existingProduct);
                     await _context.SaveChangesAsync();
-                    result.Data = "Product Updated Successfully";
+                    result.Message = "Product Updated Successfully";
                     result.Status = 0;
                     return result;
                 }
@@ -213,7 +213,7 @@ namespace Clinic.Api.Infrastructure.Services
 
                 _context.Products.Remove(product);
                 await _context.SaveChangesAsync();
-                result.Data = "Product Deleted Successfully";
+                result.Message = "Product Deleted Successfully";
                 result.Status = 0;
                 return result;
             }

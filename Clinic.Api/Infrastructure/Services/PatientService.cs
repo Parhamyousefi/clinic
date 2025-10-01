@@ -1,11 +1,9 @@
 ﻿using AutoMapper;
-using Azure.Core;
 using Clinic.Api.Application.DTOs;
 using Clinic.Api.Application.DTOs.Patients;
 using Clinic.Api.Application.Interfaces;
 using Clinic.Api.Domain.Entities;
 using Clinic.Api.Infrastructure.Data;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Clinic.Api.Infrastructure.Services
@@ -43,7 +41,7 @@ namespace Clinic.Api.Infrastructure.Services
                     patient.CreatedOn = DateTime.UtcNow;
                     _context.Patients.Add(patient);
                     await _context.SaveChangesAsync();
-                    result.Data = "Patient Saved Successfully";
+                    result.Message = "Patient Saved Successfully";
                     result.Status = 0;
                     return result;
                 }
@@ -62,7 +60,7 @@ namespace Clinic.Api.Infrastructure.Services
                     existingPatient.LastUpdated = DateTime.UtcNow;
                     _context.Patients.Update(existingPatient);
                     await _context.SaveChangesAsync();
-                    result.Data = "Patient Updated Successfully";
+                    result.Message = "Patient Updated Successfully";
                     result.Status = 0;
                     return result;
                 }
@@ -85,7 +83,7 @@ namespace Clinic.Api.Infrastructure.Services
 
                 _context.Patients.Remove(patient);
                 await _context.SaveChangesAsync();
-                result.Data = "Patient Deleted Successfully";
+                result.Message = "Patient Deleted Successfully";
                 result.Status = 0;
                 return result;
             }
@@ -157,7 +155,7 @@ namespace Clinic.Api.Infrastructure.Services
                         mappPatient.CreatorId = userId;
                         _context.PatientPhones.Add(mappPatient);
                         await _context.SaveChangesAsync();
-                        result.Data = "Patient Phone Saved Successfully";
+                        result.Message = "Patient Phone Saved Successfully";
                         result.Status = 0;
                         return result;
                     }
@@ -180,7 +178,7 @@ namespace Clinic.Api.Infrastructure.Services
                     existingPatientPhone.LastUpdated = DateTime.UtcNow;
                     _context.PatientPhones.Update(existingPatientPhone);
                     await _context.SaveChangesAsync();
-                    result.Data = "Patient Phone Updated Successfully";
+                    result.Message = "Patient Phone Updated Successfully";
                     result.Status = 0;
                     return result;
                 }
@@ -203,7 +201,7 @@ namespace Clinic.Api.Infrastructure.Services
 
                 _context.PatientPhones.Remove(patientPhone);
                 await _context.SaveChangesAsync();
-                result.Data = "Patient Phone Deleted Successfully";
+                result.Message = "Patient Phone Deleted Successfully";
                 result.Status = 0;
                 return result;
             }
@@ -305,7 +303,7 @@ namespace Clinic.Api.Infrastructure.Services
                 if (string.IsNullOrEmpty(fileExtension) || !allowedExtensions.Contains(fileExtension))
                 {
                     result.Status = 1;
-                    result.Data = "Invalid file type. Only images and PDF are allowed.";
+                    result.Message = "Invalid file type. Only images and PDF are allowed.";
                     return result;
                 }
 
@@ -329,7 +327,7 @@ namespace Clinic.Api.Infrastructure.Services
                     _context.FileAttachments.Add(entity);
                     await _context.SaveChangesAsync();
 
-                    result.Data = "File Saved Successfully";
+                    result.Message = "File Saved Successfully";
                     result.Status = 0;
                 }
                 else 
@@ -340,7 +338,7 @@ namespace Clinic.Api.Infrastructure.Services
                     if (entity == null)
                     {
                         result.Status = 1;
-                        result.Data = $"Attachment with Id {model.EditOrNew} not found.";
+                        result.Message = $"Attachment with Id {model.EditOrNew} not found.";
                         return result;
                     }
 
@@ -353,7 +351,7 @@ namespace Clinic.Api.Infrastructure.Services
                     _context.FileAttachments.Update(entity);
                     await _context.SaveChangesAsync();
 
-                    result.Data = "File Updated Successfully";
+                    result.Message = "File Updated Successfully";
                     result.Status = 0;
                 }
 
@@ -392,6 +390,28 @@ namespace Clinic.Api.Infrastructure.Services
                     throw new Exception("No attachments found for this patient or files are missing on disk.");
 
                 return existingFiles;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<GlobalResponse> DeleteAttachment(int id)
+        {
+            var result = new GlobalResponse();
+
+            try
+            {
+                var attachment = await _context.FileAttachments.FindAsync(id);
+                if (attachment == null)
+                    throw new Exception("Attachment Not Found");
+
+                _context.FileAttachments.Remove(attachment);
+                await _context.SaveChangesAsync();
+                result.Message = "Attachment Deleted Successfully";
+                result.Status = 0;
+                return result;
             }
             catch (Exception ex)
             {
