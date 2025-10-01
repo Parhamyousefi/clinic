@@ -47,7 +47,7 @@ namespace Clinic.Api.Infrastructure.Services
                     questionValue.CreatorId = userId;
                     _context.QuestionValues.Add(questionValue);
                     await _context.SaveChangesAsync();
-                    result.Data = "QuestionValue Saved Successfully";
+                    result.Message = "QuestionValue Saved Successfully";
                     result.Status = 0;
                     return result;
                 }
@@ -63,7 +63,7 @@ namespace Clinic.Api.Infrastructure.Services
                     _mapper.Map(model, existingQuestionValue);
                     _context.QuestionValues.Update(existingQuestionValue);
                     await _context.SaveChangesAsync();
-                    result.Data = "QuestionValue Updated Successfully";
+                    result.Message = "QuestionValue Updated Successfully";
                     result.Status = 0;
                     return result;
                 }
@@ -86,7 +86,7 @@ namespace Clinic.Api.Infrastructure.Services
 
                 _context.QuestionValues.Remove(questionValue);
                 await _context.SaveChangesAsync();
-                result.Data = "QuestionValue Deleted Successfully";
+                result.Message = "QuestionValue Deleted Successfully";
                 result.Status = 0;
                 return result;
             }

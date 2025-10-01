@@ -63,7 +63,7 @@ namespace Clinic.Api.Infrastructure.Services
                     appointment.CreatedOn = DateTime.UtcNow;
                     _context.Appointments.Add(appointment);
                     await _context.SaveChangesAsync();
-                    result.Data = appointment.Id;
+                    result.Message = appointment.Id;
                     result.Status = 0;
                     return result;
                 }
@@ -81,7 +81,7 @@ namespace Clinic.Api.Infrastructure.Services
                     existingAppointment.LastUpdated = DateTime.UtcNow;
                     _context.Appointments.Update(existingAppointment);
                     await _context.SaveChangesAsync();
-                    result.Data = existingAppointment.Id;
+                    result.Message = existingAppointment.Id;
                     result.Status = 0;
                     return result;
                 }
@@ -104,7 +104,7 @@ namespace Clinic.Api.Infrastructure.Services
 
                 _context.Appointments.Remove(appointment);
                 await _context.SaveChangesAsync();
-                result.Data = "Appointment Deleted Successfully";
+                result.Message = "Appointment Deleted Successfully";
                 result.Status = 0;
                 return result;
             }
@@ -170,7 +170,7 @@ namespace Clinic.Api.Infrastructure.Services
                     treatment.CreatedOn = DateTime.UtcNow;
                     _context.Treatments.Add(treatment);
                     await _context.SaveChangesAsync();
-                    result.Data = "Treatment Saved Successfully";
+                    result.Message = "Treatment Saved Successfully";
                     result.Status = 0;
                     return result;
                 }
@@ -188,7 +188,7 @@ namespace Clinic.Api.Infrastructure.Services
                     existingTreatment.CreatedOn = DateTime.UtcNow;
                     _context.Treatments.Update(existingTreatment);
                     await _context.SaveChangesAsync();
-                    result.Data = "Treatment Updated Successfully";
+                    result.Message = "Treatment Updated Successfully";
                     return result;
                 }
             }
@@ -210,7 +210,7 @@ namespace Clinic.Api.Infrastructure.Services
 
                 _context.Treatments.Remove(treatment);
                 await _context.SaveChangesAsync();
-                result.Data = "Treatment Deleted Successfully";
+                result.Message = "Treatment Deleted Successfully";
                 return result;
             }
             catch (Exception ex)
@@ -414,7 +414,7 @@ namespace Clinic.Api.Infrastructure.Services
                     billableItems.CreatedOn = DateTime.UtcNow;
                     _context.BillableItems.Add(billableItems);
                     await _context.SaveChangesAsync();
-                    result.Data = "BillableItem Saved Successfully";
+                    result.Message = "BillableItem Saved Successfully";
                     return result;
                 }
                 else
@@ -431,7 +431,7 @@ namespace Clinic.Api.Infrastructure.Services
                     existingBillable.LastUpdated = DateTime.UtcNow;
                     _context.BillableItems.Update(existingBillable);
                     await _context.SaveChangesAsync();
-                    result.Data = "BillableItem Updated Successfully";
+                    result.Message = "BillableItem Updated Successfully";
                     return result;
                 }
             }
@@ -456,7 +456,7 @@ namespace Clinic.Api.Infrastructure.Services
 
                 _context.BillableItems.Remove(billableItem);
                 await _context.SaveChangesAsync();
-                result.Data = "BillableItem Deleted Successfully";
+                result.Message = "BillableItem Deleted Successfully";
                 return result;
             }
             catch (Exception ex)

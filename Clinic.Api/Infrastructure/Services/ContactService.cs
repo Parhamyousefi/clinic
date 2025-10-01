@@ -35,7 +35,7 @@ namespace Clinic.Api.Infrastructure.Services
                     contact.CreatedOn = DateTime.UtcNow;
                     _context.Contacts.Add(contact);
                     await _context.SaveChangesAsync();
-                    result.Data = "Contact Saved Successfully";
+                    result.Message = "Contact Saved Successfully";
                     result.Status = 0;
                     return result;
                 }
@@ -50,7 +50,7 @@ namespace Clinic.Api.Infrastructure.Services
                     existingContact.LastUpdated = DateTime.UtcNow;
                     _context.Contacts.Update(existingContact);
                     await _context.SaveChangesAsync();
-                    result.Data = "Contact Updated Successfully";
+                    result.Message = "Contact Updated Successfully";
                     result.Status = 0;
                     return result;
                 }
@@ -84,7 +84,7 @@ namespace Clinic.Api.Infrastructure.Services
 
                 _context.Contacts.Remove(contact);
                 await _context.SaveChangesAsync();
-                result.Data = "Contact Deleted Successfully";
+                result.Message = "Contact Deleted Successfully";
                 result.Status = 0;
                 return result;
             }
@@ -122,7 +122,7 @@ namespace Clinic.Api.Infrastructure.Services
                     contactPhone.CreatedOn = DateTime.UtcNow;
                     _context.ContactPhones.Add(contactPhone);
                     await _context.SaveChangesAsync();
-                    result.Data = "Contact Phone Saved Successfully";
+                    result.Message = "Contact Phone Saved Successfully";
                     result.Status = 0;
                     return result;
                 }
@@ -139,7 +139,7 @@ namespace Clinic.Api.Infrastructure.Services
                     existingContactPhone.LastUpdated = DateTime.UtcNow;
                     _context.ContactPhones.Update(existingContactPhone);
                     await _context.SaveChangesAsync();
-                    result.Data = "Contact Phone Updated Successfully";
+                    result.Message = "Contact Phone Updated Successfully";
                     result.Status = 0;
                     return result;
                 }
@@ -174,7 +174,7 @@ namespace Clinic.Api.Infrastructure.Services
 
                 _context.ContactPhones.Remove(contactPhone);
                 await _context.SaveChangesAsync();
-                result.Data = "Contact Phone Deleted Successfully";
+                result.Message = "Contact Phone Deleted Successfully";
                 result.Status = 0;
                 return result;
             }
