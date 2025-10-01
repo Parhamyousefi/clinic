@@ -1,11 +1,9 @@
 ﻿using AutoMapper;
-using Azure.Core;
 using Clinic.Api.Application.DTOs;
 using Clinic.Api.Application.DTOs.Patients;
 using Clinic.Api.Application.Interfaces;
 using Clinic.Api.Domain.Entities;
 using Clinic.Api.Infrastructure.Data;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Clinic.Api.Infrastructure.Services
@@ -392,6 +390,28 @@ namespace Clinic.Api.Infrastructure.Services
                     throw new Exception("No attachments found for this patient or files are missing on disk.");
 
                 return existingFiles;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<GlobalResponse> DeleteAttachment(int id)
+        {
+            var result = new GlobalResponse();
+
+            try
+            {
+                var attachment = await _context.FileAttachments.FindAsync(id);
+                if (attachment == null)
+                    throw new Exception("Attachment Not Found");
+
+                _context.FileAttachments.Remove(attachment);
+                await _context.SaveChangesAsync();
+                result.Data = "Attachment Deleted Successfully";
+                result.Status = 0;
+                return result;
             }
             catch (Exception ex)
             {
