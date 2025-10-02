@@ -37,4 +37,16 @@
         <i class="fa fa-sign-out ml-2 sidebar-item-icon" aria-hidden="true"></i>
         <p class="m-0">خروج</p>
     </div>
+
+
+    <div class="patient-menu">
+        <div *ngFor="let item of patientMenu"
+            [ngClass]="{'selected-sidebar-menu text-white': selectedSideBarItem == item.id}"
+            class="sidebar-item d-flex align-items-center pointer mt-3 p-2" [routerLink]="item.link"
+            (click)="selectedSideBarItem = item.id">
+            <i class="fa fa-plus ml-2 sidebar-item-icon" [ngClass]="{'text-white': selectedSideBarItem == item.id}"
+                aria-hidden="true"></i>
+            <p class="m-0">{{item.text}}</p>
+        </div>
+    </div>
 </div>

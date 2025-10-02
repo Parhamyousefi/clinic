@@ -10,6 +10,7 @@ import { NewContactComponent } from './components/contacts/new-contact/new-conta
 import { ContactsComponent } from './components/contacts/contacts.component';
 import { PatientAppointmentsComponent } from './components/patient-appointments/patient-appointments.component';
 import { PatientInfoComponent } from './components/patient-info/patient-info.component';
+import { PatientAttachmentComponent } from './components/patient-attachment/patient-attachment.component';
 
 export const routes: Routes = [
     { path: '', component: LoginComponent },
@@ -47,6 +48,10 @@ export const routes: Routes = [
     },
     {
         path: 'patient-info/:id', component: PatientInfoComponent,
+        canActivate: [AuthGuard]
+    },
+    {
+        path: 'patient-attachment/:id', component: PatientAttachmentComponent,
         canActivate: [AuthGuard]
     },
 ];
