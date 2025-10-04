@@ -17,7 +17,7 @@ namespace Clinic.Api.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.8")
+                .HasAnnotation("ProductVersion", "9.0.9")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -999,7 +999,7 @@ namespace Clinic.Api.Migrations
                     b.Property<string>("Category")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("CreatedOn")
+                    b.Property<DateTime?>("CreatedOn")
                         .HasColumnType("datetime2");
 
                     b.Property<int?>("CreatorId")
@@ -2581,6 +2581,9 @@ namespace Clinic.Api.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int?>("AnswerId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("CreatorId")
                         .HasColumnType("int");
 
                     b.Property<int>("QuestionId")

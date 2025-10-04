@@ -41,14 +41,16 @@
                         {{patient.notes}}
                     </td>
                     <td>
-                        <button class="btn main-btn" *ngIf="!patient.phoneNum"
+                        <button class="btn btn-outline-secondary mx-1"
+                            [routerLink]="'/patient-info/' + patient.id">جزئیات</button>
+                        <button class="btn main-btn mx-1" *ngIf="!patient.phoneNum"
                             (click)="openAddPhoneNumModal(patient.id)">افزودن شماره
                             تلفن</button>
                         <button class="btn main-btn" *ngIf="patient.phoneNum"
                             (click)="editPhoneNum(patient.patientPhone)">ویرایش
                             شماره تلفن</button>
                         <button class="btn main-outline-btn mx-1" (click)="editPatient(patient)">ویرایش</button>
-                        <button class="btn btn-outline-danger" (click)="deletePatient(patient.id)">حذف</button>
+                        <button class="btn btn-outline-danger mx-1" (click)="deletePatient(patient.id)">حذف</button>
                     </td>
                 </tr>
             </ng-template>

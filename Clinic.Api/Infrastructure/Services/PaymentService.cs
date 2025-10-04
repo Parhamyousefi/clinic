@@ -36,7 +36,7 @@ namespace Clinic.Api.Infrastructure.Services
                     payments.CreatedOn = DateTime.UtcNow;
                     _context.Payments.Add(payments);
                     await _context.SaveChangesAsync();
-                    result.Data = "Payment Saved Successfully";
+                    result.Message = "Payment Saved Successfully";
                     result.Status = 0;
                     return result;
                 }
@@ -55,7 +55,7 @@ namespace Clinic.Api.Infrastructure.Services
                     existingPayments.LastUpdated = DateTime.UtcNow;
                     _context.Payments.Update(existingPayments);
                     await _context.SaveChangesAsync();
-                    result.Data = "Payment Updated Successfully";
+                    result.Message = "Payment Updated Successfully";
                     result.Status = 0;
                     return result;
                 }
@@ -104,7 +104,7 @@ namespace Clinic.Api.Infrastructure.Services
 
                 _context.Payments.Remove(payment);
                 await _context.SaveChangesAsync();
-                result.Data = "Payment Deleted Successfully";
+                result.Message = "Payment Deleted Successfully";
                 result.Status = 0;
                 return result;
             }

@@ -1,6 +1,8 @@
 <header>
-    <div class="navbar d-flex justify-content-between">
+    <div class="navbar d-flex justify-content-between" [ngClass]="{'mobile-nav': isMobileSize}">
         <div class="col-6">
+            <!-- <div><i class="fa fa-bars" aria-hidden="true"></i>
+            </div> -->
             <div class="search-container p-2 px-3">
                 <i class="fa fa-search ml-3"></i>
                 <input type="text" placeholder="جست و جو ...">
@@ -17,9 +19,9 @@
     </div>
 </header>
 
-<div class="sidebar">
+<div class="sidebar" [ngClass]="{'mobile-sidebar' : isMobileSize}">
     <div class="w-100 logo-container d-flex justify-content-center align-items-center">
-        Logo
+        <img src="assets/images/logo.png" alt="Logo" width="50">
     </div>
     <div class="sidebar-items mx-4 mt-3">
         <div *ngFor="let item of sidebarMenu"
@@ -34,5 +36,17 @@
     <div class="sidebar-item d-flex align-items-center pointer mt-3 p-2" (click)="logOut()">
         <i class="fa fa-sign-out ml-2 sidebar-item-icon" aria-hidden="true"></i>
         <p class="m-0">خروج</p>
+    </div>
+
+
+    <div class="patient-menu">
+        <div *ngFor="let item of patientMenu"
+            [ngClass]="{'selected-sidebar-menu text-white': selectedSideBarItem == item.id}"
+            class="sidebar-item d-flex align-items-center pointer mt-3 p-2" [routerLink]="item.link"
+            (click)="selectedSideBarItem = item.id">
+            <i class="fa fa-plus ml-2 sidebar-item-icon" [ngClass]="{'text-white': selectedSideBarItem == item.id}"
+                aria-hidden="true"></i>
+            <p class="m-0">{{item.text}}</p>
+        </div>
     </div>
 </div>
