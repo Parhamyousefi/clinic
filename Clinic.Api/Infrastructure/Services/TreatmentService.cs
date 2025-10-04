@@ -63,7 +63,7 @@ namespace Clinic.Api.Infrastructure.Services
                     appointment.CreatedOn = DateTime.UtcNow;
                     _context.Appointments.Add(appointment);
                     await _context.SaveChangesAsync();
-                    result.Message = appointment.Id;
+                    result.Data = appointment.Id;
                     result.Status = 0;
                     return result;
                 }
@@ -81,7 +81,7 @@ namespace Clinic.Api.Infrastructure.Services
                     existingAppointment.LastUpdated = DateTime.UtcNow;
                     _context.Appointments.Update(existingAppointment);
                     await _context.SaveChangesAsync();
-                    result.Message = existingAppointment.Id;
+                    result.Data = existingAppointment.Id;
                     result.Status = 0;
                     return result;
                 }
