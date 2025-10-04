@@ -92,6 +92,6 @@ export class PatientAttachmentComponent {
   }
 
   async deleteAttachment() {
-    let res: any = await this.patientService.deleteAttachment().toPromise();
+    // let res: any = await this.patientService.deleteAttachment().toPromise();
   }
 }

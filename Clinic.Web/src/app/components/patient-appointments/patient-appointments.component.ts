@@ -1,3 +1,5 @@
+import { TreatmentsService } from './../../_services/treatments.service';
+import { MainService } from './../../_services/main.service';
 import { Component } from '@angular/core';
 import { TableModule } from "primeng/table";
 import { PatientService } from '../../_services/patient.service';
@@ -25,7 +27,9 @@ export class PatientAppointmentsComponent {
     private patientService: PatientService,
     private activeRoute: ActivatedRoute,
     private userService: UserService,
-    private toastR: ToastrService
+    private toastR: ToastrService,
+    private mainService: MainService,
+    private treatmentsService:TreatmentsService
   ) { }
 
   async ngOnInit() {
@@ -49,7 +53,7 @@ export class PatientAppointmentsComponent {
 
   async getClinics() {
     try {
-      let res = await this.userService.getClinics().toPromise();
+      let res = await this.mainService.getClinics().toPromise();
       this.clinicsList = res;
       this.clinicsList.forEach((clinic: any) => {
         clinic.code = clinic.id;
@@ -63,7 +67,7 @@ export class PatientAppointmentsComponent {
 
   async getAppointmentTypes() {
     try {
-      let res: any = await this.userService.getAppointmentTypes().toPromise();
+      let res: any = await this.treatmentsService.getAppointmentTypes().toPromise();
       if (res.length > 0) {
         this.appointmentTypes = res;
         this.appointmentTypes.forEach((type: any) => {

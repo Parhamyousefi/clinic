@@ -20,10 +20,12 @@
                             "zone.js"
                         ],
                         "tsConfig": "tsconfig.app.json",
-                        "assets": [{
-                            "glob": "**/*",
-                            "input": "public"
-                        }],
+                        "assets": [
+                            {
+                                "glob": "**/*",
+                                "input": "public"
+                            }
+                        ],
                         "styles": [
                             "node_modules/bootstrap-v4-rtl/dist/css/bootstrap.min.css",
                             "node_modules/font-awesome/css/font-awesome.min.css",
@@ -35,7 +37,8 @@
                     },
                     "configurations": {
                         "production": {
-                            "budgets": [{
+                            "budgets": [
+                                {
                                     "type": "initial",
                                     "maximumWarning": "500kB",
                                     "maximumError": "1MB"
@@ -79,10 +82,13 @@
                             "zone.js/testing"
                         ],
                         "tsConfig": "tsconfig.spec.json",
-                        "assets": [{
-                            "glob": "**/*",
-                            "input": "public"
-                        }],
+                        "assets": [
+                            "src/assets/images",
+                            {
+                                "glob": "**/*",
+                                "input": "public"
+                            }
+                        ],
                         "styles": [
                             "src/styles.css"
                         ],

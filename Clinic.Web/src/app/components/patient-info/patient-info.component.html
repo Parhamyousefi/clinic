@@ -1,7 +1,8 @@
 <div class="appContainer">
     <div class="col-12">
-        <div class="col-12 text-right">
-            <h4>{{patientName}}</h4>
+        <div class="col-12 d-flex justify-content-between align-items-center">
+            <h4 class="text-right mb-0">{{patientName}}</h4>
+            <app-pdf-maker [_patientData]="patientInfo"></app-pdf-maker>
         </div>
         <div class="col-12 mt-3">
             <!-- <div class="col-12 px-4 py-3 bg-main info-header text-right">
