@@ -1,4 +1,4 @@
-<div class="appContainer">
+<div class="patientAppContainer">
     <div class="col-12 text-right">
         <h4>پیوست بیمار</h4>
         <hr>
@@ -29,16 +29,19 @@
                             (change)="handleFileInput($event.target.files)">
                     </div>
                 </div>
-                <ng-template #fileList>
+                <div *ngIf="fileName" class="d-flex align-items-center justify-content-center">
+                    <small>{{fileName}}</small>
+                    <a (click)='removeFile($event)' class='pointer text-danger mx-2'><i class='fa fa-trash'></i></a>
+                </div>
+                <!-- <ng-template #fileList>
                     <table class='table'>
                         <tr>
                             <td>{{fileName}}</td>
-                            <td><a (click)='removeFile()' class='pointer text-danger'><i
-                                        class='fa fa-trash fa-2x'></i></a>
+                            <td>
                             </td>
                         </tr>
                     </table>
-                </ng-template>
+                </ng-template> -->
             </div>
             <button class="btn main-btn mt-3" (click)="saveAttachment()">ذخیره</button>
         </div>
@@ -51,19 +54,19 @@
             <ng-template pTemplate="header">
                 <tr>
                     <th>ردیف</th>
-                    <th></th>
+                    <th>پیش نمایش</th>
                     <th>تاریخ ثبت</th>
                     <th>عملیات</th>
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-attachment let-rowIndex="rowIndex">
                 <tr>
-                    <td> {{rowIndex+1}}</td>
-                    <td><img [src]="attachment.img" alt=""></td>
+                    <td class="text-center"> {{rowIndex+1}}</td>
+                    <td><img [src]="'Clinic.Api/'+attachment.fileName" alt=""></td>
                     <td class="text-center">
                         {{attachment.createdOn | JustDateZone}}
                     </td>
-                    <td><button class="btn btn-secondary" (click)="deleteAttachment()">حذف</button></td>
+                    <td><button class="btn btn-secondary" (click)="deleteAttachment(attachment.id)">حذف</button></td>
                 </tr>
             </ng-template>
         </p-table>
