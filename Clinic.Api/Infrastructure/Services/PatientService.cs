@@ -371,25 +371,7 @@ namespace Clinic.Api.Infrastructure.Services
               .Where(f => f.PatientId == patientId)
               .ToListAsync();
 
-                var existingFiles = new List<FileAttachmentsContext>();
-
-                foreach (var attachment in attachments)
-                {
-                    var fileNameOnly = Path.GetFileName(attachment.FileName);
-
-                    var fullPath = Path.Combine(_environment.ContentRootPath, "Assets/Patient", fileNameOnly);
-
-                    if (File.Exists(fullPath))
-                    {
-                        attachment.FileName = Path.Combine("Assets/Patient", fileNameOnly).Replace("\\", "/");
-                        existingFiles.Add(attachment);
-                    }
-                }
-
-                if (!existingFiles.Any())
-                    throw new Exception("No attachments found for this patient or files are missing on disk.");
-
-                return existingFiles;
+                return attachments;
             }
             catch (Exception ex)
             {
