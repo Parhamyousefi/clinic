@@ -4,7 +4,7 @@
     {
         public int InvoiceId { get; set; }
         public int InvoiceItemId { get; set; }
-        public int BillableItemId { get; set; }
+        public int? TreatmentTemplateId { get; set; }
         public string? BillableItemName { get; set; }
         public decimal? BillableItemPrice { get; set; }
         public int? ItemCategoryId { get; set; }
