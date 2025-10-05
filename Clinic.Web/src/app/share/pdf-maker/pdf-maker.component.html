@@ -12,7 +12,7 @@
     <div *ngIf="showPdfContent" id="pdf-content" class="hidden-canvas-zone">
         <div class="d-flex justify-content-between align-items-center my-3">
             <div>
-                <img src="../../../assets/images/logo.png" alt="لوگو" style="height: 60px;">
+                <img src="../../../assets/images/logo.png" alt="لوگو" class="pl-2" style="height: 40px;">
             </div>
             <h4 class="text-center flex-grow-1 me-n5">Outpatient Sheet</h4>
             <div class="text-end">Patient Code: <strong>{{patientData.patientCode || "-"}}</strong></div>
@@ -29,11 +29,15 @@
             <div class="col text-end">Contact Phone No.: <strong>{{patientData.mobile || "-"}}</strong></div>
         </div>
         <div class="d-flex mb-2">
-            <div class="col text-end">Referring Doctor: -</div>
-            <div class="col text-end">Occupation: -</div>
+            <div class="col text-end">Referring Doctor: <strong>{{patientData.referringDoctorName || "-"}}</strong>
+            </div>
+            <div class="col text-end">Occupation: <strong>{{patientData.jobName || "-"}}</strong></div>
         </div>
-
-        <hr class="mt-3">
+        <hr style="border-top: 3px solid #000000 !important;" class="mt-3">
+        <div class="d-flex" style="height:900px">
+            <div class="col-10" style="height:900px"></div>
+            <div style="border-left: 3px solid #000000 !important; height:900px" class="col-2"></div>
+        </div>
 
     </div>
 

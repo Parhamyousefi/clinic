@@ -17,13 +17,10 @@ moment.loadPersian({ dialect: 'persian-modern', usePersianDigits: false });
 export class PdfMakerComponent {
   @Input() set _patientData(value: any) {
     this.patientData = value;
-    console.log(this.patientData);
-
     if (value) {
       const today = moment();
       const birth = moment(this.patientData.birthDate, 'jYYYY/jMM/jDD');
       this.patientData.age = today.diff(birth, 'years');
-
     }
   }
   patientData: any = [];
