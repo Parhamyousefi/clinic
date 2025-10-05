@@ -8,7 +8,7 @@ namespace Clinic.Api.Application.Interfaces
     {
         Task<GlobalResponse> SavePatient(SavePatientDto model);
         Task<GlobalResponse> DeletePatient(int id);
-        Task<IEnumerable<GetPatientsResponse>> GetPatients();
+        Task<IEnumerable<PatientsContext>> GetPatients();
         Task<IEnumerable<GetPatientInfoResponse>> GetPatientById(int patientId);
         Task<GlobalResponse> SavePatientPhone(SavePatientPhoneDto model);
         Task<GlobalResponse> DeletePatientPhone(int id);

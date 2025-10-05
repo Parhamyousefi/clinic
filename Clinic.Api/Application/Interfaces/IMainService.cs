@@ -16,5 +16,7 @@ namespace Clinic.Api.Application.Interfaces
         Task<IEnumerable<ProductsContext>> GetProducts();
         Task<GlobalResponse> DeleteProduct(int id);
         Task<GlobalResponse> SaveNote(SaveNoteDto model);
+        Task<IEnumerable<GetNotesResponse>> GetNotes(int patientId);
+        Task<GlobalResponse> DeleteNote(int noteId);
     }
 }
