@@ -519,6 +519,7 @@ namespace Clinic.Api.Infrastructure.Services
                     {
                         InvoiceId = inv.Id,
                         InvoiceItemId = item.Id,
+                        BillableItemId = bill.Id,
                         BillableItemName = bill.Name,
                         BillableItemPrice = bill.Price,
                         ItemCategoryId = bill.ItemCategoryId,

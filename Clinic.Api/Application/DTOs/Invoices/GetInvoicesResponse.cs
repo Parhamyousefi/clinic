@@ -35,6 +35,6 @@
         public bool Anesthesia { get; set; }
         public decimal? BusinessAmount { get; set; }
         public bool AcceptDiscount { get; set; }
-        public int AssistantId { get; set; }
+        public int? AssistantId { get; set; }
     }
 }

@@ -2,8 +2,9 @@
 {
     public class SaveNoteDto
     {
-        public string? Note { get; set; }
+        public string? Message { get; set; }
         public int PatientId { get; set; }
         public int EditOrNew { get; set; }
+        public int? OrderOf { get; set; }
     }
 }
