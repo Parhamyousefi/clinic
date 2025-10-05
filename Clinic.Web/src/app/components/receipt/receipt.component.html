@@ -1,6 +1,7 @@
 <div class="appContainer">
     <div class="col-12">
-        <h4 class="col-12 text-right">دریافتی ها</h4>
+        <h4 *ngIf="!isPayment" class="col-12 text-right">دریافتی ها</h4>
+        <h4 *ngIf="isPayment" class="col-12 text-right">پرداخت ها</h4>
         <hr>
         <div class="col-12 flex-wrap d-flex mt-3">
             <div class="col-12 mb-3 text-right">
@@ -41,7 +42,7 @@
                 <textarea name="note" id="note" [(ngModel)]="newReceiptModel.note"></textarea>
             </div>
         </div>
-        <div class="col-12 d-flex justify-content-center mt-4">
+        <div class="col-12 d-flex justify-content-center p-4 mt-4">
             <button (click)="savereceipt()" class="btn main-btn px-4 py-2">ثبت</button>
         </div>
     </div>

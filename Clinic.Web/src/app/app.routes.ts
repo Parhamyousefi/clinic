@@ -64,4 +64,12 @@ export const routes: Routes = [
         path: 'receipt-list', component: ReceiptListComponent,
         canActivate: [AuthGuard]
     },
+    {
+        path: 'payment-list', component: ReceiptListComponent,
+        canActivate: [AuthGuard]
+    },
+    {
+        path: 'payment', component: ReceiptComponent,
+        canActivate: [AuthGuard]
+    },
 ];

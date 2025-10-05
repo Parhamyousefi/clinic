@@ -8,6 +8,7 @@ import { TableModule } from 'primeng/table';
 import { MainService } from '../../_services/main.service';
 import { ToastrService } from 'ngx-toastr';
 import { InvoiceService } from '../../_services/invoice.service';
+import { PaymentService } from '../../_services/payment.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -19,19 +20,31 @@ import Swal from 'sweetalert2';
 })
 export class ReceiptListComponent {
   constructor(
-    private mainService: MainService,
     private toastR: ToastrService,
     private invoiceService: InvoiceService,
-    private activeRoute: ActivatedRoute
+    private activeRoute: ActivatedRoute,
+    private paymentService: PaymentService,
   ) { }
   receiptsList: any = [];
+  paymentList: any = [];
   editReceiptsModel: any = [];
   showReceiptsModal: boolean = false;
   patientId: any;
   receiptType: any = 0;
+  checkRout: any;
+  isPayment: boolean = false;
+  tableData:any=[];
 
   ngOnInit() {
-    this.getReceipts()
+    this.checkRout = this.activeRoute.snapshot.routeConfig.path;
+    if (this.checkRout === "payment-list") {
+      this.isPayment = true;
+      this.getAllPayments();
+    }
+    else {
+      this.isPayment = false;
+      this.getReceipts();
+    }
   }
 
   async getReceipts() {
@@ -42,6 +55,18 @@ export class ReceiptListComponent {
         element.sumPrice = element.eftPos + element.cash;
       });
     }
+     this.tableData =this.receiptsList;
+  }
+
+  async getAllPayments() {
+    let data = await this.paymentService.getAllPayments().toPromise();
+    this.paymentList = data;
+    if (this.paymentList.length > 0) {
+      this.paymentList.forEach(element => {
+        element.sumPrice = element.eftPos + element.cash;
+      });
+    }
+    this.tableData =this.paymentList;
   }
   async deleteReceipt(id) {
     Swal.fire({
@@ -54,10 +79,19 @@ export class ReceiptListComponent {
     }).then(async (result) => {
       try {
         if (result.value) {
-          let data = await this.invoiceService.deleteReceipt(id).toPromise();
-          if (data['status'] == 0) {
-            this.toastR.success('با موفقیت حذف گردید');
-            this.getReceipts();
+          if (this.isPayment) {
+            let data = await this.paymentService.deletePayment(id).toPromise();
+            if (data['status'] == 0) {
+              this.toastR.success('با موفقیت حذف گردید');
+              this.getAllPayments();
+            }
+          }
+          else {
+            let data = await this.invoiceService.deleteReceipt(id).toPromise();
+            if (data['status'] == 0) {
+              this.toastR.success('با موفقیت حذف گردید');
+              this.getReceipts();
+            }
           }
         }
       }
@@ -74,11 +108,36 @@ export class ReceiptListComponent {
     this.editReceiptsModel.note = item.notes;
     this.receiptType = item.receiptTypeId ? 1 : 0;
     this.editReceiptsModel.sum = item.cash + item.eftPos;
+    this.editReceiptsModel.id = item.id;
     this.showReceiptsModal = true;
   }
 
   async editreceipt() {
-    let model = {
+    if (this.isPayment) {
+      let model = {
+        receiptNo: null,
+        patientId: this.editReceiptsModel.patientId,
+        cash: +this.editReceiptsModel.cash,
+        eftPos: this.editReceiptsModel.eftPos,
+        other: null,
+        notes: this.editReceiptsModel.note,
+        allowEdit: true,
+        receiptTypeId: this.receiptType ? 1 : 0,
+        editOrNew: this.editReceiptsModel.id,
+      }
+      try {
+        let data = await this.paymentService.savePayment(model).toPromise();
+        if (data['status'] == 0) {
+          this.toastR.success('با موفقیت ثبت شد!');
+          this.closeeditReceiptsModel();
+          this.getAllPayments();
+        }
+      } catch {
+        this.toastR.error('خطا', 'خطا در انجام عملیات')
+      }
+    }
+    else {
+      let model = {
       receiptNo: null,
       patientId: this.editReceiptsModel.patientId,
       cash: +this.editReceiptsModel.cash,
@@ -88,15 +147,16 @@ export class ReceiptListComponent {
       allowEdit: true,
       receiptTypeId: this.receiptType ? 1 : 0
     }
-    try {
-      let data = await this.invoiceService.saveReceipt(model).toPromise();
-      if (data['status'] == 0) {
-        this.toastR.success('با موفقیت ثبت شد!');
-        this.closeeditReceiptsModel();
-        this.getReceipts();
+      try {
+        let data = await this.invoiceService.saveReceipt(model).toPromise();
+        if (data['status'] == 0) {
+          this.toastR.success('با موفقیت ثبت شد!');
+          this.closeeditReceiptsModel();
+          this.getReceipts();
+        }
+      } catch {
+        this.toastR.error('خطا', 'خطا در انجام عملیات')
       }
-    } catch {
-      this.toastR.error('خطا', 'خطا در انجام عملیات')
     }
   }
   closeeditReceiptsModel() {

@@ -1,9 +1,10 @@
 <div class="appContainer">
     <div class="col-12">
         <div class="col-12 d-flex justify-content-start my-3">
-            <button class="btn main-btn" routerLink="/receipt">دریافتی جدید</button>
+            <button *ngIf="!isPayment" class="btn main-btn" routerLink="/receipt">دریافتی جدید</button>
+            <button *ngIf="isPayment" class="btn main-btn" routerLink="/payment">پرداخت جدید</button>
         </div>
-        <p-table id="receiptsTable" #dt styleClass="" class="receipts-table" [value]="receiptsList" [pageLinks]="20"
+        <p-table id="dataTable" #dt styleClass="" class="data-table" [value]="tableData" [pageLinks]="20"
             [autoLayout]="true" [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
             currentPageReportTemplate="نمایش {first} تا {last} " [rowsPerPageOptions]="[10,25,50]">
             <ng-template pTemplate="header">

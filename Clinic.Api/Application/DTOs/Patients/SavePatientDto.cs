@@ -19,6 +19,7 @@
         public string? NationalCode { get; set; }
         public int? JobId { get; set; }
         public int? ReferringInpatientInsurerId { get; set; }
+        public int? PatientCode { get; set; }
         public int EditOrNew { get; set; }
     }
 }
