@@ -87,5 +87,13 @@ namespace Clinic.Api.Controllers
             var result = await _mainService.DeleteProduct(id);
             return Ok(result);
         }
+
+        [HttpPost("saveNote")]
+        [Authorize("Admin","Doctor")]
+        public async Task<IActionResult> SaveNote(SaveNoteDto model)
+        {
+            var result = await _mainService.SaveNote(model);
+            return Ok(result);
+        }
     }
 }
