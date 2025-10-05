@@ -34,9 +34,10 @@ namespace Clinic.Api.Infrastructure.Services
                     var invoice = _mapper.Map<InvoicesContext>(model);
                     invoice.CreatorId = userId;
                     invoice.CreatedOn = DateTime.UtcNow;
+                    invoice.PractitionerId = userId;
                     _context.Invoices.Add(invoice);
                     await _context.SaveChangesAsync();
-                    result.Data = $"Invoice Saved Successfully , Id : {invoice.Id}";
+                    result.Message = $"Invoice Saved Successfully , Id : {invoice.Id}";
                     result.Status = 0;
                     return result;
                 }
@@ -52,9 +53,10 @@ namespace Clinic.Api.Infrastructure.Services
                     _mapper.Map(model, existingInvoice);
                     existingInvoice.ModifierId = userId;
                     existingInvoice.LastUpdated = DateTime.UtcNow;
+                    existingInvoice.PractitionerId = userId;
                     _context.Invoices.Update(existingInvoice);
                     await _context.SaveChangesAsync();
-                    result.Data = $"Invoice Updated Successfully , Id : {existingInvoice.Id}";
+                    result.Message = $"Invoice Updated Successfully , Id : {existingInvoice.Id}";
                     result.Status = 0;
                     return result;
                 }
@@ -134,7 +136,7 @@ namespace Clinic.Api.Infrastructure.Services
                     invoiceItem.CreatedOn = DateTime.UtcNow;
                     _context.InvoiceItems.Add(invoiceItem);
                     await _context.SaveChangesAsync();
-                    result.Data = "Invoice Item Saved Successfully";
+                    result.Message = "Invoice Item Saved Successfully";
                     result.Status = 0;
                     return result;
                 }
@@ -152,7 +154,7 @@ namespace Clinic.Api.Infrastructure.Services
                     existingInvoiceItem.LastUpdated = DateTime.UtcNow;
                     _context.InvoiceItems.Update(existingInvoiceItem);
                     await _context.SaveChangesAsync();
-                    result.Data = "Invoice Item Updated Successfully";
+                    result.Message = "Invoice Item Updated Successfully";
                     result.Status = 0;
                     return result;
                 }
@@ -189,7 +191,7 @@ namespace Clinic.Api.Infrastructure.Services
 
                 _context.Invoices.Remove(invoice);
                 await _context.SaveChangesAsync();
-                result.Data = "Invoice Deleted Successfully";
+                result.Message = "Invoice Deleted Successfully";
                 result.Status = 0;
                 return result;
             }
@@ -211,7 +213,7 @@ namespace Clinic.Api.Infrastructure.Services
 
                 _context.InvoiceItems.Remove(invoiceItems);
                 await _context.SaveChangesAsync();
-                result.Data = "Invoice Item Deleted Successfully";
+                result.Message = "Invoice Item Deleted Successfully";
                 result.Status = 0;
                 return result;
             }
@@ -241,7 +243,7 @@ namespace Clinic.Api.Infrastructure.Services
                     mappReceipt.ReceiptNo = lastId + 1;
                     _context.Receipts.Add(mappReceipt);
                     await _context.SaveChangesAsync();
-                    result.Data = "Receipt Saved Successfully";
+                    result.Message = "Receipt Saved Successfully";
                     result.Status = 0;
                     return result;
                 }
@@ -251,7 +253,7 @@ namespace Clinic.Api.Infrastructure.Services
                 receipt.LastUpdated = DateTime.UtcNow;
                 _context.Receipts.Update(receipt);
                 await _context.SaveChangesAsync();
-                result.Data = "Receipt Updated Successfully";
+                result.Message = "Receipt Updated Successfully";
                 result.Status = 0;
                 return result;
             }
@@ -348,7 +350,7 @@ namespace Clinic.Api.Infrastructure.Services
 
                 _context.Receipts.Remove(receipt);
                 await _context.SaveChangesAsync();
-                result.Data = "Receipt Deleted Successfully";
+                result.Message = "Receipt Deleted Successfully";
                 result.Status = 0;
                 return result;
             }
@@ -373,7 +375,7 @@ namespace Clinic.Api.Infrastructure.Services
                     expense.CreatorId = userId;
                     _context.Expenses.Add(expense);
                     await _context.SaveChangesAsync();
-                    result.Data = "Expense Saved Successfully";
+                    result.Message = "Expense Saved Successfully";
                     result.Status = 0;
                     return result;
                 }
@@ -390,7 +392,7 @@ namespace Clinic.Api.Infrastructure.Services
                     existingExpense.LastUpdated = DateTime.UtcNow;
                     _context.Expenses.Update(existingExpense);
                     await _context.SaveChangesAsync();
-                    result.Data = "Expense Updated Successfully";
+                    result.Message = "Expense Updated Successfully";
                     result.Status = 0;
                     return result;
                 }

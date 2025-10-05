@@ -10,5 +10,7 @@
         public string? FatherName { get; set; }
         public string? NationalCode { get; set; }
         public string? PatientCode { get; set; }
+        public string? JobName { get; set; }
+        public string? DoctorName { get; set; }
     }
 }
