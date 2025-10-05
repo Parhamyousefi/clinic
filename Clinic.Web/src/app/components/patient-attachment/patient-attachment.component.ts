@@ -7,6 +7,7 @@ import { TableModule } from "primeng/table";
 import { CommonModule } from '@angular/common';
 import { SharedModule } from '../../share/shared.module';
 import { environment } from '../../../environments/environment';
+import swal from 'sweetalert2';
 
 export const ValidFormat = ['pdf', 'jpg', 'jpeg', 'png'];
 
@@ -72,6 +73,11 @@ export class PatientAttachmentComponent {
     let res: any = await this.patientService.saveAttachment(model).toPromise();
     if (res['status'] == 0) {
       this.toastR.success('با موفقیت ثبت شد');
+      this.getAttachment();
+      this.fileName = '';
+      this.fileType = '';
+      this.fileToUpload = null;
+      this.base64 = null;
     }
   }
 
@@ -80,10 +86,6 @@ export class PatientAttachmentComponent {
       let res: any = await this.patientService.getAttachment(this.patientId).toPromise();
       if (res.length > 0) {
         this.patientAttachmentList = res;
-        this.patientAttachmentList.forEach(attachment => {
-          attachment.img = this.server + "/" + attachment.fileName;
-
-        });
       }
     }
     catch {
@@ -91,7 +93,33 @@ export class PatientAttachmentComponent {
     }
   }
 
-  async deleteAttachment() {
-    // let res: any = await this.patientService.deleteAttachment().toPromise();
+  async deleteAttachment(id) {
+    swal.fire({
+      title: "آیا از حذف این پیوست مطمئن هستید ؟",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "بله انجام بده",
+      cancelButtonText: "منصرف شدم",
+      reverseButtons: false,
+    }).then(async (result) => {
+      try {
+        let res: any = await this.patientService.deleteAttachment(id).toPromise();
+        if (res['status'] == 0) {
+          this.toastR.success('با موفقیت حذف گردید');
+          this.getAttachment();
+        }
+      }
+      catch {
+        this.toastR.error('خطایی رخ داد', 'خطا!');
+      }
+    })
+  }
+
+  removeFile(event) {
+    event.stopPropagation();
+    this.fileName = '';
+    this.fileType = '';
+    this.fileToUpload = null;
+    this.base64 = null;
   }
 }

@@ -48,15 +48,15 @@ export const routes: Routes = [
         canActivate: [AuthGuard]
     },
     {
-        path: 'patientappointments/:id', component: PatientAppointmentsComponent,
+        path: 'patient/patientappointments/:id', component: PatientAppointmentsComponent,
         canActivate: [AuthGuard]
     },
     {
-        path: 'patient-info/:id', component: PatientInfoComponent,
+        path: 'patient/patient-info/:id', component: PatientInfoComponent,
         canActivate: [AuthGuard]
     },
     {
-        path: 'patient-attachment/:id', component: PatientAttachmentComponent,
+        path: 'patient/patient-attachment/:id', component: PatientAttachmentComponent,
         canActivate: [AuthGuard]
     },
 ];

@@ -19,30 +19,31 @@
     </div>
 </header>
 
-<div class="sidebar" [ngClass]="{'mobile-sidebar' : isMobileSize}">
-    <div class="w-100 logo-container d-flex justify-content-center align-items-center">
-        <img src="assets/images/logo.png" alt="Logo" width="50">
-    </div>
-    <div class="sidebar-items mx-4 mt-3">
-        <div *ngFor="let item of sidebarMenu"
-            [ngClass]="{'selected-sidebar-menu text-white': selectedSideBarItem == item.id}"
-            class="sidebar-item d-flex align-items-center pointer mt-3 p-2" [routerLink]="item.link"
-            (click)="selectedSideBarItem = item.id">
-            <i class="fa fa-plus ml-2 sidebar-item-icon" [ngClass]="{'text-white': selectedSideBarItem == item.id}"
-                aria-hidden="true"></i>
-            <p class="m-0">{{item.text}}</p>
+<div class="sidebar"
+    [ngClass]="{'mobile-sidebar' : isMobileSize, 'sidebar': !hasPatientMenu,'patient-mode-sidebar': hasPatientMenu}">
+    <div class="main-sidebar">
+        <div class="w-100 logo-container d-flex justify-content-center align-items-center">
+            <img src="assets/images/logo.png" alt="Logo" width="50">
+        </div>
+        <div class="sidebar-items mx-4 mt-3">
+            <div *ngFor="let item of sidebarMenu"
+                [ngClass]="{'selected-sidebar-menu text-white': selectedPatientSideBarItem == item.id}"
+                class="sidebar-item d-flex align-items-center pointer mt-3 p-2" [routerLink]="item.link"
+                (click)="selectedPatientSideBarItem = item.id">
+                <i class="fa fa-plus ml-2 sidebar-item-icon" [ngClass]="{'text-white': selectedSideBarItem == item.id}"
+                    aria-hidden="true"></i>
+                <p class="m-0">{{item.text}}</p>
+            </div>
+        </div>
+        <div class="sidebar-item d-flex align-items-center pointer mt-3 p-2" (click)="logOut()">
+            <i class="fa fa-sign-out ml-2 sidebar-item-icon" aria-hidden="true"></i>
+            <p class="m-0">خروج</p>
         </div>
     </div>
-    <div class="sidebar-item d-flex align-items-center pointer mt-3 p-2" (click)="logOut()">
-        <i class="fa fa-sign-out ml-2 sidebar-item-icon" aria-hidden="true"></i>
-        <p class="m-0">خروج</p>
-    </div>
-
-
-    <div class="patient-menu">
+    <div *ngIf="hasPatientMenu" class="patient-menu px-3">
         <div *ngFor="let item of patientMenu"
             [ngClass]="{'selected-sidebar-menu text-white': selectedSideBarItem == item.id}"
-            class="sidebar-item d-flex align-items-center pointer mt-3 p-2" [routerLink]="item.link"
+            class="sidebar-item d-flex align-items-center pointer mt-3 p-2" [routerLink]="item.link + '/' + patientId"
             (click)="selectedSideBarItem = item.id">
             <i class="fa fa-plus ml-2 sidebar-item-icon" [ngClass]="{'text-white': selectedSideBarItem == item.id}"
                 aria-hidden="true"></i>

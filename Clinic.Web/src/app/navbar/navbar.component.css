@@ -2,6 +2,10 @@
     min-height: 80px;
 }
 
+.logo-container img {
+    width: 120px;
+}
+
 .sidebar-items {
     overflow-y: auto;
 
@@ -60,4 +64,17 @@
     border-radius: 100%;
     background-color: #a3a3a3;
     font-size: 20px;
+}
+
+.main-sidebar {
+    width: 200px;
+    height: 100%;
+}
+
+.patient-menu {
+    margin-top: 80px;
+    background: #FFFFFF;
+    width: 200px;
+    /* box-shadow: 0 0 5px rgb(0 0 0 / 20%); */
+    box-shadow: -8px 0px 9px -7px rgba(0, 0, 0, 0.77);
 }
