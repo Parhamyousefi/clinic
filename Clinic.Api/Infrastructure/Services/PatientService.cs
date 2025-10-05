@@ -93,15 +93,67 @@ namespace Clinic.Api.Infrastructure.Services
             }
         }
 
-        public async Task<IEnumerable<PatientsContext>> GetPatients()
+        public async Task<IEnumerable<GetPatientsResponse>> GetPatients()
         {
             try
             {
+                var query = _context.Patients.AsQueryable();
                 var userId = _token.GetUserId();
 
-                var patients = await _context.Patients.Where(p => p.ReferringDoctorId == userId).ToListAsync();
+                var result = await (from n in query
+                                    join j in _context.Jobs on n.JobId equals j.Id
+                                    join u in _context.Users on n.ReferringDoctorId equals u.Id
 
-                return patients;
+                                    select new GetPatientsResponse
+                                    {
+                                        Id = n.Id,
+                                        TitleId = n.TitleId,
+                                        FirstName = n.FirstName,
+                                        LastName = n.LastName,
+                                        Gender = n.Gender,
+                                        FatherName = n.FatherName,
+                                        BirthDate = n.BirthDate,
+                                        Email = n.Email,
+                                        Address1 = n.Address1,
+                                        Address2 = n.Address2,
+                                        Address3 = n.Address3,
+                                        City = n.City,
+                                        State = n.State,
+                                        PostCode = n.PostCode,
+                                        CountryId = n.CountryId,
+                                        ReminderTypeId = n.ReminderTypeId,
+                                        UnsubscribeFromSMSMarketing = n.UnsubscribeFromSMSMarketing,
+                                        ReceiveBookingConfirmationEmails = n.ReceiveBookingConfirmationEmails,
+                                        InvoiceTo = n.InvoiceTo,
+                                        EmailInvoiceTo = n.EmailInvoiceTo,
+                                        InvoiceExtraInformation = n.InvoiceExtraInformation,
+                                        EmergencyContact = n.EmergencyContact,
+                                        ReferenceNumber = n.ReferenceNumber,
+                                        ReferringDoctorId = n.ReferringDoctorId,
+                                        ReferringDoctorName = u.FirstName + " " + u.LastName,
+                                        Notes = n.Notes,
+                                        ReferringInsurerId = n.ReferringInsurerId,
+                                        ReferringInsurer2Id = n.ReferringInsurer2Id,
+                                        ReferringContactId = n.ReferringContactId,
+                                        ReferringContact2Id = n.ReferringContact2Id,
+                                        ReferringPatientId = n.ReferringPatientId,
+                                        ModifierId = n.ModifierId,
+                                        CreatedOn = n.CreatedOn,
+                                        LastUpdated = n.LastUpdated,
+                                        PatientCode = n.PatientCode,
+                                        CreatorId = n.CreatorId,
+                                        NationalCode = n.NationalCode,
+                                        JobId = n.JobId,
+                                        JobTitle = j.Name,
+                                        ReferringInpatientInsurerId = n.ReferringInpatientInsurerId,
+                                        Balance = n.Balance,
+                                        OutBalance = n.OutBalance,
+                                        InBalance = n.InBalance,
+                                        Paperless = n.Paperless,
+                                    })
+                                    .ToListAsync();
+
+                return result;
             }
             catch (Exception ex)
             {
@@ -371,25 +423,7 @@ namespace Clinic.Api.Infrastructure.Services
               .Where(f => f.PatientId == patientId)
               .ToListAsync();
 
-                var existingFiles = new List<FileAttachmentsContext>();
-
-                foreach (var attachment in attachments)
-                {
-                    var fileNameOnly = Path.GetFileName(attachment.FileName);
-
-                    var fullPath = Path.Combine(_environment.ContentRootPath, "Assets/Patient", fileNameOnly);
-
-                    if (File.Exists(fullPath))
-                    {
-                        attachment.FileName = Path.Combine("Assets/Patient", fileNameOnly).Replace("\\", "/");
-                        existingFiles.Add(attachment);
-                    }
-                }
-
-                if (!existingFiles.Any())
-                    throw new Exception("No attachments found for this patient or files are missing on disk.");
-
-                return existingFiles;
+                return attachments;
             }
             catch (Exception ex)
             {
