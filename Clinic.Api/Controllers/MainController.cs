@@ -95,5 +95,21 @@ namespace Clinic.Api.Controllers
             var result = await _mainService.SaveNote(model);
             return Ok(result);
         }
+
+        [HttpGet("getNotes/{patientId}")]
+        [Authorize("Admin","Doctor")]
+        public async Task<IActionResult> GetNotes(int patientId)
+        {
+            var result = await _mainService.GetNotes(patientId);
+            return Ok(result);
+        }
+
+        [HttpGet("deleteNote/{noteId}")]
+        [Authorize("Admin","Doctor")]
+        public async Task<IActionResult> DeleteNote(int noteId)
+        {
+            var result = await _mainService.DeleteNote(noteId);
+            return Ok(result);
+        }
     }
 }
