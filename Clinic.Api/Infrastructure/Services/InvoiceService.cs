@@ -34,6 +34,7 @@ namespace Clinic.Api.Infrastructure.Services
                     var invoice = _mapper.Map<InvoicesContext>(model);
                     invoice.CreatorId = userId;
                     invoice.CreatedOn = DateTime.UtcNow;
+                    invoice.PractitionerId = userId;
                     _context.Invoices.Add(invoice);
                     await _context.SaveChangesAsync();
                     result.Message = $"Invoice Saved Successfully , Id : {invoice.Id}";
@@ -52,6 +53,7 @@ namespace Clinic.Api.Infrastructure.Services
                     _mapper.Map(model, existingInvoice);
                     existingInvoice.ModifierId = userId;
                     existingInvoice.LastUpdated = DateTime.UtcNow;
+                    existingInvoice.PractitionerId = userId;
                     _context.Invoices.Update(existingInvoice);
                     await _context.SaveChangesAsync();
                     result.Message = $"Invoice Updated Successfully , Id : {existingInvoice.Id}";
