@@ -512,6 +512,7 @@ namespace Clinic.Api.Infrastructure.Services
                     from inv in _context.Invoices
                     join item in _context.InvoiceItems on inv.Id equals item.InvoiceId
                     join bill in _context.BillableItems on item.ItemId equals bill.Id
+                    join ic in _context.ItemCategories on bill.ItemCategoryId equals ic.Id
                     where inv.PatientId == patientId
                     select new GetServicesPerPatientResponse
                     {
@@ -519,6 +520,8 @@ namespace Clinic.Api.Infrastructure.Services
                         InvoiceItemId = item.Id,
                         BillableItemName = bill.Name,
                         BillableItemPrice = bill.Price,
+                        ItemCategoryId = bill.ItemCategoryId,
+                        ItemCategoryName = ic.Name,
                         Quantity = item.Quantity,
                         UnitPrice = item.UnitPrice,
                         Amount = item.Amount

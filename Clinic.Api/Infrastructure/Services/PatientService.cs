@@ -35,10 +35,13 @@ namespace Clinic.Api.Infrastructure.Services
 
                 if (model.EditOrNew == -1)
                 {
+                    int? lastId = await _context.Patients.MaxAsync(r => r.PatientCode);
+                    model.PatientCode = lastId + 1;
                     var patient = _mapper.Map<PatientsContext>(model);
                     patient.CreatorId = userId;
                     patient.ReferringDoctorId = userId;
                     patient.CreatedOn = DateTime.UtcNow;
+                    patient.PatientCode = lastId + 1;
                     _context.Patients.Add(patient);
                     await _context.SaveChangesAsync();
                     result.Message = "Patient Saved Successfully";
@@ -132,7 +135,7 @@ namespace Clinic.Api.Infrastructure.Services
                                         NationalCode = n.NationalCode,
                                         PatientCode = n.PatientCode.ToString(),
                                         JobName = j.Name,
-                                        DoctorName = u.FirstName + " " + u.LastName
+                                        DoctorName = u.FirstName + " " + u.LastName,
                                     }).ToListAsync();
                 return result;
             }
