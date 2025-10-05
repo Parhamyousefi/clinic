@@ -513,6 +513,7 @@ namespace Clinic.Api.Infrastructure.Services
                     join item in _context.InvoiceItems on inv.Id equals item.InvoiceId
                     join bill in _context.BillableItems on item.ItemId equals bill.Id
                     join ic in _context.ItemCategories on bill.ItemCategoryId equals ic.Id
+                    join doc in _context.Users on inv.PractitionerId equals doc.Id
                     where inv.PatientId == patientId
                     select new GetServicesPerPatientResponse
                     {
@@ -524,6 +525,8 @@ namespace Clinic.Api.Infrastructure.Services
                         ItemCategoryName = ic.Name,
                         Quantity = item.Quantity,
                         UnitPrice = item.UnitPrice,
+                        DoctorName = doc.FirstName + " " + doc.LastName,
+                        CreatedDate = inv.CreatedOn,
                         Amount = item.Amount
                     }
                 ).ToListAsync();
