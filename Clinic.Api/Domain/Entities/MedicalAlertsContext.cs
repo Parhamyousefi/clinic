@@ -1,6 +1,6 @@
 ﻿namespace Clinic.Api.Domain.Entities
 {
-    public class MedicalArtsContext
+    public class MedicalAlertsContext
     {
         public int Id { get; set; }
         public int PatientId { get; set; }
