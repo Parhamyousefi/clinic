@@ -115,6 +115,7 @@ namespace Clinic.Api.Infrastructure.Services
             {
                 var query = _context.Patients.AsQueryable();
                 var result = await (from n in query
+                                    where n.Id == patientId
                                     join j in _context.Jobs on n.JobId equals j.Id
                                     join u in _context.Users on n.ReferringDoctorId equals u.Id
                                     select new GetPatientInfoResponse
