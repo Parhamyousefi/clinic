@@ -199,6 +199,21 @@ p-dropdown.p-element {
     background: rgba(99, 198, 179, 0.5);
 }
 
+.text-00c4b4 {
+    color: #00c4b4;
+}
+
+.btn-pink {
+    background-color: hotpink;
+    color: white;
+    border: none;
+}
+
+.btn-pink:hover {
+    background-color: hotpink;
+    color: white;
+}
+
 
 @media (max-width: 768px) {
     .appContainer {

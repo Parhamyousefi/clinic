@@ -102,7 +102,7 @@ export class NewInvoiceComponent implements OnInit {
         if (this.editOrNew == -1) {
           const match = res.data.match(/Id\s*:\s*(\d+)/);
           const id = match ? parseInt(match[1], 10) : null;
-          this.router.navigate(['/new-invoice/' + id]);
+          this.router.navigate(['/new-invoice/' + id + '/2']);
         }
       } else {
         this.toastR.error('خطا');

@@ -11,6 +11,7 @@ import { ContactsComponent } from './components/contacts/contacts.component';
 import { PatientAppointmentsComponent } from './components/patient-appointments/patient-appointments.component';
 import { PatientInfoComponent } from './components/patient-info/patient-info.component';
 import { PatientAttachmentComponent } from './components/patient-attachment/patient-attachment.component';
+import { PatientTreatmentComponent } from './components/patient-treatment/patient-treatment.component';
 
 export const routes: Routes = [
     { path: '', component: LoginComponent },
@@ -57,6 +58,10 @@ export const routes: Routes = [
     },
     {
         path: 'patient/patient-attachment/:id', component: PatientAttachmentComponent,
+        canActivate: [AuthGuard]
+    },
+    {
+        path: 'patient-treatment/:id', component: PatientTreatmentComponent,
         canActivate: [AuthGuard]
     },
 ];

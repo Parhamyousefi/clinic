@@ -85,4 +85,53 @@ export class TreatmentsService {
     return this.http.get(uri, httpOptions);
   }
 
+
+  getPatientServices(patientId) {
+    const token: any = localStorage.getItem("token");
+    const uri = this.url + `api/treatment/getPatientServices/${patientId}`;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      }),
+    };
+    return this.http.get(uri, httpOptions);
+  }
+
+  getSectionPerService(serviceId) {
+    const token: any = localStorage.getItem("token");
+    const uri = this.url + `api/treatment/getSectionPerService/${serviceId}`;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      }),
+    };
+    return this.http.get(uri, httpOptions);
+  }
+
+  getQuestionsPerSection(sectionId) {
+    const token: any = localStorage.getItem("token");
+    const uri = this.url + `api/treatment/getQuestionsPerSection/${sectionId}`;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      }),
+    };
+    return this.http.get(uri, httpOptions);
+  }
+
+  getAnswersPerQuestion(questionId) {
+    const token: any = localStorage.getItem("token");
+    const uri = this.url + `api/treatment/getAnswersPerQuestion/${questionId}`;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      }),
+    };
+    return this.http.get(uri, httpOptions);
+  }
+
 }
