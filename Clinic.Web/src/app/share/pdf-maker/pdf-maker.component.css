@@ -1,0 +1,9 @@
+.hidden-canvas-zone {
+    position: absolute;
+    left: -1000px;
+    top: 0;
+    width: 800px;
+    overflow: hidden;
+    z-index: -1;
+    direction: ltr;
+}

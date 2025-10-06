@@ -3,11 +3,12 @@ import { Component } from '@angular/core';
 import { PatientService } from '../../_services/patient.service';
 import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute } from '@angular/router';
+import { PdfMakerComponent } from '../../share/pdf-maker/pdf-maker.component';
 
 @Component({
   selector: 'app-patient-info',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule,PdfMakerComponent],
   templateUrl: './patient-info.component.html',
   styleUrl: './patient-info.component.css'
 })

@@ -62,9 +62,9 @@ export class InvoiceService {
     };
     return this.http.post(uri, data, httpOptions);
   }
-   getReceipts() {
+  getReceipts() {
     const token: any = localStorage.getItem("token");
-    const uri = this.url + `api/Invoice/getReceipts` ;
+    const uri = this.url + `api/Invoice/getReceipts`;
     const httpOptions = {
       headers: new HttpHeaders({
         "Content-Type": "application/json",
@@ -73,9 +73,34 @@ export class InvoiceService {
     };
     return this.http.get(uri, httpOptions);
   }
-   deleteReceipt(id) {
+
+  getInvoiceItems(invoiceId) {
     const token: any = localStorage.getItem("token");
-    const uri = this.url + `api/Invoice/deleteReceipt/${id}` ;
+    const uri = this.url + `api/Invoice/getInvoiceItems/${invoiceId}`;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      }),
+    };
+    return this.http.get(uri, httpOptions);
+  }
+  deleteReceipt(id) {
+    const token: any = localStorage.getItem("token");
+    const uri = this.url + `api/Invoice/deleteReceipt/${id}`;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      }),
+    };
+    return this.http.get(uri, httpOptions);
+  }
+
+
+  deleteInvoiceItem(id) {
+    const token: any = localStorage.getItem("token");
+    const uri = this.url + `api/Invoice/deleteInvoiceItem/${id}`;
     const httpOptions = {
       headers: new HttpHeaders({
         "Content-Type": "application/json",

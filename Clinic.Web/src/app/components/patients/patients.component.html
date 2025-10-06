@@ -25,7 +25,7 @@
             <ng-template pTemplate="body" let-patient let-rowIndex="rowIndex">
                 <tr>
                     <td> {{rowIndex+1}}</td>
-                    <td>
+                    <td class="pointer text-00c4b4" [routerLink]="'/patient-treatment/' + patient.id">
                         {{patient.firstName}} {{patient.lastName}}
                     </td>
                     <td>

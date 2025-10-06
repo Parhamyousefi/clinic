@@ -22,16 +22,16 @@
                 </tr>
                 <tr>
                     <th>
-                        <input type="text" (input)="dt.filter($event.target?.value, 'fldFirstName', 'contains')"
+                        <input type="text" (input)="dt.filter($event.target?.value, 'id', 'contains')"
                             class="form-control">
                     </th>
                     <th>
-                        <input type="text" (input)="dt.filter($event.target?.value, 'fldFirstName', 'contains')"
+                        <input type="text" (input)="dt.filter($event.target?.value, 'patientName', 'contains')"
                             class="form-control">
                     </th>
                     <th></th>
                     <th>
-                        <input type="text" (input)="dt.filter($event.target?.value, 'fldFirstName', 'contains')"
+                        <input type="text" (input)="dt.filter($event.target?.value, 'businessName', 'contains')"
                             class="form-control">
                     </th>
                     <th></th>
@@ -42,7 +42,7 @@
                 <tr>
                     <td class="px-2">
                         <div class="py-2 widthClassPrime">
-                            <span>{{item.date|JustDateZone}}</span>
+                            <span>{{item.id}}</span>
                         </div>
                     </td>
                     <td class="px-2">
@@ -52,22 +52,22 @@
                     </td>
                     <td class="px-2">
                         <div class="py-2 widthClassPrime">
-                            <span>{{item.appointmentTypeName}}</span>
+                            <span>{{item.amount}}</span>
                         </div>
                     </td>
                     <td class="px-2">
                         <div class="py-2 widthClassPrime">
-                            <span>{{item.billableItemName}}</span>
+                            <span>{{item.businessName}}</span>
                         </div>
                     </td>
                     <td class="px-2">
                         <div class="py-2 widthClassPrime">
-                            <span>{{item.practitionerName}}</span>
+                            <span>{{item.createdOn |JustDateZone}}</span>
                         </div>
                     </td>
                     <td class="px-2">
-                        <button class="btn btn-danger mx-2">مشاهده</button>
-                        <button class="btn btn-warning" (click)="goToEditPage(item.id)">ویرایش</button>
+                        <button class="btn btn-danger mx-2" (click)="goToEditPage(item.id , 1)">مشاهده</button>
+                        <button class="btn btn-warning" (click)="goToEditPage(item.id ,2)">ویرایش</button>
                     </td>
                 </tr>
             </ng-template>
