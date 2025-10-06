@@ -11,6 +11,10 @@ import { ContactsComponent } from './components/contacts/contacts.component';
 import { PatientAppointmentsComponent } from './components/patient-appointments/patient-appointments.component';
 import { PatientInfoComponent } from './components/patient-info/patient-info.component';
 import { PatientAttachmentComponent } from './components/patient-attachment/patient-attachment.component';
+import { ProductComponent } from './components/product/product.component';
+import { ProductListComponent } from './components/product-list/product-list.component';
+import { ReceiptComponent } from './components/receipt/receipt.component';
+import { ReceiptListComponent } from './components/receipt-list/receipt-list.component';
 
 export const routes: Routes = [
     { path: '', component: LoginComponent },
@@ -35,6 +39,11 @@ export const routes: Routes = [
         canActivate: [AuthGuard]
     },
     {
+        path: 'new-invoice/:id',
+        component: NewInvoiceComponent,
+        canActivate: [AuthGuard]
+    },
+    {
         path: 'new-contact/:id', component: NewContactComponent,
         canActivate: [AuthGuard]
     },
@@ -52,6 +61,31 @@ export const routes: Routes = [
     },
     {
         path: 'patient/patient-attachment/:id', component: PatientAttachmentComponent,
+        canActivate: [AuthGuard]
+    },
+    {
+        path: 'product', component: ProductComponent,
+        canActivate: [AuthGuard],
+    },
+
+    {
+        path: 'product-list', component: ProductListComponent,
+        canActivate: [AuthGuard]
+    },
+    {
+        path: 'receipt', component: ReceiptComponent,
+        canActivate: [AuthGuard]
+    },
+    {
+        path: 'receipt-list', component: ReceiptListComponent,
+        canActivate: [AuthGuard]
+    },
+    {
+        path: 'payment-list', component: ReceiptListComponent,
+        canActivate: [AuthGuard]
+    },
+    {
+        path: 'payment', component: ReceiptComponent,
         canActivate: [AuthGuard]
     },
 ];

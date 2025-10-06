@@ -5,10 +5,12 @@
     <hr>
     <div class="col-12">
         <button class="btn btn-danger mb-3" routerLink="/new-invoice">صورت حساب جدید
-      <!-- <i class="fa fa-plus" aria-hidden="true"></i> -->
-    </button>
+            <!-- <i class="fa fa-plus" aria-hidden="true"></i> -->
+        </button>
 
-        <p-table #dt styleClass="p-datatable-gridlines" [value]="InvoiceList" [autoLayout]="true" [paginator]="true" [rows]="10" [showCurrentPageReport]="true" currentPageReportTemplate="نمایش {first} تا {last} " [rowsPerPageOptions]="[10,25,50]">
+        <p-table #dt styleClass="p-datatable-gridlines" [value]="InvoiceList" [autoLayout]="true" [paginator]="true"
+            [rows]="10" [showCurrentPageReport]="true" currentPageReportTemplate="نمایش {first} تا {last} "
+            [rowsPerPageOptions]="[10,25,50]">
             <ng-template pTemplate="header">
                 <tr>
                     <th> شماره</th>
@@ -20,14 +22,17 @@
                 </tr>
                 <tr>
                     <th>
-                        <input type="text" (input)="dt.filter($event.target?.value, 'fldFirstName', 'contains')" class="form-control">
+                        <input type="text" (input)="dt.filter($event.target?.value, 'fldFirstName', 'contains')"
+                            class="form-control">
                     </th>
                     <th>
-                        <input type="text" (input)="dt.filter($event.target?.value, 'fldFirstName', 'contains')" class="form-control">
+                        <input type="text" (input)="dt.filter($event.target?.value, 'fldFirstName', 'contains')"
+                            class="form-control">
                     </th>
                     <th></th>
                     <th>
-                        <input type="text" (input)="dt.filter($event.target?.value, 'fldFirstName', 'contains')" class="form-control">
+                        <input type="text" (input)="dt.filter($event.target?.value, 'fldFirstName', 'contains')"
+                            class="form-control">
                     </th>
                     <th></th>
                     <th></th>
@@ -61,8 +66,8 @@
                         </div>
                     </td>
                     <td class="px-2">
-                        <button class="btn btn-danger">مشاهده</button>
-                        <button class="btn btn-warning">ویرایش</button>
+                        <button class="btn btn-danger mx-2">مشاهده</button>
+                        <button class="btn btn-warning" (click)="goToEditPage(item.id)">ویرایش</button>
                     </td>
                 </tr>
             </ng-template>

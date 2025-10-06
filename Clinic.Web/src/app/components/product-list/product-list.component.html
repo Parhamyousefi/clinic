@@ -1,0 +1,123 @@
+<div class="appContainer">
+    <div class="col-12">
+        <div class="col-12 d-flex justify-content-start my-3">
+            <button class="btn main-btn" routerLink="/product">کالای جدید</button>
+        </div>
+        <p-table id="productsTable" #dt styleClass="" class="products-table" [value]="productsList" [pageLinks]="20"
+            [autoLayout]="true" [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
+            currentPageReportTemplate="نمایش {first} تا {last} " [rowsPerPageOptions]="[10,25,50]">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th pSortableColumn="code">کد
+                        <p-sortIcon field="code"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="name">نام
+                        <p-sortIcon field="name"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="serialNumber">شماره سریال
+                        <p-sortIcon field="serialNumber"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="supplier">تامین کننده
+                        <p-sortIcon field="supplier"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="price">قیمت
+                        <p-sortIcon field="price"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="stockLevel">موجودی
+                        <p-sortIcon field="stockLevel"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="notes">یادداشت
+                        <p-sortIcon field="notes"></p-sortIcon>
+                    </th>
+                    <th>عملیات
+
+                    </th>
+                </tr>
+                <tr>
+                    <th></th>
+                    <th>
+                        <input type="text" (input)="dt.filter($event.target?.value, 'name', 'contains')"
+                            class="form-control">
+                    </th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-product let-rowIndex="rowIndex">
+                <tr>
+                    <td>{{product.code}}</td>
+                    <td>{{product.name}}</td>
+                    <td>
+                        {{product.serialNumber}}
+                    </td>
+                    <td>
+                        {{product.supplier}}
+                    </td>
+                    <td>
+                        {{product.price | NumberSplit}}
+                    </td>
+                    <td>
+                        {{product.stockLevel}}
+                    </td>
+                    <td>
+                        {{product.notes}}
+                    </td>
+                    <td>
+                        <button class="btn main-outline-btn mx-1" (click)="openEditProduct(product)">ویرایش</button>
+                        <button class="btn btn-outline-danger" (click)="deleteProduct(product.id)">حذف</button>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</div>
+<p-dialog id="edit-product-modal" header="اختصاص وقت به بیمار" [(visible)]="editProductModal" [closable]="true"
+    [ngClass]="{'modalShadow' : editProductModal}" class="p-2">
+    <div class="col-12 edit-product-modal">
+        <div class="col-8 d-flex flex-column justify-content-center my-3">
+            <label for="code" class="text-right">کد</label>
+            <input class="form-control" OnlyNumber="true" type="text" id="code" [(ngModel)]="editProductModel.code">
+        </div>
+        <div class="col-8 d-flex flex-column justify-content-center my-3">
+            <label for="name" class="text-right">نام</label>
+            <input class="form-control" type="text" id="name" [(ngModel)]="editProductModel.name">
+        </div>
+        <div class="col-8 d-flex flex-column justify-content-center my-3">
+            <label for="serialnumber" class="text-right">شماره سریال</label>
+            <input class="form-control" OnlyNumber="true" type="text" id="serialnumber"
+                [(ngModel)]="editProductModel.serialnumber">
+        </div>
+        <div class="col-8 d-flex flex-column justify-content-center my-3">
+            <label for="supplier" class="text-right">تامین کننده</label>
+            <input class="form-control" type="text" id="supplier" [(ngModel)]="editProductModel.supplier">
+        </div>
+        <div class="col-8 d-flex flex-column justify-content-center my-3">
+            <label for="price" class="text-right">قیمت</label>
+            <input class="form-control" OnlyNumber="true" type="text" id="price" [(ngModel)]="editProductModel.price">
+
+        </div>
+        <div class="col-8 d-flex flex-column justify-content-center my-3">
+            <label for="inventory" class="text-right">موجودی</label>
+            <input class="form-control" OnlyNumber="true" type="text" id="inventory"
+                [(ngModel)]="editProductModel.inventory">
+        </div>
+        <div class="col-8 d-flex flex-column justify-content-center my-3">
+            <label for="note" class="text-right">یادداشت</label>
+            <textarea name="note" id="note" [(ngModel)]="editProductModel.note"></textarea>
+        </div>
+        <div class="col-8 d-flex flex-column justify-content-center align-items-start my-3">
+            <input type="checkbox" class="custom-control-input" name="hasIsActive" id="hasIsActive"
+                [(ngModel)]="editProductModel.isActive">
+            <label for="hasIsActive" class="custom-control-label pt-1"> فعال است ؟ </label>
+        </div>
+
+        <div class="col-12 d-flex justify-content-between my-3">
+            <button class="btn btn-outline-success col-5" (click)="editProduct()">ثبت</button>
+            <button class="btn btn-outline-secondary col-5" (click)="closeEditProductModal()">انصراف</button>
+        </div>
+    </div>
+</p-dialog>

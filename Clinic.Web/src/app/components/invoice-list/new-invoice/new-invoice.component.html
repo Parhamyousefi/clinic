@@ -6,20 +6,28 @@
     <div class="col-12">
         <div class="d-lg-flex align-items-baseline my-3">
             <div class="col-lg-4 col-12">
-                <p-dropdown [options]="clinicsList" placeholder="مکان" [(ngModel)]="selectedClinic" optionLabel="name" dataKey="id" class="full-width text-right" />
+                <p-dropdown [options]="clinicsList" placeholder="مکان" [(ngModel)]="selectedClinic" optionLabel="name"
+                    dataKey="id" class="full-width text-right" />
             </div>
             <div class="col-lg-4 col-12">
-                <p-dropdown [options]="patientsList" placeholder="بیمار" [(ngModel)]="selectedPatient" optionLabel="name" dataKey="id" class="full-width text-right" />
+                <p-dropdown [options]="patientsList" placeholder="بیمار" [(ngModel)]="selectedPatient"
+                    optionLabel="name" dataKey="id" class="full-width text-right"
+                    (ngModelChange)="getPatientAppointments()" />
             </div>
             <div class="col-lg-4 col-12">
-                <p-dropdown [options]="hours" placeholder="وقت" [(ngModel)]="selectedPatient" optionLabel="name" dataKey="id" class="full-width text-right" />
+                <p-dropdown [options]="patientAppointmentsList" placeholder="وقت"
+                    [(ngModel)]="selectedPatientAppointment" optionLabel="name" dataKey="id"
+                    class="full-width text-right" />
             </div>
         </div>
         <div class="col-lg-8 col-12 my-3">
-            <textarea class="form-control" placeholder="یادداشت" name="" id=""></textarea>
+            <textarea class="form-control" placeholder="یادداشت" [(ngModel)]="note" name="" id=""></textarea>
         </div>
         <div class="col-12 text-center">
-            <button class="btn btn-danger">ذخیره</button>
+            <button class="btn btn-danger" (click)="saveInvoice()">ذخیره</button>
         </div>
+    </div>
+    <div class="col-12 mt-3">
+        <app-invoice-items [invoiceId]="editOrNew"></app-invoice-items>
     </div>
 </div>

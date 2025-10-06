@@ -6,10 +6,6 @@ import { MainService } from './../../_services/main.service';
 import moment from 'moment-jalaali';
 import { FormControl } from '@angular/forms';
 
-
-
-
-
 @Component({
   selector: 'app-today-appointments',
   standalone: true,
@@ -21,11 +17,8 @@ export class TodayAppointmentsComponent implements OnInit {
 
   constructor(
     private treatmentsService: TreatmentsService,
-    private userService: UserService,
-    private mainService: MainService
+    private userService: UserService
   ) { }
-
-
 
   clinicsList: any = [];
   selectedClinic: any;
@@ -36,7 +29,6 @@ export class TodayAppointmentsComponent implements OnInit {
   selectedTimefrom: any = '00:00';
   selectedDateTo: any;
   selectedTimeTo: any = '23:00';
-
 
   async ngOnInit() {
     this.selectedDatefrom = new FormControl(moment().format('jYYYY/jMM/jDD'));
@@ -62,7 +54,6 @@ export class TodayAppointmentsComponent implements OnInit {
       this.todayAppointmentsList = res;
     }
     catch { }
-
   }
 
   async getClinics() {
@@ -81,14 +72,11 @@ export class TodayAppointmentsComponent implements OnInit {
 
   async getBillableItems() {
     try {
-      let res = await this.mainService.getBillableItems().toPromise();
+      let res = await this.treatmentsService.getBillableItems().toPromise();
       this.servicesList = res;
       this.servicesList.forEach((service: any) => {
         service.code = service.id;
       });
-      // setTimeout(() => {
-      //   this.selectedservice = this.servicesList[0];
-      // }, 1000);
     }
     catch { }
   }
@@ -109,11 +97,6 @@ export class TodayAppointmentsComponent implements OnInit {
     return timePart.replace("Z", "");
   }
 
-
-
   onDateChange(newDate: string) {
-
   }
-
-
 }

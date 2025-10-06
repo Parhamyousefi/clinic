@@ -161,11 +161,8 @@ export class AppointmentComponent {
         }
       });
       this.timeSheetHeaderDate = date._d;
-
-
     }
     catch { }
-
   }
 
   async createAppointment() {
@@ -218,7 +215,6 @@ export class AppointmentComponent {
     this.showNewAppointment = true;
   }
 
-
   async getPatients() {
     try {
       let res: any = await this.patientService.getPatients().toPromise();
@@ -252,7 +248,6 @@ export class AppointmentComponent {
     }
   }
 
-
   combineDateAndTime(dateInput: any, timeInput: any): string {
     const date = new Date(dateInput);
     const timeString = String(timeInput);
@@ -260,8 +255,6 @@ export class AppointmentComponent {
     date.setHours(hours, minutes, 0, 0);
     return date.toISOString();
   }
-
-
 
   getEndTime(startTime: string, durationMinutes: number = 15) {
     const [hours, minutes] = startTime.split(":").map(Number);
@@ -282,8 +275,6 @@ export class AppointmentComponent {
     this.newAppointmentModel.note = appointment.note;
     this.showNewAppointment = true;
     this.editmode = true;
-
-
   }
 
   async getClinics() {
@@ -305,7 +296,6 @@ export class AppointmentComponent {
     this.newAppointmentModel = [];
   }
 
-
   getCurrentWeek() {
     let currentDate = moment(this.appointmentDate);
     let weekStart: any = currentDate.clone().locale('fa').startOf('week');
@@ -325,7 +315,6 @@ export class AppointmentComponent {
     this.weekDays = daysOfWeek;
     return this.weekDays;
   }
-
 
   setWeeklyNewAppointment(date: any, time: any) {
     this.newAppointmentModel.appointmentStartTime = this.combineDateAndTime(date, time);
@@ -353,9 +342,6 @@ export class AppointmentComponent {
     this.changeDate(0);
   }
 
-
-
-
   transformAppointments(data: any) {
     const dayMap: Record<string, number> = {
       Saturday: 0,
@@ -364,7 +350,7 @@ export class AppointmentComponent {
       Tuesday: 3,
       Wednesday: 4,
       Thursday: 5
-    };
+    }
 
     const result = Object.entries(data)
       .flatMap(([day, appointments]) =>
@@ -373,7 +359,6 @@ export class AppointmentComponent {
           dayOfWeek: dayMap[day] ?? null,
         }))
       );
-
     return result;
   }
 }
