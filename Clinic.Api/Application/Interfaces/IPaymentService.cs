@@ -7,7 +7,7 @@ namespace Clinic.Api.Application.Interfaces
     public interface IPaymentService
     {
         Task<GlobalResponse> SavePayment(SavePaymentDto model);
-        Task<IEnumerable<PaymentsContext>> GetAllPayments();
+        Task<IEnumerable<GetAllPaymentsResponse>> GetAllPayments();
         Task<IEnumerable<PaymentsContext>> GetPayment(int patientId);
         Task<GlobalResponse> DeletePayment(int id);
     }

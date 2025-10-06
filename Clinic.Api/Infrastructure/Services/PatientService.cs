@@ -1,11 +1,9 @@
 ﻿using AutoMapper;
-using Azure.Core;
 using Clinic.Api.Application.DTOs;
 using Clinic.Api.Application.DTOs.Patients;
 using Clinic.Api.Application.Interfaces;
 using Clinic.Api.Domain.Entities;
 using Clinic.Api.Infrastructure.Data;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Clinic.Api.Infrastructure.Services
@@ -37,13 +35,16 @@ namespace Clinic.Api.Infrastructure.Services
 
                 if (model.EditOrNew == -1)
                 {
+                    int? lastId = await _context.Patients.MaxAsync(r => r.PatientCode);
+                    model.PatientCode = lastId + 1;
                     var patient = _mapper.Map<PatientsContext>(model);
                     patient.CreatorId = userId;
                     patient.ReferringDoctorId = userId;
                     patient.CreatedOn = DateTime.UtcNow;
+                    patient.PatientCode = lastId + 1;
                     _context.Patients.Add(patient);
                     await _context.SaveChangesAsync();
-                    result.Data = "Patient Saved Successfully";
+                    result.Message = "Patient Saved Successfully";
                     result.Status = 0;
                     return result;
                 }
@@ -62,7 +63,7 @@ namespace Clinic.Api.Infrastructure.Services
                     existingPatient.LastUpdated = DateTime.UtcNow;
                     _context.Patients.Update(existingPatient);
                     await _context.SaveChangesAsync();
-                    result.Data = "Patient Updated Successfully";
+                    result.Message = "Patient Updated Successfully";
                     result.Status = 0;
                     return result;
                 }
@@ -85,7 +86,7 @@ namespace Clinic.Api.Infrastructure.Services
 
                 _context.Patients.Remove(patient);
                 await _context.SaveChangesAsync();
-                result.Data = "Patient Deleted Successfully";
+                result.Message = "Patient Deleted Successfully";
                 result.Status = 0;
                 return result;
             }
@@ -116,22 +117,26 @@ namespace Clinic.Api.Infrastructure.Services
             try
             {
                 var query = _context.Patients.AsQueryable();
-                var result = await query
-                    .Where(p => p.Id == patientId)
-                    .Select(a => new GetPatientInfoResponse
-                    {
-                        Mobile = _context.PatientPhones
-                            .Where(p => p.PatientId == patientId)
-                            .Select(p => p.Number)
-                            .FirstOrDefault() ?? string.Empty,
-                        FirstName = a.FirstName,
-                        LastName = a.LastName,
-                        Gender = a.Gender,
-                        BirthDate = a.BirthDate,
-                        FatherName = a.FatherName,
-                        NationalCode = a.NationalCode,
-                        PatientCode = a.PatientCode.ToString()
-                    }).ToListAsync();
+                var result = await (from n in query
+                                    where n.Id == patientId
+                                    join j in _context.Jobs on n.JobId equals j.Id
+                                    join u in _context.Users on n.ReferringDoctorId equals u.Id
+                                    select new GetPatientInfoResponse
+                                    {
+                                        Mobile = _context.PatientPhones
+                                     .Where(p => p.PatientId == patientId)
+                                     .Select(p => p.Number)
+                                     .FirstOrDefault() ?? string.Empty,
+                                        FirstName = n.FirstName,
+                                        LastName = n.LastName,
+                                        Gender = n.Gender,
+                                        BirthDate = n.BirthDate,
+                                        FatherName = n.FatherName,
+                                        NationalCode = n.NationalCode,
+                                        PatientCode = n.PatientCode.ToString(),
+                                        JobName = j.Name,
+                                        DoctorName = u.FirstName + " " + u.LastName,
+                                    }).ToListAsync();
                 return result;
             }
             catch (Exception ex)
@@ -157,7 +162,7 @@ namespace Clinic.Api.Infrastructure.Services
                         mappPatient.CreatorId = userId;
                         _context.PatientPhones.Add(mappPatient);
                         await _context.SaveChangesAsync();
-                        result.Data = "Patient Phone Saved Successfully";
+                        result.Message = "Patient Phone Saved Successfully";
                         result.Status = 0;
                         return result;
                     }
@@ -180,7 +185,7 @@ namespace Clinic.Api.Infrastructure.Services
                     existingPatientPhone.LastUpdated = DateTime.UtcNow;
                     _context.PatientPhones.Update(existingPatientPhone);
                     await _context.SaveChangesAsync();
-                    result.Data = "Patient Phone Updated Successfully";
+                    result.Message = "Patient Phone Updated Successfully";
                     result.Status = 0;
                     return result;
                 }
@@ -203,7 +208,7 @@ namespace Clinic.Api.Infrastructure.Services
 
                 _context.PatientPhones.Remove(patientPhone);
                 await _context.SaveChangesAsync();
-                result.Data = "Patient Phone Deleted Successfully";
+                result.Message = "Patient Phone Deleted Successfully";
                 result.Status = 0;
                 return result;
             }
@@ -305,7 +310,7 @@ namespace Clinic.Api.Infrastructure.Services
                 if (string.IsNullOrEmpty(fileExtension) || !allowedExtensions.Contains(fileExtension))
                 {
                     result.Status = 1;
-                    result.Data = "Invalid file type. Only images and PDF are allowed.";
+                    result.Message = "Invalid file type. Only images and PDF are allowed.";
                     return result;
                 }
 
@@ -313,20 +318,50 @@ namespace Clinic.Api.Infrastructure.Services
 
                 relativePath = relativePath.Replace("\\", "/");
 
-                var entity = new FileAttachmentsContext
+                if (model.EditOrNew == -1)
                 {
-                    PatientId = model.PatientId,
-                    FileName = relativePath,
-                    FileSize = Convert.FromBase64String(model.Base64).LongLength,
-                    CreatedOn = DateTime.UtcNow,
-                    LastUpdated = null,
-                    CreatorId = userId
-                };
+                    var entity = new FileAttachmentsContext
+                    {
+                        PatientId = model.PatientId,
+                        FileName = relativePath,
+                        FileSize = Convert.FromBase64String(model.Base64).LongLength,
+                        CreatedOn = DateTime.UtcNow,
+                        LastUpdated = null,
+                        ModifierId = null,
+                        CreatorId = userId
+                    };
 
-                _context.FileAttachments.Add(entity);
-                await _context.SaveChangesAsync();
-                result.Data = "File Saved Successfully";
-                result.Status = 0;
+                    _context.FileAttachments.Add(entity);
+                    await _context.SaveChangesAsync();
+
+                    result.Message = "File Saved Successfully";
+                    result.Status = 0;
+                }
+                else
+                {
+                    var entity = await _context.FileAttachments
+                        .FirstOrDefaultAsync(f => f.Id == model.EditOrNew);
+
+                    if (entity == null)
+                    {
+                        result.Status = 1;
+                        result.Message = $"Attachment with Id {model.EditOrNew} not found.";
+                        return result;
+                    }
+
+                    entity.PatientId = model.PatientId;
+                    entity.FileName = relativePath;
+                    entity.FileSize = Convert.FromBase64String(model.Base64).LongLength;
+                    entity.LastUpdated = DateTime.UtcNow;
+                    entity.ModifierId = userId;
+
+                    _context.FileAttachments.Update(entity);
+                    await _context.SaveChangesAsync();
+
+                    result.Message = "File Updated Successfully";
+                    result.Status = 0;
+                }
+
                 return result;
             }
             catch (Exception ex)
@@ -343,32 +378,29 @@ namespace Clinic.Api.Infrastructure.Services
               .Where(f => f.PatientId == patientId)
               .ToListAsync();
 
-                var existingFiles = new List<FileAttachmentsContext>();
+                return attachments;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
 
-                foreach (var attachment in attachments)
-                {
-                    var fileNameOnly = Path.GetFileName(attachment.FileName);
+        public async Task<GlobalResponse> DeleteAttachment(int id)
+        {
+            var result = new GlobalResponse();
 
-                    var fullPath = Path.Combine(_environment.ContentRootPath, "Assets/Patient", fileNameOnly);
+            try
+            {
+                var attachment = await _context.FileAttachments.FindAsync(id);
+                if (attachment == null)
+                    throw new Exception("Attachment Not Found");
 
-                    if (File.Exists(fullPath))
-                    {
-                        attachment.FileName = Path.Combine("Assets/Patient", fileNameOnly).Replace("\\", "/");
-                        existingFiles.Add(attachment);
-                    }
-                    else
-                    {
-                        _context.FileAttachments.Remove(attachment);
-                    }
-                }
-
-                if (_context.ChangeTracker.HasChanges())
-                    await _context.SaveChangesAsync();
-
-                if (!existingFiles.Any())
-                    throw new Exception("No attachments found for this patient or files are missing on disk.");
-
-                return existingFiles;
+                _context.FileAttachments.Remove(attachment);
+                await _context.SaveChangesAsync();
+                result.Message = "Attachment Deleted Successfully";
+                result.Status = 0;
+                return result;
             }
             catch (Exception ex)
             {

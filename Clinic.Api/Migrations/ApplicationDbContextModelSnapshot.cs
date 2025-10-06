@@ -1441,7 +1441,7 @@ namespace Clinic.Api.Migrations
                     b.Property<int?>("AppointmentId")
                         .HasColumnType("int");
 
-                    b.Property<int>("AssistantId")
+                    b.Property<int?>("AssistantId")
                         .HasColumnType("int");
 
                     b.Property<int>("BillStatus")
@@ -1692,7 +1692,7 @@ namespace Clinic.Api.Migrations
                     b.ToTable("LoginHistories");
                 });
 
-            modelBuilder.Entity("Clinic.Api.Domain.Entities.MedicalArtsContext", b =>
+            modelBuilder.Entity("Clinic.Api.Domain.Entities.MedicalAlertsContext", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()

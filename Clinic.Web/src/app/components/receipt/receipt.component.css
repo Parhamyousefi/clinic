@@ -1,0 +1,21 @@
+
+.selected-mode {
+    background-color: #00c4b4;
+    border-radius: 10px;
+    transition: .2s all ease;
+    color: #FFFFFF;
+}
+.mode-selector {
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    width: fit-content;
+    transition: .2s all ease;
+
+    div {
+        width: 70px;
+    }
+}
+.main-btn {
+    background-color: #00c4b4;
+    color: #FFFFFF;
+}

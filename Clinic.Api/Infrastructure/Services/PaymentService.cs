@@ -14,7 +14,7 @@ namespace Clinic.Api.Infrastructure.Services
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
 
-        public PaymentService(IReadTokenClaims token,ApplicationDbContext context,IMapper mapper)
+        public PaymentService(IReadTokenClaims token, ApplicationDbContext context, IMapper mapper)
         {
             _context = context;
             _token = token;
@@ -36,7 +36,7 @@ namespace Clinic.Api.Infrastructure.Services
                     payments.CreatedOn = DateTime.UtcNow;
                     _context.Payments.Add(payments);
                     await _context.SaveChangesAsync();
-                    result.Data = "Payment Saved Successfully";
+                    result.Message = "Payment Saved Successfully";
                     result.Status = 0;
                     return result;
                 }
@@ -55,7 +55,7 @@ namespace Clinic.Api.Infrastructure.Services
                     existingPayments.LastUpdated = DateTime.UtcNow;
                     _context.Payments.Update(existingPayments);
                     await _context.SaveChangesAsync();
-                    result.Data = "Payment Updated Successfully";
+                    result.Message = "Payment Updated Successfully";
                     result.Status = 0;
                     return result;
                 }
@@ -66,11 +66,32 @@ namespace Clinic.Api.Infrastructure.Services
             }
         }
 
-        public async Task<IEnumerable<PaymentsContext>> GetAllPayments()
+        public async Task<IEnumerable<GetAllPaymentsResponse>> GetAllPayments()
         {
             try
             {
-                var result = await _context.Payments.ToListAsync();
+                var query = _context.Payments.AsQueryable();
+                var result = await (from a in query
+                                    join p in _context.Patients on a.PatientId equals p.Id
+
+                                    select new GetAllPaymentsResponse
+                                    {
+                                        Id = a.Id,
+                                        PaymentNo = a.PaymentNo,
+                                        PatientId = a.PatientId,
+                                        Cash = a.Cash,
+                                        EFTPos = a.EFTPos,
+                                        Other = a.Other,
+                                        Notes = a.Notes,
+                                        ModifierId = a.ModifierId,
+                                        CreatedOn = a.CreatedOn,
+                                        LastUpdated = a.LastUpdated,
+                                        AllowEdit = a.AllowEdit,
+                                        CreatorId = a.CreatorId,
+                                        PaymentTypeId = a.PaymentTypeId,
+                                        PatientName = p.FirstName + " " + p.LastName
+                                    })
+                                   .ToListAsync();
                 return result;
             }
             catch (Exception ex)
@@ -104,7 +125,7 @@ namespace Clinic.Api.Infrastructure.Services
 
                 _context.Payments.Remove(payment);
                 await _context.SaveChangesAsync();
-                result.Data = "Payment Deleted Successfully";
+                result.Message = "Payment Deleted Successfully";
                 result.Status = 0;
                 return result;
             }

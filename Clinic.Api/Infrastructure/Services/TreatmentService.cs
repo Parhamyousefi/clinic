@@ -104,7 +104,7 @@ namespace Clinic.Api.Infrastructure.Services
 
                 _context.Appointments.Remove(appointment);
                 await _context.SaveChangesAsync();
-                result.Data = "Appointment Deleted Successfully";
+                result.Message = "Appointment Deleted Successfully";
                 result.Status = 0;
                 return result;
             }
@@ -170,7 +170,7 @@ namespace Clinic.Api.Infrastructure.Services
                     treatment.CreatedOn = DateTime.UtcNow;
                     _context.Treatments.Add(treatment);
                     await _context.SaveChangesAsync();
-                    result.Data = "Treatment Saved Successfully";
+                    result.Message = "Treatment Saved Successfully";
                     result.Status = 0;
                     return result;
                 }
@@ -188,7 +188,7 @@ namespace Clinic.Api.Infrastructure.Services
                     existingTreatment.CreatedOn = DateTime.UtcNow;
                     _context.Treatments.Update(existingTreatment);
                     await _context.SaveChangesAsync();
-                    result.Data = "Treatment Updated Successfully";
+                    result.Message = "Treatment Updated Successfully";
                     return result;
                 }
             }
@@ -210,7 +210,7 @@ namespace Clinic.Api.Infrastructure.Services
 
                 _context.Treatments.Remove(treatment);
                 await _context.SaveChangesAsync();
-                result.Data = "Treatment Deleted Successfully";
+                result.Message = "Treatment Deleted Successfully";
                 return result;
             }
             catch (Exception ex)
@@ -414,7 +414,7 @@ namespace Clinic.Api.Infrastructure.Services
                     billableItems.CreatedOn = DateTime.UtcNow;
                     _context.BillableItems.Add(billableItems);
                     await _context.SaveChangesAsync();
-                    result.Data = "BillableItem Saved Successfully";
+                    result.Message = "BillableItem Saved Successfully";
                     return result;
                 }
                 else
@@ -431,7 +431,7 @@ namespace Clinic.Api.Infrastructure.Services
                     existingBillable.LastUpdated = DateTime.UtcNow;
                     _context.BillableItems.Update(existingBillable);
                     await _context.SaveChangesAsync();
-                    result.Data = "BillableItem Updated Successfully";
+                    result.Message = "BillableItem Updated Successfully";
                     return result;
                 }
             }
@@ -456,7 +456,7 @@ namespace Clinic.Api.Infrastructure.Services
 
                 _context.BillableItems.Remove(billableItem);
                 await _context.SaveChangesAsync();
-                result.Data = "BillableItem Deleted Successfully";
+                result.Message = "BillableItem Deleted Successfully";
                 return result;
             }
             catch (Exception ex)
@@ -512,15 +512,22 @@ namespace Clinic.Api.Infrastructure.Services
                     from inv in _context.Invoices
                     join item in _context.InvoiceItems on inv.Id equals item.InvoiceId
                     join bill in _context.BillableItems on item.ItemId equals bill.Id
+                    join ic in _context.ItemCategories on bill.ItemCategoryId equals ic.Id
+                    join doc in _context.Users on inv.PractitionerId equals doc.Id
                     where inv.PatientId == patientId
                     select new GetServicesPerPatientResponse
                     {
                         InvoiceId = inv.Id,
                         InvoiceItemId = item.Id,
+                        TreatmentTemplateId = bill.TreatmentTemplateId,
                         BillableItemName = bill.Name,
                         BillableItemPrice = bill.Price,
+                        ItemCategoryId = bill.ItemCategoryId,
+                        ItemCategoryName = ic.Name,
                         Quantity = item.Quantity,
                         UnitPrice = item.UnitPrice,
+                        DoctorName = doc.FirstName + " " + doc.LastName,
+                        CreatedDate = inv.CreatedOn,
                         Amount = item.Amount
                     }
                 ).ToListAsync();

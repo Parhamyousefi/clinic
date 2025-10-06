@@ -1,0 +1,90 @@
+<div class="patientAppContainer p-0">
+    <div class="col-12 pt-2 d-flex justify-content-between align-items-center border-bottom">
+        <div>
+            <!-- <h4 class="text-right mb-0">{{patientName}} / پرونده بالینی</h4> -->
+            <h4 class="text-right mb-0">پرونده بالینی</h4>
+            <div class="d-flex align-items-center mt-1 mb-2">
+                <div class="text-end text-00c4b4 ml-5">کد سیستمی : <strong class="text-dark">{{patientInfo.patientCode
+                        || "-"}}</strong></div>
+                <div class="text-end text-00c4b4 ml-5">سن : <strong class="text-dark">{{patientInfo.age ||
+                        "-"}}</strong></div>
+                <div class="text-end text-00c4b4 ml-5">کد ملی : <strong class="text-dark">{{patientInfo.nationalCode ||
+                        "-"}}</strong></div>
+            </div>
+        </div>
+        <button class="btn btn-sm btn-pink">save</button>
+    </div>
+    <div id="p-accordion" class="col-12 d-lg-flex align-items-start mt-4">
+        <div class="col-lg-6 col-12 ">
+            <p-accordion id="v-t-accordion" *ngIf="selectedService">
+                <p-accordionTab [selected]="true">
+                    <ng-template pTemplate="header">
+                        <div class="d-flex justify-content-between align-items-center ">
+                            <div class="mt-2 d-flex gap-2">
+                                <button class="btn btn-sm btn-danger mx-1"
+                                    (click)="onClickTab($event,selectedService.id,4)">cancel</button>
+                                <button class="btn btn-sm btn-light mx-1"
+                                    (click)="onClickTab($event,selectedService.id,3)">copy</button>
+                                <button class="btn btn-sm btn-info mx-1"
+                                    (click)="onClickTab($event,selectedService.id,2)">Save</button>
+                                <button class="btn btn-sm btn-pink  mx-1" (click)="onClick($event,item.id,1)">Save &
+                                    Close</button>
+                            </div>
+                            <div class="d-flex flex-column">
+                                <div class="fw-bold">{{ selectedService.billableItemName }}</div>
+                                <div class="text-muted">{{ selectedService.createdDate | JustDateZone }}</div>
+                            </div>
+                        </div>
+                    </ng-template>
+                    <div class="" *ngFor="let value of questionsPerSectionList">
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-start flex-row-reverse align-items-center text-left"
+                                style="cursor: pointer;" (click)="value.isOpen = !value.isOpen">
+                                <span class="toggle-icon mr-1">{{ value.isOpen ? '-' : '+' }}</span>
+                                <span>{{value.name}}</span>
+                            </div>
+                            <div *ngIf="value.isOpen" class="card-body">
+                                اینجا محتوای مخفی است که با کلیک باز و بسته می‌شود.
+                            </div>
+                        </div>
+                    </div>
+                </p-accordionTab>
+            </p-accordion>
+        </div>
+        <div id="v-t-accordion" class="col-lg-4 col-12">
+            <p-accordion *ngFor="let item of patientServiceListTab, let index= index">
+                <p-accordionTab [selected]="true">
+                    <ng-template pTemplate="header">
+                        <div class="d-flex justify-content-between align-items-center ">
+                            <div class="mt-2 d-flex gap-2">
+                                <button class="btn btn-sm btn-warning mx-1" (click)="onClick($event,item,4)">Attache
+                                    Files</button>
+                                <button class="btn btn-sm btn-light mx-1" (click)="onClick($event,item,3)">PDF</button>
+                                <button class="btn btn-sm btn-info mx-1" (click)="onClick($event,item,2)">print</button>
+                                <button class="btn btn-sm btn-pink mx-1" (click)="onClick($event,item,1)">edit</button>
+                            </div>
+                            <div class="d-flex flex-column">
+                                <div class="fw-bold">{{ item.billableItemName }}</div>
+                                <div class="text-muted">{{ item.createdDate | JustDateZone }}</div>
+                            </div>
+                        </div>
+                    </ng-template>
+                    <div class="" *ngFor="let value of item.values">
+
+                    </div>
+                </p-accordionTab>
+            </p-accordion>
+        </div>
+        <div id="p-t-accordion" class="col-lg-2 col-12 ">
+            <p-accordion *ngFor="let item of patientServiceList, let index= index">
+                <p-accordionTab [header]="item.name" [selected]="index== 0? true: false">
+                    <div class="Service-box mb-3 pointer" *ngFor="let value of item.values">
+                        <p class="Service-box-header mb-0">{{value.billableItemName}}</p>
+                        <p class=" text-center mb-1">{{value.createdDate | JustDateZone}}</p>
+                        <p class=" text-center mb-1">{{value.doctorName}}</p>
+                    </div>
+                </p-accordionTab>
+            </p-accordion>
+        </div>
+    </div>
+</div>
