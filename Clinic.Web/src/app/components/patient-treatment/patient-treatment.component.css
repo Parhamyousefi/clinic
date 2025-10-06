@@ -6,6 +6,10 @@
     left: 1%;
 }
 
+#p-accordion{
+    direction: ltr;
+}
+
 ::ng-deep #p-accordion .p-accordion .p-accordion-header.p-highlight .p-accordion-header-link::after {
     content: '-';
 }
@@ -25,10 +29,6 @@
 ::ng-deep #p-t-accordion .p-accordion .p-accordion-header .p-accordion-header-link {
     background-color: #111;
     color: #fff;
-}
-
-::ng-deep #p-accordion .p-accordion-header-link {
-    flex-direction: row-reverse;
 }
 
 
@@ -64,4 +64,16 @@
 .toggle-icon {
     font-size: 1.5rem;
     font-weight: bold;
+}
+
+.custom-group {
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.custom-label {
+  display: block;
+  width: 100%;
+  font-weight: bold;
+  margin-bottom: 6px;
 }

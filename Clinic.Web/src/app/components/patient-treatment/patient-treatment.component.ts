@@ -7,7 +7,7 @@ import { CommonModule } from '@angular/common';
 import moment from 'moment-jalaali';
 import { TreatmentsService } from '../../_services/treatments.service';
 import { SharedModule } from '../../share/shared.module';
-
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 @Component({
   selector: 'app-patient-treatment',
   standalone: true,
@@ -23,6 +23,8 @@ export class PatientTreatmentComponent {
   questionsPerSectionList: any = [];
   patientServiceListTab: any = [];
   selectedService: any = null;
+  public Editor = ClassicEditor;
+
   constructor(
     private patientService: PatientService,
     private toastR: ToastrService,
@@ -73,8 +75,15 @@ export class PatientTreatmentComponent {
   async getSectionPerService(id) {
     this.questionsPerSectionList = [];
     let res: any = await this.treatmentService.getSectionPerService(id).toPromise();
-    res.forEach(item => {
-      this.treatmentService.getQuestionsPerSection(item.id).subscribe(res => {
+    await res.forEach(item => {
+      this.treatmentService.getQuestionsPerSection(item.id).subscribe((res: any) => {
+        res.forEach(question => {
+          if (question.type == "MultiSelect" || question.type == "Check" || question.type == "Combo" || question.type == "Radio" || question.type == "textCombo") {
+            this.treatmentService.getAnswersPerQuestion(question.id).subscribe(data => {
+              question.answers = data;
+            });
+          }
+        });
         this.questionsPerSectionList.push({
           id: item.id,
           name: item.title,

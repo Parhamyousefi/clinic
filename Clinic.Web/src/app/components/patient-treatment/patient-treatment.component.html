@@ -14,38 +14,13 @@
         <button class="btn btn-sm btn-pink">save</button>
     </div>
     <div id="p-accordion" class="col-12 d-lg-flex align-items-start mt-4">
-        <div class="col-lg-6 col-12 ">
-            <p-accordion id="v-t-accordion" *ngIf="selectedService">
-                <p-accordionTab [selected]="true">
-                    <ng-template pTemplate="header">
-                        <div class="d-flex justify-content-between align-items-center ">
-                            <div class="mt-2 d-flex gap-2">
-                                <button class="btn btn-sm btn-danger mx-1"
-                                    (click)="onClickTab($event,selectedService.id,4)">cancel</button>
-                                <button class="btn btn-sm btn-light mx-1"
-                                    (click)="onClickTab($event,selectedService.id,3)">copy</button>
-                                <button class="btn btn-sm btn-info mx-1"
-                                    (click)="onClickTab($event,selectedService.id,2)">Save</button>
-                                <button class="btn btn-sm btn-pink  mx-1" (click)="onClick($event,item.id,1)">Save &
-                                    Close</button>
-                            </div>
-                            <div class="d-flex flex-column">
-                                <div class="fw-bold">{{ selectedService.billableItemName }}</div>
-                                <div class="text-muted">{{ selectedService.createdDate | JustDateZone }}</div>
-                            </div>
-                        </div>
-                    </ng-template>
-                    <div class="" *ngFor="let value of questionsPerSectionList">
-                        <div class="mb-3">
-                            <div class="d-flex justify-content-start flex-row-reverse align-items-center text-left"
-                                style="cursor: pointer;" (click)="value.isOpen = !value.isOpen">
-                                <span class="toggle-icon mr-1">{{ value.isOpen ? '-' : '+' }}</span>
-                                <span>{{value.name}}</span>
-                            </div>
-                            <div *ngIf="value.isOpen" class="card-body">
-                                اینجا محتوای مخفی است که با کلیک باز و بسته می‌شود.
-                            </div>
-                        </div>
+        <div id="p-t-accordion" class="col-lg-2 col-12 ">
+            <p-accordion *ngFor="let item of patientServiceList, let index= index">
+                <p-accordionTab [header]="item.name" [selected]="index== 0? true: false">
+                    <div class="Service-box mb-3 pointer" *ngFor="let value of item.values">
+                        <p class="Service-box-header mb-0">{{value.billableItemName}}</p>
+                        <p class=" text-center mb-1">{{value.createdDate | JustDateZone}}</p>
+                        <p class=" text-center mb-1">{{value.doctorName}}</p>
                     </div>
                 </p-accordionTab>
             </p-accordion>
@@ -55,16 +30,16 @@
                 <p-accordionTab [selected]="true">
                     <ng-template pTemplate="header">
                         <div class="d-flex justify-content-between align-items-center ">
-                            <div class="mt-2 d-flex gap-2">
-                                <button class="btn btn-sm btn-warning mx-1" (click)="onClick($event,item,4)">Attache
-                                    Files</button>
-                                <button class="btn btn-sm btn-light mx-1" (click)="onClick($event,item,3)">PDF</button>
-                                <button class="btn btn-sm btn-info mx-1" (click)="onClick($event,item,2)">print</button>
-                                <button class="btn btn-sm btn-pink mx-1" (click)="onClick($event,item,1)">edit</button>
-                            </div>
                             <div class="d-flex flex-column">
                                 <div class="fw-bold">{{ item.billableItemName }}</div>
                                 <div class="text-muted">{{ item.createdDate | JustDateZone }}</div>
+                            </div>
+                            <div class="mt-2 d-flex gap-2">
+                                <button class="btn btn-sm btn-pink mx-1" (click)="onClick($event,item,1)">edit</button>
+                                <button class="btn btn-sm btn-info mx-1" (click)="onClick($event,item,2)">print</button>
+                                <button class="btn btn-sm btn-light mx-1" (click)="onClick($event,item,3)">PDF</button>
+                                <button class="btn btn-sm btn-warning mx-1" (click)="onClick($event,item,4)">Attache
+                                    Files</button>
                             </div>
                         </div>
                     </ng-template>
@@ -74,13 +49,85 @@
                 </p-accordionTab>
             </p-accordion>
         </div>
-        <div id="p-t-accordion" class="col-lg-2 col-12 ">
-            <p-accordion *ngFor="let item of patientServiceList, let index= index">
-                <p-accordionTab [header]="item.name" [selected]="index== 0? true: false">
-                    <div class="Service-box mb-3 pointer" *ngFor="let value of item.values">
-                        <p class="Service-box-header mb-0">{{value.billableItemName}}</p>
-                        <p class=" text-center mb-1">{{value.createdDate | JustDateZone}}</p>
-                        <p class=" text-center mb-1">{{value.doctorName}}</p>
+        <div class="col-lg-6 col-12 ">
+            <p-accordion id="v-t-accordion" *ngIf="selectedService">
+                <p-accordionTab [selected]="true">
+                    <ng-template pTemplate="header">
+                        <div class="d-flex justify-content-between align-items-center ">
+                            <div class="d-flex flex-column">
+                                <div class="fw-bold">{{ selectedService.billableItemName }}</div>
+                                <div class="text-muted">{{ selectedService.createdDate | JustDateZone }}</div>
+                            </div>
+                            <div class="mt-2 d-flex gap-2">
+                                <button class="btn btn-sm btn-pink  mx-1" (click)="onClick($event,item.id,1)">Save &
+                                    Close</button>
+                                <button class="btn btn-sm btn-info mx-1"
+                                    (click)="onClickTab($event,selectedService.id,2)">Save</button>
+                                <button class="btn btn-sm btn-light mx-1"
+                                    (click)="onClickTab($event,selectedService.id,3)">copy</button>
+                                <button class="btn btn-sm btn-danger mx-1"
+                                    (click)="onClickTab($event,selectedService.id,4)">cancel</button>
+                            </div>
+                        </div>
+                    </ng-template>
+                    <div class="" *ngFor="let value of questionsPerSectionList">
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-start align-items-center text-left"
+                                style="cursor: pointer;" (click)="value.isOpen = !value.isOpen">
+                                <span class="toggle-icon mr-1">{{ value.isOpen ? '-' : '+' }}</span>
+                                <span>{{value.name}}</span>
+                            </div>
+                            <div *ngIf="value.isOpen" class="card-body">
+                                <div *ngFor="let item of value.values" class="form-group custom-group">
+                                    <label class="custom-label">{{ item.title }}</label>
+                                    <ng-container [ngSwitch]="item.type">
+                                        <input *ngSwitchCase="'Text'" type="text" class="form-control" />
+                                        <input *ngSwitchCase="'Label'" type="text" class="form-control" />
+                                        <textarea *ngSwitchCase="'Paragraph'" class="form-control" rows="3"></textarea>
+                                        <div *ngSwitchCase="'Check'" class="form-group d-flex flex-wrap ">
+                                            <div *ngFor="let option of item.answers" class="col-6">
+                                                <input type="checkbox" [value]="option.id" />
+                                                <span class="ml-2">{{ option.title }}</span>
+                                            </div>
+                                        </div>
+
+                                        <ckeditor *ngSwitchCase="'Editor'" [editor]="Editor"
+                                            [config]="{ placeholder: 'Write clinical history...' }">
+                                        </ckeditor>
+
+
+                                        <select *ngSwitchCase="'Combo'" class="form-control">
+                                            <option value="" disabled selected hidden>Select an option</option>
+                                            <option *ngFor="let option of item.answers" [value]="option.id">{{
+                                                option.title }}</option>
+                                        </select>
+
+                                        <select *ngSwitchCase="'textCombo'" class="form-control">
+                                            <option value="" disabled selected hidden>Select an option</option>
+                                            <option *ngFor="let option of item.answers" [value]="option.id">{{
+                                                option.title }}</option>
+                                        </select>
+
+                                        <p-multiSelect *ngSwitchCase="'MultiSelect'" [options]="item.answers"
+                                            optionLabel="title" placeholder="Select options" [filter]="true"
+                                            [style]="{ width: '100%' }">
+                                        </p-multiSelect>
+
+                                        <div *ngSwitchCase="'Radio'" class="d-flex flex-column">
+                                            <div *ngFor="let option of item.answers" class="form-check">
+                                                <input class="form-check-input" type="radio"
+                                                    [name]="'radio_' + item.title" [value]="option.id"
+                                                    [(ngModel)]="item.selectedValue" />
+                                                <label class="form-check-label">{{ option.title }}</label>
+                                            </div>
+                                        </div>
+
+
+                                    </ng-container>
+                                </div>
+
+                            </div>
+                        </div>
                     </div>
                 </p-accordionTab>
             </p-accordion>
