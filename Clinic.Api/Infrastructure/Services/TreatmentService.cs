@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Clinic.Api.Application.DTOs;
-using Clinic.Api.Application.DTOs.Appointments;
+using Clinic.Api.Application.DTOs.Treatments;
 using Clinic.Api.Application.Interfaces;
 using Clinic.Api.Domain.Entities;
 using Clinic.Api.Infrastructure.Data;
@@ -538,6 +538,52 @@ namespace Clinic.Api.Infrastructure.Services
             {
                 throw new Exception(ex.Message);
             }
+        }
+
+        public async Task<IEnumerable<GetPatientTreatmentsResponse>> GetPatientTreatments(int patientId)
+        {
+            var result = await (from t in _context.Treatments
+                                join tt in _context.TreatmentTemplates on t.TreatmentTemplateId equals tt.Id
+                                where t.PatientId == patientId
+                                select new GetPatientTreatmentsResponse
+                                {
+                                    TreatmentId = t.Id,
+                                    AppointmentId = t.AppointmentId,
+                                    TemplateTitle = tt.Title,
+                                    Sections = (from s in _context.Sections
+                                                where s.TreatmentTemplateId == t.TreatmentTemplateId
+                                                select new SectionDto
+                                                {
+                                                    Id = s.Id,
+                                                    Title = s.title,
+                                                    Questions = (from q in _context.Questions
+                                                                 where q.SectionId == s.Id
+                                                                 select new QuestionDto
+                                                                 {
+                                                                     Id = q.Id,
+                                                                     Title = q.title,
+                                                                     Answers = (from a in _context.Answers
+                                                                                where a.Question_Id == q.Id
+                                                                                select new AnswerDto
+                                                                                {
+                                                                                    Id = a.Id,
+                                                                                    Title = a.title,
+                                                                                    Text = a.text
+                                                                                }).ToList()
+                                                                 }).ToList()
+                                                }).ToList(),
+                                    Attachments = (from f in _context.FileAttachments
+                                                   where f.TreatmentId == t.Id
+                                                   select new AttachmentDto
+                                                   {
+                                                       Id = f.Id,
+                                                       FileName = f.FileName,
+                                                       Description = f.Description,
+                                                       FileSize = f.FileSize
+                                                   }).ToList()
+                                }).ToListAsync();
+
+            return result;
         }
     }
 }

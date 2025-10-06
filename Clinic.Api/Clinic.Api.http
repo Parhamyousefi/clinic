@@ -541,3 +541,8 @@ Content-Type: application/json
 Get {{Clinic_Api_Host}}/api/patient/getAttachment/1
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTk3NTQ5OTksImlhdCI6MTc1OTE1MDE5OSwidXNlcklkIjoiMiIsInVzZXJuYW1lIjoibmltYSIsInVzZXJSb2xlIjoiQWRtaW4iLCJuYmYiOjE3NTkxNTAxOTl9.W7IOzXwRBjYBLkWF-VZ3Odtvd9VMsqblUB4bK0NHkms
 Content-Type: application/json
+
+### Get Patient Treatments 
+GET {{Clinic_Api_Host}}/api/treatment/getPatientTreatments/2
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NjAzNjIzNjksImlhdCI6MTc1OTc1NzU2OSwidXNlcklkIjoiMiIsInVzZXJuYW1lIjoibmltYSIsInVzZXJSb2xlIjoiQWRtaW4iLCJuYmYiOjE3NTk3NTc1Njl9.O8s2AJVNIXJtbVIt10jsb0uPKqXQVMAtCdu1QDsrb7g
+Content-Type: application/json
