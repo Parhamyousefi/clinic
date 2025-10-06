@@ -29,7 +29,7 @@ export const PatientMenu: imenu[] = [
   { id: 0, text: "اطلاعات بیمار", link: '/patient/patient-info', roleAccess: [], icon: '' },
   { id: 1, text: "پرونده بالینی", link: '/patient/today-appointment', roleAccess: [], icon: '' },
   { id: 2, text: "پیوست ها", link: '/patient/patient-attachment', roleAccess: [], icon: '' },
-  { id: 3, text: "وقت ها", link: '/patient/pateint-appointments', roleAccess: [], icon: '' },
+  { id: 3, text: "وقت ها", link: '/patient/patientappointments', roleAccess: [], icon: '' },
   { id: 4, text: "صورتحساب ها", link: '/', roleAccess: [], icon: '' },
   { id: 5, text: "دریافت ها", link: '/', roleAccess: [], icon: '' },
   { id: 6, text: "پرداخت ها", link: '/', roleAccess: [], icon: '' },
@@ -57,10 +57,13 @@ export class NavbarComponent {
   ) {
     router.events.subscribe((event: Event) => {
       let url = location.pathname.split('?')[0];
+      let pageUrl = location.pathname;
       if (event instanceof NavigationEnd) {
         if ((url.startsWith('/patient/'))) {
           this.hasPatientMenu = true;
-          // this.patientId = this.activeRoute.snapshot.paramMap.get('id');
+          if ((url.startsWith('/patient/patient-info')))
+            pageUrl = this.router.url;
+          this.patientId = url.split('/').pop();
         }
         else {
           this.hasPatientMenu = false;
@@ -70,14 +73,13 @@ export class NavbarComponent {
 
   }
   ngOnInit() {
-    this.activeRoute.paramMap.subscribe(params => {
-      this.patientId = params.get('id');
-      console.log('Patient ID:', this.patientId);
-    });
     let url = location.pathname;
     this.isMobileSize = window.innerWidth <= 768 && window.innerHeight <= 1024;
     this.sidebarMenu = Menu;
     this.patientMenu = PatientMenu;
+    if ((url.startsWith('/patient/'))) {
+      this.hasPatientMenu = true;
+    }
   }
 
   logOut() {
