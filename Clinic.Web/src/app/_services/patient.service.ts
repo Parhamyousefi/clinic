@@ -89,11 +89,7 @@ export class PatientService {
 
   getPatientAppointments(patientId) {
     const token: any = localStorage.getItem("token");
-<<<<<<< HEAD
     const uri = this.url + `api/Patient/getPatientAppointments/` + patientId;
-=======
-    const uri = this.url + `api/Patient/getPatientAppointments/${patientId}`;
->>>>>>> NimayeAyda/main
     const httpOptions = {
       headers: new HttpHeaders({
         "Content-Type": "application/json",
@@ -102,7 +98,6 @@ export class PatientService {
     };
     return this.http.get(uri, httpOptions);
   }
-<<<<<<< HEAD
 
   getPatientById(patientId) {
     const token: any = localStorage.getItem("token");
@@ -154,6 +149,4 @@ export class PatientService {
   }
 
 
-=======
->>>>>>> NimayeAyda/main
 }

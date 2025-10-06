@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { NgForOf, NgClass, NgIf } from "@angular/common";
 import { NavigationEnd, Router, RouterOutlet, Event, RouterLink, ActivatedRoute } from '@angular/router';
 import { AuthService } from '../_services/auth.service';
+import { PatientService } from '../_services/patient.service';
+import { ToastrService } from 'ngx-toastr';
 export interface imenu {
   id: number;
   text: string;
@@ -22,6 +24,7 @@ export const Menu: imenu[] = [
   { id: 8, text: "اشخاص", link: '/contacts', roleAccess: [], icon: '' },
   { id: 9, text: "گزارشات", link: '/', roleAccess: [], icon: '' },
   { id: 10, text: "راهنما", link: '/', roleAccess: [], icon: '' },
+  { id: 11, text: "راهنما", link: '/', roleAccess: [], icon: '' },
 ];
 
 
@@ -50,10 +53,13 @@ export class NavbarComponent {
   patientMenu: imenu[];
   hasPatientMenu: boolean = false;
   patientId: any;
+  patientName: string;
   constructor(
     private authService: AuthService,
     private router: Router,
-    private activeRoute: ActivatedRoute
+    private activeRoute: ActivatedRoute,
+    private patientService: PatientService,
+    private toastR: ToastrService
   ) {
     router.events.subscribe((event: Event) => {
       let url = location.pathname.split('?')[0];
@@ -61,9 +67,11 @@ export class NavbarComponent {
       if (event instanceof NavigationEnd) {
         if ((url.startsWith('/patient/'))) {
           this.hasPatientMenu = true;
-          if ((url.startsWith('/patient/patient-info')))
+          if ((url.startsWith('/patient/patient-info'))) {
             pageUrl = this.router.url;
-          this.patientId = url.split('/').pop();
+            this.patientId = url.split('/').pop();
+            this.getPatientById(this.patientId);
+          }
         }
         else {
           this.hasPatientMenu = false;
@@ -79,11 +87,27 @@ export class NavbarComponent {
     this.patientMenu = PatientMenu;
     if ((url.startsWith('/patient/'))) {
       this.hasPatientMenu = true;
+      // setTimeout(() => {
+      //   this.getPatientById(this.patientId);
+      // }, 500);
     }
   }
 
   logOut() {
     this.authService.logout();
+  }
+
+
+  async getPatientById(patientId) {
+    try {
+      let res: any = await this.patientService.getPatientById(patientId).toPromise();
+      if (res.length > 0) {
+        this.patientName = res[0].firstName + "" + res[0].lastName;
+      }
+    }
+    catch {
+      this.toastR.error('خطا!', 'خطا در دریافت اطلاعات');
+    }
   }
 }
 
