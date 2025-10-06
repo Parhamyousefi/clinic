@@ -130,7 +130,7 @@ namespace Clinic.Api.Infrastructure.Services
                 throw new Exception(ex.Message);
             }
         }
-        
+
         public async Task<IEnumerable<CountriesContext>> GetCountries()
         {
             try
@@ -214,6 +214,92 @@ namespace Clinic.Api.Infrastructure.Services
                 _context.Products.Remove(product);
                 await _context.SaveChangesAsync();
                 result.Message = "Product Deleted Successfully";
+                result.Status = 0;
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<GlobalResponse> SaveNote(SaveNoteDto model)
+        {
+            var result = new GlobalResponse();
+
+            try
+            {
+                var userId = _token.GetUserId();
+
+                if (model.EditOrNew == -1)
+                {
+                    var notes = _mapper.Map<MedicalAlertsContext>(model);
+                    notes.CreatorId = userId;
+                    notes.CreatedOn = DateTime.UtcNow;
+                    _context.MedicalAlerts.Add(notes);
+                    await _context.SaveChangesAsync();
+                    result.Message = "Medical Note Saved Successfully";
+                    result.Status = 0;
+                    return result;
+                }
+                else
+                {
+                    var existingNote = await _context.MedicalAlerts.FirstOrDefaultAsync(j => j.Id == model.EditOrNew);
+                    if (existingNote == null)
+                    {
+                        throw new Exception("Medical Note Not Found");
+                    }
+
+                    _mapper.Map(model, existingNote);
+                    existingNote.ModifierId = userId;
+                    existingNote.LastUpdated = DateTime.UtcNow;
+                    _context.MedicalAlerts.Update(existingNote);
+                    await _context.SaveChangesAsync();
+                    result.Message = "Medical Note Updated Successfully";
+                    result.Status = 0;
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<IEnumerable<GetNotesResponse>> GetNotes(int patientId)
+        {
+            try
+            {
+                var query = _context.MedicalNotes.AsQueryable();
+                var result = await (from n in query
+                                    select new GetNotesResponse
+                                    {
+                                        NoteId = n.Id,
+                                        Note = n.Notes
+                                    })
+                                    .ToListAsync();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<GlobalResponse> DeleteNote(int noteId)
+        {
+            var result = new GlobalResponse();
+
+            try
+            {
+                var note = await _context.MedicalNotes.FindAsync(noteId);
+
+                if (note == null)
+                    throw new Exception("Note Not Found");
+
+                _context.MedicalNotes.Remove(note);
+                await _context.SaveChangesAsync();
+                result.Message = "Note Deleted Successfully";
                 result.Status = 0;
                 return result;
             }

@@ -35,10 +35,13 @@ namespace Clinic.Api.Infrastructure.Services
 
                 if (model.EditOrNew == -1)
                 {
+                    int? lastId = await _context.Patients.MaxAsync(r => r.PatientCode);
+                    model.PatientCode = lastId + 1;
                     var patient = _mapper.Map<PatientsContext>(model);
                     patient.CreatorId = userId;
                     patient.ReferringDoctorId = userId;
                     patient.CreatedOn = DateTime.UtcNow;
+                    patient.PatientCode = lastId + 1;
                     _context.Patients.Add(patient);
                     await _context.SaveChangesAsync();
                     result.Message = "Patient Saved Successfully";
@@ -114,22 +117,26 @@ namespace Clinic.Api.Infrastructure.Services
             try
             {
                 var query = _context.Patients.AsQueryable();
-                var result = await query
-                    .Where(p => p.Id == patientId)
-                    .Select(a => new GetPatientInfoResponse
-                    {
-                        Mobile = _context.PatientPhones
-                            .Where(p => p.PatientId == patientId)
-                            .Select(p => p.Number)
-                            .FirstOrDefault() ?? string.Empty,
-                        FirstName = a.FirstName,
-                        LastName = a.LastName,
-                        Gender = a.Gender,
-                        BirthDate = a.BirthDate,
-                        FatherName = a.FatherName,
-                        NationalCode = a.NationalCode,
-                        PatientCode = a.PatientCode.ToString()
-                    }).ToListAsync();
+                var result = await (from n in query
+                                    where n.Id == patientId
+                                    join j in _context.Jobs on n.JobId equals j.Id
+                                    join u in _context.Users on n.ReferringDoctorId equals u.Id
+                                    select new GetPatientInfoResponse
+                                    {
+                                        Mobile = _context.PatientPhones
+                                     .Where(p => p.PatientId == patientId)
+                                     .Select(p => p.Number)
+                                     .FirstOrDefault() ?? string.Empty,
+                                        FirstName = n.FirstName,
+                                        LastName = n.LastName,
+                                        Gender = n.Gender,
+                                        BirthDate = n.BirthDate,
+                                        FatherName = n.FatherName,
+                                        NationalCode = n.NationalCode,
+                                        PatientCode = n.PatientCode.ToString(),
+                                        JobName = j.Name,
+                                        DoctorName = u.FirstName + " " + u.LastName,
+                                    }).ToListAsync();
                 return result;
             }
             catch (Exception ex)
@@ -311,7 +318,7 @@ namespace Clinic.Api.Infrastructure.Services
 
                 relativePath = relativePath.Replace("\\", "/");
 
-                if (model.EditOrNew == -1) 
+                if (model.EditOrNew == -1)
                 {
                     var entity = new FileAttachmentsContext
                     {
@@ -330,7 +337,7 @@ namespace Clinic.Api.Infrastructure.Services
                     result.Message = "File Saved Successfully";
                     result.Status = 0;
                 }
-                else 
+                else
                 {
                     var entity = await _context.FileAttachments
                         .FirstOrDefaultAsync(f => f.Id == model.EditOrNew);
@@ -371,25 +378,7 @@ namespace Clinic.Api.Infrastructure.Services
               .Where(f => f.PatientId == patientId)
               .ToListAsync();
 
-                var existingFiles = new List<FileAttachmentsContext>();
-
-                foreach (var attachment in attachments)
-                {
-                    var fileNameOnly = Path.GetFileName(attachment.FileName);
-
-                    var fullPath = Path.Combine(_environment.ContentRootPath, "Assets/Patient", fileNameOnly);
-
-                    if (File.Exists(fullPath))
-                    {
-                        attachment.FileName = Path.Combine("Assets/Patient", fileNameOnly).Replace("\\", "/");
-                        existingFiles.Add(attachment);
-                    }
-                }
-
-                if (!existingFiles.Any())
-                    throw new Exception("No attachments found for this patient or files are missing on disk.");
-
-                return existingFiles;
+                return attachments;
             }
             catch (Exception ex)
             {
