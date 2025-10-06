@@ -16,6 +16,7 @@ import { ProductListComponent } from './components/product-list/product-list.com
 import { ReceiptComponent } from './components/receipt/receipt.component';
 import { ReceiptListComponent } from './components/receipt-list/receipt-list.component';
 import { PatientTreatmentComponent } from './components/patient-treatment/patient-treatment.component';
+import { PatientInvoiceComponent } from './components/patient-invoice/patient-invoice.component';
 
 export const routes: Routes = [
     { path: '', component: LoginComponent },
@@ -86,11 +87,15 @@ export const routes: Routes = [
         canActivate: [AuthGuard]
     },
     {
-        path: 'patient-treatment/:id', component: PatientTreatmentComponent,
+        path: 'patient/patient-treatment/:id', component: PatientTreatmentComponent,
         canActivate: [AuthGuard]
     },
     {
         path: 'payment', component: ReceiptComponent,
+        canActivate: [AuthGuard]
+    },
+    {
+        path: 'patient/patient-invoice/:id', component: PatientInvoiceComponent,
         canActivate: [AuthGuard]
     },
 ];

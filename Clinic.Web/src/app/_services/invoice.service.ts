@@ -62,6 +62,7 @@ export class InvoiceService {
     };
     return this.http.post(uri, data, httpOptions);
   }
+
   getReceipts() {
     const token: any = localStorage.getItem("token");
     const uri = this.url + `api/Invoice/getReceipts`;

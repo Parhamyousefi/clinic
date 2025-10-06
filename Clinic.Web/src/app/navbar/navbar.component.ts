@@ -4,6 +4,7 @@ import { NavigationEnd, Router, RouterOutlet, Event, RouterLink, ActivatedRoute 
 import { AuthService } from '../_services/auth.service';
 import { PatientService } from '../_services/patient.service';
 import { ToastrService } from 'ngx-toastr';
+import { PdfMakerComponent } from '../share/pdf-maker/pdf-maker.component';
 export interface imenu {
   id: number;
   text: string;
@@ -30,7 +31,7 @@ export const Menu: imenu[] = [
 
 export const PatientMenu: imenu[] = [
   { id: 0, text: "اطلاعات بیمار", link: '/patient/patient-info', roleAccess: [], icon: '' },
-  { id: 1, text: "پرونده بالینی", link: '/patient/today-appointment', roleAccess: [], icon: '' },
+  { id: 1, text: "پرونده بالینی", link: '/patient/patient-treatment', roleAccess: [], icon: '' },
   { id: 2, text: "پیوست ها", link: '/patient/patient-attachment', roleAccess: [], icon: '' },
   { id: 3, text: "وقت ها", link: '/patient/patientappointments', roleAccess: [], icon: '' },
   { id: 4, text: "صورتحساب ها", link: '/', roleAccess: [], icon: '' },
@@ -41,7 +42,7 @@ export const PatientMenu: imenu[] = [
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [NgForOf, NgClass, RouterLink, NgIf],
+  imports: [NgForOf, NgClass, RouterLink, NgIf, PdfMakerComponent],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css'
 })
@@ -54,6 +55,7 @@ export class NavbarComponent {
   hasPatientMenu: boolean = false;
   patientId: any;
   patientName: string;
+  patientInfo: any;
   constructor(
     private authService: AuthService,
     private router: Router,
@@ -87,9 +89,9 @@ export class NavbarComponent {
     this.patientMenu = PatientMenu;
     if ((url.startsWith('/patient/'))) {
       this.hasPatientMenu = true;
-      // setTimeout(() => {
-      //   this.getPatientById(this.patientId);
-      // }, 500);
+      this.patientId = url.split('/').pop();
+      this.getPatientById(this.patientId);
+
     }
   }
 
@@ -102,6 +104,7 @@ export class NavbarComponent {
     try {
       let res: any = await this.patientService.getPatientById(patientId).toPromise();
       if (res.length > 0) {
+        this.patientInfo = res[0]
         this.patientName = res[0].firstName + "" + res[0].lastName;
       }
     }
