@@ -18,7 +18,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { NgPersianDatepickerModule } from 'ng-persian-datepicker';
-
+import { AccordionModule } from 'primeng/accordion';
 
 @NgModule({
   declarations: [
@@ -57,7 +57,8 @@ import { NgPersianDatepickerModule } from 'ng-persian-datepicker';
     MatNativeDateModule,
     NgxMaterialTimepickerModule,
     NgPersianDatepickerModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    AccordionModule
   ],
   exports: [
     NumberSplitPipe,
@@ -91,7 +92,9 @@ import { NgPersianDatepickerModule } from 'ng-persian-datepicker';
     MatDatepickerModule,
     NgxMaterialTimepickerModule,
     NgPersianDatepickerModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    CommonModule,
+    AccordionModule
   ]
 })
 export class SharedModule { }

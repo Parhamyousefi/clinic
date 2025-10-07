@@ -7,3 +7,18 @@
     border: 1px solid #00c4b4;
     color: #00c4b4;
 }
+
+.new-appointment-btn {
+    background-color: #00c4b4;
+    font-weight: 800;
+    font-size: 20px;
+    color: #FFFFFF;
+}
+
+.add-phone-modal {
+    direction: rtl;
+}
+
+::ng-deep .p-dialog-title {
+    width: 100% !important;
+}

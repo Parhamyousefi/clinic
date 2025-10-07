@@ -16,7 +16,7 @@ import swal from 'sweetalert2';
 @Component({
   selector: 'app-patients',
   standalone: true,
-  imports: [TableModule, FormsModule, SelectButtonModule, DialogModule, CommonModule, SelectButtonModule, InputMaskModule, DropdownModule],
+  imports: [TableModule, FormsModule, SelectButtonModule, DialogModule, CommonModule, SelectButtonModule, InputMaskModule, DropdownModule, RouterLink],
   templateUrl: './patients.component.html',
   styleUrl: './patients.component.css'
 })

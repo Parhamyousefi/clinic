@@ -1,13 +1,13 @@
-<div *ngIf="_invoiceId" class="item-box">
+<div *ngIf="_invoiceId != -1" class="item-box">
     <div class="header">
         <h6> اقلام صورت حساب </h6>
     </div>
     <div>
-        <div class="d-flex mt-2">
+        <div *ngIf="viewOrEdit == 2" class="d-flex mt-2">
             <button (click)="hadelType(1)" class="btn btn-light btn-sm mx-1">اضافه نمودن خدمت</button>
             <button (click)="hadelType(2)" class="btn btn-light btn-sm"> اضافه نمودن کالای مصرفی</button>
         </div>
-        <form class="d-lg-flex align-items-center g-2 my-3">
+        <form *ngIf="viewOrEdit == 2" class="d-lg-flex align-items-center g-2 my-3">
             <div class="col">
                 <p-dropdown *ngIf="type == 1" optionLabel="name" dataKey="id" [options]="servicesList"
                     placeholder="خدمات" [(ngModel)]="selectedservice" (ngModelChange)="selectedItemMetod()"
@@ -44,15 +44,56 @@
                 <button type="submit" class="btn btn-success" (click)="saveInvoiceItem()"> ذخیره</button>
             </div>
         </form>
+
+        <div *ngFor="let item of invoiceItemsList">
+            <form class="d-lg-flex align-items-center g-2 my-3">
+                <div class="col">
+                    <p-dropdown *ngIf="item.type == 1" optionLabel="name" dataKey="id" [options]="servicesList"
+                        placeholder="خدمات" class=" text-right" [ngModel]="item.selected"
+                        [ngModelOptions]="{ standalone: true }" [disabled]="true" />
+                    <p-dropdown *ngIf="item.type == 2" [options]="productList" placeholder="کالای مصرفی"
+                        optionLabel="name" dataKey="id" [ngModel]="item.selected"
+                        [ngModelOptions]="{ standalone: true }" [disabled]="true" class="text-right" />
+                </div>
+                <div class="col">
+                    <input type="number" class="form-control" [(ngModel)]="item.quantity"
+                        [ngModelOptions]="{ standalone: true }" placeholder="تعداد / K" readOnly>
+                </div>
+                <div class="col">
+                    <input type="number" class="form-control" [(ngModel)]="item.discount"
+                        [ngModelOptions]="{ standalone: true }" placeholder="تخفیف" readOnly>
+                </div>
+                <div class="col">
+                    <input type="number" class="form-control" placeholder="قیمت" [(ngModel)]="item.price"
+                        [ngModelOptions]="{ standalone: true }" readOnly>
+                </div>
+                <div class="col">
+                    <select [(ngModel)]="item.discountTypeId" disabled [ngModelOptions]="{ standalone: true }"
+                        class="form-select form-control">
+                        <option value=null>نوع تخفیف</option>
+                        <option value="1">مبلغ</option>
+                        <option value="2">درصد</option>
+                    </select>
+                </div>
+                <div class="col">
+                    <input type="text" class="form-control" [(ngModel)]="item.amount"
+                        [ngModelOptions]="{ standalone: true }" placeholder="مبلغ" readOnly>
+                </div>
+                <div *ngIf="viewOrEdit == 2" class="col">
+                    <button type="submit" class="btn btn-danger btn-sm" (click)="deleteInvoiceItem(item.id)">
+                        حذف</button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
-<div *ngIf="_invoiceId" class="d-flex mt-3 text-right">
+<div *ngIf="_invoiceId != -1" class="d-flex mt-3 text-right">
     <div class="mx-3">
         <h6>جمع تخفیفات</h6>
-        <p>1000</p>
+        <p>{{totalDiscount}}</p>
     </div>
     <div>
         <h6>مبلغ صورتحساب </h6>
-        <p>15500</p>
+        <p>{{totalAmount}}</p>
     </div>
 </div>
