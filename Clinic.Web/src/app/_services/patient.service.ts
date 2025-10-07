@@ -5,18 +5,19 @@ import { environment } from '../../environments/environment';
 @Injectable({
   providedIn: 'root'
 })
-export class InvoiceService {
-
-  constructor(
-    private http: HttpClient
-  ) { }
-
+export class PatientService {
   url = environment.url;
   token: any = localStorage.getItem("token");
 
-  getInvoices() {
+  constructor(
+    private http: HttpClient,
+
+  ) { }
+
+
+  getPatients() {
     const token: any = localStorage.getItem("token");
-    const uri = this.url + `api/Invoice/getInvoices`;
+    const uri = this.url + `api/Patient/getPatients`;
     const httpOptions = {
       headers: new HttpHeaders({
         "Content-Type": "application/json",
@@ -26,8 +27,8 @@ export class InvoiceService {
     return this.http.get(uri, httpOptions);
   }
 
-  saveInvoice(data) {
-    const uri = this.url + `api/Invoice/saveInvoice`;
+  savePatient(data) {
+    const uri = this.url + `api/Patient/savePatient`;
     const httpOptions = {
       headers: new HttpHeaders({
         "Content-Type": "application/json",
@@ -38,9 +39,8 @@ export class InvoiceService {
     return this.http.post(uri, data, httpOptions);
   }
 
-
-  saveInvoiceItem(data) {
-    const uri = this.url + `api/Invoice/saveInvoiceItem`;
+  savePatientPhone(data) {
+    const uri = this.url + `api/Patient/savePatientPhone`;
     const httpOptions = {
       headers: new HttpHeaders({
         "Content-Type": "application/json",
@@ -51,8 +51,69 @@ export class InvoiceService {
     return this.http.post(uri, data, httpOptions);
   }
 
-  saveReceipt(data) {
-    const uri = this.url + `api/Invoice/saveReceipt`;
+  getPatientPhone(patientId) {
+    const token: any = localStorage.getItem("token");
+    const uri = this.url + `api/Patient/getPatientPhone/${patientId}`;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      }),
+    };
+    return this.http.get(uri, httpOptions);
+  }
+
+  deletePatient(patientId) {
+    const token: any = localStorage.getItem("token");
+    const uri = this.url + `api/Patient/deletePatient/` + patientId;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      }),
+    };
+    return this.http.get(uri, httpOptions);
+  }
+
+  deletePatientPhone(patientId) {
+    const token: any = localStorage.getItem("token");
+    const uri = this.url + `api/Patient/deletePatientPhone/` + patientId;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      }),
+    };
+    return this.http.get(uri, httpOptions);
+  }
+
+  getPatientAppointments(patientId) {
+    const token: any = localStorage.getItem("token");
+    const uri = this.url + `api/Patient/getPatientAppointments/` + patientId;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      }),
+    };
+    return this.http.get(uri, httpOptions);
+  }
+
+  getPatientById(patientId) {
+    const token: any = localStorage.getItem("token");
+    const uri = this.url + `api/Patient/getPatientById/` + patientId;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      }),
+    };
+    return this.http.get(uri, httpOptions);
+  }
+
+
+  saveAttachment(data) {
+    const uri = this.url + `api/Patient/saveAttachment`;
     const httpOptions = {
       headers: new HttpHeaders({
         "Content-Type": "application/json",
@@ -63,9 +124,9 @@ export class InvoiceService {
     return this.http.post(uri, data, httpOptions);
   }
 
-  getReceipts() {
+  getAttachment(patientId) {
     const token: any = localStorage.getItem("token");
-    const uri = this.url + `api/Invoice/getReceipts`;
+    const uri = this.url + `api/Patient/getAttachment/` + patientId;
     const httpOptions = {
       headers: new HttpHeaders({
         "Content-Type": "application/json",
@@ -75,20 +136,9 @@ export class InvoiceService {
     return this.http.get(uri, httpOptions);
   }
 
-  getInvoiceItems(invoiceId) {
+  deleteAttachment(patientId) {
     const token: any = localStorage.getItem("token");
-    const uri = this.url + `api/Invoice/getInvoiceItems/${invoiceId}`;
-    const httpOptions = {
-      headers: new HttpHeaders({
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + token,
-      }),
-    };
-    return this.http.get(uri, httpOptions);
-  }
-  deleteReceipt(id) {
-    const token: any = localStorage.getItem("token");
-    const uri = this.url + `api/Invoice/deleteReceipt/${id}`;
+    const uri = this.url + `api/Patient/deleteAttachment/` + patientId;
     const httpOptions = {
       headers: new HttpHeaders({
         "Content-Type": "application/json",
@@ -99,15 +149,4 @@ export class InvoiceService {
   }
 
 
-  deleteInvoiceItem(id) {
-    const token: any = localStorage.getItem("token");
-    const uri = this.url + `api/Invoice/deleteInvoiceItem/${id}`;
-    const httpOptions = {
-      headers: new HttpHeaders({
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + token,
-      }),
-    };
-    return this.http.get(uri, httpOptions);
-  }
 }
