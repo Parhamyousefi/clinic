@@ -1,5 +1,5 @@
 ﻿using Clinic.Api.Application.DTOs;
-using Clinic.Api.Application.DTOs.Appointments;
+using Clinic.Api.Application.DTOs.Treatments;
 using Clinic.Api.Domain.Entities;
 
 namespace Clinic.Api.Application.Interfaces
@@ -22,5 +22,6 @@ namespace Clinic.Api.Application.Interfaces
         Task<IEnumerable<QuestionsContext>> GetQuestionsPerSection(int sectionId);
         Task<IEnumerable<AnswersContext>> GetAnswersPerQuestion(int questionId);
         Task<IEnumerable<GetServicesPerPatientResponse>> GetPatientServices(int patinetId);
+        Task<IEnumerable<GetPatientTreatmentsResponse>> GetPatientTreatments(int patientId);
     }
 }
