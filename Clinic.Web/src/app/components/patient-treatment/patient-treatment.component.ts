@@ -8,6 +8,7 @@ import moment from 'moment-jalaali';
 import { TreatmentsService } from '../../_services/treatments.service';
 import { SharedModule } from '../../share/shared.module';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import { QuestionService } from '../../_services/question.service';
 @Component({
   selector: 'app-patient-treatment',
   standalone: true,
@@ -29,7 +30,8 @@ export class PatientTreatmentComponent {
     private patientService: PatientService,
     private toastR: ToastrService,
     private activeRoute: ActivatedRoute,
-    private treatmentService: TreatmentsService
+    private treatmentService: TreatmentsService,
+    private questionService: QuestionService
   ) { }
 
   ngOnInit() {
@@ -126,6 +128,79 @@ export class PatientTreatmentComponent {
         break;
     }
   }
+
+
+
+  getAllValues() {
+    const result = [];
+    this.questionsPerSectionList.forEach(section => {
+      const sectionData = {
+        sectionId: section.id,
+        sectionName: section.name,
+        values: []
+      };
+
+      section.values.forEach(item => {
+        let value
+        switch (item.type) {
+          case 'Text':
+          case 'Paragraph':
+          case 'Label':
+          case 'Combo':
+          case 'textCombo':
+          case 'Radio':
+          case 'Editor':
+            value = item.value;
+            break;
+          case 'MultiSelect':
+            value = (item.value || []).map(opt => opt.id).join(',') || "";
+            break;
+          case 'Check':
+            value = (item.value || []).join(',') || "";
+            break;
+        }
+        let temp = {
+          id: item.id,
+          title: item.title,
+          value: value
+        }
+        if (value) {
+          this.saveQuestionValue(temp);
+        }
+        sectionData.values.push(temp);
+      });
+      result.push(sectionData);
+    });
+  }
+
+
+  onCheckboxChange(event: any, item: any) {
+    if (!item.value) {
+      item.value = [];
+    }
+    const optionId = event.target.value;
+    if (event.target.checked) {
+      item.value.push(optionId);
+    } else {
+      item.value = item.value.filter(id => id !== optionId);
+    }
+  }
+
+
+  async saveQuestionValue(item) {
+    let model = {
+      "questionId": item.id,
+      "selectedValue": item.value,
+      "treatmentId": this.selectedId,
+    }
+    // try {
+    //   await this.questionService.saveQuestionValue(model).toPromise();
+    // } catch (error) {
+    //   this.toastR.error('خطا!', 'خطا در ثبت ')
+    // }
+  }
+
+
 
 
 }

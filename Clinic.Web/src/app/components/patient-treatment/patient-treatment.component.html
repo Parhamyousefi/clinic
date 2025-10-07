@@ -11,7 +11,7 @@
                         "-"}}</strong></div>
             </div>
         </div>
-        <button class="btn btn-sm btn-pink">save</button>
+        <button *ngIf="selectedService" (click)="getAllValues()" class="btn btn-sm btn-pink">save</button>
     </div>
     <div id="p-accordion" class="col-12 d-lg-flex align-items-start mt-4">
         <div id="p-t-accordion" class="col-lg-2 col-12 ">
@@ -81,47 +81,55 @@
                                 <div *ngFor="let item of value.values" class="form-group custom-group">
                                     <label class="custom-label">{{ item.title }}</label>
                                     <ng-container [ngSwitch]="item.type">
-                                        <input *ngSwitchCase="'Text'" type="text" class="form-control" />
-                                        <input *ngSwitchCase="'Label'" type="text" class="form-control" />
-                                        <textarea *ngSwitchCase="'Paragraph'" class="form-control" rows="3"></textarea>
-                                        <div *ngSwitchCase="'Check'" class="form-group d-flex flex-wrap ">
+                                        <input *ngSwitchCase="'Text'" type="text" [id]="item.id"
+                                            [(ngModel)]="item.value" class="form-control" />
+                                        <input *ngSwitchCase="'Label'" type="text" [id]="item.id"
+                                            [(ngModel)]="item.value" class="form-control" />
+                                        <textarea *ngSwitchCase="'Paragraph'" [id]="item.id" [(ngModel)]="item.value"
+                                            class="form-control" rows="3"></textarea>
+                                            
+                                        <div *ngSwitchCase="'Check'" [id]="item.id" class="form-group d-flex flex-wrap">
                                             <div *ngFor="let option of item.answers" class="col-6">
-                                                <input type="checkbox" [value]="option.id" />
+                                                <input type="checkbox" [value]="option.id"
+                                                    [checked]="item.value?.includes(option.id)"
+                                                    (change)="onCheckboxChange($event, item)" />
                                                 <span class="ml-2">{{ option.title }}</span>
                                             </div>
                                         </div>
 
-                                        <ckeditor *ngSwitchCase="'Editor'" [editor]="Editor"
-                                            [config]="{ placeholder: 'Write clinical history...' }">
+
+                                        <ckeditor *ngSwitchCase="'Editor'" [id]="item.id" [(ngModel)]="item.value"
+                                            [editor]="Editor" [config]="{ placeholder: 'Write clinical history...' }">
                                         </ckeditor>
 
 
-                                        <select *ngSwitchCase="'Combo'" class="form-control">
+                                        <select *ngSwitchCase="'Combo'" [id]="item.id" [(ngModel)]="item.value"
+                                            class="form-control">
                                             <option value="" disabled selected hidden>Select an option</option>
                                             <option *ngFor="let option of item.answers" [value]="option.id">{{
                                                 option.title }}</option>
                                         </select>
 
-                                        <select *ngSwitchCase="'textCombo'" class="form-control">
+                                        <select *ngSwitchCase="'textCombo'" [id]="item.id" [(ngModel)]="item.value"
+                                            class="form-control">
                                             <option value="" disabled selected hidden>Select an option</option>
                                             <option *ngFor="let option of item.answers" [value]="option.id">{{
                                                 option.title }}</option>
                                         </select>
 
-                                        <p-multiSelect *ngSwitchCase="'MultiSelect'" [options]="item.answers"
-                                            optionLabel="title" placeholder="Select options" [filter]="true"
-                                            [style]="{ width: '100%' }">
+                                        <p-multiSelect *ngSwitchCase="'MultiSelect'" [id]="item.id"
+                                            [(ngModel)]="item.value" [options]="item.answers" optionLabel="title"
+                                            placeholder="Select options" [filter]="true" [style]="{ width: '100%' }">
                                         </p-multiSelect>
 
-                                        <div *ngSwitchCase="'Radio'" class="d-flex flex-column">
+                                        <div *ngSwitchCase="'Radio'" [id]="item.id" class="d-flex flex-column">
                                             <div *ngFor="let option of item.answers" class="form-check">
                                                 <input class="form-check-input" type="radio"
                                                     [name]="'radio_' + item.title" [value]="option.id"
-                                                    [(ngModel)]="item.selectedValue" />
+                                                    [(ngModel)]="item.value" />
                                                 <label class="form-check-label">{{ option.title }}</label>
                                             </div>
                                         </div>
-
 
                                     </ng-container>
                                 </div>
