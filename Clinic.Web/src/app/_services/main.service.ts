@@ -64,9 +64,21 @@ export class MainService {
     };
     return this.http.post(uri, data, httpOptions);
   }
- deleteProduct(productId) {
+  deleteProduct(productId) {
     const token: any = localStorage.getItem("token");
     const uri = this.url + `api/Main/deleteProduct/${productId}`;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      }),
+    };
+    return this.http.get(uri, httpOptions);
+  }
+
+  getClinics() {
+    const token: any = localStorage.getItem("token");
+    const uri = this.url + `api/main/getClinics`;
     const httpOptions = {
       headers: new HttpHeaders({
         "Content-Type": "application/json",
