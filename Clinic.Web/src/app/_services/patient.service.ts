@@ -135,7 +135,7 @@ export class PatientService {
     };
     return this.http.get(uri, httpOptions);
   }
-
+  
 
   getPatientReceipts(patientId) {
     const token: any = localStorage.getItem("token");
