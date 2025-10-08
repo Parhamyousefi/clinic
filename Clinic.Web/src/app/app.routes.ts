@@ -103,4 +103,8 @@ export const routes: Routes = [
         path: 'patient/patient-receipts/:id', component: PatientReceiptsComponent,
         canActivate: [AuthGuard]
     },
+    {
+        path: 'patient/receipt/:id', component: ReceiptComponent,
+        canActivate: [AuthGuard]
+    },
 ];
