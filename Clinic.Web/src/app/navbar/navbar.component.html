@@ -24,11 +24,11 @@
                 <h4 class="m-0">{{patientName}}</h4>
             </div>
             <div class="col-8 d-flex justify-content-end">
-                <button class="btn main-btn mx-1" routerLink="">صدور صورتحساب</button>
+                <button class="btn main-btn mx-1" [routerLink]="'new-invoice/'+patientId">صدور صورتحساب</button>
                 <app-pdf-maker [_patientData]="patientInfo"></app-pdf-maker>
                 <!-- <button class="btn main-btn mx-1" routerLink="">ویرایش</button> -->
-                <button class="btn btn-secondary mx-1" routerLink="">مجوز وقت دهی</button>
-                <button class="btn main-btn mx-1" routerLink="">حذف</button>
+                <!-- <button class="btn btn-secondary mx-1" routerLink="">مجوز وقت دهی</button> -->
+                <button class="btn btn-outline-danger mx-1" (click)="deletePatient(patientId)">حذف</button>
             </div>
         </div>
     </div>

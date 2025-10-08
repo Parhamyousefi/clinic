@@ -5,6 +5,7 @@ import { AuthService } from '../_services/auth.service';
 import { PatientService } from '../_services/patient.service';
 import { ToastrService } from 'ngx-toastr';
 import { PdfMakerComponent } from '../share/pdf-maker/pdf-maker.component';
+import swal from 'sweetalert2';
 export interface imenu {
   id: number;
   text: string;
@@ -30,11 +31,11 @@ export const Menu: imenu[] = [
 
 
 export const PatientMenu: imenu[] = [
-  { id: 0, text: "اطلاعات بیمار", link: '/patient/patient-info', roleAccess: [], icon: '' },
-  { id: 1, text: "پرونده بالینی", link: '/patient/patient-treatment', roleAccess: [], icon: '' },
-  { id: 2, text: "پیوست ها", link: '/patient/patient-attachment', roleAccess: [], icon: '' },
-  { id: 3, text: "وقت ها", link: '/patient/patientappointments', roleAccess: [], icon: '' },
-  { id: 4, text: "صورتحساب ها", link: '/', roleAccess: [], icon: '' },
+  { id: 0, text: "اطلاعات بیمار", link: '/patient/info', roleAccess: [], icon: '' },
+  { id: 1, text: "پرونده بالینی", link: '/patient/treatment', roleAccess: [], icon: '' },
+  { id: 2, text: "پیوست ها", link: '/patient/attachment', roleAccess: [], icon: '' },
+  { id: 3, text: "وقت ها", link: '/patient/appointments', roleAccess: [], icon: '' },
+  { id: 4, text: "صورتحساب ها", link: '/patient/invoice', roleAccess: [], icon: '' },
   { id: 5, text: "دریافت ها", link: '/', roleAccess: [], icon: '' },
   { id: 6, text: "پرداخت ها", link: '/', roleAccess: [], icon: '' },
   { id: 7, text: "پیامک ها", link: '/', roleAccess: [], icon: '' },
@@ -69,7 +70,7 @@ export class NavbarComponent {
       if (event instanceof NavigationEnd) {
         if ((url.startsWith('/patient/'))) {
           this.hasPatientMenu = true;
-          if ((url.startsWith('/patient/patient-info'))) {
+          if ((url.startsWith('/patient/info'))) {
             pageUrl = this.router.url;
             this.patientId = url.split('/').pop();
             this.getPatientById(this.patientId);
@@ -111,6 +112,31 @@ export class NavbarComponent {
     catch {
       this.toastR.error('خطا!', 'خطا در دریافت اطلاعات');
     }
+  }
+
+
+  async deletePatient(patientId) {
+    swal.fire({
+      title: "آیا از حذف این بیمار مطمئن هستید ؟",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "بله انجام بده",
+      cancelButtonText: "منصرف شدم",
+      reverseButtons: false,
+    }).then(async (result) => {
+      try {
+        if (result.value) {
+          let res: any = await this.patientService.deletePatient(patientId).toPromise();
+          if (res['status'] == 0) {
+            this.toastR.success('با موفقیت حذف گردید');
+            this.router.navigate(['/patients']);
+          }
+        }
+      }
+      catch {
+        this.toastR.error('خطایی رخ داد', 'خطا!')
+      }
+    })
   }
 }
 

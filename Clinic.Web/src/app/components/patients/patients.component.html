@@ -42,7 +42,7 @@
                     </td>
                     <td>
                         <button class="btn btn-outline-secondary mx-1"
-                            [routerLink]="'/patient/patient-info/' + patient.id">جزئیات</button>
+                            [routerLink]="'/patient/info/' + patient.id">جزئیات</button>
                         <button class="btn main-btn mx-1" *ngIf="!patient.phoneNum"
                             (click)="openAddPhoneNumModal(patient.id)">افزودن شماره
                             تلفن</button>

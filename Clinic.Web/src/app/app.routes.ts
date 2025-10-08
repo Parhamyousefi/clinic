@@ -46,6 +46,11 @@ export const routes: Routes = [
         canActivate: [AuthGuard]
     },
     {
+        path: 'new-invoice/:id',
+        component: NewInvoiceComponent,
+        canActivate: [AuthGuard]
+    },
+    {
         path: 'new-contact/:id', component: NewContactComponent,
         canActivate: [AuthGuard]
     },
@@ -54,15 +59,15 @@ export const routes: Routes = [
         canActivate: [AuthGuard]
     },
     {
-        path: 'patient/patientappointments/:id', component: PatientAppointmentsComponent,
+        path: 'patient/appointments/:id', component: PatientAppointmentsComponent,
         canActivate: [AuthGuard]
     },
     {
-        path: 'patient/patient-info/:id', component: PatientInfoComponent,
+        path: 'patient/info/:id', component: PatientInfoComponent,
         canActivate: [AuthGuard]
     },
     {
-        path: 'patient/patient-attachment/:id', component: PatientAttachmentComponent,
+        path: 'patient/attachment/:id', component: PatientAttachmentComponent,
         canActivate: [AuthGuard]
     },
     {
@@ -87,7 +92,7 @@ export const routes: Routes = [
         canActivate: [AuthGuard]
     },
     {
-        path: 'patient/patient-treatment/:id', component: PatientTreatmentComponent,
+        path: 'patient/treatment/:id', component: PatientTreatmentComponent,
         canActivate: [AuthGuard]
     },
     {
@@ -95,7 +100,7 @@ export const routes: Routes = [
         canActivate: [AuthGuard]
     },
     {
-        path: 'patient/patient-invoice/:id', component: PatientInvoiceComponent,
+        path: 'patient/invoice/:id', component: PatientInvoiceComponent,
         canActivate: [AuthGuard]
     },
 ];
