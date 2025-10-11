@@ -1,0 +1,16 @@
+.patient-menu {
+    background: #FFFFFF;
+    width: 200px;
+    height: calc(100% - 140px);
+    /* height: 100%; */
+    right: 251px;
+    top: 140px;
+    /* box-shadow: 0 0 5px rgb(0 0 0 / 20%); */
+    box-shadow: -8px 0px 9px -7px rgba(0, 0, 0, 0.77);
+    position: fixed;
+}
+
+.selected-sidebar-menu {
+    background: rgba(99, 198, 179, .5);
+    border-radius: 10px;
+}

@@ -8,7 +8,7 @@
 
 .sidebar-items {
     overflow-y: auto;
-
+    width: 100%;
 }
 
 .sidebar-items {
@@ -24,13 +24,15 @@
     font-weight: 500;
 }
 
-.sidebar-item-icon {
-    color: #63C6B3;
+.sidebar-item-icon-containter {
+    width: 25px;
+    height: 25px;
 }
 
 .selected-sidebar-menu {
     border-radius: 10px;
-    background-color: #63C6B3;
+    background: rgba(145, 198, 188, 0.5);
+
 }
 
 .search-container {
@@ -43,6 +45,7 @@
     input {
         border: none;
         outline: none;
+        background: none !important;
     }
 
 }
@@ -77,12 +80,4 @@
 
 .main-sidebar::-webkit-scrollbar {
     display: none;
-}
-
-.patient-menu {
-    margin-top: 80px;
-    background: #FFFFFF;
-    width: 200px;
-    /* box-shadow: 0 0 5px rgb(0 0 0 / 20%); */
-    box-shadow: -8px 0px 9px -7px rgba(0, 0, 0, 0.77);
 }
