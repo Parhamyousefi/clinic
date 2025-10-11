@@ -154,50 +154,6 @@ namespace Clinic.Api.Infrastructure.Services
                 throw new Exception(ex.Message);
             }
         }
-
-        public async Task<GlobalResponse> SaveTreatment(SaveTreatmentDto model)
-        {
-            var result = new GlobalResponse();
-
-            try
-            {
-                var userId = _token.GetUserId();
-
-                if (model.EditOrNew == -1)
-                {
-                    var treatment = _mapper.Map<TreatmentsContext>(model);
-                    treatment.CreatorId = userId;
-                    treatment.CreatedOn = DateTime.UtcNow;
-                    _context.Treatments.Add(treatment);
-                    await _context.SaveChangesAsync();
-                    result.Message = "Treatment Saved Successfully";
-                    result.Status = 0;
-                    return result;
-                }
-                else
-                {
-                    var existingTreatment = await _context.Treatments.FirstOrDefaultAsync(t => t.Id == model.EditOrNew);
-
-                    if (existingTreatment == null)
-                    {
-                        throw new Exception("Treatment Not Found");
-                    }
-
-                    _mapper.Map(model, existingTreatment);
-                    existingTreatment.ModifierId = userId;
-                    existingTreatment.CreatedOn = DateTime.UtcNow;
-                    _context.Treatments.Update(existingTreatment);
-                    await _context.SaveChangesAsync();
-                    result.Message = "Treatment Updated Successfully";
-                    return result;
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
-
         public async Task<GlobalResponse> DeleteTreatment(int id)
         {
             var result = new GlobalResponse();
