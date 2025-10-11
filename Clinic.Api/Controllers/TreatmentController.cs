@@ -1,5 +1,5 @@
 ﻿using Clinic.Api.Application.DTOs;
-using Clinic.Api.Application.DTOs.Appointments;
+using Clinic.Api.Application.DTOs.Treatments;
 using Clinic.Api.Application.Interfaces;
 using Clinic.Api.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -49,15 +49,6 @@ namespace Clinic.Api.Controllers
         public async Task<IActionResult> GetTreatments(int appointmentId)
         {
             var result = await _treatmentsService.GetTreatments(appointmentId);
-
-            return Ok(result);
-        }
-
-        [HttpPost("saveTreatment")]
-        [Authorize("Admin", "Doctor")]
-        public async Task<IActionResult> SaveTreatment(SaveTreatmentDto model)
-        {
-            var result = await _treatmentsService.SaveTreatment(model);
 
             return Ok(result);
         }
@@ -148,6 +139,14 @@ namespace Clinic.Api.Controllers
         public async Task<IActionResult> GetPatientServices(int patientId)
         {
             var result = await _treatmentsService.GetPatientServices(patientId);
+            return Ok(result);
+        }
+
+        [HttpGet("getPatientTreatments/{patientId}")]
+        [Authorize("Admin","Doctor")]
+        public async Task<IActionResult> GetPatientTreatments(int patientId)
+        {
+            var result = await _treatmentsService.GetPatientTreatments(patientId);
             return Ok(result);
         }
     }
