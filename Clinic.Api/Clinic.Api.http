@@ -320,7 +320,7 @@ Content-Type: application/json
 
 ### Get Receipts
 GET {{Clinic_Api_Host}}/api/invoice/getReceipt/34
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTk3NTI2NDQsImlhdCI6MTc1OTE0Nzg0NCwidXNlcklkIjoiMiIsInVzZXJuYW1lIjoibmltYSIsInVzZXJSb2xlIjoiQWRtaW4iLCJuYmYiOjE3NTkxNDc4NDR9.p59x_B95FrQRYb8-3fiIS59nceyfo6yDptmu3kDfhS4
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NjA1MTU2MTIsImlhdCI6MTc1OTkxMDgxMiwidXNlcklkIjoiMiIsInVzZXJuYW1lIjoibmltYSIsInVzZXJSb2xlIjoiQWRtaW4iLCJuYmYiOjE3NTk5MTA4MTJ9.xu6WOOL6m9f4wldEiAMBxy40_EB_auY4VESE9180Ug8
 Content-Type: application/json
 
 ### Get Receipts
@@ -462,8 +462,8 @@ Authorization: Bearer
 Content-Type: application/json
 
 ### Get Patient Receipts
-GET {{Clinic_Api_Host}}/api/patient/getPatientReceipts/1
-Authorization: Bearer
+GET {{Clinic_Api_Host}}/api/patient/getPatientReceipts/34
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NjA1MTU2MTIsImlhdCI6MTc1OTkxMDgxMiwidXNlcklkIjoiMiIsInVzZXJuYW1lIjoibmltYSIsInVzZXJSb2xlIjoiQWRtaW4iLCJuYmYiOjE3NTk5MTA4MTJ9.xu6WOOL6m9f4wldEiAMBxy40_EB_auY4VESE9180Ug8
 Content-Type: application/json
 
 ### Get Patient Payments
