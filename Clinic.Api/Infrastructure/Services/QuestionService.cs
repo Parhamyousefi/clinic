@@ -41,32 +41,49 @@ namespace Clinic.Api.Infrastructure.Services
 
             try
             {
-                if (model.EditOrNew == -1)
+                var treatment = await _context.Treatments
+           .Where(t => t.InvoiceItemId == model.InvoiceItemId)
+           .Select(t => new { t.Id })
+           .FirstOrDefaultAsync();
+
+                if (treatment == null)
+                    throw new Exception("Treatment Not Found For The Given InvoiceItemId");
+
+                var treatmentId = treatment.Id;
+
+                var existingValue = await _context.QuestionValues
+           .FirstOrDefaultAsync(qv => qv.TreatmentId == treatmentId && qv.QuestionId == model.QuestionId);
+
+                if (existingValue == null)
                 {
-                    var questionValue = _mapper.Map<QuestionValuesContext>(model);
-                    questionValue.CreatorId = userId;
-                    _context.QuestionValues.Add(questionValue);
+                    var newValue = new QuestionValuesContext
+                    {
+                        TreatmentId = treatmentId,
+                        QuestionId = model.QuestionId,
+                        selectedValue = model.selectedValue,
+                        AnswerId = model.AnswerId,
+                        CreatorId = userId
+                    };
+
+                    _context.QuestionValues.Add(newValue);
                     await _context.SaveChangesAsync();
-                    result.Message = "QuestionValue Saved Successfully";
+
                     result.Status = 0;
-                    return result;
+                    result.Message = "Question Value Saved Successfully";
                 }
                 else
                 {
-                    var existingQuestionValue = await _context.QuestionValues.FirstOrDefaultAsync(q => q.Id == model.EditOrNew);
+                    existingValue.selectedValue = model.selectedValue;
+                    existingValue.AnswerId = model.AnswerId;
 
-                    if (existingQuestionValue == null)
-                    {
-                        throw new Exception("Question Value Not Found");
-                    }
-
-                    _mapper.Map(model, existingQuestionValue);
-                    _context.QuestionValues.Update(existingQuestionValue);
+                    _context.QuestionValues.Update(existingValue);
                     await _context.SaveChangesAsync();
-                    result.Message = "QuestionValue Updated Successfully";
+
                     result.Status = 0;
-                    return result;
+                    result.Message = "Question Value Updated Successfully";
                 }
+
+                return result;
             }
             catch (Exception ex)
             {

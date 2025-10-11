@@ -1,4 +1,4 @@
-﻿namespace Clinic.Api.Application.DTOs.Appointments
+﻿namespace Clinic.Api.Application.DTOs.Treatments
 {
     public class SaveBillableItemsDto
     {
