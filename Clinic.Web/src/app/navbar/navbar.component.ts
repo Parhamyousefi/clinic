@@ -36,7 +36,7 @@ export const PatientMenu: imenu[] = [
   { id: 3, text: "وقت ها", link: '/patient/patientappointments', roleAccess: [], icon: '' },
   { id: 4, text: "صورتحساب ها", link: '/', roleAccess: [], icon: '' },
   { id: 5, text: "دریافت ها", link: '/patient/patient-receipts', roleAccess: [], icon: '' },
-  { id: 6, text: "پرداخت ها", link: '/', roleAccess: [], icon: '' },
+  { id: 6, text: "پرداخت ها", link: '/patient/patient-payment', roleAccess: [], icon: '' },
   { id: 7, text: "پیامک ها", link: '/', roleAccess: [], icon: '' },
 ];
 @Component({

@@ -2,12 +2,12 @@
     <div class="col-12">
         <div class="col-12 d-flex justify-content-between my-3">
             <div class="d-flex flex-column align-items-start">
-                <h5 class="m-0">{{patientName}} / دریافت ها</h5>
+                <h5 class="m-0">{{patientName}} / پرداخت ها</h5>
                 <p class="mb-0 mt-2">{{patientCode}}</p>
             </div>
-            <button class="btn main-btn" (click)="ceatReceipt()">دریافت جدید</button>
+            <button class="btn main-btn" (click)="ceatReceipt()">پرداخت جدید</button>
         </div>
-        <p-table id="patientRecceiptTable" #dt styleClass="" class="patientRecceipt-table" [value]="patientRecceiptList"
+        <p-table id="patientPaymentTable" #dt styleClass="" class="patientPayment-table" [value]="patientPaymentList"
             [pageLinks]="20" [autoLayout]="true" [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
             currentPageReportTemplate="نمایش {first} تا {last} " [rowsPerPageOptions]="[10,25,50]">
             <ng-template pTemplate="header">
@@ -28,14 +28,14 @@
                     <th></th>
                 </tr>
             </ng-template>
-            <ng-template pTemplate="body" let-receipt let-rowIndex="rowIndex">
+            <ng-template pTemplate="body" let-payment let-rowIndex="rowIndex">
                 <tr>
-                    <td>{{receipt.id}}</td>
+                    <td>{{payment.id}}</td>
                     <td>
-                        {{receipt.sumPrice | NumberSplitPrice}} ریال
+                        {{payment.sumPrice | NumberSplitPrice}} ریال
                     </td>
                     <td>
-                        {{receipt.createdOn | ShamsiFullDateInOneLineZone}}
+                        {{payment.createdOn | ShamsiFullDateInOneLineZone}}
                     </td>
                 </tr>
             </ng-template>
