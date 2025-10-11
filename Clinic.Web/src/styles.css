@@ -29,11 +29,11 @@ body {
 }
 
 .patientAppContainer {
-    width: calc(100% - 400px);
+    width: calc(100% - 450px);
     margin-top: 140px;
     height: 100vh;
     padding: 20px;
-    margin-right: 400px;
+    margin-right: 450px;
     direction: rtl !important;
 }
 
@@ -50,17 +50,18 @@ body {
     top: 0;
     right: 250px;
     background-color: #ffff;
+    /* background: rgba(99, 198, 179, 1); */
     box-shadow: 0px 15px 25px rgba(0, 0, 0, 0.05);
 }
 
 .patient-navbar {
     z-index: 90;
     direction: rtl;
-    width: calc(100% - 400px);
+    width: calc(100% - 250px);
     height: 60px;
     position: fixed;
-    top: 80px;
-    right: 400px;
+    top: 81px;
+    right: 251px;
     background-color: #ffff;
     box-shadow: 0px 15px 25px rgba(0, 0, 0, 0.05);
 }
@@ -72,7 +73,8 @@ body {
     text-align: center;
     width: 250px;
     height: 100%;
-    background-color: #ffff !important;
+    /* background-color: #ffff !important; */
+    background: rgba(99, 198, 179, 1);
     position: fixed;
     top: 0;
     right: 0;
@@ -81,7 +83,7 @@ body {
     transition: .2s all ease;
 }
 
-.patient-mode-sidebar {
+/* .patient-mode-sidebar {
     display: flex;
     flex-flow: row;
     direction: rtl;
@@ -93,9 +95,9 @@ body {
     top: 0;
     right: 0;
     z-index: 99;
-    /* box-shadow: 0 0 5px rgb(0 0 0 / 20%); */
-    transition: .2s all ease;
-}
+    box-shadow: 0 0 5px rgb(0 0 0 / 20%);
+transition: .2s all ease;
+} */
 
 .modalShadow {
     position: fixed;

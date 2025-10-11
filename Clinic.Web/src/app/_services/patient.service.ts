@@ -148,5 +148,17 @@ export class PatientService {
     return this.http.get(uri, httpOptions);
   }
 
+  getPatientInvoices(patientId) {
+    const token: any = localStorage.getItem("token");
+    const uri = this.url + `api/Patient/getPatientInvoices/` + patientId;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      }),
+    };
+    return this.http.get(uri, httpOptions);
+  }
+
 
 }
