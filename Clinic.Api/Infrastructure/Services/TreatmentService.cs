@@ -510,32 +510,38 @@ namespace Clinic.Api.Infrastructure.Services
                                     BillableItemId = bi.Id,
                                     TreatmentTemplateId = tt.Id,
                                     InvoiceItemId = t.InvoiceItemId,
-                                    SelectedValue = (from a in _context.Answers
-                                                    from sv in _context.QuestionValues
-                                                     where sv.QuestionId == a.Question_Id
-                                                     select sv.selectedValue).ToString(),
+
                                     Sections = (from s in _context.Sections
                                                 where s.TreatmentTemplateId == t.TreatmentTemplateId
                                                 select new SectionDto
                                                 {
                                                     Id = s.Id,
                                                     Title = s.title,
+
                                                     Questions = (from q in _context.Questions
                                                                  where q.SectionId == s.Id
                                                                  select new QuestionDto
                                                                  {
                                                                      Id = q.Id,
                                                                      Title = q.title,
+                                                                     
                                                                      Answers = (from a in _context.Answers
                                                                                 where a.Question_Id == q.Id
                                                                                 select new AnswerDto
                                                                                 {
                                                                                     Id = a.Id,
                                                                                     Title = a.title,
-                                                                                    Text = a.text,
-                                                                                }).ToList()
+                                                                                    Text = a.text
+                                                                                }).ToList(),
+
+                                                                     SelectedValue = (from v in _context.QuestionValues
+                                                                                      where v.QuestionId == q.Id
+                                                                                      && v.TreatmentId == t.Id
+                                                                                      select v.selectedValue)
+                                                                                      .FirstOrDefault()
                                                                  }).ToList()
                                                 }).ToList(),
+                                    
                                     Attachments = (from f in _context.FileAttachments
                                                    where f.TreatmentId == t.Id
                                                    select new AttachmentDto
