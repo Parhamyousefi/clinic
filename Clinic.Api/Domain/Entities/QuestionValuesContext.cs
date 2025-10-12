@@ -6,7 +6,7 @@
         public int QuestionId { get; set; }
         public string? selectedValue { get; set; }
         public int TreatmentId { get; set; }
-        public int? AnswerId { get; set; }
+        public string? AnswerId { get; set; }
         public int? CreatorId { get; set; }
     }
 }
