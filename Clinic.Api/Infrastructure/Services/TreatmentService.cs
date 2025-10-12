@@ -500,12 +500,14 @@ namespace Clinic.Api.Infrastructure.Services
         {
             var result = await (from t in _context.Treatments
                                 join tt in _context.TreatmentTemplates on t.TreatmentTemplateId equals tt.Id
+                                join bi in _context.BillableItems on t.TreatmentTemplateId equals bi.TreatmentTemplateId
                                 where t.PatientId == patientId
                                 select new GetPatientTreatmentsResponse
                                 {
                                     TreatmentId = t.Id,
                                     AppointmentId = t.AppointmentId,
                                     TemplateTitle = tt.Title,
+                                    BillableItemId = bi.Id,
                                     Sections = (from s in _context.Sections
                                                 where s.TreatmentTemplateId == t.TreatmentTemplateId
                                                 select new SectionDto
@@ -524,7 +526,10 @@ namespace Clinic.Api.Infrastructure.Services
                                                                                 {
                                                                                     Id = a.Id,
                                                                                     Title = a.title,
-                                                                                    Text = a.text
+                                                                                    Text = a.text,
+                                                                                    SelectedValue = (from sv in _context.QuestionValues
+                                                                                                     where sv.QuestionId == a.Question_Id
+                                                                                                     select sv.selectedValue).ToString()
                                                                                 }).ToList()
                                                                  }).ToList()
                                                 }).ToList(),
