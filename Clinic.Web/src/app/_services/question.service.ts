@@ -10,8 +10,7 @@ export class QuestionService {
   token: any = localStorage.getItem("token");
 
   constructor(
-    private http: HttpClient,
-
+    private http: HttpClient
   ) { }
 
 
@@ -25,5 +24,6 @@ export class QuestionService {
     };
     return this.http.post(uri, data, httpOptions);
   }
+
 
 }

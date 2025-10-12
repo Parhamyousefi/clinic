@@ -100,7 +100,7 @@ export class NewInvoiceComponent implements OnInit {
       if (res.status == 0) {
         this.toastR.success('با موفقیت ثبت شد!');
         if (this.editOrNew == -1) {
-          const match = res.data.match(/Id\s*:\s*(\d+)/);
+          const match = res.message.match(/Id\s*:\s*(\d+)/);
           const id = match ? parseInt(match[1], 10) : null;
           this.router.navigate(['/new-invoice/' + id + '/2']);
         }

@@ -31,13 +31,15 @@ export class PatientTreatmentComponent {
     private toastR: ToastrService,
     private activeRoute: ActivatedRoute,
     private treatmentService: TreatmentsService,
-    private questionService: QuestionService
+    private questionService: QuestionService,
+
   ) { }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.selectedId = this.activeRoute.snapshot.paramMap.get('id');
-    this.getPatientById();
-    this.getPatientServices();
+    await this.getPatientById();
+    await this.getPatientServices();
+    await this.getPatientTreatments();
   }
 
   async getPatientById() {
@@ -89,12 +91,16 @@ export class PatientTreatmentComponent {
         this.questionsPerSectionList.push({
           id: item.id,
           name: item.title,
+          invoiceItemId: this.selectedService.invoiceItemId,
           values: res,
           isOpen: true
         });
       });
     });
     console.log(this.questionsPerSectionList);
+    setTimeout(() => {
+      this.setValues();
+    }, 1000);
   }
 
 
@@ -118,6 +124,7 @@ export class PatientTreatmentComponent {
     event.stopPropagation();
     switch (type) {
       case 1:
+        this.getAllValues();
         break;
       case 2:
         break;
@@ -141,30 +148,38 @@ export class PatientTreatmentComponent {
       };
 
       section.values.forEach(item => {
-        let value
+        let value;
+        let answerId;
         switch (item.type) {
           case 'Text':
           case 'Paragraph':
           case 'Label':
+          case 'Editor':
+            value = item.value;
+            answerId = null;
+            break;
           case 'Combo':
           case 'textCombo':
           case 'Radio':
-          case 'Editor':
-            value = item.value;
+            answerId = item.value;
+            value = null;
             break;
           case 'MultiSelect':
-            value = (item.value || []).map(opt => opt.id).join(',') || "";
+            answerId = (item.value || []).map(opt => opt.id).join(',') || "";
+            value = null;
             break;
           case 'Check':
-            value = (item.value || []).join(',') || "";
+            answerId = (item.value || []).join(',') || "";
+            value = null;
             break;
         }
         let temp = {
           id: item.id,
           title: item.title,
-          value: value
+          selectedValue: value,
+          answerId: answerId
         }
-        if (value) {
+        if (value || answerId) {
           this.saveQuestionValue(temp);
         }
         sectionData.values.push(temp);
@@ -189,18 +204,45 @@ export class PatientTreatmentComponent {
 
   async saveQuestionValue(item) {
     let model = {
-      "questionId": item.id,
-      "selectedValue": item.value,
-      "treatmentId": this.selectedId,
+      questionId: item.id,
+      selectedValue: item.selectedValue,
+      invoiceItemId: this.selectedService.invoiceItemId,
+      answerId: item.answerId
     }
-    // try {
-    //   await this.questionService.saveQuestionValue(model).toPromise();
-    // } catch (error) {
-    //   this.toastR.error('خطا!', 'خطا در ثبت ')
-    // }
+    try {
+      await this.questionService.saveQuestionValue(model).toPromise();
+      this.getPatientTreatments();
+    } catch (error) {
+      this.toastR.error('خطا!', 'خطا در ثبت ')
+    }
+  }
+
+  async getPatientTreatments() {
+    let res: any = await this.treatmentService.getPatientTreatments(this.selectedId).toPromise();
+    if (res.length > 0) {
+      res.forEach(element => {
+        let index = this.patientServiceListTab.findIndex(item => item.invoiceItemId == element.invoiceItemId);
+        this.patientServiceListTab[index]['sections'] = element.sections;
+        this.patientServiceListTab[index]['sections'].forEach(element => {
+          element.isOpen = true;
+        });
+      });
+    }
+    console.log(this.patientServiceListTab);
   }
 
 
-
+  setValues() {
+    this.questionsPerSectionList.forEach(element => {
+      let index = this.patientServiceListTab.findIndex(item => item.invoiceItemId == element.invoiceItemId);
+      this.patientServiceListTab[index]['sections'].forEach(() => {
+        let index2 = this.patientServiceListTab[index]['sections'].findIndex(item => item.id == element.id);
+        this.patientServiceListTab[index]['sections'][index2]['questions'].forEach(questions => {
+          let index3 = element.values.findIndex(item => item.id == questions.id);
+          element.values[index3]['value'] = questions['selectedValue'];
+        });
+      });
+    });
+  }
 
 }
