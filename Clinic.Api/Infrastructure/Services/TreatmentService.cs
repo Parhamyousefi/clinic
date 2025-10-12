@@ -508,6 +508,8 @@ namespace Clinic.Api.Infrastructure.Services
                                     AppointmentId = t.AppointmentId,
                                     TemplateTitle = tt.Title,
                                     BillableItemId = bi.Id,
+                                    TreatmentTemplateId = tt.Id,
+                                    InvoiceItemId = t.InvoiceItemId,
                                     Sections = (from s in _context.Sections
                                                 where s.TreatmentTemplateId == t.TreatmentTemplateId
                                                 select new SectionDto
