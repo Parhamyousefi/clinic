@@ -508,6 +508,12 @@ namespace Clinic.Api.Infrastructure.Services
                                     AppointmentId = t.AppointmentId,
                                     TemplateTitle = tt.Title,
                                     BillableItemId = bi.Id,
+                                    TreatmentTemplateId = tt.Id,
+                                    InvoiceItemId = t.InvoiceItemId,
+                                    SelectedValue = (from a in _context.Answers
+                                                    from sv in _context.QuestionValues
+                                                     where sv.QuestionId == a.Question_Id
+                                                     select sv.selectedValue).ToString(),
                                     Sections = (from s in _context.Sections
                                                 where s.TreatmentTemplateId == t.TreatmentTemplateId
                                                 select new SectionDto
@@ -527,9 +533,6 @@ namespace Clinic.Api.Infrastructure.Services
                                                                                     Id = a.Id,
                                                                                     Title = a.title,
                                                                                     Text = a.text,
-                                                                                    SelectedValue = (from sv in _context.QuestionValues
-                                                                                                     where sv.QuestionId == a.Question_Id
-                                                                                                     select sv.selectedValue).ToString()
                                                                                 }).ToList()
                                                                  }).ToList()
                                                 }).ToList(),

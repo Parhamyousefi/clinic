@@ -6,6 +6,9 @@
         public int? AppointmentId { get; set; }
         public string TemplateTitle { get; set; } = string.Empty;
         public int? BillableItemId { get; set; }
+        public int? TreatmentTemplateId { get; set; }
+        public int? InvoiceItemId { get; set; }
+        public string? SelectedValue { get; set; }
         public List<SectionDto> Sections { get; set; } = new();
         public List<AttachmentDto> Attachments { get; set; } = new();
     }
