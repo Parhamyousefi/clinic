@@ -54,18 +54,6 @@ body {
     box-shadow: 0px 15px 25px rgba(0, 0, 0, 0.05);
 }
 
-.patient-navbar {
-    z-index: 90;
-    direction: rtl;
-    width: calc(100% - 250px);
-    height: 60px;
-    position: fixed;
-    top: 81px;
-    right: 251px;
-    background-color: #ffff;
-    box-shadow: 0px 15px 25px rgba(0, 0, 0, 0.05);
-}
-
 .sidebar {
     display: flex;
     flex-flow: row;
@@ -74,7 +62,8 @@ body {
     width: 250px;
     height: 100%;
     /* background-color: #ffff !important; */
-    background: rgba(99, 198, 179, 1);
+    /* background: rgba(99, 198, 179, 1); */
+    background: rgb(114 217 197);
     position: fixed;
     top: 0;
     right: 0;
@@ -257,5 +246,19 @@ p-dropdown.p-element {
 @media (max-width: 768px) {
     .appContainer {
         width: 100%;
+        margin-top: 80px;
+        height: 100vh;
+        padding: 20px;
+        margin-right: 0;
+        direction: rtl !important;
+    }
+
+    .patientAppContainer {
+        width: 100%;
+        margin-top: 140px;
+        height: 100vh;
+        padding: 20px;
+        margin-right: 0;
+        direction: rtl !important;
     }
 }

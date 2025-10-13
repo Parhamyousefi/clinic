@@ -33,6 +33,10 @@
     border-radius: 10px;
     background: rgba(145, 198, 188, 0.5);
 
+    i {
+        color: #000000;
+    }
+
 }
 
 .search-container {
@@ -80,4 +84,8 @@
 
 .main-sidebar::-webkit-scrollbar {
     display: none;
+}
+
+.closed-sidebar {
+    width: 0 !important;
 }
