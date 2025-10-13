@@ -5,6 +5,7 @@ using Clinic.Api.Application.Interfaces;
 using Clinic.Api.Domain.Entities;
 using Clinic.Api.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 using static Clinic.Api.Middlwares.Exceptions;
 
 namespace Clinic.Api.Infrastructure.Services
@@ -498,60 +499,121 @@ namespace Clinic.Api.Infrastructure.Services
 
         public async Task<IEnumerable<GetPatientTreatmentsResponse>> GetPatientTreatments(int patientId)
         {
-            var result = await (from t in _context.Treatments
-                                join tt in _context.TreatmentTemplates on t.TreatmentTemplateId equals tt.Id
-                                join bi in _context.BillableItems on t.TreatmentTemplateId equals bi.TreatmentTemplateId
-                                where t.PatientId == patientId
-                                select new GetPatientTreatmentsResponse
+            var treatments = await _context.Treatments
+                .Where(t => t.PatientId == patientId)
+                .ToListAsync();
+
+            if (!treatments.Any())
+                return Enumerable.Empty<GetPatientTreatmentsResponse>();
+
+            var treatmentIds = treatments.Select(t => t.Id).ToList();
+            var treatmentTemplateIds = treatments.Select(t => t.TreatmentTemplateId).Distinct().ToList();
+
+            var templates = await _context.TreatmentTemplates
+                .Where(tt => treatmentTemplateIds.Contains(tt.Id))
+                .ToListAsync();
+
+            var billableItems = await _context.BillableItems
+                .Where(bi => treatmentTemplateIds.Contains((int)bi.TreatmentTemplateId))
+                .ToListAsync();
+
+            var sections = await _context.Sections
+                .Where(s => treatmentTemplateIds.Contains(s.TreatmentTemplateId))
+                .ToListAsync();
+
+            var sectionIds = sections.Select(s => s.Id).ToList();
+
+            var questions = await _context.Questions
+                .Where(q => sectionIds.Contains((int)q.SectionId))
+                .ToListAsync();
+
+            var questionIds = questions.Select(q => q.Id).ToList();
+
+            var answers = await _context.Answers
+                .Where(a => questionIds.Contains((int)a.Question_Id))
+                .ToListAsync();
+
+            var questionValues = await _context.QuestionValues
+                .Where(qv => treatmentIds.Contains(qv.TreatmentId))
+                .ToListAsync();
+
+            var attachments = await _context.FileAttachments
+                .Where(f => treatmentIds.Contains(f.TreatmentId.Value))
+                .ToListAsync();
+
+            var result = treatments.Select(treatment =>
+            {
+                var template = templates.FirstOrDefault(tt => tt.Id == treatment.TreatmentTemplateId);
+                var billableItem = billableItems.FirstOrDefault(bi => bi.TreatmentTemplateId == treatment.TreatmentTemplateId);
+
+                var sectionDtos = sections
+                    .Where(s => s.TreatmentTemplateId == treatment.TreatmentTemplateId)
+                    .Select(s => new SectionDto
+                    {
+                        Id = s.Id,
+                        Title = s.title,
+
+                        Questions = questions
+                            .Where(q => q.SectionId == s.Id)
+                            .Select(q =>
+                            {
+                                var qv = questionValues.FirstOrDefault(v => v.QuestionId == q.Id && v.TreatmentId == treatment.Id);
+
+                                List<AnswerDto> selectedAnswerDtos = new();
+                                if (qv != null && !string.IsNullOrWhiteSpace(qv.selectedValue))
                                 {
-                                    TreatmentId = t.Id,
-                                    AppointmentId = t.AppointmentId,
-                                    TemplateTitle = tt.Title,
-                                    BillableItemId = bi.Id,
-                                    TreatmentTemplateId = tt.Id,
-                                    InvoiceItemId = t.InvoiceItemId,
+                                    var selectedIds = qv.selectedValue
+                                        .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                                        .Select(id => int.Parse(id.Trim()))
+                                        .ToList();
 
-                                    Sections = (from s in _context.Sections
-                                                where s.TreatmentTemplateId == t.TreatmentTemplateId
-                                                select new SectionDto
-                                                {
-                                                    Id = s.Id,
-                                                    Title = s.title,
+                                    selectedAnswerDtos = answers
+                                        .Where(a => selectedIds.Contains(a.Id))
+                                        .Select(a => new AnswerDto
+                                        {
+                                            Id = a.Id,
+                                            Title = a.title,
+                                            Text = a.text
+                                        })
+                                        .ToList();
+                                }
 
-                                                    Questions = (from q in _context.Questions
-                                                                 where q.SectionId == s.Id
-                                                                 select new QuestionDto
-                                                                 {
-                                                                     Id = q.Id,
-                                                                     Title = q.title,
-                                                                     
-                                                                     Answers = (from a in _context.Answers
-                                                                                where a.Question_Id == q.Id
-                                                                                select new AnswerDto
-                                                                                {
-                                                                                    Id = a.Id,
-                                                                                    Title = a.title,
-                                                                                    Text = a.text
-                                                                                }).ToList(),
+                                return new QuestionDto
+                                {
+                                    Id = q.Id,
+                                    Title = q.title,
+                                    Type = q.type,
+                                    SelectedValue = qv != null ? qv.selectedValue : null,
+                                    Answers = selectedAnswerDtos
+                                };
+                            })
+                            .ToList()
+                    })
+                    .ToList();
 
-                                                                     SelectedValue = (from v in _context.QuestionValues
-                                                                                      where v.QuestionId == q.Id
-                                                                                      && v.TreatmentId == t.Id
-                                                                                      select v.selectedValue)
-                                                                                      .FirstOrDefault()
-                                                                 }).ToList()
-                                                }).ToList(),
-                                    
-                                    Attachments = (from f in _context.FileAttachments
-                                                   where f.TreatmentId == t.Id
-                                                   select new AttachmentDto
-                                                   {
-                                                       Id = f.Id,
-                                                       FileName = f.FileName,
-                                                       Description = f.Description,
-                                                       FileSize = f.FileSize
-                                                   }).ToList()
-                                }).ToListAsync();
+                var attachmentDtos = attachments
+                    .Where(f => f.TreatmentId == treatment.Id)
+                    .Select(f => new AttachmentDto
+                    {
+                        Id = f.Id,
+                        FileName = f.FileName,
+                        Description = f.Description,
+                        FileSize = f.FileSize
+                    })
+                    .ToList();
+
+                return new GetPatientTreatmentsResponse
+                {
+                    TreatmentId = treatment.Id,
+                    AppointmentId = treatment.AppointmentId,
+                    TemplateTitle = template?.Title,
+                    BillableItemId = billableItem?.Id,
+                    TreatmentTemplateId = template?.Id,
+                    InvoiceItemId = treatment.InvoiceItemId,
+                    Sections = sectionDtos,
+                    Attachments = attachmentDtos
+                };
+            }).ToList();
 
             return result;
         }
