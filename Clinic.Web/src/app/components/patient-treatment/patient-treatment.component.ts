@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { PatientService } from '../../_services/patient.service';
 import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute } from '@angular/router';
@@ -9,10 +9,11 @@ import { TreatmentsService } from '../../_services/treatments.service';
 import { SharedModule } from '../../share/shared.module';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { QuestionService } from '../../_services/question.service';
+import { PdfMakerComponent } from '../../share/pdf-maker/pdf-maker.component';
 @Component({
   selector: 'app-patient-treatment',
   standalone: true,
-  imports: [SharedModule, CommonModule],
+  imports: [SharedModule, CommonModule, PdfMakerComponent],
   templateUrl: './patient-treatment.component.html',
   styleUrl: './patient-treatment.component.css'
 })
@@ -25,6 +26,7 @@ export class PatientTreatmentComponent {
   patientServiceListTab: any = [];
   selectedService: any = null;
   public Editor = ClassicEditor;
+  @ViewChild(PdfMakerComponent) pdfMakerComponent!: PdfMakerComponent;
 
   constructor(
     private patientService: PatientService,
@@ -138,9 +140,9 @@ export class PatientTreatmentComponent {
 
 
 
-  getAllValues() {
+  async getAllValues() {
     const result = [];
-    this.questionsPerSectionList.forEach(section => {
+    await this.questionsPerSectionList.forEach(section => {
       const sectionData = {
         sectionId: section.id,
         sectionName: section.name,
@@ -186,6 +188,7 @@ export class PatientTreatmentComponent {
       });
       result.push(sectionData);
     });
+    this.getPatientTreatments();
   }
 
 
@@ -211,7 +214,6 @@ export class PatientTreatmentComponent {
     }
     try {
       await this.questionService.saveQuestionValue(model).toPromise();
-      this.getPatientTreatments();
     } catch (error) {
       this.toastR.error('خطا!', 'خطا در ثبت ')
     }
@@ -228,7 +230,6 @@ export class PatientTreatmentComponent {
         });
       });
     }
-    console.log(this.patientServiceListTab);
   }
 
 
@@ -239,10 +240,39 @@ export class PatientTreatmentComponent {
         let index2 = this.patientServiceListTab[index]['sections'].findIndex(item => item.id == element.id);
         this.patientServiceListTab[index]['sections'][index2]['questions'].forEach(questions => {
           let index3 = element.values.findIndex(item => item.id == questions.id);
-          element.values[index3]['value'] = questions['selectedValue'];
+          let value;
+          switch (questions.type) {
+            case 'Text':
+            case 'Paragraph':
+            case 'Label':
+            case 'Editor':
+              value = questions['selectedValue'];
+              break;
+            case 'Combo':
+            case 'textCombo':
+            case 'Radio':
+              value = (questions.answers || []).map(opt => opt.id).join(',') || "";;
+              break;
+            case 'MultiSelect':
+              value = questions.answers;
+              break;
+            case 'Check':
+              value = (questions.answers || []).map(opt => opt.id).join(',') || "";
+              break;
+          }
+          element.values[index3]['value'] = value;
         });
       });
     });
+  }
+
+  handelCallMetodInPdfMaker(item, type) {
+    this.pdfMakerComponent.selectedServiceForPDF2 = item;
+    if (type == 1) {
+      this.pdfMakerComponent.generatePDF('print');
+    } else {
+      this.pdfMakerComponent.generatePDF('download')
+    }
   }
 
 }
