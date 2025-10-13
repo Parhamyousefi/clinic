@@ -24,7 +24,9 @@
         public int Id { get; set; }
         public string Title { get; set; } = string.Empty;
         public string? SelectedValue { get; set; }
+        public string? Type { get; set; }
         public List<AnswerDto> Answers { get; set; } = new();
+        public List<string>? SelectedAnswers { get; set; }
     }
 
     public class AnswerDto
