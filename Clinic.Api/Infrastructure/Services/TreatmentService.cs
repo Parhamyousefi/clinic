@@ -500,13 +500,13 @@ namespace Clinic.Api.Infrastructure.Services
         public async Task<IEnumerable<GetPatientTreatmentsResponse>> GetPatientTreatments(int patientId)
         {
             var treatments = await _context.Treatments
-                .Where(t => t.PatientId == patientId)
-                .ToListAsync();
+          .Where(t => t.PatientId == patientId)
+          .ToListAsync();
 
             if (!treatments.Any())
                 return Enumerable.Empty<GetPatientTreatmentsResponse>();
 
-            var treatmentIds = treatments.Select(t => t.Id).ToList();
+            var treatmentIds = treatments.Select(t => (int?)t.Id).ToList();
             var treatmentTemplateIds = treatments.Select(t => t.TreatmentTemplateId).Distinct().ToList();
 
             var templates = await _context.TreatmentTemplates
@@ -514,7 +514,7 @@ namespace Clinic.Api.Infrastructure.Services
                 .ToListAsync();
 
             var billableItems = await _context.BillableItems
-                .Where(bi => treatmentTemplateIds.Contains((int)bi.TreatmentTemplateId))
+                .Where(bi => bi.TreatmentTemplateId != null && treatmentTemplateIds.Contains(bi.TreatmentTemplateId.Value))
                 .ToListAsync();
 
             var sections = await _context.Sections
@@ -524,21 +524,21 @@ namespace Clinic.Api.Infrastructure.Services
             var sectionIds = sections.Select(s => s.Id).ToList();
 
             var questions = await _context.Questions
-                .Where(q => sectionIds.Contains((int)q.SectionId))
+                .Where(q => q.SectionId != null && sectionIds.Contains(q.SectionId))
                 .ToListAsync();
 
             var questionIds = questions.Select(q => q.Id).ToList();
 
             var answers = await _context.Answers
-                .Where(a => questionIds.Contains((int)a.Question_Id))
+                .Where(a => a.Question_Id != null && questionIds.Contains(a.Question_Id.Value))
                 .ToListAsync();
 
             var questionValues = await _context.QuestionValues
-                .Where(qv => treatmentIds.Contains(qv.TreatmentId))
+                .Where(qv => qv.TreatmentId != null && treatmentIds.Contains(qv.TreatmentId))
                 .ToListAsync();
 
             var attachments = await _context.FileAttachments
-                .Where(f => treatmentIds.Contains(f.TreatmentId.Value))
+                .Where(f => f.TreatmentId != null && treatmentIds.Contains(f.TreatmentId))
                 .ToListAsync();
 
             var result = treatments.Select(treatment =>
@@ -548,46 +548,69 @@ namespace Clinic.Api.Infrastructure.Services
 
                 var sectionDtos = sections
                     .Where(s => s.TreatmentTemplateId == treatment.TreatmentTemplateId)
-                    .Select(s => new SectionDto
+                    .Select(s =>
                     {
-                        Id = s.Id,
-                        Title = s.title,
-
-                        Questions = questions
+                        var questionDtos = questions
                             .Where(q => q.SectionId == s.Id)
                             .Select(q =>
                             {
                                 var qv = questionValues.FirstOrDefault(v => v.QuestionId == q.Id && v.TreatmentId == treatment.Id);
 
-                                List<AnswerDto> selectedAnswerDtos = new();
-                                if (qv != null && !string.IsNullOrWhiteSpace(qv.selectedValue))
+                                var selectedValue = qv?.selectedValue;
+                                object? finalSelectedValue = selectedValue;
+
+                                List<int> selectedIds = new();
+                                List<object> selectedAnswersJson = new();
+
+                                if (qv != null && qv.AnswerId != null)
                                 {
-                                    var selectedIds = qv.selectedValue
+                                    var raw = qv.AnswerId.ToString();
+                                    selectedIds = raw
                                         .Split(',', StringSplitOptions.RemoveEmptyEntries)
-                                        .Select(id => int.Parse(id.Trim()))
+                                        .Select(x => int.TryParse(x.Trim(), out var id) ? id : -1)
+                                        .Where(id => id > 0)
                                         .ToList();
 
-                                    selectedAnswerDtos = answers
+                                    selectedAnswersJson = answers
                                         .Where(a => selectedIds.Contains(a.Id))
-                                        .Select(a => new AnswerDto
+                                        .Select(a => new
                                         {
                                             Id = a.Id,
-                                            Title = a.title,
-                                            Text = a.text
+                                            Title = a.title
                                         })
+                                        .Cast<object>()
                                         .ToList();
+
+                                    finalSelectedValue = selectedAnswersJson;
                                 }
+
+                                var answerDtos = answers
+                                    .Where(a => selectedIds.Contains(a.Id))
+                                    .Select(a => new AnswerDto
+                                    {
+                                        Id = a.Id,
+                                        Title = a.title,
+                                        Text = a.text
+                                    })
+                                    .ToList();
 
                                 return new QuestionDto
                                 {
                                     Id = q.Id,
                                     Title = q.title,
                                     Type = q.type,
-                                    SelectedValue = qv != null ? qv.selectedValue : null,
-                                    Answers = selectedAnswerDtos
+                                    SelectedValue = finalSelectedValue,
+                                    Answers = answerDtos
                                 };
                             })
-                            .ToList()
+                            .ToList();
+
+                        return new SectionDto
+                        {
+                            Id = s.Id,
+                            Title = s.title,
+                            Questions = questionDtos
+                        };
                     })
                     .ToList();
 
