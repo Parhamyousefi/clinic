@@ -35,9 +35,9 @@
     </div>
   </div>
   <div class="col-12 text-dark" style="direction: rtl;" *ngIf="type == 2">
-    <div class="d-flex justify-content-between align-items-center px-4 border-bottom pt-3 mb-3 pb-1">
-      <h6 class="text-dark"><strong>{{patientData.firstName}} {{patientData.lastName}}</strong></h6>
-      <p class="text-dark">{{selectedServiceForPDF2.billableItemName}}</p>
+    <div class="d-flex justify-content-between align-items-center px-4 border-bottom pt-2 mb-2 pb-1">
+      <h6 class="mb-0 text-dark"><strong>{{patientData.firstName}} {{patientData.lastName}}</strong></h6>
+      <p class="mb-0 text-dark">{{selectedServiceForPDF2.billableItemName}}</p>
     </div>
 
     <div class="col-12 header-box-for-pdf2">
@@ -57,17 +57,17 @@
       </div>
     </div>
 
-    <div class="" *ngFor="let value of selectedServiceForPDF2.sections">
+    <div class="mt-4" *ngFor="let value of selectedServiceForPDF2.sections">
       <div class="mb-3">
-        <div class="text-left value-box-for-pdf2">
+        <div class="text-left value-box-for-pdf2 p-2">
           <span>{{value.title}}</span>
         </div>
-        <div class="card-body">
+        <div class="px-2 mt-1">
           <div *ngFor="let question of value.questions">
             <div *ngIf="question.selectedValue"
-              class="d-flex justify-content-between align-items-center border-bottom pb-2">
-              <p>{{ question.selectedValue }}</p>
-              <p class="mb-1"><strong>{{ question.title }}</strong></p>
+              class="d-flex justify-content-between align-items-center mt-1 border-bottom">
+              <p class="mb-0" [innerHTML]="question.selectedValue"></p>
+              <p class="mb-0"><strong>{{ question.title }}</strong></p>
             </div>
           </div>
         </div>

@@ -21,6 +21,7 @@ import { NgPersianDatepickerModule } from 'ng-persian-datepicker';
 import { AccordionModule } from 'primeng/accordion';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
+import { DialogModule } from 'primeng/dialog';
 
 @NgModule({
   declarations: [
@@ -62,7 +63,8 @@ import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
     ReactiveFormsModule,
     AccordionModule,
     MultiSelectModule,
-    CKEditorModule
+    CKEditorModule,
+    DialogModule
   ],
   exports: [
     NumberSplitPipe,
@@ -100,7 +102,8 @@ import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
     CommonModule,
     AccordionModule,
     MultiSelectModule,
-    CKEditorModule
+    CKEditorModule,
+    DialogModule
   ]
 })
 export class SharedModule { }

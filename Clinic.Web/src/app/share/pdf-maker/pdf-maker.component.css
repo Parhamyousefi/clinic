@@ -1,6 +1,6 @@
 .hidden-canvas-zone {
   position: absolute;
-  left: -1000px;
+  left: -3000px;
   top: 0;
   width: 800px;
   overflow: hidden;
@@ -18,4 +18,5 @@
   color: white;
   border-radius: 8px;
   background-color: #1a6dea;
+
 }

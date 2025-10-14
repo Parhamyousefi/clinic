@@ -10,6 +10,9 @@ import { SharedModule } from '../../share/shared.module';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { QuestionService } from '../../_services/question.service';
 import { PdfMakerComponent } from '../../share/pdf-maker/pdf-maker.component';
+import { UtilService } from '../../_services/util.service';
+export const ValidFormat = ['pdf', 'jpg', 'jpeg', 'png'];
+
 @Component({
   selector: 'app-patient-treatment',
   standalone: true,
@@ -27,6 +30,11 @@ export class PatientTreatmentComponent {
   selectedService: any = null;
   public Editor = ClassicEditor;
   @ViewChild(PdfMakerComponent) pdfMakerComponent!: PdfMakerComponent;
+  showAttacheFile: boolean = false;
+  fileToUpload: any;
+  base64: any;
+  fileName: any;
+  fileType: any;
 
   constructor(
     private patientService: PatientService,
@@ -34,9 +42,17 @@ export class PatientTreatmentComponent {
     private activeRoute: ActivatedRoute,
     private treatmentService: TreatmentsService,
     private questionService: QuestionService,
+    private utilService: UtilService
 
   ) { }
-
+  titleList: any[] = [
+    { name: "جناب", code: "1" },
+    { name: "دکتر", code: "2" },
+    { name: "آقا", code: "3" },
+    { name: "خانم", code: "4" },
+    { name: "پروفسور", code: "5" },
+    { name: "مهندس", code: "6" },
+  ];
   async ngOnInit() {
     this.selectedId = this.activeRoute.snapshot.paramMap.get('id');
     await this.getPatientById();
@@ -52,6 +68,10 @@ export class PatientTreatmentComponent {
       const today = moment();
       const birth = moment(this.patientInfo.birthDate, 'jYYYY/jMM/jDD');
       this.patientInfo.age = today.diff(birth, 'years');
+      if (this.patientInfo.gender) {
+        // this.patientInfo.title = this.titleList.filter(x => x.code == this.patientInfo.titleId)['name'];
+        this.patientInfo.title = this.patientInfo.gender == 1 ? 'آقا' : 'خانوم';
+      }
     }
   }
 
@@ -85,8 +105,13 @@ export class PatientTreatmentComponent {
       this.treatmentService.getQuestionsPerSection(item.id).subscribe((res: any) => {
         res.forEach(question => {
           if (question.type == "MultiSelect" || question.type == "Check" || question.type == "Combo" || question.type == "Radio" || question.type == "textCombo") {
-            this.treatmentService.getAnswersPerQuestion(question.id).subscribe(data => {
-              question.answers = data;
+            this.treatmentService.getAnswersPerQuestion(question.id).subscribe((data: any) => {
+              question.answers = data.map(item => ({
+                id: item.id,
+                title: item.title,
+                text: item.text
+              }));
+              ;
             });
           }
         });
@@ -113,9 +138,13 @@ export class PatientTreatmentComponent {
         this.selectedService = service;
         this.getSectionPerService(service.treatmentTemplateId);
         break;
-      case 2:
+      case 4:
+        this.fileToUpload = null;
+        this.base64 = null;
+        this.fileName = null;
+        this.fileType = null;
+        this.showAttacheFile = true;
         break;
-
       default:
         break;
     }
@@ -127,6 +156,7 @@ export class PatientTreatmentComponent {
     switch (type) {
       case 1:
         this.getAllValues();
+        this.selectedService = null;
         break;
       case 2:
         break;
@@ -163,14 +193,15 @@ export class PatientTreatmentComponent {
           case 'Combo':
           case 'textCombo':
           case 'Radio':
-            answerId = item.value;
+            answerId = item.value?.toString();
             value = null;
             break;
-          case 'MultiSelect':
-            answerId = (item.value || []).map(opt => opt.id).join(',') || "";
-            value = null;
-            break;
+          // case 'MultiSelect':
+          //   answerId = (item.value || []).map(opt => opt.id).join(',') || "";
+          //   value = null;
+          //   break;
           case 'Check':
+          case 'MultiSelect':
             answerId = (item.value || []).join(',') || "";
             value = null;
             break;
@@ -227,52 +258,97 @@ export class PatientTreatmentComponent {
         this.patientServiceListTab[index]['sections'] = element.sections;
         this.patientServiceListTab[index]['sections'].forEach(element => {
           element.isOpen = true;
+          element.questions.forEach(question => {
+            switch (question.type) {
+              case 'Combo':
+              case 'textCombo':
+              case 'Radio':
+              case 'MultiSelect':
+              case 'Check':
+                question['selectedValue'] = (question.answers || []).map(opt => opt.title).join(',');
+                break;
+              case 'Editor':
+                question['selectedValue'] = question['selectedValue'] ?? '';
+                break;
+            }
+          });
         });
       });
     }
   }
 
 
-  setValues() {
-    this.questionsPerSectionList.forEach(element => {
+  async setValues() {
+    await this.questionsPerSectionList.forEach(element => {
       let index = this.patientServiceListTab.findIndex(item => item.invoiceItemId == element.invoiceItemId);
-      this.patientServiceListTab[index]['sections'].forEach(() => {
-        let index2 = this.patientServiceListTab[index]['sections'].findIndex(item => item.id == element.id);
-        this.patientServiceListTab[index]['sections'][index2]['questions'].forEach(questions => {
-          let index3 = element.values.findIndex(item => item.id == questions.id);
-          let value;
-          switch (questions.type) {
-            case 'Text':
-            case 'Paragraph':
-            case 'Label':
-            case 'Editor':
-              value = questions['selectedValue'];
-              break;
-            case 'Combo':
-            case 'textCombo':
-            case 'Radio':
-              value = (questions.answers || []).map(opt => opt.id).join(',') || "";;
-              break;
-            case 'MultiSelect':
-              value = questions.answers;
-              break;
-            case 'Check':
-              value = (questions.answers || []).map(opt => opt.id).join(',') || "";
-              break;
-          }
-          element.values[index3]['value'] = value;
-        });
+      let index2 = this.patientServiceListTab[index]['sections'].findIndex(item => item.id == element.id);
+      this.patientServiceListTab[index]['sections'][index2]['questions'].forEach(questions => {
+        let index3 = element.values.findIndex(item => item.id == questions.id);
+        let value = null;
+        switch (questions.type) {
+          case 'Text':
+          case 'Paragraph':
+          case 'Label':
+          case 'Editor':
+            value = questions['selectedValue'] ?? '';
+            break;
+          case 'Combo':
+          case 'textCombo':
+            value = (questions.answers || []).map(opt => opt.id).join(',') || "";
+            break;
+          case 'Radio':
+            value = +((questions.answers || []).map(opt => opt.id));
+            break;
+          case 'MultiSelect':
+            value = (questions.answers || []).map(opt => opt.id);
+            break;
+          case 'Check':
+            value = (questions.answers || []).map(opt => opt.id);
+            break;
+        }
+        element.values[index3]['value'] = value;
       });
     });
   }
 
-  handelCallMetodInPdfMaker(item, type) {
+  handelCallMetodInPdfMaker(event: MouseEvent, item, type) {
+    event.stopPropagation();
     this.pdfMakerComponent.selectedServiceForPDF2 = item;
     if (type == 1) {
       this.pdfMakerComponent.generatePDF('print');
     } else {
       this.pdfMakerComponent.generatePDF('download')
     }
+  }
+
+
+  handleFileInput(files: any) {
+    let size = files[0].size;
+    let type = files[0]['name'].split('.').pop();
+    if (!ValidFormat.includes(type.toLowerCase())) {
+      this.toastR.error("فرمت وارد شده معتبر نمی باشد.", "خطا");
+      return;
+    }
+    if (size > 50000000) {
+      this.toastR.error("حداکثر سایز فایل 50 مگابایت می باشد", "خطا");
+      return;
+    }
+    this.fileToUpload = files.item(0);
+    this.utilService.getBase64(files.item(0)).then((data) => {
+      let base: any = data;
+      this.base64 = base.split(',')[1];
+
+      this.fileName = this.fileToUpload['name'];
+      this.fileType = this.fileToUpload['name'].split('.').pop();
+    });
+  }
+
+  removeFile(event) {
+    event.stopPropagation();
+    this.fileName = '';
+    this.fileType = '';
+    this.fileToUpload = null;
+    this.base64 = null;
   }
 
 }
