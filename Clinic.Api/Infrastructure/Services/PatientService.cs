@@ -328,7 +328,8 @@ namespace Clinic.Api.Infrastructure.Services
                         CreatedOn = DateTime.UtcNow,
                         LastUpdated = null,
                         ModifierId = null,
-                        CreatorId = userId
+                        CreatorId = userId,
+                        TreatmentId = model.TreatmentId
                     };
 
                     _context.FileAttachments.Add(entity);
@@ -354,6 +355,7 @@ namespace Clinic.Api.Infrastructure.Services
                     entity.FileSize = Convert.FromBase64String(model.Base64).LongLength;
                     entity.LastUpdated = DateTime.UtcNow;
                     entity.ModifierId = userId;
+                    entity.TreatmentId = model.TreatmentId;
 
                     _context.FileAttachments.Update(entity);
                     await _context.SaveChangesAsync();
