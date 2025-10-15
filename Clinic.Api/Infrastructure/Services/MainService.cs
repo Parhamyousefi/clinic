@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Clinic.Api.Application.DTOs.Contacts;
+using Clinic.Api.Application.DTOs;
 using Clinic.Api.Application.DTOs.Main;
 using Clinic.Api.Application.Interfaces;
 using Clinic.Api.Domain.Entities;
@@ -35,75 +35,6 @@ namespace Clinic.Api.Infrastructure.Services
             }
         }
 
-        public async Task<string> SaveReceipt(SaveReceiptDto model)
-        {
-            try
-            {
-                var userId = _token.GetUserId();
-
-                var receipt = await _context.Receipts.FirstOrDefaultAsync(r => r.PatientId == model.PatientId);
-
-                if (receipt == null)
-                {
-                    var mappReceipt = _mapper.Map<ReceiptsContext>(model);
-                    mappReceipt.CreatorId = userId;
-                    mappReceipt.CreatedOn = DateTime.UtcNow;
-                    _context.Receipts.Add(mappReceipt);
-                    await _context.SaveChangesAsync();
-
-                    return "Receipt Saved Successfully";
-                }
-
-                _mapper.Map(model, receipt);
-                receipt.ModifierId = userId;
-                receipt.LastUpdated = DateTime.UtcNow;
-                _context.Receipts.Update(receipt);
-                await _context.SaveChangesAsync();
-                return "Receipt Updated Successfully";
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
-
-        public async Task<IEnumerable<ReceiptsContext>> GetReceipts(int? patientId)
-        {
-            try
-            {
-                if (patientId == null)
-                {
-                    var receipts = await _context.Receipts.ToListAsync();
-                    return receipts;
-                }
-
-                var receipt = await _context.Receipts.Where(r => r.PatientId == patientId).ToListAsync();
-                return receipt;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
-
-        public async Task<string> DeleteReceipt(int patientId)
-        {
-            try
-            {
-                var receipt = await _context.Receipts.FirstOrDefaultAsync(r => r.PatientId == patientId);
-                if (receipt == null)
-                    throw new Exception("Receipt Not Found");
-
-                _context.Receipts.Remove(receipt);
-                await _context.SaveChangesAsync();
-                return "Receipt Deleted Successfully";
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
-
         public async Task<IEnumerable<BusinessesContext>> GetClinics()
         {
             try
@@ -121,8 +52,10 @@ namespace Clinic.Api.Infrastructure.Services
             }
         }
 
-        public async Task<string> SaveJob(SaveJobDto model)
+        public async Task<GlobalResponse> SaveJob(SaveJobDto model)
         {
+            var result = new GlobalResponse();
+
             try
             {
                 var userId = _token.GetUserId();
@@ -134,7 +67,9 @@ namespace Clinic.Api.Infrastructure.Services
                     job.CreatedOn = DateTime.UtcNow;
                     _context.Jobs.Add(job);
                     await _context.SaveChangesAsync();
-                    return "Job Saved Successfully";
+                    result.Message = "Job Saved Successfully";
+                    result.Status = 0;
+                    return result;
                 }
                 else
                 {
@@ -149,7 +84,9 @@ namespace Clinic.Api.Infrastructure.Services
                     existingJob.LastUpdated = DateTime.UtcNow;
                     _context.Jobs.Update(existingJob);
                     await _context.SaveChangesAsync();
-                    return "Job Updated Successfully";
+                    result.Message = "Job Updated Successfully";
+                    result.Status = 0;
+                    return result;
                 }
             }
             catch (Exception ex)
@@ -171,8 +108,10 @@ namespace Clinic.Api.Infrastructure.Services
             }
         }
 
-        public async Task<string> DeleteJob(int id)
+        public async Task<GlobalResponse> DeleteJob(int id)
         {
+            var result = new GlobalResponse();
+
             try
             {
                 var job = await _context.Jobs.FindAsync(id);
@@ -182,7 +121,9 @@ namespace Clinic.Api.Infrastructure.Services
 
                 _context.Jobs.Remove(job);
                 await _context.SaveChangesAsync();
-                return "Job Deleted Successfully";
+                result.Message = "Job Deleted Successfully";
+                result.Status = 0;
+                return result;
             }
             catch (Exception ex)
             {
@@ -190,24 +131,176 @@ namespace Clinic.Api.Infrastructure.Services
             }
         }
 
-        public async Task<IEnumerable<BillableItemsContext>> GetBillableItems()
-        {
-            try
-            {
-                var result = await _context.BillableItems.ToListAsync();
-                return result;
-            }
-            catch(Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
-        
         public async Task<IEnumerable<CountriesContext>> GetCountries()
         {
             try
             {
                 var result = await _context.Countries.ToListAsync();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<GlobalResponse> SaveProduct(SaveProductDto model)
+        {
+            var result = new GlobalResponse();
+
+            try
+            {
+                var userId = _token.GetUserId();
+
+                if (model.EditOrNew == -1)
+                {
+                    var product = _mapper.Map<ProductsContext>(model);
+                    product.CreatorId = userId;
+                    product.CreatedOn = DateTime.UtcNow;
+                    _context.Products.Add(product);
+                    await _context.SaveChangesAsync();
+                    result.Message = "Product Saved Successfully";
+                    result.Status = 0;
+                    return result;
+                }
+                else
+                {
+                    var existingProduct = await _context.Products.FirstOrDefaultAsync(j => j.Id == model.EditOrNew);
+                    if (existingProduct == null)
+                    {
+                        throw new Exception("Product Not Found");
+                    }
+
+                    _mapper.Map(model, existingProduct);
+                    existingProduct.ModifierId = userId;
+                    existingProduct.LastUpdated = DateTime.UtcNow;
+                    _context.Products.Update(existingProduct);
+                    await _context.SaveChangesAsync();
+                    result.Message = "Product Updated Successfully";
+                    result.Status = 0;
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<IEnumerable<ProductsContext>> GetProducts()
+        {
+            try
+            {
+                var result = await _context.Products.ToListAsync();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<GlobalResponse> DeleteProduct(int id)
+        {
+            var result = new GlobalResponse();
+
+            try
+            {
+                var product = await _context.Products.FindAsync(id);
+
+                if (product == null)
+                    throw new Exception("Product Not Found");
+
+                _context.Products.Remove(product);
+                await _context.SaveChangesAsync();
+                result.Message = "Product Deleted Successfully";
+                result.Status = 0;
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<GlobalResponse> SaveNote(SaveNoteDto model)
+        {
+            var result = new GlobalResponse();
+
+            try
+            {
+                var userId = _token.GetUserId();
+
+                if (model.EditOrNew == -1)
+                {
+                    var notes = _mapper.Map<MedicalAlertsContext>(model);
+                    notes.CreatorId = userId;
+                    notes.CreatedOn = DateTime.UtcNow;
+                    _context.MedicalAlerts.Add(notes);
+                    await _context.SaveChangesAsync();
+                    result.Message = "Medical Note Saved Successfully";
+                    result.Status = 0;
+                    return result;
+                }
+                else
+                {
+                    var existingNote = await _context.MedicalAlerts.FirstOrDefaultAsync(j => j.Id == model.EditOrNew);
+                    if (existingNote == null)
+                    {
+                        throw new Exception("Medical Note Not Found");
+                    }
+
+                    _mapper.Map(model, existingNote);
+                    existingNote.ModifierId = userId;
+                    existingNote.LastUpdated = DateTime.UtcNow;
+                    _context.MedicalAlerts.Update(existingNote);
+                    await _context.SaveChangesAsync();
+                    result.Message = "Medical Note Updated Successfully";
+                    result.Status = 0;
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<IEnumerable<GetNotesResponse>> GetNotes(int patientId)
+        {
+            try
+            {
+                var query = _context.MedicalNotes.AsQueryable();
+                var result = await (from n in query
+                                    select new GetNotesResponse
+                                    {
+                                        NoteId = n.Id,
+                                        Note = n.Notes
+                                    })
+                                    .ToListAsync();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<GlobalResponse> DeleteNote(int noteId)
+        {
+            var result = new GlobalResponse();
+
+            try
+            {
+                var note = await _context.MedicalNotes.FindAsync(noteId);
+
+                if (note == null)
+                    throw new Exception("Note Not Found");
+
+                _context.MedicalNotes.Remove(note);
+                await _context.SaveChangesAsync();
+                result.Message = "Note Deleted Successfully";
+                result.Status = 0;
                 return result;
             }
             catch (Exception ex)

@@ -1,0 +1,88 @@
+::ng-deep #p-accordion .p-accordion .p-accordion-header .p-accordion-header-link::after {
+  content: "+";
+  font-size: 1.2rem;
+  margin-left: auto;
+  position: absolute;
+  left: 1%;
+}
+
+#p-accordion {
+  direction: ltr;
+}
+
+::ng-deep #p-accordion .p-accordion .p-accordion-header.p-highlight .p-accordion-header-link::after {
+  content: '-';
+}
+
+::ng-deep #p-accordion chevronrighticon {
+  display: none;
+}
+
+::ng-deep #p-accordion chevrondownicon {
+  display: none;
+}
+
+::ng-deep #p-accordion .p-accordion .p-accordion-tab {
+  color: #fff;
+}
+
+::ng-deep #p-t-accordion .p-accordion .p-accordion-header .p-accordion-header-link {
+  background-color: #111;
+  color: #fff;
+}
+
+
+.Service-box {
+  border: 1px solid lightgray;
+  border-radius: 8px;
+}
+
+::ng-deep #v-t-accordion .p-accordion .p-accordion-header .p-accordion-header-link {
+  background-color: #00c4b41f;
+  color: #00c4b4;
+}
+
+::ng-deep #v-t-accordion .p-accordion-header-link {
+  display: block !important;
+}
+
+
+
+.Service-box-header {
+  text-align: center;
+  background-color: #00c4b41f;
+  color: #00c4b4;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  border-bottom: 1px solid lightgray;
+  padding: 4px;
+}
+
+
+.toggle-icon {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.custom-group {
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.custom-label {
+  display: block;
+  width: 100%;
+  font-weight: bold;
+  margin-bottom: 6px;
+}
+
+.new-appointment-modal {
+  min-width: 500px;
+  min-height: 200px;
+}
+
+::ng-deep #new-appointment-modal #pn_id_1_header {
+  padding: 15px;
+}

@@ -1,0 +1,195 @@
+<div class="appContainer p-0">
+  <div class="col-12 pt-2 d-flex justify-content-between align-items-center border-bottom">
+    <div>
+      <h4 class="text-right mb-0">{{ patientInfo.title}} {{patientName}} / پرونده بالینی</h4>
+      <div class="d-flex align-items-center mt-1 mb-2">
+        <div class="text-end text-00c4b4 ml-5">کد سیستمی : <strong class="text-dark">{{patientInfo.patientCode
+                        || "-"}}</strong></div>
+        <div class="text-end text-00c4b4 ml-5">سن : <strong class="text-dark">{{patientInfo.age ||
+                        "-"}}</strong></div>
+        <div class="text-end text-00c4b4 ml-5">کد ملی : <strong class="text-dark">{{patientInfo.nationalCode ||
+                        "-"}}</strong></div>
+      </div>
+    </div>
+    <button *ngIf="selectedService" (click)="getAllValues()" class="btn btn-sm btn-pink">save</button>
+  </div>
+  <div id="p-accordion" class="col-12 d-lg-flex align-items-start mt-4">
+    <div id="p-t-accordion" class="col-lg-2 col-12 ">
+      <p-accordion *ngFor="let item of patientServiceList, let index= index">
+        <p-accordionTab [header]="item.name" [selected]="index== 0? true: false">
+          <div class="Service-box mb-3 pointer" *ngFor="let value of item.values">
+            <p class="Service-box-header mb-0">{{value.billableItemName}}</p>
+            <p class=" text-center mb-1">{{value.createdDate | JustDateZone}}</p>
+            <p class=" text-center mb-1">{{value.doctorName}}</p>
+          </div>
+        </p-accordionTab>
+      </p-accordion>
+    </div>
+    <div id="v-t-accordion" class="col-lg-4 col-12">
+      <p-accordion *ngFor="let item of patientServiceListTab, let index= index">
+        <p-accordionTab [selected]="true">
+          <ng-template pTemplate="header">
+            <div class="d-flex justify-content-between align-items-center ">
+              <div class="d-flex flex-column">
+                <div class="fw-bold">{{ item.billableItemName }}</div>
+                <div class="text-muted">{{ item.createdDate | JustDateZone }}</div>
+              </div>
+              <div class="mt-2 d-flex gap-2">
+                <button class="btn btn-sm btn-pink mx-1" (click)="onClick($event,item,1)">edit</button>
+                <button class="btn btn-sm btn-info mx-1"
+                  (click)="handelCallMetodInPdfMaker($event,item,1)">print</button>
+                <button class="btn btn-sm btn-light mx-1"
+                  (click)="handelCallMetodInPdfMaker($event,item,2)">PDF</button>
+                <app-pdf-maker [_patientData]="patientInfo" [type]="2"></app-pdf-maker>
+                <button class="btn btn-sm btn-warning mx-1" (click)="onClick($event,item,4)">Attache
+                  Files</button>
+              </div>
+            </div>
+          </ng-template>
+          <div class="" *ngFor="let value of item.sections">
+            <div class="mb-3">
+              <div class="d-flex justify-content-start align-items-center text-left" style="cursor: pointer;"
+                (click)="value.isOpen = !value.isOpen">
+                <span class="toggle-icon mr-1">{{ value.isOpen ? '-' : '+' }}</span>
+                <span>{{value.title}}</span>
+              </div>
+              <div *ngIf="value.isOpen" class="card-body">
+                <div *ngFor="let question of value.questions">
+                  <ng-container *ngIf="question.selectedValue">
+                    <p class="mb-1"><strong>{{ question.title }}</strong></p>
+                    <p [innerHTML]="question.selectedValue"></p>
+                  </ng-container>
+                </div>
+              </div>
+            </div>
+          </div>
+        </p-accordionTab>
+      </p-accordion>
+    </div>
+    <div class="col-lg-6 col-12 ">
+      <p-accordion id="v-t-accordion" *ngIf="selectedService">
+        <p-accordionTab [selected]="true">
+          <ng-template pTemplate="header">
+            <div class="d-flex justify-content-between align-items-center ">
+              <div class="d-flex flex-column">
+                <div class="fw-bold">{{ selectedService.billableItemName }}</div>
+                <div class="text-muted">{{ selectedService.createdDate | JustDateZone }}</div>
+              </div>
+              <div class="mt-2 d-flex gap-2">
+                <button class="btn btn-sm btn-pink  mx-1" (click)="onClickTab($event,selectedService.id,1)">Save &
+                  Close</button>
+                <button class="btn btn-sm btn-info mx-1" (click)="onClickTab($event,selectedService.id,2)">Save</button>
+                <!-- <button class="btn btn-sm btn-light mx-1"
+                  (click)="onClickTab($event,selectedService.id,3)">copy</button> -->
+                <button class="btn btn-sm btn-danger mx-1"
+                  (click)="onClickTab($event,selectedService.id,4)">cancel</button>
+              </div>
+            </div>
+          </ng-template>
+          <div class="" *ngFor="let value of questionsPerSectionList">
+            <div class="mb-3">
+              <div class="d-flex justify-content-start align-items-center text-left" style="cursor: pointer;"
+                (click)="value.isOpen = !value.isOpen">
+                <span class="toggle-icon mr-1">{{ value.isOpen ? '-' : '+' }}</span>
+                <span>{{value.name}}</span>
+              </div>
+              <div *ngIf="value.isOpen" class="card-body">
+                <div *ngFor="let item of value.values" class="form-group custom-group">
+                  <label class="custom-label">{{ item.title }}</label>
+                  <ng-container [ngSwitch]="item.type">
+                    <input *ngSwitchCase="'Text'" type="text" [id]="item.id" [(ngModel)]="item.value"
+                      class="form-control" />
+                    <input *ngSwitchCase="'Label'" type="text" [id]="item.id" [(ngModel)]="item.value"
+                      class="form-control" />
+                    <textarea *ngSwitchCase="'Paragraph'" [id]="item.id" [(ngModel)]="item.value" class="form-control"
+                      rows="3"></textarea>
+
+                    <div *ngSwitchCase="'Check'" [id]="item.id" class="form-group d-flex flex-wrap">
+                      <div *ngFor="let option of item.answers" class="col-6">
+                        <input type="checkbox" [value]="option.id" [checked]="item.value?.includes(option.id)"
+                          (change)="onCheckboxChange($event, item)" />
+                        <span class="ml-2">{{ option.title }}</span>
+                      </div>
+                    </div>
+
+
+                    <ckeditor *ngSwitchCase="'Editor'" [id]="item.id" [(ngModel)]="item.value" [editor]="Editor"
+                      [config]="{ placeholder: 'Write...' }">
+                    </ckeditor>
+
+
+                    <select *ngSwitchCase="'Combo'" [id]="item.id" [(ngModel)]="item.value" class="form-control">
+                      <option value="" disabled selected hidden>Select an option</option>
+                      <option *ngFor="let option of item.answers" [value]="option.id">{{
+                                                option.title }}</option>
+                    </select>
+
+                    <select *ngSwitchCase="'textCombo'" [id]="item.id" [(ngModel)]="item.value" class="form-control">
+                      <option value="" disabled selected hidden>Select an option</option>
+                      <option *ngFor="let option of item.answers" [value]="option.id">{{
+                                                option.title }}</option>
+                    </select>
+
+                    <p-multiSelect *ngSwitchCase="'MultiSelect'" [id]="item.id" [(ngModel)]="item.value"
+                      [options]="item.answers" optionValue="id" optionLabel="title" placeholder="Select options"
+                      [filter]="true" [style]="{ width: '100%' }">
+                    </p-multiSelect>
+
+                    <div *ngSwitchCase="'Radio'" [id]="item.id" class="d-flex flex-column">
+                      <div *ngFor="let option of item.answers" class="form-check">
+                        <input class="form-check-input" type="radio" [name]="'radio_' + item.title" [value]="option.id"
+                          [(ngModel)]="item.value" />
+                        <label class="form-check-label">{{ option.title }}</label>
+                      </div>
+                    </div>
+
+                  </ng-container>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </p-accordionTab>
+      </p-accordion>
+    </div>
+  </div>
+</div>
+
+
+<p-dialog id="new-appointment-modal" header="Attache File" [(visible)]="showAttacheFile" [ngClass]="{'modalShadow' : showAttacheFile}" class="p-2">
+  <div class="col-12 d-flex flex-wrap justify-content-center">
+    <div class="col-4 d-flex flex-column align-items-center">
+      <div class="dashed_upload p-5 pointer" (click)="fileInput.click()">
+        <div class="wrapper">
+          <div class="drop">
+            <div class="cont col-12 d-flex flex-column align-items-center">
+              <i class="fa fa-cloud-upload"></i>
+              <div class="">
+                <h3>
+                  بکشید و رها کنید
+                </h3>
+              </div>
+              <div class="desc my-2">
+                یا
+              </div>
+              <div>
+                برای انتخاب فایل کلیک کنید
+              </div>
+              <small class="my-3">
+                فرمت های مجاز :pdf, jpg, jpeg, png
+              </small>
+            </div>
+            <output id="list"></output><input #fileInput id="files" class="d-none" type="file"
+              (change)="handleFileInput($event.target.files)">
+          </div>
+        </div>
+        <div *ngIf="fileName" class="d-flex align-items-center justify-content-center">
+          <small>{{fileName}}</small>
+          <a (click)='removeFile($event)' class='pointer text-danger mx-2'><i class='fa fa-trash'></i></a>
+        </div>
+
+      </div>
+      <button class="btn main-btn mt-3">ذخیره</button>
+    </div>
+  </div>
+</p-dialog>

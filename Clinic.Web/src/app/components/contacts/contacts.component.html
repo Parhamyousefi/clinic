@@ -1,0 +1,80 @@
+<div class="appContainer">
+    <div class="col-12 d-flex justify-content-between">
+        <h4>اشخاص</h4>
+        <button class="btn new-appointment-btn px-3 py-1 d-flex align-items-center justify-content-center"
+            routerLink="/new-contact/-1">
+            +
+        </button>
+    </div>
+    <hr>
+    <div class="col-12">
+        <p-table id="contactsTable" #dt styleClass="" class="contacts-table" [value]="contactList" [pageLinks]="20"
+            [autoLayout]="true" [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
+            currentPageReportTemplate="نمایش {first} تا {last} " [rowsPerPageOptions]="[10,25,50]">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>ردیف</th>
+                    <th>نام و نام خانوادگی</th>
+                    <th>تلفن</th>
+                    <th>شغل</th>
+                    <th>شرکت</th>
+                    <th>عملیات</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-contact let-rowIndex="rowIndex">
+                <tr>
+                    <td> {{rowIndex+1}}</td>
+                    <td class="text-center">
+                        {{contact.firstName}} {{contact.lastName}}
+                    </td>
+                    <td class="text-center">
+                        {{contact.phoneNum || "-"}}
+                    </td>
+                    <td class="text-center">
+                        {{contact.jobTitle}}
+                    </td>
+                    <td class="text-center">
+                        {{contact.companyName}}
+                    </td>
+                    <td class="text-center">
+                        <button class="btn main-btn" *ngIf="!contact.phoneNum"
+                            (click)="openAddPhoneNumModal(contact.id)">افزودن شماره
+                            تلفن</button>
+                        <button class="btn main-btn" *ngIf="contact.phoneNum"
+                            (click)="editPhoneNum(contact.phone)">ویرایش
+                            شماره تلفن</button>
+                        <button class="btn main-outline-btn mx-1" (click)="editContact(contact)">ویرایش</button>
+                        <button class="btn btn-outline-secondary mx-1" (click)="deleteContact(contact.id)">حذف</button>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+    <p-dialog id="add-phone-modal" [(visible)]="showAddPhoneNum" [closable]="false"
+        [ngClass]="{'modalShadow' : showAddPhoneNum}" class="p-2">
+        <p-header>
+            <div class="col-12 d-flex justify-content-between p-0">
+                <div class="col-6 text-right d-flex align-items-center">شماره تلفن</div>
+                <div class="col-6"><button class="btn btn-outline-danger mx-1"
+                        (click)="deleteContactPhone(selectedEditPhoneNum)" *ngIf="hasPhoneNum">حذف شماره
+                        تلفن</button></div>
+            </div>
+        </p-header>
+        <div class="col-12 create-phone-num-modal d-flex justify-content-between align-items-center">
+            <div class="col-6 text-right">
+                <label for="phoneNum">شماره تلفن</label>
+                <input type="text" name="phoneNum" id="phoneNum" maxlength="11" class="form-control"
+                    [(ngModel)]="phoneNum.phoneNumber">
+            </div>
+            <div class="col-6 text-right">
+                <label for="phoneNumType">نوع</label>
+                <p-dropdown [options]="phoneTypeList" id="phoneNumType" [(ngModel)]="phoneNum.phoneType"
+                    optionLabel="name" class="full-width text-right" />
+            </div>
+        </div>
+        <div class="col-12 mt-5 text-center">
+            <button class="btn main-btn px-3 py-2 mx-1" (click)="savePatientPhone()">ثبت</button>
+            <button class="btn btn-outline-danger px-3 py-2 mx-1" (click)="closeAddPhoneNum()">انصراف</button>
+        </div>
+    </p-dialog>
+</div>

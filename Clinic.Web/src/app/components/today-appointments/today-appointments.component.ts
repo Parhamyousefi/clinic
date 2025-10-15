@@ -1,9 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import moment from 'moment';
 import { TreatmentsService } from './../../_services/treatments.service';
 import { UserService } from '../../_services/user.service';
 import { SharedModule } from '../../share/shared.module';
 import { MainService } from './../../_services/main.service';
+import moment from 'moment-jalaali';
+import { FormControl } from '@angular/forms';
+
+
+
+
 
 @Component({
   selector: 'app-today-appointments',
@@ -20,30 +25,37 @@ export class TodayAppointmentsComponent implements OnInit {
     private mainService: MainService
   ) { }
 
+
+
   clinicsList: any = [];
   selectedClinic: any;
   todayAppointmentsList: any = [];
   servicesList: any = [];
   selectedservice: any;
-  selectedDatefrom: Date | null = null;
-  selectedTimefrom: any;
-  selectedDateTo: Date | null = null;
-  selectedTimeTo: any;
+  selectedDatefrom: any;
+  selectedTimefrom: any = '00:00';
+  selectedDateTo: any;
+  selectedTimeTo: any = '23:00';
+
+
   async ngOnInit() {
+    this.selectedDatefrom = new FormControl(moment().format('jYYYY/jMM/jDD'));
+    this.selectedDateTo = new FormControl(moment().format('jYYYY/jMM/jDD'));
     await this.getClinics();
-    await this.getJobs();
-    await this.getAppointment();
+    await this.getBillableItems();
+    setTimeout(() => {
+      this.getAppointment();
+    }, 1000);
   }
 
   async getAppointment() {
-    let today = moment();
     let model = {
-      date: today,
-      arrived: null,
+      fromDate: moment(this.selectedDatefrom.value, 'jYYYY/jMM/jDD').add(3.5, 'hours').toDate(),
+      toDate: moment(this.selectedDateTo.value, 'jYYYY/jMM/jDD').add(3.5, 'hours').toDate(),
       clinic: this.selectedClinic?.code,
       service: this.selectedservice?.code,
-      from: null,
-      to: null
+      from: this.convertTimeToUTC(this.selectedTimefrom),
+      to: this.convertTimeToUTC(this.selectedTimeTo)
     }
     try {
       let res: any = await this.treatmentsService.getTodayAppointments(model).toPromise();
@@ -55,26 +67,57 @@ export class TodayAppointmentsComponent implements OnInit {
 
   async getClinics() {
     try {
-      let res = await this.userService.getClinics().toPromise();
+      let res = await this.mainService.getClinics().toPromise();
       this.clinicsList = res;
       this.clinicsList.forEach((clinic: any) => {
         clinic.code = clinic.id;
       });
-      this.selectedClinic = this.clinicsList[0];
+      setTimeout(() => {
+        this.selectedClinic = this.clinicsList[0];
+      }, 1000);
     }
     catch { }
   }
 
-  async getJobs() {
+  async getBillableItems() {
     try {
-      let res = await this.mainService.getJobs().toPromise();
+      let res = await this.treatmentsService.getBillableItems().toPromise();
       this.servicesList = res;
       this.servicesList.forEach((service: any) => {
         service.code = service.id;
       });
-      this.selectedClinic = this.servicesList[0];
+      this.servicesList.unshift({
+        name: 'همه',
+        id: -1,
+      });
+      // setTimeout(() => {
+      //   this.selectedservice = this.servicesList[0];
+      // }, 1000);
     }
     catch { }
   }
+
+  convertTimeToUTC(time: string): string {
+    let [hours, minutes] = time.split(":").map(Number);
+    const now = new Date();
+    const date = new Date(Date.UTC(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate(),
+      hours,
+      minutes,
+      0,
+      0
+    ));
+    const timePart = date.toISOString().split("T")[1];
+    return timePart.replace("Z", "");
+  }
+
+
+
+  onDateChange(newDate: string) {
+
+  }
+
 
 }

@@ -59,7 +59,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwid
 }
 
 ### Create Appointment
-POST {{Clinic_Api_Host}}/api/treatments/createAppointment
+POST {{Clinic_Api_Host}}/api/treatment/createAppointment
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwidXNlcm5hbWUiOiJuaW1hIiwicm9sZSI6IkFkbWluIiwiZXhwIjoxNzU1NDI0NTQyLCJpc3MiOiJDbGluaWMuQXBpIiwiYXVkIjoiQ2xpbmljLkFwaS5Vc2VycyJ9.LTAK60TQc1MgocqkjJHqeYu9hyPrwfHGksWx-l2MzpI
 
@@ -80,19 +80,16 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwid
   "appointmentCancelTypeId": null,
   "cancelNotes": null,
   "isUnavailbleBlock": false,
-  "modifierId": null,
-  "createdOn": "2025-08-11T12:00:00",
   "lastUpdated": null,
   "isAllDay": false,
   "sendReminder": true,
   "appointmentSMS": null,
   "ignoreDidNotCome": false,
-  "creatorId": 1,
   "byInvoice": false
 }
 
 ### Forgot Password
-POST {{Clinic_Api_Host}}/api/users/forgot-password
+POST {{Clinic_Api_Host}}/api/user/forgotPassword
 Content-Type: application/json
 
 {
@@ -101,21 +98,22 @@ Content-Type: application/json
 }
 
 ### Get appointments with date
-GET {{Clinic_Api_Host}}/api/treatments/getAppointments/1/2025-08-25
+POST {{Clinic_Api_Host}}/api/treatment/getAppointments
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwidXNlcm5hbWUiOiJuaW1hIiwicm9sZSI6IkFkbWluIiwiZXhwIjoxNzU1NDI5OTMwLCJpc3MiOiJDbGluaWMuQXBpIiwiYXVkIjoiQ2xpbmljLkFwaS5Vc2VycyJ9.f4r_G_wCuE1JQi-ZV1T0c0ZrGRQATltfv2laPiZDOjU
-
-### Get appointments without date (will default inside controller/service)
-GET {{Clinic_Api_Host}}/api/treatments/getAppointments/1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwidXNlcm5hbWUiOiJuaW1hIiwicm9sZSI6IkFkbWluIiwiZXhwIjoxNzU1MzYwOTk4LCJpc3MiOiJDbGluaWMuQXBpIiwiYXVkIjoiQ2xpbmljLkFwaS5Vc2VycyJ9.LFqZBAfSZ08y1a66RjIin1Mkb5MLH3gNd73qDfxv1R4
+{
+  "clinicId": 1,
+  "Date": "2025-08-25",
+  "doctorId": null
+}
 
 ### Create a new patient
 POST {{Clinic_Api_Host}}/api/patient/savePatient
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTc0MjIxMzQsImlhdCI6MTc1NjgxNzMzNCwidXNlcklkIjoiMiIsInVzZXJuYW1lIjoibmltYSIsInVzZXJSb2xlIjoiQWRtaW4iLCJuYmYiOjE3NTY4MTczMzR9.6_mKpOHryOj5H4eRcwdKBGQTvdsy9Ibts-P1zSFMScw
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTg0NDExNzEsImlhdCI6MTc1NzgzNjM3MSwidXNlcklkIjoiMiIsInVzZXJuYW1lIjoibmltYSIsInVzZXJSb2xlIjoiQWRtaW4iLCJuYmYiOjE3NTc4MzYzNzF9.cwqL8VDBlDE5Q6vrDosRtSm0-zdAowbGmenaE-m4SVY
 
 {
   "titleId": 1,
-  "firstName": "Nima",
+  "firstName": "Nima2234",
   "lastName": "Ghahremanian",
   "gender": 1,
   "fatherName": "Ali",
@@ -136,18 +134,14 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTc0MjIxM
   "invoiceExtraInformation": "Paid by insurance",
   "emergencyContact": "09121234567",
   "referenceNumber": "REF-001",
-  "referringDoctorId": 6,
+  "referringDoctorId": 2,
   "notes": "Patient has no allergies",
   "referringInsurerId": 3,
   "referringInsurer2Id": null,
   "referringContactId": 7,
   "referringContact2Id": null,
   "referringPatientId": null,
-  "modifierId": null,
-  "createdOn": null,
-  "lastUpdated": null,
   "patientCode": 101,
-  "creatorId": null,
   "nationalCode": "1234567890",
   "jobId": 4,
   "referringInpatientInsurerId": null,
@@ -161,10 +155,10 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTc0MjIxM
 ### Get Patients
 GET {{Clinic_Api_Host}}/api/patient/getPatients
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTc0MjIxMzQsImlhdCI6MTc1NjgxNzMzNCwidXNlcklkIjoiMiIsInVzZXJuYW1lIjoibmltYSIsInVzZXJSb2xlIjoiQWRtaW4iLCJuYmYiOjE3NTY4MTczMzR9.6_mKpOHryOj5H4eRcwdKBGQTvdsy9Ibts-P1zSFMScw
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTg0NDExNzEsImlhdCI6MTc1NzgzNjM3MSwidXNlcklkIjoiMiIsInVzZXJuYW1lIjoibmltYSIsInVzZXJSb2xlIjoiQWRtaW4iLCJuYmYiOjE3NTc4MzYzNzF9.cwqL8VDBlDE5Q6vrDosRtSm0-zdAowbGmenaE-m4SVY
 
 ### Get Treatments
-GET {{Clinic_Api_Host}}/api/treatments/getTreatments/2
+GET {{Clinic_Api_Host}}/api/treatment/getTreatments/2
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwidXNlcm5hbWUiOiJuaW1hIiwicm9sZSI6IkFkbWluIiwiZXhwIjoxNzU1NTM0MjE2LCJpc3MiOiJDbGluaWMuQXBpIiwiYXVkIjoiQ2xpbmljLkFwaS5Vc2VycyJ9.m2aC3StvAxkQ8MWLhJDmDW0vkMv3i6rK0qxQXJH6k5A
 
@@ -174,42 +168,23 @@ Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwidXNlcm5hbWUiOiJuaW1hIiwicm9sZSI6IkFkbWluIiwiZXhwIjoxNzU1NTM0MjE2LCJpc3MiOiJDbGluaWMuQXBpIiwiYXVkIjoiQ2xpbmljLkFwaS5Vc2VycyJ9.m2aC3StvAxkQ8MWLhJDmDW0vkMv3i6rK0qxQXJH6k5A
 
 ### Get Questions 
-GET {{Clinic_Api_Host}}/api/questions/getQuestions
+GET {{Clinic_Api_Host}}/api/question/getQuestions
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwidXNlcm5hbWUiOiJuaW1hIiwicm9sZSI6IkFkbWluIiwiZXhwIjoxNzU1NTM0MjE2LCJpc3MiOiJDbGluaWMuQXBpIiwiYXVkIjoiQ2xpbmljLkFwaS5Vc2VycyJ9.m2aC3StvAxkQ8MWLhJDmDW0vkMv3i6rK0qxQXJH6k5A
 
-### Save Treatments
-POST {{Clinic_Api_Host}}/api/treatments/saveTreatment
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwidXNlcm5hbWUiOiJuaW1hIiwicm9sZSI6IkFkbWluIiwiZXhwIjoxNzU1NTM0MjE2LCJpc3MiOiJDbGluaWMuQXBpIiwiYXVkIjoiQ2xpbmljLkFwaS5Vc2VycyJ9.m2aC3StvAxkQ8MWLhJDmDW0vkMv3i6rK0qxQXJH6k5A
+### Save or Update QuestionValue
+POST {{Clinic_Api_Host}}/api/Question/saveQuestionValue
 Content-Type: application/json
-
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NjA3ODY4MzEsImlhdCI6MTc2MDE4MjAzMSwidXNlcklkIjoiMiIsInVzZXJuYW1lIjoibmltYSIsInVzZXJSb2xlIjoiQWRtaW4iLCJuYmYiOjE3NjAxODIwMzF9.PZk551c_2wz7du9ihwKJg33DI6F3BbTzL-h0H2E9XVg
 {
-  "patientId": 1,
-  "appointmentId": 2,
-  "isFinal": true,
-  "treatmentTemplateId": 5,
-  "modifierId": null,
-  "createdOn": "2025-08-18T10:00:00",
-  "lastUpdated": null,
-  "creatorId": 2,
-  "invoiceItemId": null,
-  "visitTime": "2025-08-18T12:00:00"
-}
-
-### Save QuestionValue
-POST {{Clinic_Api_Host}}/api/questions/saveQuestionValue
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwidXNlcm5hbWUiOiJuaW1hIiwicm9sZSI6IkFkbWluIiwiZXhwIjoxNzU1NTM0MjE2LCJpc3MiOiJDbGluaWMuQXBpIiwiYXVkIjoiQ2xpbmljLkFwaS5Vc2VycyJ9.m2aC3StvAxkQ8MWLhJDmDW0vkMv3i6rK0qxQXJH6k5A
-Content-Type: application/json
-
-{
-  "questionId": 12,
+  "questionId": 4,
   "selectedValue": "Yes",
-  "treatmentId": 1,
-  "answerId": null
+  "invoiceItemId": 10,
+  "answerId": 2
 }
 
 ### Get Today Appointments
-POST {{Clinic_Api_Host}}/api/treatments/getTodayAppointments
+POST {{Clinic_Api_Host}}/api/treatment/getTodayAppointments
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTc3NTA4NDAsImlhdCI6MTc1NzE0NjA0MCwidXNlcklkIjoiMiIsInVzZXJuYW1lIjoibmltYSIsInVzZXJSb2xlIjoiQWRtaW4iLCJuYmYiOjE3NTcxNDYwNDB9.pSmMbUGbSWgdq5AKGuvwIqCdph4nzSgmOBQCqcd28qo
 Content-Type: application/json
 
@@ -217,7 +192,7 @@ Content-Type: application/json
   "fromDate": "2025-08-18",  
   "toDate": "2025-08-20",         
   "clinic": null,                  
-  "service": 5,            
+  "service": null,            
   "from": null,                       
   "to": null     
 }
@@ -231,10 +206,6 @@ Content-Type: application/json
   "patientId": 1,
   "phoneNoTypeId": 1,
   "number": "09129561523",
-  "modifierId": 2,
-  "createdOn": "2025-08-18T00:00:00",
-  "lastUpdated": null,
-  "creatorId": 2
 }
 
 ### Get Patient Phone
@@ -243,7 +214,7 @@ Authorization: Bearer
 Content-Type: application/json
 
 ### Save Invoices 
-POST {{Clinic_Api_Host}}/api/invoices/saveInvoices
+POST {{Clinic_Api_Host}}/api/invoice/saveInvoice
 Authorization: Bearer
 Content-Type: application/json
 {
@@ -280,17 +251,17 @@ Content-Type: application/json
 }
 
 ### Delete Invoices
-GET {{Clinic_Api_Host}}/api/invoices/deleteInvoices/1
+GET {{Clinic_Api_Host}}/api/invoice/deleteInvoice/1
 Authorization: Bearer
 Content-Type: application/json
 
 ### Get Invoices
-GET {{Clinic_Api_Host}}/api/invoices/getInvoices
+GET {{Clinic_Api_Host}}/api/invoice/getInvoices
 Authorization: Bearer
 Content-Type: application/json
 
 ### Save Invoice Items
-POST {{Clinic_Api_Host}}/api/invoices/saveInvoiceItems
+POST {{Clinic_Api_Host}}/api/invoice/saveInvoiceItem
 Authorization: Bearer
 Content-Type: application/json
 {
@@ -302,27 +273,23 @@ Content-Type: application/json
   "discount": null,
   "discountTypeId": 1,
   "amount": 2,
-  "modifierId": null,
-  "createdOn": "2025-08-18T00:00:00",
-  "lastUpdated": null,
   "isLock": true,
-  "creatorId": null,
   "done": true,
   "editOrNew": -1
 }
 
 ### Delete Invoice Items 
-GET {{Clinic_Api_Host}}/api/invoices/deleteInvoiceItems/1
+GET {{Clinic_Api_Host}}/api/invoice/deleteInvoiceItem/1
 Authorization: Bearer
 Content-Type: application/json
 
 ### Get Invoice Items
-GET {{Clinic_Api_Host}}/api/invoices/getInvoiceItems
+GET {{Clinic_Api_Host}}/api/invoice/getInvoiceItems
 Authorization: Bearer
 Content-Type: application/json
 
 ### Save Receipts
-POST {{Clinic_Api_Host}}/api/main/saveReceipts
+POST {{Clinic_Api_Host}}/api/main/saveReceipt
 Authorization: Bearer
 Content-Type: application/json
 {
@@ -332,26 +299,27 @@ Content-Type: application/json
   "eFTPos": null,
   "other": null,
   "notes": null,
-  "modifierId": null,
-  "createdOn": "2025-08-18T00:00:00",
-  "lastUpdated": null,
   "allowEdit": true,
-  "creatorId": null,
   "receiptTypeId": 1
 }
 
 ### Get Receipts
-GET {{Clinic_Api_Host}}/api/main/getReceipts/2
-Authorization: Bearer
+GET {{Clinic_Api_Host}}/api/invoice/getReceipt/34
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NjA1MTU2MTIsImlhdCI6MTc1OTkxMDgxMiwidXNlcklkIjoiMiIsInVzZXJuYW1lIjoibmltYSIsInVzZXJSb2xlIjoiQWRtaW4iLCJuYmYiOjE3NTk5MTA4MTJ9.xu6WOOL6m9f4wldEiAMBxy40_EB_auY4VESE9180Ug8
+Content-Type: application/json
+
+### Get Receipts
+Get {{Clinic_Api_Host}}/api/invoice/getReceipts
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTk3NTI2NDQsImlhdCI6MTc1OTE0Nzg0NCwidXNlcklkIjoiMiIsInVzZXJuYW1lIjoibmltYSIsInVzZXJSb2xlIjoiQWRtaW4iLCJuYmYiOjE3NTkxNDc4NDR9.p59x_B95FrQRYb8-3fiIS59nceyfo6yDptmu3kDfhS4
 Content-Type: application/json
 
 ### Delete Receipts
-GET {{Clinic_Api_Host}}/api/main/deleteReceipts/2
+GET {{Clinic_Api_Host}}/api/main/deleteReceipt/2
 Authorization: Bearer 
 Content-Type: application/json
 
 ### Save Payments
-POST {{Clinic_Api_Host}}/api/payments/savePayments
+POST {{Clinic_Api_Host}}/api/payment/savePayment
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwidXNlcm5hbWUiOiJuaW1hIiwicm9sZSI6IkFkbWluIiwiZXhwIjoxNzU2NjUyMjE4LCJpc3MiOiJDbGluaWMuQXBpIiwiYXVkIjoiQ2xpbmljLkFwaS5Vc2VycyJ9.MVn8XLhTQglJ3ysHtn5YrIrZ7DEoFZ4Eh93JbgAE-cQ
 Content-Type: application/json
 {
@@ -361,27 +329,23 @@ Content-Type: application/json
   "eFTPos": null,
   "other": null,
   "notes": null,
-  "modifierId": null,
-  "createdOn": "2025-08-18T00:00:00",
-  "lastUpdated": null,
   "allowEdit": true,
-  "creatorId": null,
   "paymentTypeId": 1,
   "editOrNew": -1
 }
 
 ### Get All Payments
-GET {{Clinic_Api_Host}}/api/payments/getAllPayments
+GET {{Clinic_Api_Host}}/api/payment/getAllPayments
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwidXNlcm5hbWUiOiJuaW1hIiwicm9sZSI6IkFkbWluIiwiZXhwIjoxNzU2NjUyMjE4LCJpc3MiOiJDbGluaWMuQXBpIiwiYXVkIjoiQ2xpbmljLkFwaS5Vc2VycyJ9.MVn8XLhTQglJ3ysHtn5YrIrZ7DEoFZ4Eh93JbgAE-cQ
 Content-Type: application/json
 
 ### Get Payment
-GET {{Clinic_Api_Host}}/api/payments/getPayment/2
+GET {{Clinic_Api_Host}}/api/payment/getPayment/2
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwidXNlcm5hbWUiOiJuaW1hIiwicm9sZSI6IkFkbWluIiwiZXhwIjoxNzU2NjUyMjE4LCJpc3MiOiJDbGluaWMuQXBpIiwiYXVkIjoiQ2xpbmljLkFwaS5Vc2VycyJ9.MVn8XLhTQglJ3ysHtn5YrIrZ7DEoFZ4Eh93JbgAE-cQ
 Content-Type: application/json
 
 ### Delete Payment
-GET {{Clinic_Api_Host}}/api/payments/deletePayment/1
+GET {{Clinic_Api_Host}}/api/payment/deletePayment/1
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwidXNlcm5hbWUiOiJuaW1hIiwicm9sZSI6IkFkbWluIiwiZXhwIjoxNzU2NjUyMjE4LCJpc3MiOiJDbGluaWMuQXBpIiwiYXVkIjoiQ2xpbmljLkFwaS5Vc2VycyJ9.MVn8XLhTQglJ3ysHtn5YrIrZ7DEoFZ4Eh93JbgAE-cQ
 Content-Type: application/json
 
@@ -391,8 +355,8 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwid
 Content-Type: application/json
 
 ### Save Contacts
-POST {{Clinic_Api_Host}}/api/contacts/saveContacts
-Authorization: Bearer
+POST {{Clinic_Api_Host}}/api/contact/saveContact
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTg0NDYxOTUsImlhdCI6MTc1Nzg0MTM5NSwidXNlcklkIjoiMiIsInVzZXJuYW1lIjoibmltYSIsInVzZXJSb2xlIjoiQWRtaW4iLCJuYmYiOjE3NTc4NDEzOTV9.pFOe0vNCHKcRb4s8Pw2Gh9RFcf0r_R1Oa9_7sTqrmLY
 Content-Type: application/json
 {
   "contactTypeId": 1,
@@ -412,30 +376,173 @@ Content-Type: application/json
   "postCode": null,
   "countryId": null,
   "notes": null,
-  "modifierId": null,
-  "createdOn": null,
-  "lastUpdated": null,
-  "creatorId": null,
   "jobId": null,
   "editOrNew": -1
 }
 
 ### Get Contacts
-GET {{Clinic_Api_Host}}/api/contacts/getContacts
-Authorization: Bearer
+GET {{Clinic_Api_Host}}/api/contact/getContacts
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTg0NDYxOTUsImlhdCI6MTc1Nzg0MTM5NSwidXNlcklkIjoiMiIsInVzZXJuYW1lIjoibmltYSIsInVzZXJSb2xlIjoiQWRtaW4iLCJuYmYiOjE3NTc4NDEzOTV9.pFOe0vNCHKcRb4s8Pw2Gh9RFcf0r_R1Oa9_7sTqrmLY
 Content-Type: application/json
 
 ### Delete Contacts
-GET {{Clinic_Api_Host}}/api/contacts/deleteContacts/1
+GET {{Clinic_Api_Host}}/api/contact/deleteContact/1
 Authorization: Bearer
 Content-Type: application/json
 
 ### Get Contact Types
-GET {{Clinic_Api_Host}}/api/contacts/getContactTypes
+GET {{Clinic_Api_Host}}/api/contact/getContactTypes
 Authorization: Bearer
 Content-Type: application/json
 
 ### Get Countries
-GET {{Clinic_Api_Host}}/api/contacts/getCountries
+GET {{Clinic_Api_Host}}/api/contact/getCountries
 Authorization: Bearer
 Content-Type: application/json
+
+### Get Week Appointments
+GET {{Clinic_Api_Host}}/api/treatment/getWeeklyAppointments
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTg3MTgzMjksImlhdCI6MTc1ODExMzUyOSwidXNlcklkIjoiMiIsInVzZXJuYW1lIjoibmltYSIsInVzZXJSb2xlIjoiQWRtaW4iLCJuYmYiOjE3NTgxMTM1Mjl9.AMFg58a7xg8wMW0XzHYGvbSTlRj29g_KYVXXuU1d9I0
+Content-Type: application/json
+
+### Save BillableItems
+POST {{Clinic_Api_Host}}/api/treatment/saveBillableItem
+Authorization: Bearer
+Content-Type: application/json
+{
+  "code": null,
+  "name": "salam",
+  "price": 10,
+  "isOther": true,
+  "itemTypeId": 1,
+  "duration": 1,
+  "allowEditPrice": true,
+  "treatmentTemplateId": null,
+  "forceOneInvoice": true,
+  "isTreatmentDataRequired": true,
+  "group": null,
+  "parentId": null,
+  "itemCategoryId": null,
+  "orderInItemCategory": null,
+  "autoCopyTreatment": true,
+  "discountPercent": null,
+  "needAccept": true,
+  "lastTimeColor": null,
+  "editOrNew": -1
+}
+
+### Delete BillableItem
+GET {{Clinic_Api_Host}}/api/treatment/deleteBillableItem/1
+Authorization: Bearer
+Content-Type: application/json
+
+### Get Patient ById
+GET {{Clinic_Api_Host}}/api/patient/getPatientById/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTg2Mjc0MDUsImlhdCI6MTc1ODAyMjYwNSwidXNlcklkIjoiMiIsInVzZXJuYW1lIjoibmltYSIsInVzZXJSb2xlIjoiQWRtaW4iLCJuYmYiOjE3NTgwMjI2MDV9.Bn_rBQnDX91i78gu4NdJPaL5PWHqnh-dMhZnvzJss1U
+Content-Type: application/json
+
+### Get Patient Invoices
+GET {{Clinic_Api_Host}}/api/patient/getPatientInvoices/1
+Authorization: Bearer
+Content-Type: application/json
+
+### Get Patient Receipts
+GET {{Clinic_Api_Host}}/api/patient/getPatientReceipts/34
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NjA1MTU2MTIsImlhdCI6MTc1OTkxMDgxMiwidXNlcklkIjoiMiIsInVzZXJuYW1lIjoibmltYSIsInVzZXJSb2xlIjoiQWRtaW4iLCJuYmYiOjE3NTk5MTA4MTJ9.xu6WOOL6m9f4wldEiAMBxy40_EB_auY4VESE9180Ug8
+Content-Type: application/json
+
+### Get Patient Payments
+GET {{Clinic_Api_Host}}/api/patient/getPatientPayments/2
+Authorization: Bearer
+Content-Type: application/json
+
+### Save Product
+POST {{Clinic_Api_Host}}/api/main/saveProduct
+Authorization: Bearer
+Content-Type: application/json
+{
+  "code": null,
+  "name": null,
+  "serialNumber": null,
+  "supplier": null,
+  "price": 100,
+  "stockLevel": null,
+  "notes": null,
+  "isActive": true,
+  "editOrNew": -1
+}
+
+### Get Products
+GET {{Clinic_Api_Host}}/api/main/getProducts
+Authorization: Bearer
+Content-Type: application/json
+
+### Delete Product
+GET {{Clinic_Api_Host}}/api/main/deleteProduct/1
+Authorization: Bearer
+Content-Type: application/json
+
+### Get Contact Phone
+GET {{Clinic_Api_Host}}/api/contact/getContactPhone/1
+Authorization: Bearer
+Content-Type: application/json
+
+### Get Section Per Service
+GET {{Clinic_Api_Host}}/api/treatment/getSectionPerService/1
+Authorization: Bearer
+Content-Type: application/json
+
+### Get Question Per Section
+GET {{Clinic_Api_Host}}/api/treatment/getQuestionsPerSection/1
+Authorization: Bearer
+Content-Type: application/json
+
+### Get Answers Per Question
+GET {{Clinic_Api_Host}}/api/treatment/getAnswersPerQuestion/1
+Authorization: Bearer
+Content-Type: application/json
+
+### Get Patient Services 
+GET {{Clinic_Api_Host}}/api/treatment/getPatientServices/1
+Authorization: Bearer
+Content-Type: application/json
+
+### Delete ContactPhone 
+GET {{Clinic_Api_Host}}/api/contact/deleteContactPhone/1
+Authorization: Bearer
+Content-Type: application/json
+
+### Save Attachment
+POST {{Clinic_Api_Host}}/api/patient/saveAttachment
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTk3NTQ5OTksImlhdCI6MTc1OTE1MDE5OSwidXNlcklkIjoiMiIsInVzZXJuYW1lIjoibmltYSIsInVzZXJSb2xlIjoiQWRtaW4iLCJuYmYiOjE3NTkxNTAxOTl9.W7IOzXwRBjYBLkWF-VZ3Odtvd9VMsqblUB4bK0NHkms
+Content-Type: application/json
+{
+  "patientId": 1,
+  "filename": "test.png",
+  "base64": ""
+}
+
+### Get Attachment
+Get {{Clinic_Api_Host}}/api/patient/getAttachment/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTk3NTQ5OTksImlhdCI6MTc1OTE1MDE5OSwidXNlcklkIjoiMiIsInVzZXJuYW1lIjoibmltYSIsInVzZXJSb2xlIjoiQWRtaW4iLCJuYmYiOjE3NTkxNTAxOTl9.W7IOzXwRBjYBLkWF-VZ3Odtvd9VMsqblUB4bK0NHkms
+Content-Type: application/json
+
+### Get Patient Treatments 
+GET {{Clinic_Api_Host}}/api/treatment/getPatientTreatments/677613
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NjA5NDczMzQsImlhdCI6MTc2MDM0MjUzNCwidXNlcklkIjoiMiIsInVzZXJuYW1lIjoibmltYSIsInVzZXJSb2xlIjoiQWRtaW4iLCJuYmYiOjE3NjAzNDI1MzR9.bEgZQkG1AOhPp5DjJaQx9jnkbbxKKEskSgEWZzC1gcs
+Content-Type: application/json
+
+### Save or Update InvoiceItem
+POST {{Clinic_Api_Host}}/api/Invoice/SaveInvoiceItem
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NjA3ODY4MzEsImlhdCI6MTc2MDE4MjAzMSwidXNlcklkIjoiMiIsInVzZXJuYW1lIjoibmltYSIsInVzZXJSb2xlIjoiQWRtaW4iLCJuYmYiOjE3NjAxODIwMzF9.PZk551c_2wz7du9ihwKJg33DI6F3BbTzL-h0H2E9XVg
+
+{
+  "invoiceId": 1012408,
+  "itemId": 9058947,
+  "productId": 3,
+  "quantity": 2,
+  "discount": 10,
+  "discountTypeId": 1,
+  "editOrNew": -1
+}

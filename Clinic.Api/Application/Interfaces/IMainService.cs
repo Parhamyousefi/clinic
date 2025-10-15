@@ -1,4 +1,5 @@
-﻿using Clinic.Api.Application.DTOs.Main;
+﻿using Clinic.Api.Application.DTOs;
+using Clinic.Api.Application.DTOs.Main;
 using Clinic.Api.Domain.Entities;
 
 namespace Clinic.Api.Application.Interfaces
@@ -6,14 +7,16 @@ namespace Clinic.Api.Application.Interfaces
     public interface IMainService
     {
         Task<IEnumerable<SectionsContext>> GetSections();
-        Task<string> SaveReceipt(SaveReceiptDto model);
-        Task<IEnumerable<ReceiptsContext>> GetReceipts(int? patientId);
-        Task<string> DeleteReceipt(int patientId);
         Task<IEnumerable<BusinessesContext>> GetClinics();
-        Task<string> SaveJob(SaveJobDto model);
+        Task<GlobalResponse> SaveJob(SaveJobDto model);
         Task<IEnumerable<JobsContext>> GetJobs();
-        Task<string> DeleteJob(int id);
-        Task<IEnumerable<BillableItemsContext>> GetBillableItems();
+        Task<GlobalResponse> DeleteJob(int id);
         Task<IEnumerable<CountriesContext>> GetCountries();
+        Task<GlobalResponse> SaveProduct(SaveProductDto model);
+        Task<IEnumerable<ProductsContext>> GetProducts();
+        Task<GlobalResponse> DeleteProduct(int id);
+        Task<GlobalResponse> SaveNote(SaveNoteDto model);
+        Task<IEnumerable<GetNotesResponse>> GetNotes(int patientId);
+        Task<GlobalResponse> DeleteNote(int noteId);
     }
 }

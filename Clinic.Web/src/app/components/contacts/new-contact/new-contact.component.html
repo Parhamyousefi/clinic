@@ -1,0 +1,74 @@
+<div class="appContainer">
+    <div class="col-12 d-flex justify-content-center">
+        <p-selectButton id="contactType" [options]="contactTypes" [(ngModel)]="newContactModel.selectedType"
+            [ngModelOptions]="{ standalone: true }" [multiple]="false" optionLabel="name" optionValue="value" dir="ltr"
+            class="select-btn" />
+    </div>
+    <div class="col-12">
+        <div class="d-flex">
+            <span routerLink="/contacts" class="p-3"><i class="fa fa-arrow-right" aria-hidden="true"></i></span>
+            <h4 class="text-right d-flex align-items-center m-0">اطلاعات شخصی</h4>
+        </div>
+        <hr>
+        <div class=" col-12 flex-wrap d-flex mt-3">
+            <div class="col-4 d-flex flex-column justify-content-center">
+                <label for="title" class="text-right">عنوان</label>
+                <p-dropdown id="title" [options]="titleList" [(ngModel)]="newContactModel.selectedTitle"
+                    [ngModelOptions]="{ standalone: true }" optionLabel="name" class="full-width text-right" />
+            </div>
+            <div class="col-4 d-flex flex-column justify-content-center">
+                <label for="name" class="text-right">نام</label>
+                <input class="form-control" type="text" name="name" id="name" [(ngModel)]="newContactModel.firstName"
+                    [ngModelOptions]="{ standalone: true }">
+            </div>
+            <div class="col-4 d-flex flex-column justify-content-center">
+                <label for="lastName" class="text-right">نام خانوادگی</label>
+                <input class="form-control" type="text" id="lastName" [(ngModel)]="newContactModel.lastName"
+                    [ngModelOptions]="{ standalone: true }">
+            </div>
+            <div class="col-4 d-flex flex-column justify-content-center">
+                <label for="mainName" class="text-right">نام اصلی</label>
+                <input class="form-control" type="text" id="mainName" [(ngModel)]="newContactModel.mainName"
+                    [ngModelOptions]="{ standalone: true }">
+            </div>
+            <div class="col-4 d-flex flex-column justify-content-center">
+                <label for="title" class="text-right">شغل</label>
+                <p-dropdown id="title" [options]="jobsList" [(ngModel)]="newContactModel.selectedJob" optionLabel="name"
+                    [ngModelOptions]="{ standalone: true }" class="full-width text-right" />
+            </div>
+            <div class="col-4 d-flex flex-column justify-content-center">
+                <label for="coName" class="text-right">شرکت</label>
+                <input class="form-control" type="text" id="coName" [(ngModel)]="newContactModel.coName"
+                    [ngModelOptions]="{ standalone: true }">
+            </div>
+            <div class="col-4 d-flex flex-column justify-content-center">
+                <label for="email" class="text-right">ایمیل</label>
+                <input class="form-control" type="text" id="email" [(ngModel)]="newContactModel.email"
+                    [ngModelOptions]="{ standalone: true }">
+            </div>
+            <div class="col-4 d-flex flex-column justify-content-center">
+                <label for="city" class="text-right">شهر</label>
+                <input class="form-control" type="text" id="city" [(ngModel)]="newContactModel.city"
+                    [ngModelOptions]="{ standalone: true }">
+            </div>
+            <div class="col-4 d-flex flex-column justify-content-center">
+                <label for="postalCode" class="text-right">کد پستی</label>
+                <input class="form-control" OnlyNumber="true" type="text" id="postalCode"
+                    [(ngModel)]="newContactModel.postalCode" [ngModelOptions]="{ standalone: true }">
+            </div>
+            <div class="col-4 d-flex flex-column justify-content-center">
+                <label for="country" class="text-right">کشور</label>
+                <p-dropdown id="country" [options]="countries" [(ngModel)]="newContactModel.country"
+                    [ngModelOptions]="{ standalone: true }" optionLabel="name" class="full-width text-right" />
+            </div>
+            <div class="col-4 d-flex flex-column justify-content-center">
+                <label for="address" class="text-right">آدرس</label>
+                <textarea name="address" id="address" [(ngModel)]="newContactModel.address"
+                    [ngModelOptions]="{ standalone: true }"></textarea>
+            </div>
+        </div>
+        <div class="col-12 d-flex justify-content-center mt-4">
+            <button class="btn main-btn px-4 py-2" (click)="saveContact()">ثبت</button>
+        </div>
+    </div>
+</div>

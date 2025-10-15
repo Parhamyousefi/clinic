@@ -52,7 +52,7 @@ namespace Clinic.Api.Infrastructure.Data
         public DbSet<MessageCommentsContext> MessageComments { get; set; }
         public DbSet<MessageBoardsContext> MessageBoards { get; set; }
         public DbSet<MedicalNotesContext> MedicalNotes { get; set; }
-        public DbSet<MedicalArtsContext> MedicalArts { get; set; }
+        public DbSet<MedicalAlertsContext> MedicalAlerts { get; set; }
         public DbSet<LoginHistoriesContext> LoginHistories { get; set; }
         public DbSet<LicencesContext> Licences { get; set; }
         public DbSet<LetterTemplatesContext> LetterTemplates { get; set; }

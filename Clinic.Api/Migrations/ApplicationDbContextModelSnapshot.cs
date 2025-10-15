@@ -17,7 +17,7 @@ namespace Clinic.Api.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.8")
+                .HasAnnotation("ProductVersion", "9.0.9")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -999,7 +999,7 @@ namespace Clinic.Api.Migrations
                     b.Property<string>("Category")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("CreatedOn")
+                    b.Property<DateTime?>("CreatedOn")
                         .HasColumnType("datetime2");
 
                     b.Property<int?>("CreatorId")
@@ -1441,7 +1441,7 @@ namespace Clinic.Api.Migrations
                     b.Property<int?>("AppointmentId")
                         .HasColumnType("int");
 
-                    b.Property<int>("AssistantId")
+                    b.Property<int?>("AssistantId")
                         .HasColumnType("int");
 
                     b.Property<int>("BillStatus")
@@ -1692,7 +1692,7 @@ namespace Clinic.Api.Migrations
                     b.ToTable("LoginHistories");
                 });
 
-            modelBuilder.Entity("Clinic.Api.Domain.Entities.MedicalArtsContext", b =>
+            modelBuilder.Entity("Clinic.Api.Domain.Entities.MedicalAlertsContext", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -1723,7 +1723,7 @@ namespace Clinic.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("MedicalArts");
+                    b.ToTable("MedicalAlerts");
                 });
 
             modelBuilder.Entity("Clinic.Api.Domain.Entities.MedicalNotesContext", b =>
@@ -2580,7 +2580,10 @@ namespace Clinic.Api.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("AnswerId")
+                    b.Property<string>("AnswerId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("CreatorId")
                         .HasColumnType("int");
 
                     b.Property<int>("QuestionId")
