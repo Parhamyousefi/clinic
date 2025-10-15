@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { PatientService } from '../../_services/patient.service';
 import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute } from '@angular/router';
-
 import { CommonModule } from '@angular/common';
 import moment from 'moment-jalaali';
 import { TreatmentsService } from '../../_services/treatments.service';
@@ -47,7 +46,6 @@ export class PatientTreatmentComponent {
     }
   }
 
-
   async getPatientServices() {
     let res: any = await this.treatmentService.getPatientServices(this.selectedId).toPromise();
     this.patientServiceListTab = res;
@@ -59,16 +57,14 @@ export class PatientTreatmentComponent {
             id: item.itemCategoryId,
             name: item.itemCategoryName,
             values: []
-          };
+          }
         }
         acc[key].values.push(item);
         return acc;
       }, {} as Record<number, { id: number; name: string; values: typeof res }>)
-    );
+    )
     this.patientServiceList = grouped;
   }
-
-
 
   async getSectionPerService(id) {
     this.questionsPerSectionList = [];
@@ -83,9 +79,7 @@ export class PatientTreatmentComponent {
         });
       });
     });
-    console.log(this.questionsPerSectionList);
   }
-
 
   onClick(event: MouseEvent, service, type) {
     event.stopPropagation();
@@ -96,12 +90,8 @@ export class PatientTreatmentComponent {
         break;
       case 2:
         break;
-
-      default:
-        break;
     }
   }
-
 
   onClickTab(event: MouseEvent, id, type) {
     event.stopPropagation();
@@ -117,6 +107,5 @@ export class PatientTreatmentComponent {
         break;
     }
   }
-
 
 }
