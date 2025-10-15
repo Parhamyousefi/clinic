@@ -528,8 +528,8 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTk3NTQ5O
 Content-Type: application/json
 
 ### Get Patient Treatments 
-GET {{Clinic_Api_Host}}/api/treatment/getPatientTreatments/1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NjAzNjIzNjksImlhdCI6MTc1OTc1NzU2OSwidXNlcklkIjoiMiIsInVzZXJuYW1lIjoibmltYSIsInVzZXJSb2xlIjoiQWRtaW4iLCJuYmYiOjE3NTk3NTc1Njl9.O8s2AJVNIXJtbVIt10jsb0uPKqXQVMAtCdu1QDsrb7g
+GET {{Clinic_Api_Host}}/api/treatment/getPatientTreatments/677613
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NjA5NDczMzQsImlhdCI6MTc2MDM0MjUzNCwidXNlcklkIjoiMiIsInVzZXJuYW1lIjoibmltYSIsInVzZXJSb2xlIjoiQWRtaW4iLCJuYmYiOjE3NjAzNDI1MzR9.bEgZQkG1AOhPp5DjJaQx9jnkbbxKKEskSgEWZzC1gcs
 Content-Type: application/json
 
 ### Save or Update InvoiceItem

@@ -5,6 +5,9 @@
         public int TreatmentId { get; set; }
         public int? AppointmentId { get; set; }
         public string TemplateTitle { get; set; } = string.Empty;
+        public int? BillableItemId { get; set; }
+        public int? TreatmentTemplateId { get; set; }
+        public int? InvoiceItemId { get; set; }
         public List<SectionDto> Sections { get; set; } = new();
         public List<AttachmentDto> Attachments { get; set; } = new();
     }
@@ -21,6 +24,10 @@
         public int Id { get; set; }
         public string Title { get; set; } = string.Empty;
         public List<AnswerDto> Answers { get; set; } = new();
+        public object? SelectedValue { get; set; }              
+        public List<int>? SelectedAnswerIds { get; set; }       
+        public List<string>? SelectedAnswers { get; set; }     
+        public string? Type { get; set; }                  
     }
 
     public class AnswerDto
