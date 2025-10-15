@@ -5,13 +5,15 @@ import swal from 'sweetalert2';
 import { PdfMakerComponent } from '../../share/pdf-maker/pdf-maker.component';
 import { PatientService } from '../../_services/patient.service';
 import { Router, RouterLink } from '@angular/router';
+import { MainService } from '../../_services/main.service';
+import { FormsModule } from '@angular/forms';
 
 export interface imenu {
   id: number;
   text: string;
   link: string;
   roleAccess: number[];
-  icon: string
+  icon: string;
 }
 
 
@@ -30,7 +32,7 @@ export const PatientMenu: imenu[] = [
 @Component({
   selector: 'app-patient-menu',
   standalone: true,
-  imports: [PdfMakerComponent, RouterLink, CommonModule],
+  imports: [PdfMakerComponent, RouterLink, CommonModule, FormsModule],
   templateUrl: './patient-menu.component.html',
   styleUrl: './patient-menu.component.css'
 })
@@ -43,10 +45,15 @@ export class PatientMenuComponent {
   patientInfo: any;
   patientName: any;
   selectedSideBarItem: any;
+  patientNote: any;
+  patientsNote: any;
+  openNoteInput: any;
+  noteEdit: boolean;
   constructor(
     private toastR: ToastrService,
     private patientService: PatientService,
-    private router: Router
+    private router: Router,
+    private mainService: MainService,
   ) { }
   ngOnInit() {
     let url = location.pathname;
@@ -56,7 +63,7 @@ export class PatientMenuComponent {
       this.hasPatientMenu = true;
       this.patientId = url.split('/').pop();
       this.getPatientById(this.patientId);
-
+      this.getNotes();
     }
   }
   async getPatientById(patientId) {
@@ -94,5 +101,31 @@ export class PatientMenuComponent {
         this.toastR.error('خطایی رخ داد', 'خطا!')
       }
     })
+  }
+
+  async saveNote() {
+    let model = {
+      "message": this.patientNote,
+      "patientId": this.patientId,
+      "editOrNew": -1,
+      "orderOf": 0
+    }
+    let res: any = await this.mainService.saveNote(model).toPromise();
+    if (res['status'] == 0) {
+      this.toastR.success('با موفقیت ذخیره گردید');
+      this.patientNote = "";
+      this.openNoteInput = false;
+      this.getNotes();
+    }
+  }
+
+  async getNotes() {
+    try {
+      let res: any = await this.mainService.getNotes(this.patientId).toPromise();
+      if (res.length > 0) {
+        this.patientsNote = res;
+      }
+    }
+    catch { }
   }
 }

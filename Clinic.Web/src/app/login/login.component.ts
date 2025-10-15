@@ -53,4 +53,11 @@ export class LoginComponent {
     }
     catch { }
   }
+
+
+  handleKeyUp(event) {
+    if (event.key === 'Enter') {
+      this.login()
+    }
+  }
 }

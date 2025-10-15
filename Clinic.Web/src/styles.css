@@ -30,7 +30,7 @@ body {
 
 .patientAppContainer {
     width: calc(100% - 450px);
-    margin-top: 140px;
+    margin-top: 180px;
     height: 100vh;
     padding: 20px;
     margin-right: 450px;
@@ -162,6 +162,15 @@ mat-label {
 .main-btn {
     background-color: #00c4b4;
     color: #FFFFFF;
+}
+
+.main-btn-outline {
+    border: 1px solid #00c4b4;
+    color: #00c4b4;
+}
+
+.main-btn-outline:hover {
+    background-color: #63C6B3;
 }
 
 .bg-main {
