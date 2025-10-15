@@ -76,41 +76,41 @@ namespace Clinic.Api.Infrastructure.Services
                                       join b in _context.Businesses on i.BusinessId equals b.Id
                                       select new GetInvoicesResponse
                                       {
-               Id = i.Id,
-               InvoiceNo = i.InvoiceNo,
-               BusinessId = i.BusinessId,
-               IssueDate = i.IssueDate,
-               PatientId = i.PatientId,
-               PractitionerId = i.PractitionerId,
-               AppointmentId = i.AppointmentId,
-               InvoiceTo = i.InvoiceTo,
-               ExtraPatientInfo = i.ExtraPatientInfo,
-               TotalDiscount = i.TotalDiscount,
-               Amount = i.Amount,
-               Notes = i.Notes,
-               Payment = i.Payment,
-               ModifierId = i.ModifierId,
-               CreatedOn = i.CreatedOn,
-               LastUpdated = i.LastUpdated,
-               InvoiceBillStatusId = i.InvoiceBillStatusId,
-               AllowPayLater = i.AllowPayLater,
-               UserAllowPayLaterId = i.UserAllowPayLaterId,
-               Receipt = i.Receipt,
-               BillStatus = i.BillStatus,
-               IsCanceled = i.IsCanceled,
-               BusinessDebit = i.BusinessDebit,
-               CreatorId = i.CreatorId,
-               RecordStateId = i.RecordStateId,
-               AnesthesiaTechnicianId = i.AnesthesiaTechnicianId,
-               ElectroTechnicianId = i.ElectroTechnicianId,
-               IsFirstInvoice = i.IsFirstInvoice,
-               Anesthesia = i.Anesthesia,
-               BusinessAmount = i.BusinessAmount,
-               AcceptDiscount = i.AcceptDiscount,
-               AssistantId = i.AssistantId,
-               PatientName = p.FirstName + " " + p.LastName,
-               BusinessName = b.Name
-           })
+                                          Id = i.Id,
+                                          InvoiceNo = i.InvoiceNo,
+                                          BusinessId = i.BusinessId,
+                                          IssueDate = i.IssueDate,
+                                          PatientId = i.PatientId,
+                                          PractitionerId = i.PractitionerId,
+                                          AppointmentId = i.AppointmentId,
+                                          InvoiceTo = i.InvoiceTo,
+                                          ExtraPatientInfo = i.ExtraPatientInfo,
+                                          TotalDiscount = i.TotalDiscount,
+                                          Amount = i.Amount,
+                                          Notes = i.Notes,
+                                          Payment = i.Payment,
+                                          ModifierId = i.ModifierId,
+                                          CreatedOn = i.CreatedOn,
+                                          LastUpdated = i.LastUpdated,
+                                          InvoiceBillStatusId = i.InvoiceBillStatusId,
+                                          AllowPayLater = i.AllowPayLater,
+                                          UserAllowPayLaterId = i.UserAllowPayLaterId,
+                                          Receipt = i.Receipt,
+                                          BillStatus = i.BillStatus,
+                                          IsCanceled = i.IsCanceled,
+                                          BusinessDebit = i.BusinessDebit,
+                                          CreatorId = i.CreatorId,
+                                          RecordStateId = i.RecordStateId,
+                                          AnesthesiaTechnicianId = i.AnesthesiaTechnicianId,
+                                          ElectroTechnicianId = i.ElectroTechnicianId,
+                                          IsFirstInvoice = i.IsFirstInvoice,
+                                          Anesthesia = i.Anesthesia,
+                                          BusinessAmount = i.BusinessAmount,
+                                          AcceptDiscount = i.AcceptDiscount,
+                                          AssistantId = i.AssistantId,
+                                          PatientName = p.FirstName + " " + p.LastName,
+                                          BusinessName = b.Name
+                                      })
            .ToListAsync();
 
                 return invoices;
@@ -128,36 +128,93 @@ namespace Clinic.Api.Infrastructure.Services
             try
             {
                 var userId = _token.GetUserId();
+                InvoiceItemsContext invoiceItem;
+                bool itemChanged = false;
 
                 if (model.EditOrNew == -1)
                 {
-                    var invoiceItem = _mapper.Map<InvoiceItemsContext>(model);
+                    invoiceItem = _mapper.Map<InvoiceItemsContext>(model);
                     invoiceItem.CreatorId = userId;
                     invoiceItem.CreatedOn = DateTime.UtcNow;
                     _context.InvoiceItems.Add(invoiceItem);
-                    await _context.SaveChangesAsync();
-                    result.Message = "Invoice Item Saved Successfully";
-                    result.Status = 0;
-                    return result;
                 }
                 else
                 {
-                    var existingInvoiceItem = await _context.InvoiceItems.FirstOrDefaultAsync(i => i.Id == model.EditOrNew);
-
-                    if (existingInvoiceItem == null)
-                    {
+                    invoiceItem = await _context.InvoiceItems.FirstOrDefaultAsync(i => i.Id == model.EditOrNew);
+                    if (invoiceItem == null)
                         throw new Exception("Invoice Item Not Found");
+
+                    itemChanged = invoiceItem.ItemId != model.ItemId;
+
+                    _mapper.Map(model, invoiceItem);
+                    invoiceItem.ModifierId = userId;
+                    invoiceItem.LastUpdated = DateTime.UtcNow;
+                    _context.InvoiceItems.Update(invoiceItem);
+                }
+
+                await _context.SaveChangesAsync();
+                
+                var invoiceInfo = await _context.Invoices
+                    .Where(inv => inv.Id == model.InvoiceId)
+                    .Select(inv => new { inv.AppointmentId, inv.PatientId })
+                    .FirstOrDefaultAsync();
+
+                if (invoiceInfo == null)
+                    throw new Exception("Invoice Not Found");
+
+                var existingTreatment = await _context.Treatments
+                    .FirstOrDefaultAsync(t => t.InvoiceItemId == invoiceItem.Id);
+
+                if (existingTreatment == null)
+                {
+                    var treatmentTemplateId = await _context.BillableItems
+                        .Where(i => i.Id == model.ItemId)
+                        .Select(i => i.TreatmentTemplateId)
+                        .FirstOrDefaultAsync();
+
+                    var newTreatment = new TreatmentsContext
+                    {
+                        AppointmentId = invoiceInfo.AppointmentId,
+                        PatientId = invoiceInfo.PatientId,
+                        TreatmentTemplateId = treatmentTemplateId ?? 0,
+                        IsFinal = false,
+                        VisitTime = DateTime.UtcNow,
+                        CreatedOn = DateTime.UtcNow,
+                        CreatorId = userId,
+                        InvoiceItemId = invoiceItem.Id
+                    };
+
+                    _context.Treatments.Add(newTreatment);
+                }
+                else
+                {
+                    existingTreatment.AppointmentId = invoiceInfo.AppointmentId;
+                    existingTreatment.PatientId = invoiceInfo.PatientId;
+                    existingTreatment.VisitTime = DateTime.UtcNow;
+                    existingTreatment.LastUpdated = DateTime.UtcNow;
+                    existingTreatment.ModifierId = userId;
+
+                    if (itemChanged)
+                    {
+                        var newTemplateId = await _context.BillableItems
+                            .Where(i => i.Id == model.ItemId)
+                            .Select(i => i.TreatmentTemplateId)
+                            .FirstOrDefaultAsync();
+
+                        existingTreatment.TreatmentTemplateId = newTemplateId ?? 0;
                     }
 
-                    _mapper.Map(model, existingInvoiceItem);
-                    existingInvoiceItem.ModifierId = userId;
-                    existingInvoiceItem.LastUpdated = DateTime.UtcNow;
-                    _context.InvoiceItems.Update(existingInvoiceItem);
-                    await _context.SaveChangesAsync();
-                    result.Message = "Invoice Item Updated Successfully";
-                    result.Status = 0;
-                    return result;
+                    _context.Treatments.Update(existingTreatment);
                 }
+
+                await _context.SaveChangesAsync();
+
+                result.Status = 0;
+                result.Message = model.EditOrNew == -1
+                    ? "Invoice Item and Treatment Saved Successfully"
+                    : "Invoice Item and Treatment Updated Successfully";
+
+                return result;
             }
             catch (Exception ex)
             {
@@ -276,7 +333,7 @@ namespace Clinic.Api.Infrastructure.Services
 
                 var result = await (from a in query
                                     join p in _context.Patients on a.PatientId equals p.Id
-                                    
+
                                     select new GetReciptsResponse
                                     {
                                         Id = a.Id,

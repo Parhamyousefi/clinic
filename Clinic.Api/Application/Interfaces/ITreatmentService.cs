@@ -1,5 +1,5 @@
 ﻿using Clinic.Api.Application.DTOs;
-using Clinic.Api.Application.DTOs.Appointments;
+using Clinic.Api.Application.DTOs.Treatments;
 using Clinic.Api.Domain.Entities;
 
 namespace Clinic.Api.Application.Interfaces
@@ -10,7 +10,6 @@ namespace Clinic.Api.Application.Interfaces
         Task<GlobalResponse> DeleteAppointment(int id);
         Task<IEnumerable<AppointmentsContext>> GetAppointments(GetAppointmentsDto model);
         Task<IEnumerable<TreatmentsContext>> GetTreatments(int appointmentId);
-        Task<GlobalResponse> SaveTreatment(SaveTreatmentDto model);
         Task<GlobalResponse> DeleteTreatment(int id);
         Task<IEnumerable<GetTodayAppointmentsInfoDto>> GetTodayAppointments(GetTodayAppointmentsDto model);
         Task<IEnumerable<GetAppointmentTypesDto>> GetAppointmentTypes();
@@ -22,5 +21,6 @@ namespace Clinic.Api.Application.Interfaces
         Task<IEnumerable<QuestionsContext>> GetQuestionsPerSection(int sectionId);
         Task<IEnumerable<AnswersContext>> GetAnswersPerQuestion(int questionId);
         Task<IEnumerable<GetServicesPerPatientResponse>> GetPatientServices(int patinetId);
+        Task<IEnumerable<GetPatientTreatmentsResponse>> GetPatientTreatments(int patientId);
     }
 }

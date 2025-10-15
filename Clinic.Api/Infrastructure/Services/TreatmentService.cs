@@ -1,10 +1,11 @@
 ﻿using AutoMapper;
 using Clinic.Api.Application.DTOs;
-using Clinic.Api.Application.DTOs.Appointments;
+using Clinic.Api.Application.DTOs.Treatments;
 using Clinic.Api.Application.Interfaces;
 using Clinic.Api.Domain.Entities;
 using Clinic.Api.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 using static Clinic.Api.Middlwares.Exceptions;
 
 namespace Clinic.Api.Infrastructure.Services
@@ -154,50 +155,6 @@ namespace Clinic.Api.Infrastructure.Services
                 throw new Exception(ex.Message);
             }
         }
-
-        public async Task<GlobalResponse> SaveTreatment(SaveTreatmentDto model)
-        {
-            var result = new GlobalResponse();
-
-            try
-            {
-                var userId = _token.GetUserId();
-
-                if (model.EditOrNew == -1)
-                {
-                    var treatment = _mapper.Map<TreatmentsContext>(model);
-                    treatment.CreatorId = userId;
-                    treatment.CreatedOn = DateTime.UtcNow;
-                    _context.Treatments.Add(treatment);
-                    await _context.SaveChangesAsync();
-                    result.Message = "Treatment Saved Successfully";
-                    result.Status = 0;
-                    return result;
-                }
-                else
-                {
-                    var existingTreatment = await _context.Treatments.FirstOrDefaultAsync(t => t.Id == model.EditOrNew);
-
-                    if (existingTreatment == null)
-                    {
-                        throw new Exception("Treatment Not Found");
-                    }
-
-                    _mapper.Map(model, existingTreatment);
-                    existingTreatment.ModifierId = userId;
-                    existingTreatment.CreatedOn = DateTime.UtcNow;
-                    _context.Treatments.Update(existingTreatment);
-                    await _context.SaveChangesAsync();
-                    result.Message = "Treatment Updated Successfully";
-                    return result;
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
-
         public async Task<GlobalResponse> DeleteTreatment(int id)
         {
             var result = new GlobalResponse();
@@ -538,6 +495,150 @@ namespace Clinic.Api.Infrastructure.Services
             {
                 throw new Exception(ex.Message);
             }
+        }
+
+        public async Task<IEnumerable<GetPatientTreatmentsResponse>> GetPatientTreatments(int patientId)
+        {
+            var treatments = await _context.Treatments
+          .Where(t => t.PatientId == patientId)
+          .ToListAsync();
+
+            if (!treatments.Any())
+                return Enumerable.Empty<GetPatientTreatmentsResponse>();
+
+            var treatmentIds = treatments.Select(t => (int?)t.Id).ToList();
+            var treatmentTemplateIds = treatments.Select(t => t.TreatmentTemplateId).Distinct().ToList();
+
+            var templates = await _context.TreatmentTemplates
+                .Where(tt => treatmentTemplateIds.Contains(tt.Id))
+                .ToListAsync();
+
+            var billableItems = await _context.BillableItems
+                .Where(bi => bi.TreatmentTemplateId != null && treatmentTemplateIds.Contains(bi.TreatmentTemplateId.Value))
+                .ToListAsync();
+
+            var sections = await _context.Sections
+                .Where(s => treatmentTemplateIds.Contains(s.TreatmentTemplateId))
+                .ToListAsync();
+
+            var sectionIds = sections.Select(s => s.Id).ToList();
+
+            var questions = await _context.Questions
+                .Where(q => q.SectionId != null && sectionIds.Contains(q.SectionId))
+                .ToListAsync();
+
+            var questionIds = questions.Select(q => q.Id).ToList();
+
+            var answers = await _context.Answers
+                .Where(a => a.Question_Id != null && questionIds.Contains(a.Question_Id.Value))
+                .ToListAsync();
+
+            var questionValues = await _context.QuestionValues
+                .Where(qv => qv.TreatmentId != null && treatmentIds.Contains(qv.TreatmentId))
+                .ToListAsync();
+
+            var attachments = await _context.FileAttachments
+                .Where(f => f.TreatmentId != null && treatmentIds.Contains(f.TreatmentId))
+                .ToListAsync();
+
+            var result = treatments.Select(treatment =>
+            {
+                var template = templates.FirstOrDefault(tt => tt.Id == treatment.TreatmentTemplateId);
+                var billableItem = billableItems.FirstOrDefault(bi => bi.TreatmentTemplateId == treatment.TreatmentTemplateId);
+
+                var sectionDtos = sections
+                    .Where(s => s.TreatmentTemplateId == treatment.TreatmentTemplateId)
+                    .Select(s =>
+                    {
+                        var questionDtos = questions
+                            .Where(q => q.SectionId == s.Id)
+                            .Select(q =>
+                            {
+                                var qv = questionValues.FirstOrDefault(v => v.QuestionId == q.Id && v.TreatmentId == treatment.Id);
+
+                                var selectedValue = qv?.selectedValue;
+                                object? finalSelectedValue = selectedValue;
+
+                                List<int> selectedIds = new();
+                                List<object> selectedAnswersJson = new();
+
+                                if (qv != null && qv.AnswerId != null)
+                                {
+                                    var raw = qv.AnswerId.ToString();
+                                    selectedIds = raw
+                                        .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                                        .Select(x => int.TryParse(x.Trim(), out var id) ? id : -1)
+                                        .Where(id => id > 0)
+                                        .ToList();
+
+                                    selectedAnswersJson = answers
+                                        .Where(a => selectedIds.Contains(a.Id))
+                                        .Select(a => new
+                                        {
+                                            Id = a.Id,
+                                            Title = a.title
+                                        })
+                                        .Cast<object>()
+                                        .ToList();
+
+                                    finalSelectedValue = selectedAnswersJson;
+                                }
+
+                                var answerDtos = answers
+                                    .Where(a => selectedIds.Contains(a.Id))
+                                    .Select(a => new AnswerDto
+                                    {
+                                        Id = a.Id,
+                                        Title = a.title,
+                                        Text = a.text
+                                    })
+                                    .ToList();
+
+                                return new QuestionDto
+                                {
+                                    Id = q.Id,
+                                    Title = q.title,
+                                    Type = q.type,
+                                    SelectedValue = finalSelectedValue,
+                                    Answers = answerDtos
+                                };
+                            })
+                            .ToList();
+
+                        return new SectionDto
+                        {
+                            Id = s.Id,
+                            Title = s.title,
+                            Questions = questionDtos
+                        };
+                    })
+                    .ToList();
+
+                var attachmentDtos = attachments
+                    .Where(f => f.TreatmentId == treatment.Id)
+                    .Select(f => new AttachmentDto
+                    {
+                        Id = f.Id,
+                        FileName = f.FileName,
+                        Description = f.Description,
+                        FileSize = f.FileSize
+                    })
+                    .ToList();
+
+                return new GetPatientTreatmentsResponse
+                {
+                    TreatmentId = treatment.Id,
+                    AppointmentId = treatment.AppointmentId,
+                    TemplateTitle = template?.Title,
+                    BillableItemId = billableItem?.Id,
+                    TreatmentTemplateId = template?.Id,
+                    InvoiceItemId = treatment.InvoiceItemId,
+                    Sections = sectionDtos,
+                    Attachments = attachmentDtos
+                };
+            }).ToList();
+
+            return result;
         }
     }
 }

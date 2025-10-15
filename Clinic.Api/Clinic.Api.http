@@ -172,30 +172,15 @@ GET {{Clinic_Api_Host}}/api/question/getQuestions
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwidXNlcm5hbWUiOiJuaW1hIiwicm9sZSI6IkFkbWluIiwiZXhwIjoxNzU1NTM0MjE2LCJpc3MiOiJDbGluaWMuQXBpIiwiYXVkIjoiQ2xpbmljLkFwaS5Vc2VycyJ9.m2aC3StvAxkQ8MWLhJDmDW0vkMv3i6rK0qxQXJH6k5A
 
-### Save Treatments
-POST {{Clinic_Api_Host}}/api/treatment/saveTreatment
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwidXNlcm5hbWUiOiJuaW1hIiwicm9sZSI6IkFkbWluIiwiZXhwIjoxNzU1NTM0MjE2LCJpc3MiOiJDbGluaWMuQXBpIiwiYXVkIjoiQ2xpbmljLkFwaS5Vc2VycyJ9.m2aC3StvAxkQ8MWLhJDmDW0vkMv3i6rK0qxQXJH6k5A
+### Save or Update QuestionValue
+POST {{Clinic_Api_Host}}/api/Question/saveQuestionValue
 Content-Type: application/json
-
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NjA3ODY4MzEsImlhdCI6MTc2MDE4MjAzMSwidXNlcklkIjoiMiIsInVzZXJuYW1lIjoibmltYSIsInVzZXJSb2xlIjoiQWRtaW4iLCJuYmYiOjE3NjAxODIwMzF9.PZk551c_2wz7du9ihwKJg33DI6F3BbTzL-h0H2E9XVg
 {
-  "patientId": 1,
-  "appointmentId": 2,
-  "isFinal": true,
-  "treatmentTemplateId": 5,
-  "invoiceItemId": null,
-  "visitTime": "2025-08-18T12:00:00"
-}
-
-### Save QuestionValue
-POST {{Clinic_Api_Host}}/api/question/saveQuestionValue
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwidXNlcm5hbWUiOiJuaW1hIiwicm9sZSI6IkFkbWluIiwiZXhwIjoxNzU1NTM0MjE2LCJpc3MiOiJDbGluaWMuQXBpIiwiYXVkIjoiQ2xpbmljLkFwaS5Vc2VycyJ9.m2aC3StvAxkQ8MWLhJDmDW0vkMv3i6rK0qxQXJH6k5A
-Content-Type: application/json
-
-{
-  "questionId": 12,
+  "questionId": 4,
   "selectedValue": "Yes",
-  "treatmentId": 1,
-  "answerId": null
+  "invoiceItemId": 10,
+  "answerId": 2
 }
 
 ### Get Today Appointments
@@ -320,7 +305,7 @@ Content-Type: application/json
 
 ### Get Receipts
 GET {{Clinic_Api_Host}}/api/invoice/getReceipt/34
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTk3NTI2NDQsImlhdCI6MTc1OTE0Nzg0NCwidXNlcklkIjoiMiIsInVzZXJuYW1lIjoibmltYSIsInVzZXJSb2xlIjoiQWRtaW4iLCJuYmYiOjE3NTkxNDc4NDR9.p59x_B95FrQRYb8-3fiIS59nceyfo6yDptmu3kDfhS4
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NjA1MTU2MTIsImlhdCI6MTc1OTkxMDgxMiwidXNlcklkIjoiMiIsInVzZXJuYW1lIjoibmltYSIsInVzZXJSb2xlIjoiQWRtaW4iLCJuYmYiOjE3NTk5MTA4MTJ9.xu6WOOL6m9f4wldEiAMBxy40_EB_auY4VESE9180Ug8
 Content-Type: application/json
 
 ### Get Receipts
@@ -462,8 +447,8 @@ Authorization: Bearer
 Content-Type: application/json
 
 ### Get Patient Receipts
-GET {{Clinic_Api_Host}}/api/patient/getPatientReceipts/1
-Authorization: Bearer
+GET {{Clinic_Api_Host}}/api/patient/getPatientReceipts/34
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NjA1MTU2MTIsImlhdCI6MTc1OTkxMDgxMiwidXNlcklkIjoiMiIsInVzZXJuYW1lIjoibmltYSIsInVzZXJSb2xlIjoiQWRtaW4iLCJuYmYiOjE3NTk5MTA4MTJ9.xu6WOOL6m9f4wldEiAMBxy40_EB_auY4VESE9180Ug8
 Content-Type: application/json
 
 ### Get Patient Payments
@@ -541,3 +526,23 @@ Content-Type: application/json
 Get {{Clinic_Api_Host}}/api/patient/getAttachment/1
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTk3NTQ5OTksImlhdCI6MTc1OTE1MDE5OSwidXNlcklkIjoiMiIsInVzZXJuYW1lIjoibmltYSIsInVzZXJSb2xlIjoiQWRtaW4iLCJuYmYiOjE3NTkxNTAxOTl9.W7IOzXwRBjYBLkWF-VZ3Odtvd9VMsqblUB4bK0NHkms
 Content-Type: application/json
+
+### Get Patient Treatments 
+GET {{Clinic_Api_Host}}/api/treatment/getPatientTreatments/677613
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NjA5NDczMzQsImlhdCI6MTc2MDM0MjUzNCwidXNlcklkIjoiMiIsInVzZXJuYW1lIjoibmltYSIsInVzZXJSb2xlIjoiQWRtaW4iLCJuYmYiOjE3NjAzNDI1MzR9.bEgZQkG1AOhPp5DjJaQx9jnkbbxKKEskSgEWZzC1gcs
+Content-Type: application/json
+
+### Save or Update InvoiceItem
+POST {{Clinic_Api_Host}}/api/Invoice/SaveInvoiceItem
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NjA3ODY4MzEsImlhdCI6MTc2MDE4MjAzMSwidXNlcklkIjoiMiIsInVzZXJuYW1lIjoibmltYSIsInVzZXJSb2xlIjoiQWRtaW4iLCJuYmYiOjE3NjAxODIwMzF9.PZk551c_2wz7du9ihwKJg33DI6F3BbTzL-h0H2E9XVg
+
+{
+  "invoiceId": 1012408,
+  "itemId": 9058947,
+  "productId": 3,
+  "quantity": 2,
+  "discount": 10,
+  "discountTypeId": 1,
+  "editOrNew": -1
+}
