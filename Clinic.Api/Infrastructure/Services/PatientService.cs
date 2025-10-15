@@ -318,6 +318,8 @@ namespace Clinic.Api.Infrastructure.Services
 
                 relativePath = relativePath.Replace("\\", "/");
 
+                var treatmentId = Convert.ToInt32(_context.Treatments.Where(t => t.InvoiceItemId == model.InvoiceItemId).Select(t => t.InvoiceItemId));
+
                 if (model.EditOrNew == -1)
                 {
                     var entity = new FileAttachmentsContext
@@ -329,7 +331,7 @@ namespace Clinic.Api.Infrastructure.Services
                         LastUpdated = null,
                         ModifierId = null,
                         CreatorId = userId,
-                        TreatmentId = model.TreatmentId
+                        TreatmentId = treatmentId
                     };
 
                     _context.FileAttachments.Add(entity);
@@ -355,7 +357,7 @@ namespace Clinic.Api.Infrastructure.Services
                     entity.FileSize = Convert.FromBase64String(model.Base64).LongLength;
                     entity.LastUpdated = DateTime.UtcNow;
                     entity.ModifierId = userId;
-                    entity.TreatmentId = model.TreatmentId;
+                    entity.TreatmentId = treatmentId;
 
                     _context.FileAttachments.Update(entity);
                     await _context.SaveChangesAsync();
