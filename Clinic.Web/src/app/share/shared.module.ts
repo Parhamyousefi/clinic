@@ -19,6 +19,9 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { NgPersianDatepickerModule } from 'ng-persian-datepicker';
 import { AccordionModule } from 'primeng/accordion';
+import { MultiSelectModule } from 'primeng/multiselect';
+import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
+import { DialogModule } from 'primeng/dialog';
 
 @NgModule({
   declarations: [
@@ -58,7 +61,10 @@ import { AccordionModule } from 'primeng/accordion';
     NgxMaterialTimepickerModule,
     NgPersianDatepickerModule,
     ReactiveFormsModule,
-    AccordionModule
+    AccordionModule,
+    MultiSelectModule,
+    CKEditorModule,
+    DialogModule
   ],
   exports: [
     NumberSplitPipe,
@@ -94,7 +100,10 @@ import { AccordionModule } from 'primeng/accordion';
     NgPersianDatepickerModule,
     ReactiveFormsModule,
     CommonModule,
-    AccordionModule
+    AccordionModule,
+    MultiSelectModule,
+    CKEditorModule,
+    DialogModule
   ]
 })
 export class SharedModule { }
