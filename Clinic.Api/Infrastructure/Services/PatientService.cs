@@ -314,7 +314,7 @@ namespace Clinic.Api.Infrastructure.Services
                     return result;
                 }
 
-                var relativePath = await _fileService.SaveFileAsync(model.Base64, model.FileName, "Assets/Patient", _environment);
+                var relativePath = await _fileService.SaveFileAsync(model.Base64, model.FileName, "assets/patient", _environment);
 
                 relativePath = relativePath.Replace("\\", "/");
 
