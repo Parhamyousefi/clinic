@@ -140,7 +140,7 @@ if (app.Environment.IsDevelopment())
 app.UseStaticFiles(new StaticFileOptions()
 {
     FileProvider = new PhysicalFileProvider(
-        Path.Combine(Directory.GetCurrentDirectory(), @"assets/patient")),
+        Path.Combine(Directory.GetCurrentDirectory(), @"assets")),
     RequestPath = new PathString("/images")
 });
 
