@@ -548,3 +548,30 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NjA3ODY4M
   "discountTypeId": 1,
   "editOrNew": -1
 }
+
+### GetInvoices By Clinic
+Post {{Clinic_Api_Host}}/api/report/getInvoicesByClinic
+Content-Type: application/json
+Authorization: Bearer
+{
+  "fromDate": "2025-08-18T00:00:00",
+  "toDate": "2025-08-18T00:00:00"
+}
+
+### GetInvoicesByService
+POST {{Clinic_Api_Host}}/api/report/getInvoicesByService
+Content-Type: application/json
+Authorization: Bearer
+{
+  "fromDate": "2025-08-18T00:00:00",
+  "toDate": "2025-08-18T00:00:00"
+}
+
+### GetAppointmentsAndUnpaidInvoices
+POST {{Clinic_Api_Host}}/api/report/getAppointmentsAndUnpaidInvoices
+Content-Type: application/json
+Authorization: Bearer
+{
+   "fromDate": "2025-08-18T00:00:00",
+  "toDate": "2025-08-18T00:00:00"
+}
