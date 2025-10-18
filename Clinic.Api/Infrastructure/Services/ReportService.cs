@@ -1,4 +1,5 @@
-﻿using Clinic.Api.Application.DTOs.Report;
+﻿using Clinic.Api.Application.DTOs;
+using Clinic.Api.Application.DTOs.Report;
 using Clinic.Api.Application.Interfaces;
 using Clinic.Api.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
@@ -50,5 +51,44 @@ namespace Clinic.Api.Infrastructure.Services
 
             return result;
         }
+
+        public async Task<GlobalResponse> GetAppointmentsAndUnpaidInvoices(InvoiceFilterDto model)
+        {
+            var response = new GlobalResponse();
+
+            try
+            {
+                var appointmentCount = await _context.Appointments
+                    .CountAsync(a => a.Start >= model.FromDate && a.End <= model.ToDate && (a.Cancelled == false || a.Cancelled == null));
+
+                var unpaidInvoices = await (
+                    from i in _context.Invoices
+                    join p in _context.Patients on i.PatientId equals p.Id into patientGroup
+                    from patient in patientGroup.DefaultIfEmpty()
+                    where ((i.Amount) - (i.Payment)) > 0 && (i.IsCanceled == false || i.IsCanceled == null)
+                    select new
+                    {
+                        InvoiceNo = i.InvoiceNo,
+                        PatientName = ((patient.FirstName ?? "") + " " + (patient.LastName ?? "")).Trim(),
+                        RemainingAmount = ((decimal?)i.Amount ?? 0m) - ((decimal?)i.Payment ?? 0m)
+                    }
+                ).ToListAsync();
+
+                response.Status = 0;
+                response.Data = new
+                {
+                    AppointmentCount = appointmentCount,
+                    UnpaidInvoices = unpaidInvoices
+                };
+            }
+            catch (Exception ex)
+            {
+                response.Status = 1;
+                response.Message = ex.Message;
+            }
+
+            return response;
+        }
+
     }
 }
