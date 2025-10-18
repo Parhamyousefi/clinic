@@ -1,4 +1,5 @@
-﻿using Clinic.Api.Application.DTOs.Report;
+﻿using Clinic.Api.Application.DTOs;
+using Clinic.Api.Application.DTOs.Report;
 using Clinic.Api.Application.Interfaces;
 using Clinic.Api.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -30,6 +31,14 @@ namespace Clinic.Api.Controllers
         {
             var result = await _reportService.GetInvoicesByService(model);
             return Ok(result);
+        }
+
+        [HttpPost("getAppointmentsAndUnpaidInvoices")]
+        [Authorize("Doctor","Admin")]
+        public async Task<GlobalResponse> GetAppointmentsAndUnpaidInvoices(InvoiceFilterDto model)
+        {
+            var result = await _reportService.GetAppointmentsAndUnpaidInvoices(model);
+            return result;
         }
     }
 }
