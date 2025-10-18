@@ -2,7 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { PatientService } from '../../_services/patient.service';
 import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute } from '@angular/router';
-
+import swal from 'sweetalert2';
 import { CommonModule } from '@angular/common';
 import moment from 'moment-jalaali';
 import { TreatmentsService } from '../../_services/treatments.service';
@@ -12,7 +12,7 @@ import { QuestionService } from '../../_services/question.service';
 import { PdfMakerComponent } from '../../share/pdf-maker/pdf-maker.component';
 import { UtilService } from '../../_services/util.service';
 export const ValidFormat = ['pdf', 'jpg', 'jpeg', 'png'];
-
+import { environment } from './../../../environments/environment';
 @Component({
   selector: 'app-patient-treatment',
   standalone: true,
@@ -35,6 +35,7 @@ export class PatientTreatmentComponent {
   base64: any;
   fileName: any;
   fileType: any;
+  url = environment.url
 
   constructor(
     private patientService: PatientService,
@@ -133,12 +134,14 @@ export class PatientTreatmentComponent {
 
   onClick(event: MouseEvent, service, type) {
     event.stopPropagation();
+    this.selectedService = service;
     switch (type) {
       case 1:
-        this.selectedService = service;
         this.getSectionPerService(service.treatmentTemplateId);
+        this.selectedService['type'] = 1;
         break;
       case 4:
+        this.selectedService['type'] = 4;
         this.fileToUpload = null;
         this.base64 = null;
         this.fileName = null;
@@ -256,6 +259,7 @@ export class PatientTreatmentComponent {
       res.forEach(element => {
         let index = this.patientServiceListTab.findIndex(item => item.invoiceItemId == element.invoiceItemId);
         this.patientServiceListTab[index]['sections'] = element.sections;
+        this.patientServiceListTab[index]['attachments'] = element.attachments;
         this.patientServiceListTab[index]['sections'].forEach(element => {
           element.isOpen = true;
           element.questions.forEach(question => {
@@ -337,7 +341,6 @@ export class PatientTreatmentComponent {
     this.utilService.getBase64(files.item(0)).then((data) => {
       let base: any = data;
       this.base64 = base.split(',')[1];
-
       this.fileName = this.fileToUpload['name'];
       this.fileType = this.fileToUpload['name'].split('.').pop();
     });
@@ -349,6 +352,48 @@ export class PatientTreatmentComponent {
     this.fileType = '';
     this.fileToUpload = null;
     this.base64 = null;
+  }
+
+  async saveAttachment() {
+    let model = {
+      patientId: this.selectedId,
+      fileName: this.fileName,
+      base64: this.base64,
+      invoiceItemId: this.selectedService.invoiceItemId,
+      editOrNew: -1
+    }
+    let res: any = await this.patientService.saveAttachment(model).toPromise();
+    if (res['status'] == 0) {
+      this.toastR.success('با موفقیت ثبت شد');
+      this.getPatientTreatments();
+      this.showAttacheFile = false;
+      this.fileName = '';
+      this.fileType = '';
+      this.fileToUpload = null;
+      this.base64 = null;
+    }
+  }
+
+  async deleteAttachment(id) {
+    swal.fire({
+      title: "آیا از حذف این پیوست مطمئن هستید ؟",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "بله انجام بده",
+      cancelButtonText: "منصرف شدم",
+      reverseButtons: false,
+    }).then(async (result) => {
+      try {
+        let res: any = await this.patientService.deleteAttachment(id).toPromise();
+        if (res['status'] == 0) {
+          this.toastR.success('با موفقیت حذف گردید');
+          this.getPatientTreatments();
+        }
+      }
+      catch {
+        this.toastR.error('خطایی رخ داد', 'خطا!');
+      }
+    })
   }
 
 }
