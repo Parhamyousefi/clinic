@@ -113,7 +113,7 @@ export class MainService {
     return this.http.get(uri, httpOptions);
   }
 
-  deleteNotes(id) {
+  deleteNote(id) {
     const token: any = localStorage.getItem("token");
     const uri = this.url + `api/main/deleteNote/` + id;
     const httpOptions = {

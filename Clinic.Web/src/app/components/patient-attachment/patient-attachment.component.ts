@@ -86,6 +86,15 @@ export class PatientAttachmentComponent {
       let res: any = await this.patientService.getAttachment(this.patientId).toPromise();
       if (res.length > 0) {
         this.patientAttachmentList = res;
+        this.patientAttachmentList.forEach(attachment => {
+          attachment.fileName = this.server + attachment.fileName;
+          if (attachment.fileName.toLowerCase().endsWith('.jpg')) {
+            attachment.fileType = 1;
+          }
+          else {
+            attachment.fileType = 0;
+          }
+        });
       }
     }
     catch {

@@ -1,10 +1,10 @@
 .patient-menu {
     background: #FFFFFF;
     width: 200px;
-    height: calc(100% - 140px);
+    height: calc(100% - 200px);
     /* height: 100%; */
     right: 251px;
-    top: 180px;
+    top: 200px;
     /* box-shadow: 0 0 5px rgb(0 0 0 / 20%); */
     box-shadow: -8px 0px 9px -7px rgba(0, 0, 0, 0.77);
     position: fixed;
@@ -14,7 +14,7 @@
     z-index: 90;
     direction: rtl;
     width: calc(100% - 250px);
-    height: 100px;
+    height: 120px;
     position: fixed;
     top: 81px;
     right: 251px;
@@ -34,10 +34,14 @@
 
 .add-note-btn {
     width: fit-content;
+    background-color: #ff57eb;
+    color: #FFFFFF;
 }
 
 .note-input {
     width: 400px;
+    border-radius: 10px;
+    border: 1px solid #858585;
 }
 
 .note-input-container {
@@ -46,6 +50,38 @@
 
 .closed-note-container {
     width: 0;
+}
+
+.note-item {
+    border: 1px solid #63C6B3;
+    border-radius: 10px;
+    transition: .2s all ease;
+    min-width: fit-content;
+    position: relative;
+    overflow: visible;
+
+    i {
+        font-size: 10px;
+    }
+}
+
+.note-item:hover {
+    background: rgba(99, 198, 179, .3);
+}
+
+.note-items-container {
+    max-width: 40%;
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+
+.delete-note {
+    border-radius: 100%;
+    position: absolute;
+    top: -3px;
+    right: -3px;
+    width: 15px;
+    height: 15px;
 }
 
 @media (max-width: 768px) {

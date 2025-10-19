@@ -30,7 +30,7 @@ body {
 
 .patientAppContainer {
     width: calc(100% - 450px);
-    margin-top: 180px;
+    margin-top: 200px;
     height: 100vh;
     padding: 20px;
     margin-right: 450px;
