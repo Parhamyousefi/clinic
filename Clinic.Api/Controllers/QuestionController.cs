@@ -17,7 +17,7 @@ namespace Clinic.Api.Controllers
         }
 
         [HttpGet("getQuestions")]
-        [Authorize("Admin","Doctor")]
+        [Authorize("Admin", "Doctor")]
         public async Task<IActionResult> GetQuestions()
         {
             var result = await _questionsService.GetQuestions();

@@ -1,5 +1,4 @@
-﻿using Clinic.Api.Application.DTOs;
-using Clinic.Api.Application.DTOs.Treatments;
+﻿using Clinic.Api.Application.DTOs.Treatments;
 using Clinic.Api.Application.Interfaces;
 using Clinic.Api.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -111,7 +110,7 @@ namespace Clinic.Api.Controllers
         }
 
         [HttpGet("getSectionPerService/{serviceId}")]
-        [Authorize("Admin","Doctor")]
+        [Authorize("Admin", "Doctor")]
         public async Task<IActionResult> GetSectionPerService(int serviceId)
         {
             var result = await _treatmentsService.GetSectionPerService(serviceId);
@@ -119,7 +118,7 @@ namespace Clinic.Api.Controllers
         }
 
         [HttpGet("getQuestionsPerSection/{sectionId}")]
-        [Authorize("Admin","Doctor")]
+        [Authorize("Admin", "Doctor")]
         public async Task<IActionResult> GetQuestionsPerSection(int sectionId)
         {
             var result = await _treatmentsService.GetQuestionsPerSection(sectionId);
@@ -127,7 +126,7 @@ namespace Clinic.Api.Controllers
         }
 
         [HttpGet("getAnswersPerQuestion/{questionId}")]
-        [Authorize("Admin","Doctor")]
+        [Authorize("Admin", "Doctor")]
         public async Task<IActionResult> GetAnswersPerQuestion(int questionId)
         {
             var result = await _treatmentsService.GetAnswersPerQuestion(questionId);
@@ -135,7 +134,7 @@ namespace Clinic.Api.Controllers
         }
 
         [HttpGet("getPatientServices/{patientId}")]
-        [Authorize("Admin","Doctor")]
+        [Authorize("Admin", "Doctor")]
         public async Task<IActionResult> GetPatientServices(int patientId)
         {
             var result = await _treatmentsService.GetPatientServices(patientId);
@@ -143,7 +142,7 @@ namespace Clinic.Api.Controllers
         }
 
         [HttpGet("getPatientTreatments/{patientId}")]
-        [Authorize("Admin","Doctor")]
+        [Authorize("Admin", "Doctor")]
         public async Task<IActionResult> GetPatientTreatments(int patientId)
         {
             var result = await _treatmentsService.GetPatientTreatments(patientId);
