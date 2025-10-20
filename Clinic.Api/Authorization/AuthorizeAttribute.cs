@@ -1,5 +1,4 @@
 ﻿using Clinic.Api.Infrastructure.Services;
-using Clinic.Api.Middlwares;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.IdentityModel.Tokens;

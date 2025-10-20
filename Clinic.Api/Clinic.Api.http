@@ -514,17 +514,19 @@ Content-Type: application/json
 
 ### Save Attachment
 POST {{Clinic_Api_Host}}/api/patient/saveAttachment
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTk3NTQ5OTksImlhdCI6MTc1OTE1MDE5OSwidXNlcklkIjoiMiIsInVzZXJuYW1lIjoibmltYSIsInVzZXJSb2xlIjoiQWRtaW4iLCJuYmYiOjE3NTkxNTAxOTl9.W7IOzXwRBjYBLkWF-VZ3Odtvd9VMsqblUB4bK0NHkms
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NjEzODY5ODIsImlhdCI6MTc2MDc4MjE4MiwidXNlcklkIjoiMiIsInVzZXJuYW1lIjoibmltYSIsInVzZXJSb2xlIjoiQWRtaW4iLCJuYmYiOjE3NjA3ODIxODJ9.MEURmD3D6fvkxLULhm-SuAy_PhCc_8kdZv2vMqUc1Q8
 Content-Type: application/json
 {
   "patientId": 1,
   "filename": "test.png",
-  "base64": ""
+  "base64": "",
+  "editOrNew": -1,
+  "invoiceItemId": 10281424
 }
 
 ### Get Attachment
 Get {{Clinic_Api_Host}}/api/patient/getAttachment/1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTk3NTQ5OTksImlhdCI6MTc1OTE1MDE5OSwidXNlcklkIjoiMiIsInVzZXJuYW1lIjoibmltYSIsInVzZXJSb2xlIjoiQWRtaW4iLCJuYmYiOjE3NTkxNTAxOTl9.W7IOzXwRBjYBLkWF-VZ3Odtvd9VMsqblUB4bK0NHkms
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NjEzODY5ODIsImlhdCI6MTc2MDc4MjE4MiwidXNlcklkIjoiMiIsInVzZXJuYW1lIjoibmltYSIsInVzZXJSb2xlIjoiQWRtaW4iLCJuYmYiOjE3NjA3ODIxODJ9.MEURmD3D6fvkxLULhm-SuAy_PhCc_8kdZv2vMqUc1Q8
 Content-Type: application/json
 
 ### Get Patient Treatments 
@@ -545,4 +547,31 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NjA3ODY4M
   "discount": 10,
   "discountTypeId": 1,
   "editOrNew": -1
+}
+
+### GetInvoices By Clinic
+Post {{Clinic_Api_Host}}/api/report/getInvoicesByClinic
+Content-Type: application/json
+Authorization: Bearer
+{
+  "fromDate": "2025-08-18T00:00:00",
+  "toDate": "2025-08-18T00:00:00"
+}
+
+### GetInvoicesByService
+POST {{Clinic_Api_Host}}/api/report/getInvoicesByService
+Content-Type: application/json
+Authorization: Bearer
+{
+  "fromDate": "2025-08-18T00:00:00",
+  "toDate": "2025-08-18T00:00:00"
+}
+
+### GetAppointmentsAndUnpaidInvoices
+POST {{Clinic_Api_Host}}/api/report/getAppointmentsAndUnpaidInvoices
+Content-Type: application/json
+Authorization: Bearer
+{
+   "fromDate": "2025-08-18T00:00:00",
+  "toDate": "2025-08-18T00:00:00"
 }

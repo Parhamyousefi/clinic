@@ -153,7 +153,7 @@ namespace Clinic.Api.Infrastructure.Services
                 }
 
                 await _context.SaveChangesAsync();
-                
+
                 var invoiceInfo = await _context.Invoices
                     .Where(inv => inv.Id == model.InvoiceId)
                     .Select(inv => new { inv.AppointmentId, inv.PatientId })

@@ -27,7 +27,7 @@ public class UserController : ControllerBase
     }
 
     [Authorize("Admin")]
-    [HttpGet("getAllUsers")] 
+    [HttpGet("getAllUsers")]
     public async Task<IActionResult> GetAll() => Ok(await _svc.GetAllAsync());
 
     [Authorize("Admin")]
