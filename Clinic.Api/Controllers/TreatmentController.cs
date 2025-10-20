@@ -53,15 +53,6 @@ namespace Clinic.Api.Controllers
             return Ok(result);
         }
 
-        [HttpPost("saveTreatment")]
-        [Authorize("Admin", "Doctor")]
-        public async Task<IActionResult> SaveTreatment(SaveTreatmentDto model)
-        {
-            var result = await _treatmentsService.SaveTreatment(model);
-
-            return Ok(result);
-        }
-
         [HttpGet("deleteTreatment/{id}")]
         [Authorize("Admin", "Doctor")]
         public async Task<IActionResult> DeleteTreatment(int id)

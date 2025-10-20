@@ -52,6 +52,7 @@ export class NewInvoiceComponent implements OnInit {
       await this.getClinics();
       if (this.editOrNew != -1) {
         this.getInvoices();
+        this.setSelectedPatient(this.editOrNew);
       }
     });
 
@@ -148,4 +149,7 @@ export class NewInvoiceComponent implements OnInit {
     this.router.navigate(['/new-invoice/' + this.editOrNew + '/' + 2])
   }
 
+  setSelectedPatient(patientId) {
+    this.selectedPatient = this.patientsList.filter(patient => patient.id == patientId)[0];
+  }
 }

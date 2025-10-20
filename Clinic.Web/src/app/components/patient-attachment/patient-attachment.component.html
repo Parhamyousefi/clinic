@@ -62,11 +62,18 @@
             <ng-template pTemplate="body" let-attachment let-rowIndex="rowIndex">
                 <tr>
                     <td class="text-center"> {{rowIndex+1}}</td>
-                    <td><img [src]="'Clinic.Api/'+attachment.fileName" alt=""></td>
+                    <td class="text-center">
+                        <img *ngIf="attachment.fileType == 1" [src]="attachment.fileName" alt="" width="50">
+                        <i *ngIf="attachment.fileType == 0" class="fa fa-2x fa-file-pdf-o" aria-hidden="true"></i>
+
+                    </td>
                     <td class="text-center">
                         {{attachment.createdOn | JustDateZone}}
                     </td>
-                    <td><button class="btn btn-secondary" (click)="deleteAttachment(attachment.id)">حذف</button></td>
+                    <td><button class="btn btn-secondary" (click)="deleteAttachment(attachment.id)">حذف</button>
+                        <a class="btn main-btn-outline mr-1" download [href]="attachment.fileName"><i
+                                class="fa fa-download"></i></a>
+                    </td>
                 </tr>
             </ng-template>
         </p-table>

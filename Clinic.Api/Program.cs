@@ -8,6 +8,7 @@ using Clinic.Api.Middlwares;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
@@ -41,6 +42,7 @@ builder.Services.AddScoped<IInvoiceService, InvoiceService>();
 builder.Services.AddScoped<IContactService, ContactService>();
 builder.Services.AddScoped<IPaymentService, PaymentService>();
 builder.Services.AddScoped<IFileService, FileService>();
+builder.Services.AddScoped<IReportService, ReportService>();
 
 // Auth & JWT
 var jwt = builder.Configuration.GetSection("JwtSettings").Get<JwtSettings>();
@@ -134,6 +136,13 @@ if (app.Environment.IsDevelopment())
         c.RoutePrefix = string.Empty;
     });
 }
+
+app.UseStaticFiles(new StaticFileOptions()
+{
+    FileProvider = new PhysicalFileProvider(
+        Path.Combine(Directory.GetCurrentDirectory(), @"assets")),
+    RequestPath = new PathString("/assets")
+});
 
 app.UseSerilogRequestLogging();
 app.UseSwagger();

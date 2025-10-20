@@ -4,8 +4,7 @@
     {
         public int QuestionId { get; set; }
         public string? selectedValue { get; set; }
-        public int TreatmentId { get; set; }
-        public int? CreatorId { get; set; }
-        public int EditOrNew { get; set; }
+        public int InvoiceItemId { get; set; }
+        public string? AnswerId { get; set; }
     }
 }
