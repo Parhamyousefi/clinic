@@ -314,9 +314,11 @@ namespace Clinic.Api.Infrastructure.Services
                     return result;
                 }
 
-                var relativePath = await _fileService.SaveFileAsync(model.Base64, model.FileName, "Assets/Patient", _environment);
+                var relativePath = await _fileService.SaveFileAsync(model.Base64, model.FileName, "assets/patient", _environment);
 
                 relativePath = relativePath.Replace("\\", "/");
+
+                var treatment = await _context.Treatments.FirstOrDefaultAsync(t => t.InvoiceItemId == model.InvoiceItemId);
 
                 if (model.EditOrNew == -1)
                 {
@@ -328,7 +330,8 @@ namespace Clinic.Api.Infrastructure.Services
                         CreatedOn = DateTime.UtcNow,
                         LastUpdated = null,
                         ModifierId = null,
-                        CreatorId = userId
+                        CreatorId = userId,
+                        TreatmentId = treatment.Id
                     };
 
                     _context.FileAttachments.Add(entity);
@@ -354,6 +357,7 @@ namespace Clinic.Api.Infrastructure.Services
                     entity.FileSize = Convert.FromBase64String(model.Base64).LongLength;
                     entity.LastUpdated = DateTime.UtcNow;
                     entity.ModifierId = userId;
+                    entity.TreatmentId = treatment.Id;
 
                     _context.FileAttachments.Update(entity);
                     await _context.SaveChangesAsync();
