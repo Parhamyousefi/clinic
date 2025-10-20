@@ -134,4 +134,18 @@ export class TreatmentsService {
     return this.http.get(uri, httpOptions);
   }
 
+
+  getPatientTreatments(patientId) {
+    const token: any = localStorage.getItem("token");
+    const uri = this.url + `api/treatment/getPatientTreatments/${patientId}`;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      }),
+    };
+    return this.http.get(uri, httpOptions);
+  }
+
+
 }

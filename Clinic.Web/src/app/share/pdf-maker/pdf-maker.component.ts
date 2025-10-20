@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { SharedModule } from 'primeng/api';
 import html2canvas from 'html2canvas';
@@ -14,7 +14,7 @@ moment.loadPersian({ dialect: 'persian-modern', usePersianDigits: false });
   templateUrl: './pdf-maker.component.html',
   styleUrl: './pdf-maker.component.css'
 })
-export class PdfMakerComponent {
+export class PdfMakerComponent implements OnInit {
   @Input() set _patientData(value: any) {
     this.patientData = value;
     if (value) {
@@ -23,12 +23,26 @@ export class PdfMakerComponent {
       this.patientData.age = today.diff(birth, 'years');
     }
   }
+  @Input() type;
   patientData: any = [];
   showPdfContent = false;
   todayDate = moment().format('jYYYY/jMM/jDD');
   todayTime = moment.parseZone().local().format('HH:mm');
+  todayDateForPDf2: any;
+  selectedServiceForPDF2: any = [];
   get _patientData(): any {
     return this.patientData;
+  }
+
+  ngOnInit(): void {
+    const now = moment();
+    const weekday = now.format('dddd');
+    const day = now.format('jD');
+    const month = now.format('jMMMM');
+    const year = now.format('jYYYY');
+    const time = now.format('hh:mm A');
+    this.todayDateForPDf2 = `${weekday} ${day} ${month} ${year} ساعت ${time}`;
+
   }
 
 
@@ -58,17 +72,18 @@ export class PdfMakerComponent {
             if (position < imgHeight) pdf.addPage();
           }
         }
-
-        // pdf.save('outpatient-sheet.pdf');
-
-        const blob = pdf.output('blob');
-        const blobUrl = URL.createObjectURL(blob);
-        const printWindow = window.open(blobUrl);
-        if (printWindow) {
-          printWindow.onload = () => {
-            printWindow.focus();
-            printWindow.print();
-          };
+        if (mode == 'print') {
+          const blob = pdf.output('blob');
+          const blobUrl = URL.createObjectURL(blob);
+          const printWindow = window.open(blobUrl);
+          if (printWindow) {
+            printWindow.onload = () => {
+              printWindow.focus();
+              printWindow.print();
+            };
+          }
+        } else {
+          pdf.save('patient-treatment.pdf');
         }
         document.body.style.overflow = '';
         this.showPdfContent = false;

@@ -1,11 +1,24 @@
 .hidden-canvas-zone {
-    position: absolute;
-    left: -1000px;
-    top: 0;
-    width: 800px;
-    overflow: hidden;
-    z-index: -1;
-    direction: ltr;
+  position: absolute;
+  left: -3000px;
+  top: 0;
+  width: 800px;
+  overflow: hidden;
+  z-index: -1;
+  direction: ltr;
+}
+
+.header-box-for-pdf2 {
+  background-color: lightgray;
+  padding: 8px;
+  border-radius: 10px;
+}
+
+.value-box-for-pdf2 {
+  color: white;
+  border-radius: 8px;
+  background-color: #1a6dea;
+
 }
 
 .pdf-maker-container {
