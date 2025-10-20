@@ -22,6 +22,7 @@ import { AccordionModule } from 'primeng/accordion';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { DialogModule } from 'primeng/dialog';
+import { ImageModule } from 'primeng/image';
 
 @NgModule({
   declarations: [
@@ -64,7 +65,8 @@ import { DialogModule } from 'primeng/dialog';
     AccordionModule,
     MultiSelectModule,
     CKEditorModule,
-    DialogModule
+    DialogModule,
+    ImageModule
   ],
   exports: [
     NumberSplitPipe,
@@ -103,7 +105,8 @@ import { DialogModule } from 'primeng/dialog';
     AccordionModule,
     MultiSelectModule,
     CKEditorModule,
-    DialogModule
+    DialogModule,
+    ImageModule
   ]
 })
 export class SharedModule { }
