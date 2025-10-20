@@ -271,7 +271,7 @@ export class AppointmentComponent {
   editAppointment(appointment: any) {
     this.newAppointmentModel.id = appointment.id;
     this.newAppointmentModel.selectedType = this.appointmentTypes.filter((type: any) => type.id == appointment.appointmentTypeId)[0];
-    this.newAppointmentModel.selectedPatient = this.patientsList.filter((patient: any) => patient.patientCode == appointment.patientId)[0];
+    this.newAppointmentModel.selectedPatient = this.patientsList.filter((patient: any) => patient.id == appointment.patientId)[0];
     this.newAppointmentModel.appointmentStartTime = appointment.start;
     this.newAppointmentModel.appointmentEndTime = appointment.end;
     this.newAppointmentModel.note = appointment.note;
