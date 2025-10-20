@@ -46,6 +46,7 @@ export class NavbarComponent {
   patientId: any;
   patientName: string;
   patientInfo: any;
+  openSidebar: boolean;
   constructor(
     private authService: AuthService,
     private router: Router,
@@ -75,6 +76,12 @@ export class NavbarComponent {
   ngOnInit() {
     let url = location.pathname;
     this.isMobileSize = window.innerWidth <= 768 && window.innerHeight <= 1024;
+    if (this.isMobileSize) {
+      this.openSidebar = false;
+    }
+    else {
+      this.openSidebar = true;
+    }
     this.sidebarMenu = Menu;
     if ((url.startsWith('/patient/'))) {
       this.hasPatientMenu = true;
@@ -126,5 +133,15 @@ export class NavbarComponent {
       }
     })
   }
+
+
+  mobileSideBarClose() {
+    if (this.isMobileSize) {
+      this.openSidebar = false;
+    }
+  }
+
+
+
 }
 

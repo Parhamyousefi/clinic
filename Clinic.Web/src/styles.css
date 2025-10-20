@@ -147,27 +147,36 @@ mat-label {
 
 
 .mobile-sidebar {
-    transition: .2s all ease;
-    display: none;
+  transition: .2s all ease;
+  display: none;
 }
 
 .mobile-nav {
-    width: 100% !important;
-    right: 0;
+  width: 100% !important;
+  right: 0;
 }
 
 .main-btn {
-    background-color: #00c4b4;
-    color: #FFFFFF;
+  background-color: #00c4b4;
+  color: #FFFFFF;
+}
+
+.main-btn-outline {
+  border: 1px solid #00c4b4;
+  color: #00c4b4;
+}
+
+.main-btn-outline:hover {
+  background-color: #63C6B3;
 }
 
 .bg-main {
-    background-color: #63C6B3;
-    color: #FFFFFF;
+  background-color: #63C6B3;
+  color: #FFFFFF;
 }
 
 .bg-main-outline {
-    background: rgba(99, 198, 179, 0.5);
+  background: rgba(99, 198, 179, 0.5);
 }
 
 /* calender */
@@ -269,5 +278,19 @@ p-dropdown.p-element {
 @media (max-width: 768px) {
   .appContainer {
     width: 100%;
+    margin-top: 80px;
+    height: 100vh;
+    padding: 20px;
+    margin-right: 0;
+    direction: rtl !important;
+  }
+
+  .patientAppContainer {
+    width: 100%;
+    margin-top: 140px;
+    height: 100vh;
+    padding: 20px;
+    margin-right: 0;
+    direction: rtl !important;
   }
 }

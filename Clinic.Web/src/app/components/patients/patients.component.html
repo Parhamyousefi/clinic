@@ -72,19 +72,19 @@
             </div>
             <hr>
             <div class="col-12 mt-3 mb-4 d-flex flex-wrap new-appointment-containter">
-                <div class="col-4 d-flex flex-column">
+                <div class="col-md-4 col-12 d-flex flex-column">
                     <label for="firstName" class="text-right">
                         <span class="text-danger ml-1">*</span>نام
                     </label>
                     <input type="text" id="firstName" class="form-control" [(ngModel)]="newPatient.firstName">
                 </div>
-                <div class="col-4 d-flex flex-column">
+                <div class="col-md-4 col-12 d-flex flex-column">
                     <label for="lastName" class="text-right">
                         <span class="text-danger ml-1">*</span>نام خانوادگی
                     </label>
                     <input type="text" id="lastName" class="form-control" [(ngModel)]="newPatient.lastName">
                 </div>
-                <div class="col-4 d-flex flex-column">
+                <div class="col-md-4 col-12 d-flex flex-column">
                     <label for="lastName" class="text-right">
                         <span class="text-danger ml-1">*</span>جنسیت
                     </label>
@@ -94,7 +94,7 @@
                     </div>
 
                 </div>
-                <div class="col-4 d-flex flex-column">
+                <div class="col-md-4 col-12 d-flex flex-column">
                     <label for="birthDate" class="text-right">
                         <span class="text-danger ml-1">*</span>تاریخ تولد
                     </label>
@@ -102,55 +102,55 @@
                     <!-- <p-inputMask [(ngModel)]="newPatient.birthDate" id="birthDate" mask="0000/00/00" placeholder="0000/00/00"
                 slotChar="روز/ماه/سال" /> -->
                 </div>
-                <div class="col-4 d-flex flex-column">
+                <div class="col-md-4 col-12 d-flex flex-column">
                     <label for="fatherName" class="text-right">
                         <span class="text-danger ml-1">*</span>نام پدر
                     </label>
                     <input type="text" id="fatherName" class="form-control" [(ngModel)]="newPatient.fatherName">
                 </div>
-                <div class="col-4 d-flex flex-column">
+                <div class="col-md-4 col-12 d-flex flex-column">
                     <label for="nationalCode" class="text-right">
                         <span class="text-danger ml-1">*</span>کد ملی
                     </label>
                     <input type="text" id="nationalCode" class="form-control" maxlength="10"
                         [(ngModel)]="newPatient.nationalCode">
                 </div>
-                <div class="col-4 d-flex flex-column">
+                <div class="col-md-4 col-12 d-flex flex-column">
                     <label for="job" class="text-right">
                         <span class="text-danger ml-1">*</span>شغل
                     </label>
                     <p-dropdown [options]="jobList" id="job" [(ngModel)]="newPatient.job" optionLabel="name"
                         class="full-width text-right" />
                 </div>
-                <div class="col-4 d-flex flex-column">
+                <div class="col-md-4 col-12 d-flex flex-column">
                     <label for="mainInsurance" class="text-right">
                         بیمه گر اصلی
                     </label>
                     <p-dropdown [options]="mainInsurance" id="mainInsurance" [(ngModel)]="newPatient.mainInsurance"
                         optionLabel="name" class="full-width text-right" />
                 </div>
-                <div class="col-4 d-flex flex-column">
+                <div class="col-md-4 col-12 d-flex flex-column">
                     <label for="takmiliInsurance" class="text-right">
                         بیمه گر تکمیلی
                     </label>
                     <p-dropdown [options]="takmiliInsurance" id="takmiliInsurance"
                         [(ngModel)]="newPatient.takmiliInsurance" optionLabel="name" class="full-width text-right" />
                 </div>
-                <div class="col-4 d-flex flex-column">
+                <div class="col-md-4 col-12 d-flex flex-column">
                     <label for="firstReagent" class="text-right">
                         معرف اول
                     </label>
                     <p-dropdown [options]="firstReagent" id="firstReagent" [(ngModel)]="newPatient.referringContactId"
                         optionLabel="name" class="full-width text-right" />
                 </div>
-                <div class="col-4 d-flex flex-column">
+                <div class="col-md-4 col-12 d-flex flex-column">
                     <label for="secondReagent" class="text-right">
                         معرف دوم
                     </label>
                     <p-dropdown [options]="secondReagent" id="secondReagent"
                         [(ngModel)]="newPatient.referringContact2Id" optionLabel="name" class="full-width text-right" />
                 </div>
-                <div class="col-4 d-flex flex-column">
+                <div class="col-md-4 col-12 d-flex flex-column">
                     <label for="inpatientInsurance" class="text-right">
                         بیمه گر بستری
                     </label>
@@ -158,27 +158,27 @@
                         [(ngModel)]="newPatient.referringInpatientInsurerId" optionLabel="name"
                         class="full-width text-right" />
                 </div>
-                <div class="col-4 d-flex flex-column">
+                <div class="col-md-4 col-12 d-flex flex-column">
                     <label for="nationalCode" class="text-right">
                         <span class="text-danger ml-1">*</span>عنوان
                     </label>
                     <p-dropdown [options]="titleList" [(ngModel)]="newPatient.title" optionLabel="name"
                         class="full-width text-right" />
                 </div>
-                <div class="col-4 d-flex flex-column">
+                <div class="col-md-4 col-12 d-flex flex-column">
                     <label for="fileNum" class="text-right">
                         <span class="text-danger ml-1">*</span>شماره پرونده
                     </label>
                     <input type="text" id="fileNum" id="city" class="form-control"
                         [(ngModel)]="newPatient.referenceNumber">
                 </div>
-                <div class="col-4 d-flex flex-column">
+                <div class="col-md-4 col-12 d-flex flex-column">
                     <label for="city" class="text-right">
                         <span class="text-danger ml-1">*</span>شهر
                     </label>
                     <input type="text" id="city" class="form-control" [(ngModel)]="newPatient.city">
                 </div>
-                <div class="col-4 d-flex flex-column">
+                <div class="col-md-4 col-12 d-flex flex-column">
                     <label for="note" class="text-right">
                         یادداشت
                     </label>
