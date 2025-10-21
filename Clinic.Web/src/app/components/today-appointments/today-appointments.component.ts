@@ -5,11 +5,12 @@ import { SharedModule } from '../../share/shared.module';
 import { MainService } from './../../_services/main.service';
 import moment from 'moment-jalaali';
 import { FormControl } from '@angular/forms';
+import { RouterLink } from "@angular/router";
 
 @Component({
   selector: 'app-today-appointments',
   standalone: true,
-  imports: [SharedModule],
+  imports: [SharedModule, RouterLink],
   templateUrl: './today-appointments.component.html',
   styleUrl: './today-appointments.component.css'
 })

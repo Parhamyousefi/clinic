@@ -70,7 +70,7 @@
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-item>
-                <tr>
+                <tr [routerLink]="'/patient/treatment/' + item.patientId" class="pointer">
                     <td class="px-2">
                         <div class="py-2 widthClassPrime">
                             <span>{{item.date|JustDateZone}}</span>
@@ -97,7 +97,8 @@
                         </div>
                     </td>
                     <td class="px-2">
-                        <button class="btn btn-danger">صدور صورتحساب</button>
+                        <button class="btn btn-danger"
+                            (click)="'/new-invoice/' + item.patientId +'/2/'+selectedClinic.code">صدور صورتحساب</button>
                     </td>
                 </tr>
             </ng-template>
