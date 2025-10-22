@@ -1,5 +1,4 @@
-﻿using Clinic.Api.Application.DTOs;
-using Clinic.Api.Application.DTOs.Users;
+﻿using Clinic.Api.Application.DTOs.Users;
 
 namespace Clinic.Api.Application.Interfaces
 {
