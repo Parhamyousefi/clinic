@@ -1,10 +1,14 @@
 <div class="appContainer">
     <div class="col-12 text-right">
-        <h4>وقت دهی</h4>
+        <h4>اوقات امروز</h4>
     </div>
     <hr>
     <div class="col-12">
         <div class="d-lg-flex align-items-baseline my-3">
+            <div class="col-lg-2 col-12">
+                <p-dropdown [options]="visitStatusList" placeholder="مکان" [(ngModel)]="selectedClinic"
+                    optionLabel="name" dataKey="id" class="full-width text-right" />
+            </div>
             <div class="col-lg-2 col-12">
                 <p-dropdown [options]="clinicsList" placeholder="مکان" [(ngModel)]="selectedClinic" optionLabel="name"
                     dataKey="id" class="full-width text-right" />
@@ -77,8 +81,8 @@
                         </div>
                     </td>
                     <td class="px-2">
-                        <div class="py-2 widthClassPrime">
-                            <span>{{item.patientName}}</span>
+                        <div class="py-2 widthClassPrime ">
+                            <span class="patient-name">{{item.patientName}}</span>
                         </div>
                     </td>
                     <td class="px-2">
@@ -98,10 +102,20 @@
                     </td>
                     <td class="px-2">
                         <button class="btn btn-danger"
-                            (click)="'/new-invoice/' + item.patientId +'/2/'+selectedClinic.code">صدور صورتحساب</button>
+                            [routerLink]="'/new-invoice/' + item.patientId +'/2/'+selectedClinic.code">صدور
+                            صورتحساب</button>
+                        <button class="btn btn-outline-secondary mt-2" (click)="openDiscount($event)">ثبت تخفیف</button>
                     </td>
                 </tr>
             </ng-template>
         </p-table>
     </div>
+
+    <p-dialog id="new-appointment-modal" header="افزودن تخفیف" [(visible)]="showNewDiscount" [closable]="true"
+        [ngClass]="{'modalShadow' : showNewDiscount}" class="p-2">
+        <div class="col-12 d-flex flex-column">
+            <input type="text" class="col-12" placeholder="100,000">
+            <button class="btn main-btn mt-2" (click)="submitDiscount()">ثبت</button>
+        </div>
+    </p-dialog>
 </div>

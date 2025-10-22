@@ -309,6 +309,7 @@ export class AppointmentComponent {
         dayNumber: weekStart.format('jDD'),
         fullDate: weekStart.toDate(),
         isToday: weekStart.isSame(moment(), 'day'),
+        isPast: weekStart.isBefore(moment(), 'day'),
         dayAppointments: []
       });
       weekStart.add(1, 'day');
@@ -318,10 +319,15 @@ export class AppointmentComponent {
     return this.weekDays;
   }
 
-  setWeeklyNewAppointment(date: any, time: any) {
-    this.newAppointmentModel.appointmentStartTime = this.combineDateAndTime(date, time);
-    this.newAppointmentModel.appointmentEndTime = this.combineDateAndTime(date, this.getEndTime(time))
-    this.showNewAppointment = true;
+  setWeeklyNewAppointment(date: any, time: any, isPast: any) {
+    if (isPast) {
+      this.toastR.error('ثبت وقت برای روزهای پیشین ممکن نیست! ')
+    }
+    else {
+      this.newAppointmentModel.appointmentStartTime = this.combineDateAndTime(date, time);
+      this.newAppointmentModel.appointmentEndTime = this.combineDateAndTime(date, this.getEndTime(time))
+      this.showNewAppointment = true;
+    }
   }
 
   async getWeeklyAppointments() {
@@ -334,6 +340,8 @@ export class AppointmentComponent {
       let startIndex = this.hours.indexOf(appointment.time);
       this.weeklyTimetable[this.hours[startIndex]][appointment.dayOfWeek].dayAppointments.push(appointment);
     });
+    console.log(this.weeklyTimetable);
+
   }
 
   onDateSelect(date: string) {

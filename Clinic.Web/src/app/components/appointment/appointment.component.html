@@ -85,7 +85,7 @@
                                 <tr class="tr-sticky w-100 d-flex">
                                     <th class="table-time col-2"></th>
                                     <th *ngFor="let day of weekDays" class="text-center col-2"
-                                        [ngClass]="{'today-bg': day.isToday}">
+                                        [ngClass]="{'today-bg': day.isToday, 'text-muted bg-muted': day.isPast}">
                                         <div>{{day.dayName}}</div>
                                         <div>{{day.dayNumber}}</div>
                                     </th>
@@ -95,8 +95,8 @@
                                 <tr class="d-flex" *ngFor="let time of hours; let rowIndex = index">
                                     <td class="col-2 d-flex justify-content-center align-items-center">{{time}}</td>
                                     <td *ngFor="let day of weeklyTimetable[time] " class="text-center col-2"
-                                        [ngClass]="{'today-bg': day.isToday}"
-                                        (click)="setWeeklyNewAppointment(day.fullDate,time)">
+                                        [ngClass]="{'today-bg': day.isToday, 'text-muted bg-muted': day.isPast}"
+                                        (click)="setWeeklyNewAppointment(day.fullDate,time,day.isPast)">
                                         <div *ngFor="let appointment of day.dayAppointments">
                                             <div class="mt-2">
                                                 {{appointment.patientName}}</div>
