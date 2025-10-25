@@ -13,5 +13,6 @@
         public int DayNumber { get; set; }
         public int Status { get; set; }
         public string? BillableItemName { get; set; }
+        public string? PatientPhone { get; set; }
     }
 }
