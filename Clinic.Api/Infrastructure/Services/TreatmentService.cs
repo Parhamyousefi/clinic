@@ -212,23 +212,29 @@ namespace Clinic.Api.Infrastructure.Services
                     int serviceId = model.Service.Value;
 
                     query = query.Where(a =>
-                        _context.Treatments.Any(t => t.AppointmentId == a.Id && t.TreatmentTemplateId == serviceId) &&
-                        _context.BillableItems.Any(b => b.TreatmentTemplateId == serviceId));
+                        (from t in _context.Treatments
+                         join b in _context.BillableItems on t.TreatmentTemplateId equals b.TreatmentTemplateId
+                         where t.AppointmentId == a.Id && b.Id == serviceId
+                         select t).Any());
                 }
 
                 var result = await (
-                    from a in query
-                    join p in _context.Patients on a.PatientId equals p.Id
-                    join u in _context.Users on a.PractitionerId equals u.Id
-                    join at in _context.AppointmentTypes on a.AppointmentTypeId equals at.Id
-                    select new
-                    {
-                        Appointment = a,
-                        Patient = p,
-                        Practitioner = u,
-                        AppointmentType = at
-                    }
-                ).ToListAsync();
+       from a in query
+       join p in _context.Patients on a.PatientId equals p.Id
+       join u in _context.Users on a.PractitionerId equals u.Id
+       join at in _context.AppointmentTypes on a.AppointmentTypeId equals at.Id
+       join ph in _context.PatientPhones on p.Id equals ph.PatientId into phoneGroup
+       from ph in phoneGroup.OrderByDescending(x => x.CreatedOn).Take(1).DefaultIfEmpty()
+       select new
+       {
+           Appointment = a,
+           Patient = p,
+           Practitioner = u,
+           AppointmentType = at,
+           PhoneNumber = ph != null ? ph.Number : null
+       }
+   ).ToListAsync();
+
 
                 var appointmentIds = result.Select(r => r.Appointment.Id).ToList();
                 var appointmentIdsNullable = appointmentIds.Select(id => (int?)id).ToList();
@@ -280,7 +286,8 @@ namespace Clinic.Api.Infrastructure.Services
                         BillableItemNames = relatedBillableNames.ToList(),
                         Status = !hasInvoice && !hasTreatment ? 1 :
                                  hasInvoice && !hasTreatment ? 2 :
-                                 hasInvoice && hasTreatment ? 3 : 0
+                                 hasInvoice && hasTreatment ? 3 : 0,
+                        PatientPhone = r.PhoneNumber
                     };
                 }).ToList();
 

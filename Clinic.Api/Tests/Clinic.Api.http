@@ -163,11 +163,6 @@ GET {{Clinic_Api_Host}}/api/treatment/getTreatments/2
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwidXNlcm5hbWUiOiJuaW1hIiwicm9sZSI6IkFkbWluIiwiZXhwIjoxNzU1NTM0MjE2LCJpc3MiOiJDbGluaWMuQXBpIiwiYXVkIjoiQ2xpbmljLkFwaS5Vc2VycyJ9.m2aC3StvAxkQ8MWLhJDmDW0vkMv3i6rK0qxQXJH6k5A
 
-### Get Sections
-GET {{Clinic_Api_Host}}/api/main/getSections
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwidXNlcm5hbWUiOiJuaW1hIiwicm9sZSI6IkFkbWluIiwiZXhwIjoxNzU1NTM0MjE2LCJpc3MiOiJDbGluaWMuQXBpIiwiYXVkIjoiQ2xpbmljLkFwaS5Vc2VycyJ9.m2aC3StvAxkQ8MWLhJDmDW0vkMv3i6rK0qxQXJH6k5A
-
 ### Get Questions 
 GET {{Clinic_Api_Host}}/api/question/getQuestions
 Content-Type: application/json
@@ -245,16 +240,6 @@ GET {{Clinic_Api_Host}}/api/payment/deletePayment/1
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwidXNlcm5hbWUiOiJuaW1hIiwicm9sZSI6IkFkbWluIiwiZXhwIjoxNzU2NjUyMjE4LCJpc3MiOiJDbGluaWMuQXBpIiwiYXVkIjoiQ2xpbmljLkFwaS5Vc2VycyJ9.MVn8XLhTQglJ3ysHtn5YrIrZ7DEoFZ4Eh93JbgAE-cQ
 Content-Type: application/json
 
-### Get Clinics
-GET {{Clinic_Api_Host}}/api/main/getClinics
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwidXNlcm5hbWUiOiJuaW1hIiwicm9sZSI6IkFkbWluIiwiZXhwIjoxNzU2ODA1NjE4LCJpc3MiOiJDbGluaWMuQXBpIiwiYXVkIjoiQ2xpbmljLkFwaS5Vc2VycyJ9.S8z4iLf7sKv6IOaJNX2CVFGjM3IZaG5yK84Sv-VYTd8
-Content-Type: application/json
-
-### Get Countries
-GET {{Clinic_Api_Host}}/api/contact/getCountries
-Authorization: Bearer
-Content-Type: application/json
-
 ### Get Week Appointments
 GET {{Clinic_Api_Host}}/api/treatment/getWeeklyAppointments
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTg3MTgzMjksImlhdCI6MTc1ODExMzUyOSwidXNlcklkIjoiMiIsInVzZXJuYW1lIjoibmltYSIsInVzZXJSb2xlIjoiQWRtaW4iLCJuYmYiOjE3NTgxMTM1Mjl9.AMFg58a7xg8wMW0XzHYGvbSTlRj29g_KYVXXuU1d9I0
@@ -308,32 +293,6 @@ Content-Type: application/json
 
 ### Get Patient Payments
 GET {{Clinic_Api_Host}}/api/patient/getPatientPayments/2
-Authorization: Bearer
-Content-Type: application/json
-
-### Save Product
-POST {{Clinic_Api_Host}}/api/main/saveProduct
-Authorization: Bearer
-Content-Type: application/json
-{
-  "code": null,
-  "name": null,
-  "serialNumber": null,
-  "supplier": null,
-  "price": 100,
-  "stockLevel": null,
-  "notes": null,
-  "isActive": true,
-  "editOrNew": -1
-}
-
-### Get Products
-GET {{Clinic_Api_Host}}/api/main/getProducts
-Authorization: Bearer
-Content-Type: application/json
-
-### Delete Product
-GET {{Clinic_Api_Host}}/api/main/deleteProduct/1
 Authorization: Bearer
 Content-Type: application/json
 

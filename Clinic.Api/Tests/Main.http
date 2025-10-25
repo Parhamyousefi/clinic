@@ -1,0 +1,82 @@
+@Clinic_Api_Host = https://localhost:7281
+
+### Get Sections
+GET {{Clinic_Api_Host}}/api/main/getSections
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwidXNlcm5hbWUiOiJuaW1hIiwicm9sZSI6IkFkbWluIiwiZXhwIjoxNzU1NTM0MjE2LCJpc3MiOiJDbGluaWMuQXBpIiwiYXVkIjoiQ2xpbmljLkFwaS5Vc2VycyJ9.m2aC3StvAxkQ8MWLhJDmDW0vkMv3i6rK0qxQXJH6k5A
+
+### Get Clinics
+GET {{Clinic_Api_Host}}/api/main/getClinics
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwidXNlcm5hbWUiOiJuaW1hIiwicm9sZSI6IkFkbWluIiwiZXhwIjoxNzU2ODA1NjE4LCJpc3MiOiJDbGluaWMuQXBpIiwiYXVkIjoiQ2xpbmljLkFwaS5Vc2VycyJ9.S8z4iLf7sKv6IOaJNX2CVFGjM3IZaG5yK84Sv-VYTd8
+Content-Type: application/json
+
+### Save Job
+POST {{Clinic_Api_Host}}/api/main/saveJob
+Authorization: Bearer 
+Content-Type: application/json
+{
+  "name": "nima",
+  "editOrNew": -1
+}
+
+### Get Jobs
+GET {{Clinic_Api_Host}}/api/main/getJobs
+Authorization: Bearer
+Content-Type: application/json
+
+### Delete Job 
+GET {{Clinic_Api_Host}}/api/main/deleteJob/1
+Authorization: Bearer
+Content-Type: application/json
+
+### Get Countries
+GET {{Clinic_Api_Host}}/api/contact/getCountries
+Authorization: Bearer
+Content-Type: application/json
+
+### Save Product
+POST {{Clinic_Api_Host}}/api/main/saveProduct
+Authorization: Bearer
+Content-Type: application/json
+{
+  "code": null,
+  "name": null,
+  "serialNumber": null,
+  "supplier": null,
+  "price": 100,
+  "stockLevel": null,
+  "notes": null,
+  "isActive": true,
+  "editOrNew": -1
+}
+
+### Get Products
+GET {{Clinic_Api_Host}}/api/main/getProducts
+Authorization: Bearer
+Content-Type: application/json
+
+### Delete Product
+GET {{Clinic_Api_Host}}/api/main/deleteProduct/1
+Authorization: Bearer
+Content-Type: application/json
+
+### Save Note
+POST {{Clinic_Api_Host}}/api/main/saveNote
+Authorization: Bearer
+Content-Type: application/json
+{
+  "message": "salam",
+  "patientId": 1,
+  "editOrNew": -1,
+  "orderOf": null
+}
+
+### Get Notes 
+GET {{Clinic_Api_Host}}/api/main/getNotes/1
+Authorization: Bearer
+Content-Type: application/json
+
+### Delete Note 
+GET {{Clinic_Api_Host}}/api/main/deleteNote/1
+Authorization: Bearer
+Content-Type: application/json

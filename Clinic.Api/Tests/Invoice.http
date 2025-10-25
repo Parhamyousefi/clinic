@@ -125,3 +125,17 @@ Content-Type: application/json
 GET {{Clinic_Api_Host}}/api/invoice/getExpenses
 Authorization: Bearer
 Content-Type: application/json
+
+### Save Invoice Discount
+POST {{Clinic_Api_Host}}/api/invoice/saveInvoiceDiscount
+Authorization: Bearer
+Content-Type: application/json
+{
+  "invoiceId": 1,
+  "totalDiscount": 21.3
+}
+
+### Get Invoice Details
+GET {{Clinic_Api_Host}}/api/invoice/getInvoiceDetails/1
+Authorization: Bearer
+Content-Type: application/json

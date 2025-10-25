@@ -111,5 +111,21 @@ namespace Clinic.Api.Controllers
             var result = await _invoicesService.GetExpenses();
             return Ok(result);
         }
+
+        [HttpPost("saveInvoiceDiscount")]
+        [Authorize("Admin","Doctor")]
+        public async Task<IActionResult> SaveInvoiceDiscount(SaveInvoiceDiscountDto model)
+        {
+            var result = await _invoicesService.SaveInvoiceDiscount(model);
+            return Ok(result);
+        }
+
+        [HttpGet("getInvoiceDetails/{appointmentId}")]
+        [Authorize("Admin", "Doctor")]
+        public async Task<IActionResult> GetInvoiceDetails(int appointmentId)
+        {
+            var result = await _invoicesService.GetInvoiceDetails(appointmentId);
+            return Ok(result);
+        }
     }
 }
