@@ -211,9 +211,17 @@ namespace Clinic.Api.Infrastructure.Services
                 {
                     int serviceId = model.Service.Value;
 
-                    query = query.Where(a =>
-                        _context.Treatments.Any(t => t.AppointmentId == a.Id && t.TreatmentTemplateId == serviceId) &&
-                        _context.BillableItems.Any(b => b.TreatmentTemplateId == serviceId));
+                    if (model.Service.HasValue)
+                    {
+                        int serviceId = model.Service.Value;
+
+                        query = query.Where(a =>
+                            (from t in _context.Treatments
+                             join b in _context.BillableItems on t.TreatmentTemplateId equals b.TreatmentTemplateId
+                             where t.AppointmentId == a.Id && b.Id == serviceId
+                             select t).Any());
+                    }
+
                 }
 
                 var result = await (
