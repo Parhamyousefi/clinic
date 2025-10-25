@@ -223,12 +223,14 @@ namespace Clinic.Api.Infrastructure.Services
                     join p in _context.Patients on a.PatientId equals p.Id
                     join u in _context.Users on a.PractitionerId equals u.Id
                     join at in _context.AppointmentTypes on a.AppointmentTypeId equals at.Id
+                    join pp in _context.PatientPhones on a.PatientId equals pp.PatientId
                     select new
                     {
                         Appointment = a,
                         Patient = p,
                         Practitioner = u,
-                        AppointmentType = at
+                        AppointmentType = at,
+                        PatientPhone = pp
                     }
                 ).ToListAsync();
 
@@ -282,7 +284,8 @@ namespace Clinic.Api.Infrastructure.Services
                         BillableItemNames = relatedBillableNames.ToList(),
                         Status = !hasInvoice && !hasTreatment ? 1 :
                                  hasInvoice && !hasTreatment ? 2 :
-                                 hasInvoice && hasTreatment ? 3 : 0
+                                 hasInvoice && hasTreatment ? 3 : 0,
+                        PatientPhone = r.PatientPhone.Number
                     };
                 }).ToList();
 
