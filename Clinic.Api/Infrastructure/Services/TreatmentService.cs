@@ -219,20 +219,22 @@ namespace Clinic.Api.Infrastructure.Services
                 }
 
                 var result = await (
-                    from a in query
-                    join p in _context.Patients on a.PatientId equals p.Id
-                    join u in _context.Users on a.PractitionerId equals u.Id
-                    join at in _context.AppointmentTypes on a.AppointmentTypeId equals at.Id
-                    join pp in _context.PatientPhones on a.PatientId equals pp.PatientId
-                    select new
-                    {
-                        Appointment = a,
-                        Patient = p,
-                        Practitioner = u,
-                        AppointmentType = at,
-                        PatientPhone = pp
-                    }
-                ).ToListAsync();
+       from a in query
+       join p in _context.Patients on a.PatientId equals p.Id
+       join u in _context.Users on a.PractitionerId equals u.Id
+       join at in _context.AppointmentTypes on a.AppointmentTypeId equals at.Id
+       join ph in _context.PatientPhones on p.Id equals ph.PatientId into phoneGroup
+       from ph in phoneGroup.OrderByDescending(x => x.CreatedOn).Take(1).DefaultIfEmpty()
+       select new
+       {
+           Appointment = a,
+           Patient = p,
+           Practitioner = u,
+           AppointmentType = at,
+           PhoneNumber = ph != null ? ph.Number : null
+       }
+   ).ToListAsync();
+
 
                 var appointmentIds = result.Select(r => r.Appointment.Id).ToList();
                 var appointmentIdsNullable = appointmentIds.Select(id => (int?)id).ToList();
@@ -285,7 +287,7 @@ namespace Clinic.Api.Infrastructure.Services
                         Status = !hasInvoice && !hasTreatment ? 1 :
                                  hasInvoice && !hasTreatment ? 2 :
                                  hasInvoice && hasTreatment ? 3 : 0,
-                        PatientPhone = r.PatientPhone.Number
+                        PatientPhone = r.PhoneNumber
                     };
                 }).ToList();
 
