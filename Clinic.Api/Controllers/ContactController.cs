@@ -65,7 +65,7 @@ namespace Clinic.Api.Controllers
         }
 
         [HttpGet("deleteContactPhone/{id}")]
-        [Authorize("Admin","Doctor")]
+        [Authorize("Admin", "Doctor")]
         public async Task<IActionResult> DeleteContactPhone(int id)
         {
             var result = await _contactsService.DeleteContactPhone(id);

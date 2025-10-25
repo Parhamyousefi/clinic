@@ -55,9 +55,9 @@ namespace Clinic.Api.Controllers
             var result = await _mainService.DeleteJob(id);
             return Ok(result);
         }
-        
+
         [HttpGet("getCountries")]
-        [Authorize("Admin","Doctor")]
+        [Authorize("Admin", "Doctor")]
         public async Task<IActionResult> GetCountries()
         {
             var result = await _mainService.GetCountries();
@@ -65,7 +65,7 @@ namespace Clinic.Api.Controllers
         }
 
         [HttpPost("saveProduct")]
-        [Authorize("Admin","Doctor")]
+        [Authorize("Admin", "Doctor")]
         public async Task<IActionResult> SaveProduct(SaveProductDto model)
         {
             var result = await _mainService.SaveProduct(model);
@@ -73,7 +73,7 @@ namespace Clinic.Api.Controllers
         }
 
         [HttpGet("getProducts")]
-        [Authorize("Admin","Doctor")]
+        [Authorize("Admin", "Doctor")]
         public async Task<IActionResult> GetProducts()
         {
             var result = await _mainService.GetProducts();
@@ -81,7 +81,7 @@ namespace Clinic.Api.Controllers
         }
 
         [HttpGet("deleteProduct/{id}")]
-        [Authorize("Admin","Doctor")]
+        [Authorize("Admin", "Doctor")]
         public async Task<IActionResult> DeleteProduct(int id)
         {
             var result = await _mainService.DeleteProduct(id);
@@ -89,7 +89,7 @@ namespace Clinic.Api.Controllers
         }
 
         [HttpPost("saveNote")]
-        [Authorize("Admin","Doctor")]
+        [Authorize("Admin", "Doctor")]
         public async Task<IActionResult> SaveNote(SaveNoteDto model)
         {
             var result = await _mainService.SaveNote(model);
@@ -97,7 +97,7 @@ namespace Clinic.Api.Controllers
         }
 
         [HttpGet("getNotes/{patientId}")]
-        [Authorize("Admin","Doctor")]
+        [Authorize("Admin", "Doctor")]
         public async Task<IActionResult> GetNotes(int patientId)
         {
             var result = await _mainService.GetNotes(patientId);
@@ -105,7 +105,7 @@ namespace Clinic.Api.Controllers
         }
 
         [HttpGet("deleteNote/{noteId}")]
-        [Authorize("Admin","Doctor")]
+        [Authorize("Admin", "Doctor")]
         public async Task<IActionResult> DeleteNote(int noteId)
         {
             var result = await _mainService.DeleteNote(noteId);
