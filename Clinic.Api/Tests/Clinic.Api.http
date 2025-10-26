@@ -61,19 +61,19 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwid
 ### Create Appointment
 POST {{Clinic_Api_Host}}/api/treatment/createAppointment
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwidXNlcm5hbWUiOiJuaW1hIiwicm9sZSI6IkFkbWluIiwiZXhwIjoxNzU1NDI0NTQyLCJpc3MiOiJDbGluaWMuQXBpIiwiYXVkIjoiQ2xpbmljLkFwaS5Vc2VycyJ9.LTAK60TQc1MgocqkjJHqeYu9hyPrwfHGksWx-l2MzpI
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NjE1NzAwMjUsImlhdCI6MTc2MDk2NTIyNSwidXNlcklkIjoiMiIsInVzZXJuYW1lIjoibmltYSIsInVzZXJSb2xlIjoiQWRtaW4iLCJuYmYiOjE3NjA5NjUyMjV9.HuMiNQYHgiChPcEZegH14f6AuMf-WKbT9lm91_EPAQ4
 
 {
-  "businessId": 1,
-  "practitionerId": 2,
-  "patientId": 3,
+  "businessId": 2,
+  "practitionerId": 4,
+  "patientId": 6,
   "appointmentTypeId": 1,
   "start": "2025-08-18T10:00:00",
   "end": "2025-08-20T11:00:00",
   "repeatId": null,
   "repeatEvery": null,
   "endsAfter": null,
-  "note": "Initial consultation",
+  "note": "salaaaaaaaaaaaam",
   "arrived": 0,
   "waitListId": null,
   "cancelled": false,
@@ -85,7 +85,8 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwid
   "sendReminder": true,
   "appointmentSMS": null,
   "ignoreDidNotCome": false,
-  "byInvoice": false
+  "byInvoice": false,
+  "editOrNew": 20
 }
 
 ### Forgot Password
@@ -162,11 +163,6 @@ GET {{Clinic_Api_Host}}/api/treatment/getTreatments/2
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwidXNlcm5hbWUiOiJuaW1hIiwicm9sZSI6IkFkbWluIiwiZXhwIjoxNzU1NTM0MjE2LCJpc3MiOiJDbGluaWMuQXBpIiwiYXVkIjoiQ2xpbmljLkFwaS5Vc2VycyJ9.m2aC3StvAxkQ8MWLhJDmDW0vkMv3i6rK0qxQXJH6k5A
 
-### Get Sections
-GET {{Clinic_Api_Host}}/api/main/getSections
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwidXNlcm5hbWUiOiJuaW1hIiwicm9sZSI6IkFkbWluIiwiZXhwIjoxNzU1NTM0MjE2LCJpc3MiOiJDbGluaWMuQXBpIiwiYXVkIjoiQ2xpbmljLkFwaS5Vc2VycyJ9.m2aC3StvAxkQ8MWLhJDmDW0vkMv3i6rK0qxQXJH6k5A
-
 ### Get Questions 
 GET {{Clinic_Api_Host}}/api/question/getQuestions
 Content-Type: application/json
@@ -185,12 +181,12 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NjA3ODY4M
 
 ### Get Today Appointments
 POST {{Clinic_Api_Host}}/api/treatment/getTodayAppointments
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTc3NTA4NDAsImlhdCI6MTc1NzE0NjA0MCwidXNlcklkIjoiMiIsInVzZXJuYW1lIjoibmltYSIsInVzZXJSb2xlIjoiQWRtaW4iLCJuYmYiOjE3NTcxNDYwNDB9.pSmMbUGbSWgdq5AKGuvwIqCdph4nzSgmOBQCqcd28qo
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NjE2NTg3NzUsImlhdCI6MTc2MTA1Mzk3NSwidXNlcklkIjoiMiIsInVzZXJuYW1lIjoibmltYSIsInVzZXJSb2xlIjoiQWRtaW4iLCJuYmYiOjE3NjEwNTM5NzV9.RisBksPpDw5Iyx0CaZG1bRk1WXhVRhgJrCrVEcYxWBI
 Content-Type: application/json
 
 {
-  "fromDate": "2025-08-18",  
-  "toDate": "2025-08-20",         
+  "fromDate": "2025-10-12",  
+  "toDate": "2025-10-12",         
   "clinic": null,                  
   "service": null,            
   "from": null,                       
@@ -211,111 +207,6 @@ Content-Type: application/json
 ### Get Patient Phone
 GET {{Clinic_Api_Host}}/api/patient/getPatientPhone/1
 Authorization: Bearer
-Content-Type: application/json
-
-### Save Invoices 
-POST {{Clinic_Api_Host}}/api/invoice/saveInvoice
-Authorization: Bearer
-Content-Type: application/json
-{
-  "invoiceNo": "1",
-  "businessId": 1,
-  "issueDate": null,
-  "patientId": "2",
-  "practitionerId": 2,
-  "appointmentId": null,
-  "invoiceTo": null,
-  "extraPatientInfo": null,
-  "totalDiscount": 1,
-  "amount": 2,
-  "modifierId": null,
-  "createdOn": "2025-08-18T00:00:00",
-  "lastUpdated": null,
-  "invoiceBillStatusId": null,
-  "allowPayLater": true,
-  "userAllowPayLaterId": null,
-  "receipt": 2,
-  "billStatus": 1,
-  "isCanceled": true,
-  "businessDebit": null,
-  "creatorId": null,
-  "recordStateId": 1,
-  "anesthesiaTechnicianId": null,
-  "electroTechnicianId": null,
-  "isFirstInvoice": true,
-  "anesthesia": false,
-  "businessAmount": 2,
-  "acceptDiscount": true,
-  "assistantId": 1,
-  "editOrNew": -1
-}
-
-### Delete Invoices
-GET {{Clinic_Api_Host}}/api/invoice/deleteInvoice/1
-Authorization: Bearer
-Content-Type: application/json
-
-### Get Invoices
-GET {{Clinic_Api_Host}}/api/invoice/getInvoices
-Authorization: Bearer
-Content-Type: application/json
-
-### Save Invoice Items
-POST {{Clinic_Api_Host}}/api/invoice/saveInvoiceItem
-Authorization: Bearer
-Content-Type: application/json
-{
-  "invoiceId": 1,
-  "itemId": null,
-  "productId": null,
-  "quantity": 2,
-  "unitPrice": 3,
-  "discount": null,
-  "discountTypeId": 1,
-  "amount": 2,
-  "isLock": true,
-  "done": true,
-  "editOrNew": -1
-}
-
-### Delete Invoice Items 
-GET {{Clinic_Api_Host}}/api/invoice/deleteInvoiceItem/1
-Authorization: Bearer
-Content-Type: application/json
-
-### Get Invoice Items
-GET {{Clinic_Api_Host}}/api/invoice/getInvoiceItems
-Authorization: Bearer
-Content-Type: application/json
-
-### Save Receipts
-POST {{Clinic_Api_Host}}/api/main/saveReceipt
-Authorization: Bearer
-Content-Type: application/json
-{
-  "receiptNo": null,
-  "patientId": 2,
-  "cash": null,
-  "eFTPos": null,
-  "other": null,
-  "notes": null,
-  "allowEdit": true,
-  "receiptTypeId": 1
-}
-
-### Get Receipts
-GET {{Clinic_Api_Host}}/api/invoice/getReceipt/34
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NjA1MTU2MTIsImlhdCI6MTc1OTkxMDgxMiwidXNlcklkIjoiMiIsInVzZXJuYW1lIjoibmltYSIsInVzZXJSb2xlIjoiQWRtaW4iLCJuYmYiOjE3NTk5MTA4MTJ9.xu6WOOL6m9f4wldEiAMBxy40_EB_auY4VESE9180Ug8
-Content-Type: application/json
-
-### Get Receipts
-Get {{Clinic_Api_Host}}/api/invoice/getReceipts
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTk3NTI2NDQsImlhdCI6MTc1OTE0Nzg0NCwidXNlcklkIjoiMiIsInVzZXJuYW1lIjoibmltYSIsInVzZXJSb2xlIjoiQWRtaW4iLCJuYmYiOjE3NTkxNDc4NDR9.p59x_B95FrQRYb8-3fiIS59nceyfo6yDptmu3kDfhS4
-Content-Type: application/json
-
-### Delete Receipts
-GET {{Clinic_Api_Host}}/api/main/deleteReceipt/2
-Authorization: Bearer 
 Content-Type: application/json
 
 ### Save Payments
@@ -347,57 +238,6 @@ Content-Type: application/json
 ### Delete Payment
 GET {{Clinic_Api_Host}}/api/payment/deletePayment/1
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwidXNlcm5hbWUiOiJuaW1hIiwicm9sZSI6IkFkbWluIiwiZXhwIjoxNzU2NjUyMjE4LCJpc3MiOiJDbGluaWMuQXBpIiwiYXVkIjoiQ2xpbmljLkFwaS5Vc2VycyJ9.MVn8XLhTQglJ3ysHtn5YrIrZ7DEoFZ4Eh93JbgAE-cQ
-Content-Type: application/json
-
-### Get Clinics
-GET {{Clinic_Api_Host}}/api/main/getClinics
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwidXNlcm5hbWUiOiJuaW1hIiwicm9sZSI6IkFkbWluIiwiZXhwIjoxNzU2ODA1NjE4LCJpc3MiOiJDbGluaWMuQXBpIiwiYXVkIjoiQ2xpbmljLkFwaS5Vc2VycyJ9.S8z4iLf7sKv6IOaJNX2CVFGjM3IZaG5yK84Sv-VYTd8
-Content-Type: application/json
-
-### Save Contacts
-POST {{Clinic_Api_Host}}/api/contact/saveContact
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTg0NDYxOTUsImlhdCI6MTc1Nzg0MTM5NSwidXNlcklkIjoiMiIsInVzZXJuYW1lIjoibmltYSIsInVzZXJSb2xlIjoiQWRtaW4iLCJuYmYiOjE3NTc4NDEzOTV9.pFOe0vNCHKcRb4s8Pw2Gh9RFcf0r_R1Oa9_7sTqrmLY
-Content-Type: application/json
-{
-  "contactTypeId": 1,
-  "titleId": null,
-  "firstName": null,
-  "lastName": null,
-  "preferredName": null,
-  "occupation": null,
-  "companyName": null,
-  "providerName": null,
-  "email": null,
-  "address1": null,
-  "address2": null,
-  "address3": null,
-  "city": null,
-  "state": null,
-  "postCode": null,
-  "countryId": null,
-  "notes": null,
-  "jobId": null,
-  "editOrNew": -1
-}
-
-### Get Contacts
-GET {{Clinic_Api_Host}}/api/contact/getContacts
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTg0NDYxOTUsImlhdCI6MTc1Nzg0MTM5NSwidXNlcklkIjoiMiIsInVzZXJuYW1lIjoibmltYSIsInVzZXJSb2xlIjoiQWRtaW4iLCJuYmYiOjE3NTc4NDEzOTV9.pFOe0vNCHKcRb4s8Pw2Gh9RFcf0r_R1Oa9_7sTqrmLY
-Content-Type: application/json
-
-### Delete Contacts
-GET {{Clinic_Api_Host}}/api/contact/deleteContact/1
-Authorization: Bearer
-Content-Type: application/json
-
-### Get Contact Types
-GET {{Clinic_Api_Host}}/api/contact/getContactTypes
-Authorization: Bearer
-Content-Type: application/json
-
-### Get Countries
-GET {{Clinic_Api_Host}}/api/contact/getCountries
-Authorization: Bearer
 Content-Type: application/json
 
 ### Get Week Appointments
@@ -456,37 +296,6 @@ GET {{Clinic_Api_Host}}/api/patient/getPatientPayments/2
 Authorization: Bearer
 Content-Type: application/json
 
-### Save Product
-POST {{Clinic_Api_Host}}/api/main/saveProduct
-Authorization: Bearer
-Content-Type: application/json
-{
-  "code": null,
-  "name": null,
-  "serialNumber": null,
-  "supplier": null,
-  "price": 100,
-  "stockLevel": null,
-  "notes": null,
-  "isActive": true,
-  "editOrNew": -1
-}
-
-### Get Products
-GET {{Clinic_Api_Host}}/api/main/getProducts
-Authorization: Bearer
-Content-Type: application/json
-
-### Delete Product
-GET {{Clinic_Api_Host}}/api/main/deleteProduct/1
-Authorization: Bearer
-Content-Type: application/json
-
-### Get Contact Phone
-GET {{Clinic_Api_Host}}/api/contact/getContactPhone/1
-Authorization: Bearer
-Content-Type: application/json
-
 ### Get Section Per Service
 GET {{Clinic_Api_Host}}/api/treatment/getSectionPerService/1
 Authorization: Bearer
@@ -504,11 +313,6 @@ Content-Type: application/json
 
 ### Get Patient Services 
 GET {{Clinic_Api_Host}}/api/treatment/getPatientServices/1
-Authorization: Bearer
-Content-Type: application/json
-
-### Delete ContactPhone 
-GET {{Clinic_Api_Host}}/api/contact/deleteContactPhone/1
 Authorization: Bearer
 Content-Type: application/json
 

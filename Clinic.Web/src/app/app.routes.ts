@@ -17,6 +17,8 @@ import { ReceiptComponent } from './components/receipt/receipt.component';
 import { ReceiptListComponent } from './components/receipt-list/receipt-list.component';
 import { PatientTreatmentComponent } from './components/patient-treatment/patient-treatment.component';
 import { PatientInvoiceComponent } from './components/patient-invoice/patient-invoice.component';
+import { ExpensesComponent } from './components/expenses/expenses.component';
+import { BusinessReportComponent } from './components/reports/business-report/business-report.component';
 
 export const routes: Routes = [
     { path: '', component: LoginComponent },
@@ -42,6 +44,11 @@ export const routes: Routes = [
     },
     {
         path: 'new-invoice/:id/:type',
+        component: NewInvoiceComponent,
+        canActivate: [AuthGuard]
+    },
+    {
+        path: 'new-invoice/:id/:type/:clinicId',
         component: NewInvoiceComponent,
         canActivate: [AuthGuard]
     },
@@ -101,6 +108,14 @@ export const routes: Routes = [
     },
     {
         path: 'patient/invoice/:id', component: PatientInvoiceComponent,
+        canActivate: [AuthGuard]
+    },
+    {
+        path: 'expenses', component: ExpensesComponent,
+        canActivate: [AuthGuard]
+    },
+    {
+        path: 'report/business-report', component: BusinessReportComponent,
         canActivate: [AuthGuard]
     },
 ];

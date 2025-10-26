@@ -5,15 +5,17 @@ import { SharedModule } from '../../share/shared.module';
 import { MainService } from './../../_services/main.service';
 import moment from 'moment-jalaali';
 import { FormControl } from '@angular/forms';
-
+import { RouterLink } from "@angular/router";
+import { InputMaskModule } from 'primeng/inputmask';
 @Component({
   selector: 'app-today-appointments',
   standalone: true,
-  imports: [SharedModule],
+  imports: [SharedModule, RouterLink, InputMaskModule],
   templateUrl: './today-appointments.component.html',
   styleUrl: './today-appointments.component.css'
 })
 export class TodayAppointmentsComponent implements OnInit {
+  appointmentDiscount: any;
 
   constructor(
     private treatmentsService: TreatmentsService,
@@ -30,7 +32,12 @@ export class TodayAppointmentsComponent implements OnInit {
   selectedTimefrom: any = '00:00';
   selectedDateTo: any;
   selectedTimeTo: any = '23:00';
-
+  showNewDiscount: boolean = false;
+  visitStatusList: any = [
+    { name: "انتظار", code: 1 },
+    { name: "پذیرش شده", code: 1 },
+    { name: "ملاقات شده", code: 1 },
+  ]
   async ngOnInit() {
     this.selectedDatefrom = new FormControl(moment().format('jYYYY/jMM/jDD'));
     this.selectedDateTo = new FormControl(moment().format('jYYYY/jMM/jDD'));
@@ -107,4 +114,14 @@ export class TodayAppointmentsComponent implements OnInit {
 
   onDateChange(newDate: string) {
   }
+
+  openDiscount(event) {
+    event.stopPropagation();
+    this.showNewDiscount = true;
+  }
+
+  submitDiscount() {
+    this.showNewDiscount = false;
+  }
+
 }

@@ -20,11 +20,8 @@ namespace Clinic.Api.Controllers
         [Authorize("Admin", "Doctor")]
         public async Task<IActionResult> Create(CreateAppointmentDto model)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
-            var id = await _treatmentsService.CreateAppointmentAsync(model);
-            return Ok(new { success = id, message = "Appointment Created Successfully" });
+            var result = await _treatmentsService.CreateAppointmentAsync(model);
+            return Ok(result);
         }
 
         [HttpGet("deleteAppointment/{id}")]

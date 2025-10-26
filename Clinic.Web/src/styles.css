@@ -29,11 +29,11 @@ body {
 }
 
 .patientAppContainer {
-  width: calc(100% - 400px);
-  margin-top: 80px;
+  width: calc(100% - 450px);
+  margin-top: 200px;
   height: 100vh;
   padding: 20px;
-  margin-right: 400px;
+  margin-right: 450px;
   direction: rtl !important;
 }
 
@@ -50,6 +50,7 @@ body {
   top: 0;
   right: 250px;
   background-color: #ffff;
+  /* background: rgba(99, 198, 179, 1); */
   box-shadow: 0px 15px 25px rgba(0, 0, 0, 0.05);
 }
 
@@ -60,7 +61,9 @@ body {
   text-align: center;
   width: 250px;
   height: 100%;
-  background-color: #ffff !important;
+  /* background-color: #ffff !important; */
+  /* background: rgba(99, 198, 179, 1); */
+  background: rgb(114 217 197);
   position: fixed;
   top: 0;
   right: 0;
@@ -69,21 +72,21 @@ body {
   transition: .2s all ease;
 }
 
-.patient-mode-sidebar {
-  display: flex;
-  flex-flow: row;
-  direction: rtl;
-  text-align: center;
-  width: 400px;
-  height: 100%;
-  background-color: none !important;
-  position: fixed;
-  top: 0;
-  right: 0;
-  z-index: 99;
-  /* box-shadow: 0 0 5px rgb(0 0 0 / 20%); */
-  transition: .2s all ease;
-}
+/* .patient-mode-sidebar {
+    display: flex;
+    flex-flow: row;
+    direction: rtl;
+    text-align: center;
+    width: 400px;
+    height: 100%;
+    background-color: none !important;
+    position: fixed;
+    top: 0;
+    right: 0;
+    z-index: 99;
+    box-shadow: 0 0 5px rgb(0 0 0 / 20%);
+transition: .2s all ease;
+} */
 
 .modalShadow {
   position: fixed;
@@ -273,7 +276,29 @@ p-dropdown.p-element {
   padding: 1rem;
 }
 
+.reportAppContainer {
+  width: calc(100% - 500px);
+  margin-top: 100px;
+  height: 100vh;
+  padding: 20px;
+  margin-right: 500px;
+  direction: rtl !important;
+}
 
+.p-selectbutton.p-buttonset {
+  direction: ltr;
+  text-align: right;
+}
+
+.p-ripple.p-element.p-button.p-component.p-highlight {
+  background-color: #72d9c5;
+  box-shadow: none;
+  border-color: #72d9c5;
+}
+
+.text-72d9c5 {
+  color: #72d9c5;
+}
 
 @media (max-width: 768px) {
   .appContainer {

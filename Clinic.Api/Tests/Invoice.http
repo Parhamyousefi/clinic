@@ -1,0 +1,141 @@
+@Clinic_Api_Host = https://localhost:7281
+
+### Save Invoices 
+POST {{Clinic_Api_Host}}/api/invoice/saveInvoice
+Authorization: Bearer
+Content-Type: application/json
+{
+  "invoiceNo": "1",
+  "businessId": 1,
+  "issueDate": null,
+  "patientId": "2",
+  "practitionerId": 2,
+  "appointmentId": null,
+  "invoiceTo": null,
+  "extraPatientInfo": null,
+  "totalDiscount": 1,
+  "amount": 2,
+  "modifierId": null,
+  "createdOn": "2025-08-18T00:00:00",
+  "lastUpdated": null,
+  "invoiceBillStatusId": null,
+  "allowPayLater": true,
+  "userAllowPayLaterId": null,
+  "receipt": 2,
+  "billStatus": 1,
+  "isCanceled": true,
+  "businessDebit": null,
+  "creatorId": null,
+  "recordStateId": 1,
+  "anesthesiaTechnicianId": null,
+  "electroTechnicianId": null,
+  "isFirstInvoice": true,
+  "anesthesia": false,
+  "businessAmount": 2,
+  "acceptDiscount": true,
+  "assistantId": 1,
+  "editOrNew": -1
+}
+
+### Delete Invoices
+GET {{Clinic_Api_Host}}/api/invoice/deleteInvoice/1
+Authorization: Bearer
+Content-Type: application/json
+
+### Get Invoices
+GET {{Clinic_Api_Host}}/api/invoice/getInvoices
+Authorization: Bearer
+Content-Type: application/json
+
+### Save Invoice Items
+POST {{Clinic_Api_Host}}/api/invoice/saveInvoiceItem
+Authorization: Bearer
+Content-Type: application/json
+{
+  "invoiceId": 1,
+  "itemId": null,
+  "productId": null,
+  "quantity": 2,
+  "unitPrice": 3,
+  "discount": null,
+  "discountTypeId": 1,
+  "amount": 2,
+  "isLock": true,
+  "done": true,
+  "editOrNew": -1
+}
+
+### Delete Invoice Items 
+GET {{Clinic_Api_Host}}/api/invoice/deleteInvoiceItem/1
+Authorization: Bearer
+Content-Type: application/json
+
+### Get Invoice Items
+GET {{Clinic_Api_Host}}/api/invoice/getInvoiceItems
+Authorization: Bearer
+Content-Type: application/json
+
+### Save Receipts
+POST {{Clinic_Api_Host}}/api/invoice/saveReceipt
+Authorization: Bearer
+Content-Type: application/json
+{
+  "receiptNo": null,
+  "patientId": 2,
+  "cash": null,
+  "eFTPos": null,
+  "other": null,
+  "notes": null,
+  "allowEdit": true,
+  "receiptTypeId": 1
+}
+
+### Get Receipts
+GET {{Clinic_Api_Host}}/api/invoice/getReceipt/34
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NjA1MTU2MTIsImlhdCI6MTc1OTkxMDgxMiwidXNlcklkIjoiMiIsInVzZXJuYW1lIjoibmltYSIsInVzZXJSb2xlIjoiQWRtaW4iLCJuYmYiOjE3NTk5MTA4MTJ9.xu6WOOL6m9f4wldEiAMBxy40_EB_auY4VESE9180Ug8
+Content-Type: application/json
+
+### Get Receipts
+Get {{Clinic_Api_Host}}/api/invoice/getReceipts
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTk3NTI2NDQsImlhdCI6MTc1OTE0Nzg0NCwidXNlcklkIjoiMiIsInVzZXJuYW1lIjoibmltYSIsInVzZXJSb2xlIjoiQWRtaW4iLCJuYmYiOjE3NTkxNDc4NDR9.p59x_B95FrQRYb8-3fiIS59nceyfo6yDptmu3kDfhS4
+Content-Type: application/json
+
+### Delete Receipts
+GET {{Clinic_Api_Host}}/api/invoice/deleteReceipt/2
+Authorization: Bearer 
+Content-Type: application/json
+
+### Save Expense
+POST {{Clinic_Api_Host}}/api/invoice/saveExpense
+Authorization: Bearer
+Content-Type: application/json
+{
+  "expenseNo": null,
+  "businessId": 1,
+  "expenseDate": null,
+  "vendor": null,
+  "category": null,
+  "amount": 2000,
+  "tax": 200,
+  "notes": null,
+  "editOrNew": -1
+}
+
+### Get Expenses
+GET {{Clinic_Api_Host}}/api/invoice/getExpenses
+Authorization: Bearer
+Content-Type: application/json
+
+### Save Invoice Discount
+POST {{Clinic_Api_Host}}/api/invoice/saveInvoiceDiscount
+Authorization: Bearer
+Content-Type: application/json
+{
+  "invoiceId": 1,
+  "totalDiscount": 21.3
+}
+
+### Get Invoice Details
+GET {{Clinic_Api_Host}}/api/invoice/getInvoiceDetails/1
+Authorization: Bearer
+Content-Type: application/json

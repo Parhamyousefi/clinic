@@ -1,0 +1,63 @@
+@Clinic_Api_Host = https://localhost:7281
+
+### Save Contacts
+POST {{Clinic_Api_Host}}/api/contact/saveContact
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTg0NDYxOTUsImlhdCI6MTc1Nzg0MTM5NSwidXNlcklkIjoiMiIsInVzZXJuYW1lIjoibmltYSIsInVzZXJSb2xlIjoiQWRtaW4iLCJuYmYiOjE3NTc4NDEzOTV9.pFOe0vNCHKcRb4s8Pw2Gh9RFcf0r_R1Oa9_7sTqrmLY
+Content-Type: application/json
+{
+  "contactTypeId": 1,
+  "titleId": null,
+  "firstName": null,
+  "lastName": null,
+  "preferredName": null,
+  "occupation": null,
+  "companyName": null,
+  "providerName": null,
+  "email": null,
+  "address1": null,
+  "address2": null,
+  "address3": null,
+  "city": null,
+  "state": null,
+  "postCode": null,
+  "countryId": null,
+  "notes": null,
+  "jobId": null,
+  "editOrNew": -1
+}
+
+### Get Contacts
+GET {{Clinic_Api_Host}}/api/contact/getContacts
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTg0NDYxOTUsImlhdCI6MTc1Nzg0MTM5NSwidXNlcklkIjoiMiIsInVzZXJuYW1lIjoibmltYSIsInVzZXJSb2xlIjoiQWRtaW4iLCJuYmYiOjE3NTc4NDEzOTV9.pFOe0vNCHKcRb4s8Pw2Gh9RFcf0r_R1Oa9_7sTqrmLY
+Content-Type: application/json
+
+### Delete Contacts
+GET {{Clinic_Api_Host}}/api/contact/deleteContact/1
+Authorization: Bearer
+Content-Type: application/json
+
+### Get Contact Types
+GET {{Clinic_Api_Host}}/api/contact/getContactTypes
+Authorization: Bearer
+Content-Type: application/json
+
+### Save Contact Phone
+POST {{Clinic_Api_Host}}/api/contact/saveContactPhone
+Authorization: Bearer
+Content-Type: application/json
+{
+  "contactId": 2,
+  "phoneNoTypeId": 2,
+  "number": "09123456789",
+  "editOrNew": -1
+}
+
+### Get Contact Phone
+GET {{Clinic_Api_Host}}/api/contact/getContactPhone/1
+Authorization: Bearer
+Content-Type: application/json
+
+### Delete ContactPhone 
+GET {{Clinic_Api_Host}}/api/contact/deleteContactPhone/1
+Authorization: Bearer
+Content-Type: application/json

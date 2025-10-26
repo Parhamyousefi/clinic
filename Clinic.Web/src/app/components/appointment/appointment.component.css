@@ -136,3 +136,7 @@
     transition: .2s all ease;
     color: #FFFFFF;
 }
+
+.bg-muted {
+    background-color: #f2f0f0;
+}

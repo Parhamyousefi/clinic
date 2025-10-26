@@ -23,6 +23,7 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { DialogModule } from 'primeng/dialog';
 import { ImageModule } from 'primeng/image';
+import { SelectButtonModule } from 'primeng/selectbutton';
 
 @NgModule({
   declarations: [
@@ -66,7 +67,8 @@ import { ImageModule } from 'primeng/image';
     MultiSelectModule,
     CKEditorModule,
     DialogModule,
-    ImageModule
+    ImageModule,
+    SelectButtonModule
   ],
   exports: [
     NumberSplitPipe,
@@ -106,7 +108,8 @@ import { ImageModule } from 'primeng/image';
     MultiSelectModule,
     CKEditorModule,
     DialogModule,
-    ImageModule
+    ImageModule,
+    SelectButtonModule
   ]
 })
 export class SharedModule { }

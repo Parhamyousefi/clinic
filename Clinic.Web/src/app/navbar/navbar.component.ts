@@ -1,10 +1,9 @@
 import { Component } from '@angular/core';
 import { NgForOf, NgClass, NgIf } from "@angular/common";
-import { NavigationEnd, Router, RouterOutlet, Event, RouterLink, ActivatedRoute } from '@angular/router';
+import { NavigationEnd, Router, Event, RouterLink, ActivatedRoute } from '@angular/router';
 import { AuthService } from '../_services/auth.service';
 import { PatientService } from '../_services/patient.service';
 import { ToastrService } from 'ngx-toastr';
-import { PdfMakerComponent } from '../share/pdf-maker/pdf-maker.component';
 import swal from 'sweetalert2';
 import { PatientMenuComponent } from "../components/patient-menu/patient-menu.component";
 export interface imenu {
@@ -23,16 +22,18 @@ export const Menu: imenu[] = [
   { id: 4, text: "دریافت ها", link: '/receipt-list', roleAccess: [], icon: 'fa fa-credit-card-alt' },
   { id: 5, text: "پرداخت ها", link: '/payment-list', roleAccess: [], icon: 'fa fa-credit-card-alt' },
   { id: 6, text: "کالاهای مصرفی", link: '/product-list', roleAccess: [], icon: 'fa fa-th-large' },
-  { id: 7, text: "هزینه ها", link: '/', roleAccess: [], icon: 'fa fa-money' },
+  { id: 7, text: "هزینه ها", link: '/expenses', roleAccess: [], icon: 'fa fa-money' },
   { id: 8, text: "اشخاص", link: '/contacts', roleAccess: [], icon: 'fa fa-user' },
-  { id: 9, text: "گزارشات", link: '/', roleAccess: [], icon: 'fa fa-bar-chart' },
-  { id: 10, text: "راهنما", link: '/', roleAccess: [], icon: 'fa fa-info-circle' },
+  { id: 9, text: "گزارشات", link: '/report/business-report', roleAccess: [], icon: 'fa fa-bar-chart' },
+  // { id: 10, text: "راهنما", link: '/', roleAccess: [], icon: 'fa fa-info-circle' },
 ];
+
+
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [NgForOf, NgClass, RouterLink, NgIf, PdfMakerComponent, PatientMenuComponent],
+  imports: [NgForOf, NgClass, RouterLink, NgIf, PatientMenuComponent],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css'
 })
@@ -47,6 +48,18 @@ export class NavbarComponent {
   patientName: string;
   patientInfo: any;
   openSidebar: boolean;
+  showReportMenu: boolean = false;
+  reportMenu: imenu[] = [
+    { id: 1, text: "گزارش خلاصه عملکرد", link: '/report/business-report', roleAccess: [], icon: 'fa fa-bar-chart' },
+    { id: 2, text: " گزارش صورتحسابهای سرپایی ", link: '/', roleAccess: [], icon: 'fa fa-bar-chart' },
+    { id: 3, text: " گزارش صورتحسابهای بستری", link: '/', roleAccess: [], icon: 'fa fa-bar-chart' },
+    { id: 4, text: "گزارش صورتحسابهای تغییر کرده", link: '/', roleAccess: [], icon: 'fa fa-bar-chart' },
+    { id: 5, text: "گزارش درآمد", link: '/', roleAccess: [], icon: 'fa fa-bar-chart' },
+    { id: 6, text: " گزارش بیماران مراجعه نکرده", link: '/', roleAccess: [], icon: 'fa fa-bar-chart' },
+  ];
+  selectedSideBarreportMenuItem: any;
+
+
   constructor(
     private authService: AuthService,
     private router: Router,
@@ -69,6 +82,10 @@ export class NavbarComponent {
         else {
           this.hasPatientMenu = false;
         }
+        this.showReportMenu = (url.startsWith('/report/')) == true ? true : false;
+        const matchedItem = this.reportMenu.find(item => item.link === pageUrl);
+        this.selectedSideBarreportMenuItem = matchedItem?.id ?? null;
+
       }
     })
 
@@ -87,8 +104,10 @@ export class NavbarComponent {
       this.hasPatientMenu = true;
       this.patientId = url.split('/').pop();
       this.getPatientById(this.patientId);
-
     }
+    this.showReportMenu = (url.startsWith('/report/')) == true ? true : false;
+    const matchedItem = this.reportMenu.find(item => item.link === url);
+    this.selectedSideBarreportMenuItem = matchedItem?.id ?? null;
   }
 
   logOut() {

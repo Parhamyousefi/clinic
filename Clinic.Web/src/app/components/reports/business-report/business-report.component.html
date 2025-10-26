@@ -1,0 +1,127 @@
+<div class="reportAppContainer">
+  <div class="col-12">
+    <h4 class="text-right mb-0 mr-3">گزارش خلاصه عملکرد</h4>
+    <hr>
+  </div>
+  <div class="col-12">
+    <div class="d-lg-flex align-items-start">
+      <p-selectButton [options]="dateOptions" [(ngModel)]="selectedTypeDate" (ngModelChange)="handelSelectedType()"
+        optionLabel="name" optionValue="value" />
+      <div class="col-lg-2 col-12 pt-2">
+        <ng-persian-datepicker>
+          <input type="text" class="form-control" [formControl]="selectedDatefrom" />
+        </ng-persian-datepicker>
+      </div>
+      <div class="col-lg-2 col-12 pt-2">
+        <ng-persian-datepicker>
+          <input type="text" class="form-control" [formControl]="selectedDateTo"
+            (ngModelChange)="handelSelectedType()" />
+        </ng-persian-datepicker>
+      </div>
+      <div class="text-left col mb-3">
+        <button class="btn btn-danger" (click)="getData()">ایجاد گزارش</button>
+      </div>
+    </div>
+  </div>
+  <hr>
+  <div class="col-12 d-lg-flex mt-3">
+    <div class="col-lg-6 col-12 px-0">
+      <div *ngIf="setTimes != null" class="card mb-2 shadow-sm">
+        <div class="card-body text-center">
+          <h5 class="card-title fw-bold text-72d9c5">اوقات تنظیم شده</h5>
+          <div class="row text-end">
+            <div class="col-12">
+              <p class="mb-1">تعداد وقت‌های تنظیم شده</p>
+              <h4 class="text-dark fw-bold">{{setTimes.appointmentCount}}</h4>
+            </div>
+            <!-- <div class="col-md-6">
+              <p class="mb-1">تعداد بیماران مراجعه نکرده یا کنسل کرده</p>
+              <h4 class="text-danger fw-bold">۱</h4>
+            </div> -->
+          </div>
+        </div>
+      </div>
+      <div *ngIf="unpaidInvoicesList.length > 0" class="card shadow-sm">
+        <div class="card-body text-center">
+          <h5 class="card-title fw-bold text-72d9c5">صورت‌حساب‌های تسویه نشده</h5>
+        </div>
+        <p-table [value]="unpaidInvoicesList" [paginator]="true" [rows]="10" responsiveLayout="scroll"
+          class="p-datatable-sm">
+          <ng-template pTemplate="header">
+            <tr>
+              <th class="text-end">شماره</th>
+              <th class="text-end">بیمار</th>
+              <th class="text-end">مانده</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-patient>
+            <tr>
+              <td class="text-center">{{ patient.invoiceNo }}</td>
+              <td class="text-center">{{ patient.patientName }}</td>
+              <td class="text-center">{{ patient.remainingAmount| inputNumberSplit }} ریال</td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </div>
+    <div class="col-lg-6 col-12">
+      <div class="card mb-4 p-3 text-center">
+        <h5 class="fw-bold text-72d9c5">صورتحساب‌های صادر شده</h5>
+        <div class="row">
+          <div class="col-md-6">
+            <p class="mb-1">تعداد:</p>
+            <h4 class="text-pink fw-bold">۸۱</h4>
+          </div>
+          <div class="col-md-6">
+            <p class="mb-1">جمع کل قابل دریافت:</p>
+            <h4 class="text-dark fw-bold">۲۱۱</h4>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="locationSummary.length > 0">
+        <h5 class="fw-bold header-div">خلاصه صورت‌حساب بر اساس مکان</h5>
+        <p-table [value]="locationSummary" [paginator]="true" [rows]="5" responsiveLayout="scroll"
+          class="p-datatable-sm mb-4">
+          <ng-template pTemplate="header">
+            <tr>
+              <th class="text-center">مکان</th>
+              <th class="text-center">تعداد</th>
+              <th class="text-center">تخفیف</th>
+              <th class="text-center">قابل دریافت</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-row>
+            <tr>
+              <td class="text-center">{{ row.location }}</td>
+              <td class="text-center">{{ row.totalQuantity }}</td>
+              <td class="text-center">{{ row.totalDiscount }}</td>
+              <td class="text-center">{{ row.receivableAmount }}</td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+      <div *ngIf="serviceSummary.length > 0">
+        <h5 class="fw-bold header-div">خلاصه صورت‌حساب بر اساس خدمت</h5>
+        <p-table [value]="serviceSummary" [paginator]="true" [rows]="5" responsiveLayout="scroll"
+          class="p-datatable-sm">
+          <ng-template pTemplate="header">
+            <tr>
+              <th class="text-center">خدمت</th>
+              <th class="text-center">تعداد</th>
+              <th class="text-center">تخفیف</th>
+              <th class="text-center">قابل دریافت</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let item>
+            <tr>
+              <td class="text-center">{{ item.serviceName }}</td>
+              <td class="text-center">{{ item.totalQuantity }}</td>
+              <td class="text-center">{{ item.totalDiscount }}</td>
+              <td class="text-center">{{ item.receivableAmount }}</td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </div>
+  </div>
+</div>

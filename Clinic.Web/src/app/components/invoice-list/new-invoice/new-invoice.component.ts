@@ -41,15 +41,19 @@ export class NewInvoiceComponent implements OnInit {
   type: any;
   selectedPatientTitle: any;
   selectedClinicTitle: any;
-
+  selectedClinicId: any;
   async ngOnInit() {
     this.activeRoute.params.subscribe(async () => {
       this.editOrNew = +this.activeRoute.snapshot.paramMap.get('id') || -1;
       this.type = +this.activeRoute.snapshot.paramMap.get('type') || 2;
+      this.selectedClinicId = +this.activeRoute.snapshot.paramMap.get('clinicId') || null;
       console.log(this.type);
 
       await this.getPatients();
       await this.getClinics();
+      if (this.selectedClinicId != null) {
+        this.selectedClinic = this.clinicsList.filter(clinic => clinic.id == this.selectedClinicId)[0];
+      }
       if (this.editOrNew != -1) {
         this.getInvoices();
         this.setSelectedPatient(this.editOrNew);
