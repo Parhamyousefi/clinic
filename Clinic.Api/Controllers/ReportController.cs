@@ -21,7 +21,7 @@ namespace Clinic.Api.Controllers
         [Authorize("Admin", "Doctor")]
         public async Task<IActionResult> GetInvoicesByClinic(InvoiceFilterDto model)
         {
-            var result = await _reportService.GetInvoicesByService(model);
+            var result = await _reportService.GetInvoicesByClinic(model);
             return Ok(result);
         }
 
@@ -35,10 +35,17 @@ namespace Clinic.Api.Controllers
 
         [HttpPost("getAppointmentsAndUnpaidInvoices")]
         [Authorize("Doctor", "Admin")]
-        public async Task<GlobalResponse> GetAppointmentsAndUnpaidInvoices(InvoiceFilterDto model)
+        public async Task<IActionResult> GetAppointmentsAndUnpaidInvoices(InvoiceFilterDto model)
         {
             var result = await _reportService.GetAppointmentsAndUnpaidInvoices(model);
-            return result;
+            return Ok(result);
         }
+
+        //[HttpPost("getSubmitedInvoices")]
+        //[Authorize("Admin", "Doctor")]
+        //public async Task<IActionResult> GetSubmitedInvoices(InvoiceFilterDto model)
+        //{
+
+        //}
     }
 }

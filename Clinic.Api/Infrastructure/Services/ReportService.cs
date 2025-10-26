@@ -1,4 +1,5 @@
 ﻿using Clinic.Api.Application.DTOs;
+using Clinic.Api.Application.DTOs.Invoices;
 using Clinic.Api.Application.DTOs.Report;
 using Clinic.Api.Application.Interfaces;
 using Clinic.Api.Infrastructure.Data;
@@ -90,5 +91,22 @@ namespace Clinic.Api.Infrastructure.Services
             return response;
         }
 
+        //public async Task<IEnumerable<GetSubmitedInvoicesResponse>> GetSubmitedInvoices(InvoiceFilterDto model)
+        //{
+        //    try
+        //    {
+        //        var result = await (from inv in _context.Invoices
+        //                            where inv.CreatedOn >= model.FromDate && inv.CreatedOn <= model.ToDate
+        //                            select new GetSubmitedInvoicesResponse
+        //                            {
+        //                                Count = inv.c
+        //                            })
+        //    }
+        //    catch (Exception)
+        //    {
+
+        //        throw;
+        //    }
+        //}
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Clinic.Api.Application.DTOs;
+using Clinic.Api.Application.DTOs.Invoices;
 using Clinic.Api.Application.DTOs.Report;
 
 namespace Clinic.Api.Application.Interfaces
@@ -8,5 +9,6 @@ namespace Clinic.Api.Application.Interfaces
         Task<IEnumerable<InvoiceByClinicResponse>> GetInvoicesByClinic(InvoiceFilterDto model);
         Task<IEnumerable<InvoiceByServiceResponse>> GetInvoicesByService(InvoiceFilterDto model);
         Task<GlobalResponse> GetAppointmentsAndUnpaidInvoices(InvoiceFilterDto model);
+        //Task<IEnumerable<GetSubmitedInvoicesResponse>> GetSubmitedInvoices(InvoiceFilterDto model);
     }
 }
