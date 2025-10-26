@@ -9,5 +9,9 @@ namespace Clinic.Api.Application.Interfaces
         Task<IEnumerable<InvoiceByServiceResponse>> GetInvoicesByService(InvoiceFilterDto model);
         Task<GlobalResponse> GetAppointmentsAndUnpaidInvoices(InvoiceFilterDto model);
         Task<GetSubmitedInvoicesResponse> GetSubmitedInvoices(InvoiceFilterDto model);
+        Task<IEnumerable<GetUnpaidInvoicesResponse>> GetUnpaidInvoices(InvoiceFilterDto model);
+        Task<IEnumerable<GetPractitionerIncomeReportResponse>> GetPractitionerIncome(IncomeReportFilterDto model);
+        Task<IEnumerable<GetBusinessIncomeReportResponse>> GetBusinessIncome(IncomeReportFilterDto model);
+        Task<IEnumerable<GetIncomeReportDetailResponse>> GetIncomeReportDetails(IncomeReportFilterDto model);
     }
 }
