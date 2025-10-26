@@ -41,11 +41,12 @@ namespace Clinic.Api.Controllers
             return Ok(result);
         }
 
-        //[HttpPost("getSubmitedInvoices")]
-        //[Authorize("Admin", "Doctor")]
-        //public async Task<IActionResult> GetSubmitedInvoices(InvoiceFilterDto model)
-        //{
-
-        //}
+        [HttpPost("getSubmitedInvoices")]
+        [Authorize("Admin", "Doctor")]
+        public async Task<IActionResult> GetSubmitedInvoices(InvoiceFilterDto model)
+        {
+            var result = await _reportService.GetSubmitedInvoices(model);
+            return Ok(result);
+        }
     }
 }

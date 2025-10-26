@@ -1,4 +1,4 @@
-﻿namespace Clinic.Api.Application.DTOs.Invoices
+﻿namespace Clinic.Api.Application.DTOs.Report
 {
     public class GetSubmitedInvoicesResponse
     {

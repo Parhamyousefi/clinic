@@ -1,5 +1,4 @@
 ﻿using Clinic.Api.Application.DTOs;
-using Clinic.Api.Application.DTOs.Invoices;
 using Clinic.Api.Application.DTOs.Report;
 using Clinic.Api.Application.Interfaces;
 using Clinic.Api.Infrastructure.Data;
@@ -91,22 +90,30 @@ namespace Clinic.Api.Infrastructure.Services
             return response;
         }
 
-        //public async Task<IEnumerable<GetSubmitedInvoicesResponse>> GetSubmitedInvoices(InvoiceFilterDto model)
-        //{
-        //    try
-        //    {
-        //        var result = await (from inv in _context.Invoices
-        //                            where inv.CreatedOn >= model.FromDate && inv.CreatedOn <= model.ToDate
-        //                            select new GetSubmitedInvoicesResponse
-        //                            {
-        //                                Count = inv.c
-        //                            })
-        //    }
-        //    catch (Exception)
-        //    {
+        public async Task<GetSubmitedInvoicesResponse> GetSubmitedInvoices(InvoiceFilterDto model)
+        {
+            try
+            {
+                var from = model.FromDate.Date;
+                var to = model.ToDate.Date.AddDays(1).AddTicks(-1);
 
-        //        throw;
-        //    }
-        //}
+                var invoices = await _context.Invoices
+                    .Where(i => i.CreatedOn >= from && i.CreatedOn <= to && (i.IsCanceled == false || i.IsCanceled == null))
+                    .ToListAsync();
+
+                var totalInvoices = invoices.Count;
+                var totalReceiptAmount = invoices.Sum(i => i.Receipt);
+
+                return new GetSubmitedInvoicesResponse
+                {
+                    Count = totalInvoices,
+                    Receipt = totalReceiptAmount
+                };
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error calculating invoice summary: {ex.Message}");
+            }
+        }
     }
 }
