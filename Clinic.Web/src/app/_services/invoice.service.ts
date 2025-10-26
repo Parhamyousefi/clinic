@@ -134,4 +134,17 @@ export class InvoiceService {
     };
     return this.http.post(uri, data, httpOptions);
   }
+
+
+  saveInvoiceDiscount(data) {
+    const uri = this.url + `api/Invoice/saveInvoiceDiscount`;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + this.token,
+        responseType: 'text'
+      }),
+    };
+    return this.http.post(uri, data, httpOptions);
+  }
 }

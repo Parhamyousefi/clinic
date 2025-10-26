@@ -90,6 +90,10 @@ export const routes: Routes = [
         canActivate: [AuthGuard]
     },
     {
+        path: 'receipt/:id', component: ReceiptComponent,
+        canActivate: [AuthGuard]
+    },
+    {
         path: 'receipt-list', component: ReceiptListComponent,
         canActivate: [AuthGuard]
     },
