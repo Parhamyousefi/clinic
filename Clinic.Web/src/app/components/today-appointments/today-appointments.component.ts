@@ -36,11 +36,15 @@ export class TodayAppointmentsComponent implements OnInit {
   selectedTimeTo: any = '23:00';
   showNewDiscount: boolean = false;
   visitStatusList: any = [
+    { name: "همه", code: 0 },
     { name: "انتظار", code: 1 },
     { name: "پذیرش شده", code: 2 },
     { name: "ملاقات شده", code: 3 },
   ]
   filteredAppointments: any = [];
+  showAppointmentDetail: any;
+  appointmentDetailItem: any = [];
+  selectedStatus: any = '';
   async ngOnInit() {
     this.selectedDatefrom = new FormControl(moment().format('jYYYY/jMM/jDD'));
     this.selectedDateTo = new FormControl(moment().format('jYYYY/jMM/jDD'));
@@ -64,6 +68,10 @@ export class TodayAppointmentsComponent implements OnInit {
       let res: any = await this.treatmentsService.getTodayAppointments(model).toPromise();
       this.todayAppointmentsList = res;
       this.filteredAppointments = this.todayAppointmentsList;
+      if (this.selectedStatus && this.selectedStatus.code !== 0) {
+        this.filteredAppointments = this.todayAppointmentsList.filter(x => x.status === this.selectedStatus.code);
+      }
+
     }
     catch { }
   }
@@ -131,7 +139,6 @@ export class TodayAppointmentsComponent implements OnInit {
         "totalDiscount": 0
       }
       let res: any = await this.invoiceService.saveInvoiceDiscount(model).toPromise();
-
       this.showNewDiscount = false;
     }
     catch { }
@@ -154,4 +161,9 @@ export class TodayAppointmentsComponent implements OnInit {
     });
   }
 
+  openAppointmentDetail(event, item) {
+    event.stopPropagation();
+    this.showAppointmentDetail = true;
+    this.appointmentDetailItem[0] = item;
+  }
 }

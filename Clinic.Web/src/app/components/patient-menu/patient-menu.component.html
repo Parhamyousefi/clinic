@@ -5,14 +5,14 @@
             <h4 class="m-0">{{patientName}}</h4>
         </div>
         <div class="col-md-8 col-12 d-flex justify-content-end">
-            <button class="btn main-btn mx-1" [routerLink]="'new-invoice/'+patientId">صدور صورتحساب</button>
+            <button class="btn main-btn mx-1 p-1" [routerLink]="'new-invoice/'+patientId">صدور صورتحساب</button>
             <app-pdf-maker [_patientData]="patientInfo" [type]="1"></app-pdf-maker>
             <!-- <button class="btn main-btn mx-1" routerLink="">ویرایش</button> -->
             <!-- <button class="btn btn-secondary mx-1" routerLink="">مجوز وقت دهی</button> -->
-            <button class="btn btn-outline-danger mx-1" (click)="deletePatient(patientId)">حذف</button>
+            <button class="btn btn-outline-danger mx-1 p-1" (click)="deletePatient(patientId)">حذف</button>
         </div>
     </div>
-    <div class="w-100 note-container mt-2 p-2 d-flex">
+    <div class="w-100 note-container mt-2 p-2 d-flex align-items-center">
         <div class="d-flex note-items-container ml-2">
             <div *ngFor="let note of patientsNote" class="note-item p-2 mx-1 my-1 pointer" (click)="editNote(note)"
                 (mouseover)="hoveredNote = note.noteId" (mouseleave)="hoveredNote= ''">
@@ -23,10 +23,11 @@
                 </span>
             </div>
         </div>
-        <div *ngIf="!openNoteInput" class="add-note-btn rounded p-2 pointer d-flex align-items-center"
-            (click)="openNoteInput = true">افزودن یادداشت</div>
-        <div [ngClass]="{'closed-note-container d-none' : !openNoteInput}" class="note-input-container">
-            <input type="text" name="note" id="patient-note" class="note-input mr-2 h-100" [(ngModel)]="patientNote">
+        <btn *ngIf="!openNoteInput" class="add-note-btn rounded p-1 pointer d-flex align-items-center"
+            (click)="openNoteInput = true">افزودن یادداشت</btn>
+        <div [ngClass]="{'closed-note-container' : !openNoteInput}" class="note-input-container d-flex">
+            <input type="text" name="note" id="patient-note" class="note-input form-control mr-2 h-100"
+                [(ngModel)]="patientNote">
             <button class="btn main-btn-outline mx-1" (click)="saveNote()">ذخیره</button>
             <button class="btn btn-outline-secondary mx-1" (click)="openNoteInput = false">انصراف</button>
         </div>

@@ -74,7 +74,7 @@ export class PatientMenuComponent {
       let res: any = await this.patientService.getPatientById(patientId).toPromise();
       if (res.length > 0) {
         this.patientInfo = res[0]
-        this.patientName = res[0].firstName + "" + res[0].lastName;
+        this.patientName = res[0].firstName + " " + res[0].lastName;
       }
     }
     catch {
