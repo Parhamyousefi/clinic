@@ -114,15 +114,15 @@
                         </div>
                     </td>
                     <td class="px-2 d-flex flex-wrap">
-                        <button class="btn btn-danger col-6"
+                        <button class="btn btn-danger btn-sm ml-2"
                             [routerLink]="'/new-invoice/' + item.patientId +'/2/'+selectedClinic.code">صدور
                             صورتحساب</button>
-                        <button class="btn btn-outline-danger col-6" (click)="openDiscount($event)">ثبت
+                        <button class="btn btn-outline-danger btn-sm" (click)="openDiscount($event)">ثبت
                             تخفیف</button>
-                        <button class="btn btn-outline-secondary mt-2 col-6"
+                        <button class="btn btn-outline-secondary mt-2 btn-sm"
                             [routerLink]="'/receipt/'+item.patientId">ثبت
                             دریافت</button>
-                        <button class="btn main-btn-outline mt-2 col-6">جزئیات</button>
+                        <button class="btn main-btn-outline mt-2 btn-sm mr-2">جزئیات</button>
                     </td>
                 </tr>
                 <tr *ngIf="showAppointmentInfoId == item.id">

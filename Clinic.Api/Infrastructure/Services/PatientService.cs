@@ -102,7 +102,8 @@ namespace Clinic.Api.Infrastructure.Services
             {
                 var userId = _token.GetUserId();
 
-                var patients = await _context.Patients.Where(p => p.CreatorId == userId).ToListAsync();
+                var patients = await _context.Patients.Where(p => p.CreatorId == userId
+                &&  p.CreatorId != p.Id).OrderBy(p=> p.CreatedOn).ToListAsync();
 
                 return patients;
             }
