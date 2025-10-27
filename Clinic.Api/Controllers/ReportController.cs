@@ -33,11 +33,11 @@ namespace Clinic.Api.Controllers
             return Ok(result);
         }
 
-        [HttpPost("getAppointmentsAndUnpaidInvoices")]
+        [HttpPost("getSubmitedAppointments")]
         [Authorize("Doctor", "Admin")]
-        public async Task<IActionResult> GetAppointmentsAndUnpaidInvoices(InvoiceFilterDto model)
+        public async Task<IActionResult> GetSubmitedAppointments(InvoiceFilterDto model)
         {
-            var result = await _reportService.GetAppointmentsAndUnpaidInvoices(model);
+            var result = await _reportService.GetSubmitedAppointments(model);
             return Ok(result);
         }
 

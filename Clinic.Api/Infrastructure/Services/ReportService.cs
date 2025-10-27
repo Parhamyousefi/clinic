@@ -52,33 +52,27 @@ namespace Clinic.Api.Infrastructure.Services
             return result;
         }
 
-        public async Task<GlobalResponse> GetAppointmentsAndUnpaidInvoices(InvoiceFilterDto model)
+        public async Task<GlobalResponse> GetSubmitedAppointments(InvoiceFilterDto model)
         {
             var response = new GlobalResponse();
 
             try
             {
-                var appointmentCount = await _context.Appointments
-                    .CountAsync(a => a.Start >= model.FromDate.Date && a.End <= model.ToDate.Date && (a.Cancelled == false || a.Cancelled == null));
+                var fromDate = model.FromDate.Date;
+                var toDate = model.ToDate.Date;
 
-                var unpaidInvoices = await (
-                    from i in _context.Invoices
-                    join p in _context.Patients on i.PatientId equals p.Id into patientGroup
-                    from patient in patientGroup.DefaultIfEmpty()
-                    where ((i.Amount) - (i.Payment)) > 0 && (i.IsCanceled == false || i.IsCanceled == null)
-                    select new
-                    {
-                        InvoiceNo = i.InvoiceNo,
-                        PatientName = ((patient.FirstName ?? "") + " " + (patient.LastName ?? "")).Trim(),
-                        RemainingAmount = ((decimal?)i.Amount ?? 0m) - ((decimal?)i.Payment ?? 0m)
-                    }
-                ).ToListAsync();
+                var appointmentCount = await _context.Appointments
+                    .CountAsync(a => a.Start >= fromDate && a.End <= toDate && (a.Cancelled == false || a.Cancelled == null));
+
+                var cancelledOrNoShowCount = await _context.Appointments
+                    .CountAsync(a => a.Start >= fromDate && a.End <= toDate &&
+                                     (a.Cancelled == true || a.Arrived == 0));
 
                 response.Status = 0;
                 response.Data = new
                 {
                     AppointmentCount = appointmentCount,
-                    UnpaidInvoices = unpaidInvoices
+                    CancelledOrNoShowCount = cancelledOrNoShowCount,
                 };
             }
             catch (Exception ex)
