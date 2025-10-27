@@ -287,7 +287,11 @@ namespace Clinic.Api.Infrastructure.Services
                         Status = !hasInvoice && !hasTreatment ? 1 :
                                  hasInvoice && !hasTreatment ? 2 :
                                  hasInvoice && hasTreatment ? 3 : 0,
-                        PatientPhone = r.PhoneNumber
+                        PatientPhone = r.PhoneNumber,
+                        TotalDiscount = invoices
+            .Where(i => i.AppointmentId == appointmentId && (i.IsCanceled == false || i.IsCanceled == null))
+            .Select(i => i.TotalDiscount)
+            .FirstOrDefault()
                     };
                 }).ToList();
 
