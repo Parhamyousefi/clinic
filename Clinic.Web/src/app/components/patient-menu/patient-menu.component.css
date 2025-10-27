@@ -50,6 +50,7 @@
 
 .closed-note-container {
     width: 0;
+    display: none !important;
 }
 
 .note-item {

@@ -14,5 +14,6 @@
         public int Status { get; set; }
         public string? BillableItemName { get; set; }
         public string? PatientPhone { get; set; }
+        public decimal? TotalDiscount { get; set; }
     }
 }

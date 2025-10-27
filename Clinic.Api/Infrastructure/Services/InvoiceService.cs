@@ -34,14 +34,11 @@ namespace Clinic.Api.Infrastructure.Services
                     string? lastId = await _context.Invoices.MaxAsync(r => r.InvoiceNo);
                     var Id = Convert.ToInt32(lastId);
                     model.InvoiceNo = (Id + 1).ToString();
-                    int invoiceId = await _context.Invoices.MaxAsync(r => r.Id);
-                    model.Id = invoiceId + 1;
                     var invoice = _mapper.Map<InvoicesContext>(model);
                     invoice.CreatorId = userId;
                     invoice.CreatedOn = DateTime.UtcNow;
                     invoice.PractitionerId = userId;
                     invoice.InvoiceNo = (Id + 1).ToString();
-                    invoice.Id = invoiceId + 1;
                     _context.Invoices.Add(invoice);
                     await _context.SaveChangesAsync();
                     result.Message = $"Invoice Saved Successfully , Id : {invoice.Id}";
