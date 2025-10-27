@@ -15,7 +15,7 @@ export class ReportService {
 
   getInvoicesByClinic(data: any) {
     const uri = this.url + `api/Report/getInvoicesByClinic`;
-    const httpOptions = { 
+    const httpOptions = {
       headers: new HttpHeaders({
         "Content-Type": "application/json",
         Authorization: "Bearer " + this.token,
@@ -33,8 +33,31 @@ export class ReportService {
     };
     return this.http.post(uri, data, httpOptions);
   }
-  getAppointmentsAndUnpaidInvoices(data: any) {
-    const uri = this.url + `api/Report/getAppointmentsAndUnpaidInvoices`;
+
+  getSubmitedAppointments(data: any) {
+    const uri = this.url + `api/Report/getSubmitedAppointments`;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + this.token,
+      }),
+    };
+    return this.http.post(uri, data, httpOptions);
+  }
+
+  getSubmitedInvoices(data: any) {
+    const uri = this.url + `api/Report/getSubmitedInvoices`;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + this.token,
+      }),
+    };
+    return this.http.post(uri, data, httpOptions);
+  }
+
+  getUnpaidInvoices(data: any) {
+    const uri = this.url + `api/Report/getUnpaidInvoices`;
     const httpOptions = {
       headers: new HttpHeaders({
         "Content-Type": "application/json",

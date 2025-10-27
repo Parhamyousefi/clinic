@@ -32,7 +32,7 @@ export class BusinessReportComponent implements OnInit {
   setTimes: any = null;
   locationSummary: any = [];
   serviceSummary: any = [];
-
+  submitedInvoicesDetail: any = null;
   ngOnInit(): void {
     this.selectedDatefrom = new FormControl(moment().format('jYYYY/jMM/jDD'));
     this.selectedDateTo = new FormControl(moment().format('jYYYY/jMM/jDD'));
@@ -66,24 +66,25 @@ export class BusinessReportComponent implements OnInit {
     this.unpaidInvoicesList = [];
     this.locationSummary = [];
     this.serviceSummary = [];
+    this.submitedInvoicesDetail = null;
 
     let model = {
       fromDate: moment(this.selectedDatefrom.value, 'jYYYY/jMM/jDD').add(3.5, 'hours').toDate(),
       toDate: moment(this.selectedDateTo.value, 'jYYYY/jMM/jDD').add(3.5, 'hours').toDate(),
     }
     try {
-      let res1: any = await this.reportService.getAppointmentsAndUnpaidInvoices(model).toPromise();
+      let res1: any = await this.reportService.getSubmitedAppointments(model).toPromise();
       let res2: any = await this.reportService.getInvoicesByClinic(model).toPromise();
       let res3: any = await this.reportService.getInvoicesByService(model).toPromise();
-      this.setTimes = {
-        appointmentCount: res1['data']['appointmentCount'],
-        // appointmentCount: res1['data']['appointmentCount']
-      }
-      this.unpaidInvoicesList = res1['data']['unpaidInvoices'];
+      let res4: any = await this.reportService.getUnpaidInvoices(model).toPromise();
+      let res5: any = await this.reportService.getSubmitedInvoices(model).toPromise();
+
+      this.setTimes = res1['data']
       this.locationSummary = res2;
       this.serviceSummary = res3;
-      console.log(this.serviceSummary);
-      
+      this.unpaidInvoicesList = res4;
+      this.submitedInvoicesDetail = res5;
+
     }
     catch { }
   }
