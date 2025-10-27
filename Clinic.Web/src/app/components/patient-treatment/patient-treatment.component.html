@@ -42,7 +42,7 @@
                 <button class="btn btn-sm btn-light mx-1"
                   (click)="handelCallMetodInPdfMaker($event,item,2)">PDF</button>
                 <app-pdf-maker [_patientData]="patientInfo" [type]="2"></app-pdf-maker>
-                <button class="btn btn-sm btn-warning mx-1" (click)="onClick($event,item,4)">Attache
+                <button class="btn btn-sm btn-warning mx-1" (click)="onClick($event,item,4)">Attach
                   Files</button>
               </div>
             </div>
@@ -167,8 +167,8 @@
   </div>
 </div>
 
-<p-dialog id="new-appointment-modal" header="Attache File" [(visible)]="showAttacheFile"
-  [ngClass]="{'modalShadow' : showAttacheFile}" class="p-2">
+<p-dialog id="new-appointment-modal" header="Attach File" [(visible)]="showAttachFile"
+  [ngClass]="{'modalShadow' : showAttachFile}" class="p-2">
   <div class="d-flex flex-column align-items-center">
     <div class="dashed_upload p-5 pointer" (click)="fileInput.click()">
       <div class="wrapper">

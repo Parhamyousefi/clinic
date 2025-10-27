@@ -102,7 +102,7 @@ namespace Clinic.Api.Infrastructure.Services
             {
                 var userId = _token.GetUserId();
 
-                var patients = await _context.Patients.Where(p => p.ReferringDoctorId == userId).ToListAsync();
+                var patients = await _context.Patients.Where(p => p.CreatorId == userId).ToListAsync();
 
                 return patients;
             }
@@ -119,8 +119,8 @@ namespace Clinic.Api.Infrastructure.Services
                 var query = _context.Patients.AsQueryable();
                 var result = await (from n in query
                                     where n.Id == patientId
-                                    join j in _context.Jobs on n.JobId equals j.Id
-                                    join u in _context.Users on n.ReferringDoctorId equals u.Id
+                                    // join j in _context.Jobs on n.JobId equals j.Id
+                                    join u in _context.Users on n.CreatorId equals u.Id
                                     select new GetPatientInfoResponse
                                     {
                                         Mobile = _context.PatientPhones
@@ -134,7 +134,7 @@ namespace Clinic.Api.Infrastructure.Services
                                         FatherName = n.FatherName,
                                         NationalCode = n.NationalCode,
                                         PatientCode = n.PatientCode.ToString(),
-                                        JobName = j.Name,
+                                        // JobName = j.Name,
                                         DoctorName = u.FirstName + " " + u.LastName,
                                     }).ToListAsync();
                 return result;

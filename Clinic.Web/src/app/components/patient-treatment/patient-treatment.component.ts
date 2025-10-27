@@ -30,7 +30,7 @@ export class PatientTreatmentComponent {
   selectedService: any = null;
   public Editor = ClassicEditor;
   @ViewChild(PdfMakerComponent) pdfMakerComponent!: PdfMakerComponent;
-  showAttacheFile: boolean = false;
+  showAttachFile: boolean = false;
   fileToUpload: any;
   base64: any;
   fileName: any;
@@ -141,7 +141,7 @@ export class PatientTreatmentComponent {
         this.base64 = null;
         this.fileName = null;
         this.fileType = null;
-        this.showAttacheFile = true;
+        this.showAttachFile = true;
         break;
     }
   }
@@ -350,7 +350,7 @@ export class PatientTreatmentComponent {
     if (res['status'] == 0) {
       this.toastR.success('با موفقیت ثبت شد');
       this.getPatientTreatments();
-      this.showAttacheFile = false;
+      this.showAttachFile = false;
       this.fileName = '';
       this.fileType = '';
       this.fileToUpload = null;
