@@ -7,6 +7,7 @@ import moment from 'moment-jalaali';
 import { FormControl } from '@angular/forms';
 import { RouterLink } from "@angular/router";
 import { InputMaskModule } from 'primeng/inputmask';
+import { InvoiceService } from '../../_services/invoice.service';
 @Component({
   selector: 'app-today-appointments',
   standalone: true,
@@ -20,7 +21,8 @@ export class TodayAppointmentsComponent implements OnInit {
   constructor(
     private treatmentsService: TreatmentsService,
     private userService: UserService,
-    private mainService: MainService
+    private mainService: MainService,
+    private invoiceService: InvoiceService
   ) { }
 
   clinicsList: any = [];
@@ -35,9 +37,10 @@ export class TodayAppointmentsComponent implements OnInit {
   showNewDiscount: boolean = false;
   visitStatusList: any = [
     { name: "انتظار", code: 1 },
-    { name: "پذیرش شده", code: 1 },
-    { name: "ملاقات شده", code: 1 },
+    { name: "پذیرش شده", code: 2 },
+    { name: "ملاقات شده", code: 3 },
   ]
+  filteredAppointments: any = [];
   async ngOnInit() {
     this.selectedDatefrom = new FormControl(moment().format('jYYYY/jMM/jDD'));
     this.selectedDateTo = new FormControl(moment().format('jYYYY/jMM/jDD'));
@@ -60,6 +63,7 @@ export class TodayAppointmentsComponent implements OnInit {
     try {
       let res: any = await this.treatmentsService.getTodayAppointments(model).toPromise();
       this.todayAppointmentsList = res;
+      this.filteredAppointments = this.todayAppointmentsList;
     }
     catch { }
   }
@@ -120,8 +124,34 @@ export class TodayAppointmentsComponent implements OnInit {
     this.showNewDiscount = true;
   }
 
-  submitDiscount() {
-    this.showNewDiscount = false;
+  async submitDiscount() {
+    try {
+      let model = {
+        "invoiceId": 0,
+        "totalDiscount": 0
+      }
+      let res: any = await this.invoiceService.saveInvoiceDiscount(model).toPromise();
+
+      this.showNewDiscount = false;
+    }
+    catch { }
+  }
+
+  filterAppointments(searchText: any) {
+    if (!searchText) {
+      this.filteredAppointments = this.todayAppointmentsList;
+      return;
+    }
+
+    const text = searchText.toLowerCase();
+
+    this.filteredAppointments = this.todayAppointmentsList.filter(item => {
+      return (
+        item.patientPhone?.toLowerCase().includes(text) ||
+        item.patientName?.toLowerCase().includes(text) ||
+        item.id.toString().includes(text)
+      );
+    });
   }
 
 }
