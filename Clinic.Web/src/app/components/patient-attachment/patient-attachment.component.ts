@@ -49,8 +49,8 @@ export class PatientAttachmentComponent {
       this.toastR.error("فرمت وارد شده معتبر نمی باشد.", "خطا");
       return;
     }
-    if (size > 50000000) {
-      this.toastR.error("حداکثر سایز فایل 50 مگابایت می باشد", "خطا");
+    if (size > 5000000) {
+      this.toastR.error("حداکثر سایز فایل 5 مگابایت می باشد", "خطا");
       return;
     }
     this.fileToUpload = files.item(0);
