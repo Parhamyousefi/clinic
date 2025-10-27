@@ -3,6 +3,7 @@ using Clinic.Api.Application.DTOs.Report;
 using Clinic.Api.Application.Interfaces;
 using Clinic.Api.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace Clinic.Api.Infrastructure.Services
 {
@@ -206,7 +207,7 @@ namespace Clinic.Api.Infrastructure.Services
             catch (Exception ex)
             {
                 throw new Exception(ex.Message);
-            } 
+            }
         }
 
         public async Task<IEnumerable<GetBusinessIncomeReportResponse>> GetBusinessIncome(IncomeReportFilterDto model)
@@ -264,7 +265,7 @@ namespace Clinic.Api.Infrastructure.Services
             catch (Exception ex)
             {
                 throw new Exception(ex.Message);
-            } 
+            }
         }
 
         public async Task<IEnumerable<GetIncomeReportDetailResponse>> GetIncomeReportDetails(IncomeReportFilterDto model)
@@ -331,5 +332,221 @@ namespace Clinic.Api.Infrastructure.Services
                 throw new Exception(ex.Message);
             }
         }
+
+        public async Task<GlobalResponse> GetOutPatientSummaryReport(OutPatientReportFilterDto model)
+        {
+            var response = new GlobalResponse();
+
+            try
+            {
+                var fromDateTime = model.FromDate.Date.Add(TimeSpan.Parse(model.FromTime ?? "00:00:00"));
+                var toDateTime = model.ToDate.Date.Add(TimeSpan.Parse(model.ToTime ?? "23:59:59"));
+
+                var userIds = new List<int>();
+                if (!string.IsNullOrEmpty(model.UserId))
+                {
+                    userIds = model.UserId
+                        .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                        .Select(u => int.Parse(u.Trim()))
+                        .ToList();
+                }
+
+                var serviceIds = new List<int>();
+                if (!string.IsNullOrEmpty(model.ServiceId))
+                {
+                    serviceIds = model.ServiceId
+                        .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                        .Select(s => int.Parse(s.Trim()))
+                        .ToList();
+                }
+
+                var productIds = new List<int>();
+                if (!string.IsNullOrEmpty(model.Product))
+                {
+                    productIds = model.Product
+                        .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                        .Select(p => int.Parse(p.Trim()))
+                        .ToList();
+                }
+
+                var query = from invoice in _context.Invoices
+                            join item in _context.InvoiceItems
+                                on invoice.Id equals item.InvoiceId
+                            where
+                                invoice.CreatedOn >= fromDateTime &&
+                                invoice.CreatedOn <= toDateTime &&
+                                (userIds.Count == 0 || userIds.Contains(invoice.PractitionerId)) &&
+                                (serviceIds.Count == 0 || (item.ItemId.HasValue && serviceIds.Contains(item.ItemId.Value))) &&
+                                (productIds.Count == 0 || (item.ProductId.HasValue && productIds.Contains(item.ProductId.Value))) &&
+                                (string.IsNullOrEmpty(model.IsPaid) ||
+                                    (model.IsPaid == "1" && invoice.Receipt > 0) ||
+                                    (model.IsPaid == "0" && (invoice.Receipt == null || invoice.Receipt == 0))) &&
+                                (model.CreatorId == 0 || invoice.CreatorId == model.CreatorId)
+                            select new
+                            {
+                                invoice.Id,
+                                invoice.Amount,
+                                invoice.TotalDiscount,
+                                invoice.Payment,
+                                invoice.Receipt,
+                                invoice.BusinessAmount,
+                                invoice.BusinessDebit,
+                                invoice.IsCanceled
+                            };
+
+                var data = await query.ToListAsync();
+
+                if (data == null || !data.Any())
+                {
+                    response.Status = 0;
+                    response.Message = "Data Not Found";
+                    response.Data = null;
+                    return response;
+                }
+
+                var totalCount = data.Count;
+                var canceledCount = data.Count(x => x.IsCanceled);
+                var totalAmount = data.Sum(x => x.Amount);
+                var totalDiscount = data.Sum(x => x.TotalDiscount);
+                var totalReceivable = data.Sum(x => x.Amount - x.TotalDiscount);
+                var totalReceived = data.Sum(x => x.Receipt);
+                var totalPaid = data.Sum(x => x.Payment);
+                var netReceived = totalReceived - totalPaid;
+                var totalUnreceived = totalReceivable - totalReceived;
+                var totalOverReceived = totalReceived > totalReceivable ? totalReceived - totalReceivable : 0;
+
+                response.Status = 1;
+                response.Message = "Success";
+                response.Data = new
+                {
+                    TotalCount = totalCount,
+                    CanceledCount = canceledCount,
+                    TotalAmount = totalAmount,
+                    TotalDiscount = totalDiscount,
+                    TotalReceivable = totalReceivable,
+                    TotalReceived = totalReceived,
+                    TotalPaid = totalPaid,
+                    NetReceived = netReceived,
+                    TotalUnreceived = totalUnreceived,
+                    TotalOverReceived = totalOverReceived
+                };
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                response.Status = 3;
+                response.Message = ex.Message;
+                return response;
+            }
+        }
+
+        public async Task<GlobalResponse> GetOutPatientReportBasedOnCreator(OutPatientReportFilterDto model)
+        {
+            var response = new GlobalResponse();
+
+            try
+            {
+                var fromDateTime = model.FromDate.Date.Add(TimeSpan.Parse(model.FromTime ?? "00:00:00"));
+                var toDateTime = model.ToDate.Date.Add(TimeSpan.Parse(model.ToTime ?? "23:59:59"));
+
+                var userIds = new List<int>();
+                if (!string.IsNullOrEmpty(model.UserId))
+                {
+                    userIds = model.UserId
+                        .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                        .Select(u => int.Parse(u.Trim()))
+                        .ToList();
+                }
+
+                var serviceIds = new List<int>();
+                if (!string.IsNullOrEmpty(model.ServiceId))
+                {
+                    serviceIds = model.ServiceId
+                        .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                        .Select(s => int.Parse(s.Trim()))
+                        .ToList();
+                }
+
+                var productIds = new List<int>();
+                if (!string.IsNullOrEmpty(model.Product))
+                {
+                    productIds = model.Product
+                        .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                        .Select(p => int.Parse(p.Trim()))
+                        .ToList();
+                }
+
+                var query = from invoice in _context.Invoices
+                            join item in _context.InvoiceItems
+                                on invoice.Id equals item.InvoiceId
+                            join user in _context.Users
+                                on invoice.CreatorId equals user.Id
+                            where
+                                invoice.CreatedOn >= fromDateTime &&
+                                invoice.CreatedOn <= toDateTime &&
+                                (userIds.Count == 0 || userIds.Contains(invoice.PractitionerId)) &&
+                                (serviceIds.Count == 0 || (item.ItemId.HasValue && serviceIds.Contains(item.ItemId.Value))) &&
+                                (productIds.Count == 0 || (item.ProductId.HasValue && productIds.Contains(item.ProductId.Value))) &&
+                                (string.IsNullOrEmpty(model.Referral) || invoice.InvoiceTo == model.Referral) &&
+                                (string.IsNullOrEmpty(model.IsPaid) ||
+                                    (model.IsPaid == "1" && invoice.Receipt > 0) ||
+                                    (model.IsPaid == "0" && (invoice.Receipt == null || invoice.Receipt == 0))) &&
+                                (model.CreatorId == 0 || invoice.CreatorId == model.CreatorId)
+                            select new
+                            {
+                                CreatorId = invoice.CreatorId,
+                                CreatorName = user.FirstName + " " + user.LastName,
+                                invoice.Amount,
+                                invoice.TotalDiscount,
+                                invoice.Payment,
+                                invoice.Receipt,
+                                invoice.IsCanceled
+                            };
+
+                var data = await query.ToListAsync();
+
+                if (data == null || !data.Any())
+                {
+                    response.Status = 0;
+                    response.Message = "No Data Found";
+                    response.Data = null;
+                    return response;
+                }
+
+                var groupedData = data
+                    .GroupBy(x => new { x.CreatorId, x.CreatorName })
+                    .Select(g => new
+                    {
+                        CreatorName = g.Key.CreatorName,
+                        Count = g.Count(),
+                        TotalAmount = g.Sum(x => x.Amount),
+                        TotalDiscount = g.Sum(x => x.TotalDiscount),
+                        TotalReceivable = g.Sum(x => x.Amount - x.TotalDiscount),
+                        TotalReceived = g.Sum(x => x.Receipt),
+                        TotalPaid = g.Sum(x => x.Payment),
+                        NetReceived = g.Sum(x => (x.Receipt) - (x.Payment)),
+                        TotalUnreceived = g.Sum(x => (x.Amount - x.TotalDiscount) - (x.Receipt)),
+                        TotalOverReceived = g.Sum(x => (x.Receipt) > (x.Amount - x.TotalDiscount)
+                            ? (x.Receipt) - (x.Amount - x.TotalDiscount)
+                            : 0)
+                    })
+                    .OrderByDescending(x => x.Count)
+                    .ToList();
+
+                response.Status = 1;
+                response.Message = "Success";
+                response.Data = groupedData;
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                response.Status = 3;
+                response.Message = ex.Message;
+                return response;
+            }
+        }
+
     }
 }
