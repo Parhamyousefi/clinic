@@ -15,5 +15,6 @@
         public string? BillableItemName { get; set; }
         public string? PatientPhone { get; set; }
         public decimal? TotalDiscount { get; set; }
+        public int? InvoiceId { get; set; }
     }
 }

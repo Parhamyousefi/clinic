@@ -124,7 +124,7 @@ namespace Clinic.Api.Infrastructure.Services
                                     join u in _context.Users on n.CreatorId equals u.Id
                                     select new GetPatientInfoResponse
                                     {
-                                        Mobile = _context.PatientPhones
+                                        PhoneNumber = _context.PatientPhones
                                      .Where(p => p.PatientId == patientId)
                                      .Select(p => p.Number)
                                      .FirstOrDefault() ?? string.Empty,
@@ -137,6 +137,7 @@ namespace Clinic.Api.Infrastructure.Services
                                         PatientCode = n.PatientCode.ToString(),
                                         // JobName = j.Name,
                                         DoctorName = u.FirstName + " " + u.LastName,
+                                        Mobile = n.Mobile
                                     }).ToListAsync();
                 return result;
             }

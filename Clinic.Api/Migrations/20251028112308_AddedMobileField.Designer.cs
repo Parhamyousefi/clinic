@@ -4,6 +4,7 @@ using Clinic.Api.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Clinic.Api.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251028112308_AddedMobileField")]
+    partial class AddedMobileField
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -50,7 +53,7 @@ namespace Clinic.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Answers", (string)null);
+                    b.ToTable("Answers");
                 });
 
             modelBuilder.Entity("Clinic.Api.Domain.Entities.AppointmentCancelTypesContext", b =>
@@ -66,7 +69,7 @@ namespace Clinic.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("AppointmentCancelTypes", (string)null);
+                    b.ToTable("AppointmentCancelTypes");
                 });
 
             modelBuilder.Entity("Clinic.Api.Domain.Entities.AppointmentRemindersContext", b =>
@@ -127,7 +130,7 @@ namespace Clinic.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("AppointmentReminders", (string)null);
+                    b.ToTable("AppointmentReminders");
                 });
 
             modelBuilder.Entity("Clinic.Api.Domain.Entities.AppointmentServicesContext", b =>
@@ -161,7 +164,7 @@ namespace Clinic.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("AppointmentServices", (string)null);
+                    b.ToTable("AppointmentServices");
                 });
 
             modelBuilder.Entity("Clinic.Api.Domain.Entities.AppointmentTypePractitionersContext", b =>
@@ -195,7 +198,7 @@ namespace Clinic.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("AppointmentTypePractitioners", (string)null);
+                    b.ToTable("AppointmentTypePractitioners");
                 });
 
             modelBuilder.Entity("Clinic.Api.Domain.Entities.AppointmentTypesContext", b =>
@@ -271,7 +274,7 @@ namespace Clinic.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("AppointmentTypes", (string)null);
+                    b.ToTable("AppointmentTypes");
                 });
 
             modelBuilder.Entity("Clinic.Api.Domain.Entities.AppointmentsContext", b =>
@@ -359,7 +362,7 @@ namespace Clinic.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Appointments", (string)null);
+                    b.ToTable("Appointments");
                 });
 
             modelBuilder.Entity("Clinic.Api.Domain.Entities.BillableItemsContext", b =>
@@ -439,7 +442,7 @@ namespace Clinic.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("BillableItems", (string)null);
+                    b.ToTable("BillableItems");
                 });
 
             modelBuilder.Entity("Clinic.Api.Domain.Entities.BusinessServicesContext", b =>
@@ -473,7 +476,7 @@ namespace Clinic.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("BusinessServices", (string)null);
+                    b.ToTable("BusinessServices");
                 });
 
             modelBuilder.Entity("Clinic.Api.Domain.Entities.BusinessesContext", b =>
@@ -552,7 +555,7 @@ namespace Clinic.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Businesses", (string)null);
+                    b.ToTable("Businesses");
                 });
 
             modelBuilder.Entity("Clinic.Api.Domain.Entities.ChatMessageInfoesContext", b =>
@@ -589,7 +592,7 @@ namespace Clinic.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ChatMessageInfoes", (string)null);
+                    b.ToTable("ChatMessageInfoes");
                 });
 
             modelBuilder.Entity("Clinic.Api.Domain.Entities.CommunicationCategoriesContext", b =>
@@ -608,7 +611,7 @@ namespace Clinic.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("CommunicationCategories", (string)null);
+                    b.ToTable("CommunicationCategories");
                 });
 
             modelBuilder.Entity("Clinic.Api.Domain.Entities.CommunicationDirectionsContext", b =>
@@ -624,7 +627,7 @@ namespace Clinic.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("CommunicationDirections", (string)null);
+                    b.ToTable("CommunicationDirections");
                 });
 
             modelBuilder.Entity("Clinic.Api.Domain.Entities.CommunicationTypesContext", b =>
@@ -640,7 +643,7 @@ namespace Clinic.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ComunicationTypes", (string)null);
+                    b.ToTable("ComunicationTypes");
                 });
 
             modelBuilder.Entity("Clinic.Api.Domain.Entities.CommunicationsContext", b =>
@@ -686,7 +689,7 @@ namespace Clinic.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Communications", (string)null);
+                    b.ToTable("Communications");
                 });
 
             modelBuilder.Entity("Clinic.Api.Domain.Entities.ContactPhonesContext", b =>
@@ -723,7 +726,7 @@ namespace Clinic.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ContactPhones", (string)null);
+                    b.ToTable("ContactPhones");
                 });
 
             modelBuilder.Entity("Clinic.Api.Domain.Entities.ContactTypesContext", b =>
@@ -739,7 +742,7 @@ namespace Clinic.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ContactTypes", (string)null);
+                    b.ToTable("ContactTypes");
                 });
 
             modelBuilder.Entity("Clinic.Api.Domain.Entities.ContactsContext", b =>
@@ -818,7 +821,7 @@ namespace Clinic.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Contacts", (string)null);
+                    b.ToTable("Contacts");
                 });
 
             modelBuilder.Entity("Clinic.Api.Domain.Entities.CountriesContext", b =>
@@ -834,7 +837,7 @@ namespace Clinic.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Countries", (string)null);
+                    b.ToTable("Countries");
                 });
 
             modelBuilder.Entity("Clinic.Api.Domain.Entities.DateConvertContext", b =>
@@ -866,7 +869,7 @@ namespace Clinic.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("DocumentNumbers", (string)null);
+                    b.ToTable("DocumentNumbers");
                 });
 
             modelBuilder.Entity("Clinic.Api.Domain.Entities.DocumentsPrintingsContext", b =>
@@ -942,7 +945,7 @@ namespace Clinic.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("DocumentsPrintings", (string)null);
+                    b.ToTable("DocumentsPrintings");
                 });
 
             modelBuilder.Entity("Clinic.Api.Domain.Entities.ExpenseItemsContext", b =>
@@ -979,7 +982,7 @@ namespace Clinic.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ExpenseItems", (string)null);
+                    b.ToTable("ExpenseItems");
                 });
 
             modelBuilder.Entity("Clinic.Api.Domain.Entities.ExpensesContext", b =>
@@ -1028,7 +1031,7 @@ namespace Clinic.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Expenses", (string)null);
+                    b.ToTable("Expenses");
                 });
 
             modelBuilder.Entity("Clinic.Api.Domain.Entities.FileAttachmentsContext", b =>
@@ -1071,7 +1074,7 @@ namespace Clinic.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("FileAttachments", (string)null);
+                    b.ToTable("FileAttachments");
                 });
 
             modelBuilder.Entity("Clinic.Api.Domain.Entities.GeneralSettingsContext", b =>
@@ -1210,7 +1213,7 @@ namespace Clinic.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("GeneralSettings", (string)null);
+                    b.ToTable("GeneralSettings");
                 });
 
             modelBuilder.Entity("Clinic.Api.Domain.Entities.HolidaysContext", b =>
@@ -1241,7 +1244,7 @@ namespace Clinic.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Holidays", (string)null);
+                    b.ToTable("Holidays");
                 });
 
             modelBuilder.Entity("Clinic.Api.Domain.Entities.InvoiceItemHistoriesContext", b =>
@@ -1284,7 +1287,7 @@ namespace Clinic.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("InvoiceItemHistories", (string)null);
+                    b.ToTable("InvoiceItemHistories");
                 });
 
             modelBuilder.Entity("Clinic.Api.Domain.Entities.InvoiceItemsContext", b =>
@@ -1339,7 +1342,7 @@ namespace Clinic.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("InvoiceItems", (string)null);
+                    b.ToTable("InvoiceItems");
                 });
 
             modelBuilder.Entity("Clinic.Api.Domain.Entities.InvoiceSettingsContext", b =>
@@ -1412,7 +1415,7 @@ namespace Clinic.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("InvoiceSettings", (string)null);
+                    b.ToTable("InvoiceSettings");
                 });
 
             modelBuilder.Entity("Clinic.Api.Domain.Entities.InvoicesContext", b =>
@@ -1518,7 +1521,7 @@ namespace Clinic.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Invoices", (string)null);
+                    b.ToTable("Invoices");
                 });
 
             modelBuilder.Entity("Clinic.Api.Domain.Entities.ItemCategoriesContext", b =>
@@ -1552,7 +1555,7 @@ namespace Clinic.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ItemCategories", (string)null);
+                    b.ToTable("ItemCategories");
                 });
 
             modelBuilder.Entity("Clinic.Api.Domain.Entities.JobsContext", b =>
@@ -1580,7 +1583,7 @@ namespace Clinic.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Jobs", (string)null);
+                    b.ToTable("Jobs");
                 });
 
             modelBuilder.Entity("Clinic.Api.Domain.Entities.LetterTemplatesContext", b =>
@@ -1611,7 +1614,7 @@ namespace Clinic.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("LetterTemplates", (string)null);
+                    b.ToTable("LetterTemplates");
                 });
 
             modelBuilder.Entity("Clinic.Api.Domain.Entities.LettersContext", b =>
@@ -1648,7 +1651,7 @@ namespace Clinic.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Letters", (string)null);
+                    b.ToTable("Letters");
                 });
 
             modelBuilder.Entity("Clinic.Api.Domain.Entities.LicencesContext", b =>
@@ -1664,7 +1667,7 @@ namespace Clinic.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Licences", (string)null);
+                    b.ToTable("Licences");
                 });
 
             modelBuilder.Entity("Clinic.Api.Domain.Entities.LoginHistoriesContext", b =>
@@ -1689,7 +1692,7 @@ namespace Clinic.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("LoginHistories", (string)null);
+                    b.ToTable("LoginHistories");
                 });
 
             modelBuilder.Entity("Clinic.Api.Domain.Entities.MedicalAlertsContext", b =>
@@ -1723,7 +1726,7 @@ namespace Clinic.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("MedicalAlerts", (string)null);
+                    b.ToTable("MedicalAlerts");
                 });
 
             modelBuilder.Entity("Clinic.Api.Domain.Entities.MedicalNotesContext", b =>
@@ -1754,7 +1757,7 @@ namespace Clinic.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("MedicalNotes", (string)null);
+                    b.ToTable("MedicalNotes");
                 });
 
             modelBuilder.Entity("Clinic.Api.Domain.Entities.MessageBoardsContext", b =>
@@ -1785,7 +1788,7 @@ namespace Clinic.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("MessageBoards", (string)null);
+                    b.ToTable("MessageBoards");
                 });
 
             modelBuilder.Entity("Clinic.Api.Domain.Entities.MessageCommentsContext", b =>
@@ -1816,7 +1819,7 @@ namespace Clinic.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("MessageComments", (string)null);
+                    b.ToTable("MessageComments");
                 });
 
             modelBuilder.Entity("Clinic.Api.Domain.Entities.OnlineBookingsContext", b =>
@@ -1874,7 +1877,7 @@ namespace Clinic.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("OnlineBookings", (string)null);
+                    b.ToTable("OnlineBookings");
                 });
 
             modelBuilder.Entity("Clinic.Api.Domain.Entities.OutOfTurnExceptionsContext", b =>
@@ -1914,7 +1917,7 @@ namespace Clinic.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("OutOfTurnExceptions", (string)null);
+                    b.ToTable("OutOfTurnExceptions");
                 });
 
             modelBuilder.Entity("Clinic.Api.Domain.Entities.PatientFastMessagesContext", b =>
@@ -1960,7 +1963,7 @@ namespace Clinic.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("PatientFastMessages", (string)null);
+                    b.ToTable("PatientFastMessages");
                 });
 
             modelBuilder.Entity("Clinic.Api.Domain.Entities.PatientFieldsContext", b =>
@@ -2081,7 +2084,7 @@ namespace Clinic.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("PatientFields", (string)null);
+                    b.ToTable("PatientFields");
                 });
 
             modelBuilder.Entity("Clinic.Api.Domain.Entities.PatientMessagesContext", b =>
@@ -2112,7 +2115,7 @@ namespace Clinic.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("PatientMessages", (string)null);
+                    b.ToTable("PatientMessages");
                 });
 
             modelBuilder.Entity("Clinic.Api.Domain.Entities.PatientPhonesContext", b =>
@@ -2146,7 +2149,7 @@ namespace Clinic.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("PatientPhones", (string)null);
+                    b.ToTable("PatientPhones");
                 });
 
             modelBuilder.Entity("Clinic.Api.Domain.Entities.PatientsContext", b =>
@@ -2286,7 +2289,7 @@ namespace Clinic.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Patients", (string)null);
+                    b.ToTable("Patients");
                 });
 
             modelBuilder.Entity("Clinic.Api.Domain.Entities.PaymentInvoicesContext", b =>
@@ -2320,7 +2323,7 @@ namespace Clinic.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("PaymentInvoices", (string)null);
+                    b.ToTable("PaymentInvoices");
                 });
 
             modelBuilder.Entity("Clinic.Api.Domain.Entities.PaymentsContext", b =>
@@ -2369,7 +2372,7 @@ namespace Clinic.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Payments", (string)null);
+                    b.ToTable("Payments");
                 });
 
             modelBuilder.Entity("Clinic.Api.Domain.Entities.PeriodsContext", b =>
@@ -2385,7 +2388,7 @@ namespace Clinic.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Periods", (string)null);
+                    b.ToTable("Periods");
                 });
 
             modelBuilder.Entity("Clinic.Api.Domain.Entities.PhoneNoTypesContext", b =>
@@ -2401,7 +2404,7 @@ namespace Clinic.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("PhoneNoTypes", (string)null);
+                    b.ToTable("PhoneNoTypes");
                 });
 
             modelBuilder.Entity("Clinic.Api.Domain.Entities.PractitionerTimeExceptionsContext", b =>
@@ -2432,7 +2435,7 @@ namespace Clinic.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("PractitionerTimeExceptions", (string)null);
+                    b.ToTable("PractitionerTimeExceptions");
                 });
 
             modelBuilder.Entity("Clinic.Api.Domain.Entities.PreAppointmentsContext", b =>
@@ -2481,7 +2484,7 @@ namespace Clinic.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("PreAppointments", (string)null);
+                    b.ToTable("PreAppointments");
                 });
 
             modelBuilder.Entity("Clinic.Api.Domain.Entities.ProductCardexesContext", b =>
@@ -2524,7 +2527,7 @@ namespace Clinic.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ProductCardexes", (string)null);
+                    b.ToTable("ProductCardexes");
                 });
 
             modelBuilder.Entity("Clinic.Api.Domain.Entities.ProductsContext", b =>
@@ -2573,7 +2576,7 @@ namespace Clinic.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Products", (string)null);
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("Clinic.Api.Domain.Entities.QuestionValuesContext", b =>
@@ -2601,7 +2604,7 @@ namespace Clinic.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("QuestionValues", (string)null);
+                    b.ToTable("QuestionValues");
                 });
 
             modelBuilder.Entity("Clinic.Api.Domain.Entities.QuestionsContext", b =>
@@ -2647,7 +2650,7 @@ namespace Clinic.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Questions", (string)null);
+                    b.ToTable("Questions");
                 });
 
             modelBuilder.Entity("Clinic.Api.Domain.Entities.RecallTypesContext", b =>
@@ -2681,7 +2684,7 @@ namespace Clinic.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("RecallTypes", (string)null);
+                    b.ToTable("RecallTypes");
                 });
 
             modelBuilder.Entity("Clinic.Api.Domain.Entities.RecallsContext", b =>
@@ -2724,7 +2727,7 @@ namespace Clinic.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Recalls", (string)null);
+                    b.ToTable("Recalls");
                 });
 
             modelBuilder.Entity("Clinic.Api.Domain.Entities.ReceiptInvoicesContext", b =>
@@ -2758,7 +2761,7 @@ namespace Clinic.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ReceiptInvoices", (string)null);
+                    b.ToTable("ReceiptInvoices");
                 });
 
             modelBuilder.Entity("Clinic.Api.Domain.Entities.ReceiptTypesContext", b =>
@@ -2786,7 +2789,7 @@ namespace Clinic.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ReceiptTypes", (string)null);
+                    b.ToTable("ReceiptTypes");
                 });
 
             modelBuilder.Entity("Clinic.Api.Domain.Entities.ReceiptsContext", b =>
@@ -2835,7 +2838,7 @@ namespace Clinic.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Receipts", (string)null);
+                    b.ToTable("Receipts");
                 });
 
             modelBuilder.Entity("Clinic.Api.Domain.Entities.ReferralSourcesContext", b =>
@@ -2863,7 +2866,7 @@ namespace Clinic.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ReferralSources", (string)null);
+                    b.ToTable("ReferralSources");
                 });
 
             modelBuilder.Entity("Clinic.Api.Domain.Entities.RelatedPatientsContext", b =>
@@ -2897,7 +2900,7 @@ namespace Clinic.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("RelatedPatients", (string)null);
+                    b.ToTable("RelatedPatients");
                 });
 
             modelBuilder.Entity("Clinic.Api.Domain.Entities.RelationsContext", b =>
@@ -2913,7 +2916,7 @@ namespace Clinic.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Relations", (string)null);
+                    b.ToTable("Relations");
                 });
 
             modelBuilder.Entity("Clinic.Api.Domain.Entities.ReminderTypesContext", b =>
@@ -2929,7 +2932,7 @@ namespace Clinic.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ReminderTypes", (string)null);
+                    b.ToTable("ReminderTypes");
                 });
 
             modelBuilder.Entity("Clinic.Api.Domain.Entities.RolesContext", b =>
@@ -3296,7 +3299,7 @@ namespace Clinic.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Roles", (string)null);
+                    b.ToTable("Roles");
                 });
 
             modelBuilder.Entity("Clinic.Api.Domain.Entities.SMSSettingsContext", b =>
@@ -3330,7 +3333,7 @@ namespace Clinic.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("SMSSettings", (string)null);
+                    b.ToTable("SMSSettings");
                 });
 
             modelBuilder.Entity("Clinic.Api.Domain.Entities.SchedulesContext", b =>
@@ -3379,7 +3382,7 @@ namespace Clinic.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Schedules", (string)null);
+                    b.ToTable("Schedules");
                 });
 
             modelBuilder.Entity("Clinic.Api.Domain.Entities.SectionsContext", b =>
@@ -3410,7 +3413,7 @@ namespace Clinic.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Sections", (string)null);
+                    b.ToTable("Sections");
                 });
 
             modelBuilder.Entity("Clinic.Api.Domain.Entities.StockAdjustmentTypesContext", b =>
@@ -3432,7 +3435,7 @@ namespace Clinic.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("StockAdjustmentTypes", (string)null);
+                    b.ToTable("StockAdjustmentTypes");
                 });
 
             modelBuilder.Entity("Clinic.Api.Domain.Entities.TimeExceptionTypesContext", b =>
@@ -3448,7 +3451,7 @@ namespace Clinic.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("TimeExceptionTypes", (string)null);
+                    b.ToTable("TimeExceptionTypes");
                 });
 
             modelBuilder.Entity("Clinic.Api.Domain.Entities.TimeExceptionsContext", b =>
@@ -3518,7 +3521,7 @@ namespace Clinic.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("TimeExceptions", (string)null);
+                    b.ToTable("TimeExceptions");
                 });
 
             modelBuilder.Entity("Clinic.Api.Domain.Entities.TitlesContext", b =>
@@ -3534,7 +3537,7 @@ namespace Clinic.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Titles", (string)null);
+                    b.ToTable("Titles");
                 });
 
             modelBuilder.Entity("Clinic.Api.Domain.Entities.TreatmentTemplatesContext", b =>
@@ -3580,7 +3583,7 @@ namespace Clinic.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("TreatmentTemplates", (string)null);
+                    b.ToTable("TreatmentTemplates");
                 });
 
             modelBuilder.Entity("Clinic.Api.Domain.Entities.TreatmentsContext", b =>
@@ -3623,7 +3626,7 @@ namespace Clinic.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Treatments", (string)null);
+                    b.ToTable("Treatments");
                 });
 
             modelBuilder.Entity("Clinic.Api.Domain.Entities.UserAppointmentsContext", b =>
@@ -3675,7 +3678,7 @@ namespace Clinic.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("UserAppointment", (string)null);
+                    b.ToTable("UserAppointment");
                 });
 
             modelBuilder.Entity("Clinic.Api.Domain.Entities.UserBusinessesContext", b =>
@@ -3712,7 +3715,7 @@ namespace Clinic.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("UserBusinesses", (string)null);
+                    b.ToTable("UserBusinesses");
                 });
 
             modelBuilder.Entity("Clinic.Api.Domain.Entities.UserContext", b =>
@@ -3794,7 +3797,7 @@ namespace Clinic.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("Clinic.Api.Domain.Entities.UserPhonesContext", b =>
@@ -3828,7 +3831,7 @@ namespace Clinic.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("UserPhones", (string)null);
+                    b.ToTable("UserPhones");
                 });
 
             modelBuilder.Entity("Clinic.Api.Domain.Entities.WaitListBusinessesContext", b =>
@@ -3859,7 +3862,7 @@ namespace Clinic.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("WaitListBusinesses", (string)null);
+                    b.ToTable("WaitListBusinesses");
                 });
 
             modelBuilder.Entity("Clinic.Api.Domain.Entities.WaitListPractitionersContext", b =>
@@ -3890,7 +3893,7 @@ namespace Clinic.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("WaitListPractitioners", (string)null);
+                    b.ToTable("WaitListPractitioners");
                 });
 
             modelBuilder.Entity("Clinic.Api.Domain.Entities.WaitListsContext", b =>
@@ -3948,7 +3951,7 @@ namespace Clinic.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("WaitLists", (string)null);
+                    b.ToTable("WaitLists");
                 });
 #pragma warning restore 612, 618
         }

@@ -21,5 +21,6 @@
         public int? ReferringInpatientInsurerId { get; set; }
         public int? PatientCode { get; set; }
         public int EditOrNew { get; set; }
+        public string Mobile { get; set; }
     }
 }
