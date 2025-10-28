@@ -23,8 +23,8 @@ export const PatientMenu: imenu[] = [
   { id: 2, text: "پیوست ها", link: '/patient/attachment', roleAccess: [], icon: '' },
   { id: 3, text: "وقت ها", link: '/patient/appointments', roleAccess: [], icon: '' },
   { id: 4, text: "صورتحساب ها", link: '/patient/invoice', roleAccess: [], icon: '' },
-  { id: 5, text: "دریافت ها", link: '/', roleAccess: [], icon: '' },
-  { id: 6, text: "پرداخت ها", link: '/', roleAccess: [], icon: '' },
+  { id: 5, text: "دریافت ها", link: '/patient/receipt', roleAccess: [], icon: '' },
+  { id: 6, text: "پرداخت ها", link: '/patient/payment', roleAccess: [], icon: '' },
   { id: 7, text: "پیامک ها", link: '/', roleAccess: [], icon: '' },
 ];
 

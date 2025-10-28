@@ -25,10 +25,7 @@ export const Menu: imenu[] = [
   { id: 7, text: "هزینه ها", link: '/expenses', roleAccess: [], icon: 'fa fa-money' },
   { id: 8, text: "اشخاص", link: '/contacts', roleAccess: [], icon: 'fa fa-user' },
   { id: 9, text: "گزارشات", link: '/report/business-report', roleAccess: [], icon: 'fa fa-bar-chart' },
-  // { id: 10, text: "راهنما", link: '/', roleAccess: [], icon: 'fa fa-info-circle' },
 ];
-
-
 
 @Component({
   selector: 'app-navbar',

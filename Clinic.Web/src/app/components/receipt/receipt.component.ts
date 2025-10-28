@@ -33,14 +33,24 @@ export class ReceiptComponent {
   patientsList: any;
   checkRout: any;
   isPayment: boolean = false;
+  petientId: any;
+  patientSelected: any;
+  isPatientReceipt: boolean = false;
   patientId: any;
+
   async ngOnInit() {
     this.checkRout = this.activeRoute.snapshot.routeConfig.path;
-    this.patientId = this.activeRoute.snapshot.paramMap.get('id')
+    this.petientId = +this.activeRoute.snapshot.paramMap.get('id') || null;
     this.isPayment = this.checkRout === "payment" ? true : false;
     await this.getPatients();
-    this.newReceiptModel.selectedPatient = this.patientsList.filter(patient => patient.id == this.patientId)[0];
+        this.newReceiptModel.selectedPatient = this.patientsList.filter(patient => patient.id == this.patientId)[0];
+
+    if (this.petientId != null) {
+      this.isPatientReceipt = true;
+      this.patientSelect();
+    }
   }
+
   async getPatients() {
     try {
       let res: any = await this.patientService.getPatients().toPromise();
@@ -119,5 +129,9 @@ export class ReceiptComponent {
   }
   sumNumber() {
     this.newReceiptModel.sum = (this.newReceiptModel.eftPos | 0) + (this.newReceiptModel.cash | 0);
+  }
+  patientSelect() {
+    this.newReceiptModel.selectedPatient = this.patientsList.filter(x => x.id == this.petientId)[0];
+    console.log(this.patientSelected);
   }
 }
