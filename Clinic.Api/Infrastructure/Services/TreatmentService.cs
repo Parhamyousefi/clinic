@@ -291,7 +291,11 @@ namespace Clinic.Api.Infrastructure.Services
                         TotalDiscount = invoices
             .Where(i => i.AppointmentId == appointmentId && (i.IsCanceled == false || i.IsCanceled == null))
             .Select(i => i.TotalDiscount)
-            .FirstOrDefault()
+            .FirstOrDefault(),
+                        InvoiceId = invoices
+                        .Where(i => i.AppointmentId == appointmentId && (i.IsCanceled == false || i.IsCanceled == null))
+                        .Select(i => i.Id)
+                        .FirstOrDefault()
                     };
                 }).ToList();
 
