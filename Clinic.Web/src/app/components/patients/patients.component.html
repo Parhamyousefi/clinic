@@ -43,12 +43,8 @@
                     <td>
                         <button class="btn btn-outline-secondary mx-1"
                             [routerLink]="'/patient/info/' + patient.id">جزئیات</button>
-                        <button class="btn main-btn mx-1" *ngIf="!patient.phoneNum"
-                            (click)="openAddPhoneNumModal(patient.id)">افزودن شماره
+                        <button class="btn main-btn mx-1" (click)="openAddPhoneNumModal(patient.id)">افزودن شماره
                             تلفن</button>
-                        <button class="btn main-btn" *ngIf="patient.phoneNum"
-                            (click)="editPhoneNum(patient.patientPhone)">ویرایش
-                            شماره تلفن</button>
                         <button class="btn main-outline-btn mx-1" (click)="editPatient(patient)">ویرایش</button>
                         <button class="btn btn-outline-danger mx-1" (click)="deletePatient(patient.id)">حذف</button>
                     </td>
@@ -196,14 +192,6 @@
 
     <p-dialog id="add-phone-modal" [(visible)]="showAddPhoneNum" [closable]="false"
         [ngClass]="{'modalShadow' : showAddPhoneNum}" class="p-2">
-        <p-header>
-            <div class="col-12 d-flex justify-content-between p-0">
-                <div class="col-6 text-right d-flex align-items-center">شماره تلفن</div>
-                <div class="col-6"><button class="btn btn-outline-danger"
-                        (click)="deletePatientPhone(selectedEditPhoneNum)" *ngIf="hasPhoneNum">حذف شماره
-                        تلفن</button></div>
-            </div>
-        </p-header>
         <div class="col-12 create-phone-num-modal d-flex justify-content-between align-items-center">
             <div class="col-6 text-right">
                 <label for="phoneNum">شماره تلفن</label>
@@ -219,6 +207,42 @@
         <div class="col-12 mt-5 text-center">
             <button class="btn main-btn px-3 py-2 mx-1" (click)="savePhone()">ثبت</button>
             <button class="btn btn-outline-danger px-3 py-2 mx-1" (click)="closeAddPhoneNum()">انصراف</button>
+        </div>
+
+        <div class="col-12 mt-3">
+            <p-table id="patientsTable" #dt styleClass="" class="patients-table" [value]="patientPhoneList"
+                [pageLinks]="20" [autoLayout]="true" [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
+                currentPageReportTemplate="نمایش {first} تا {last} " [rowsPerPageOptions]="[10,25,50]">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th pSortableColumn="rowIndex">ردیف
+                            <p-sortIcon field="rowIndex"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="typeText">شماره تلفن
+                            <p-sortIcon field="typeText"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="phoneNoTypeId">نوع
+                            <p-sortIcon field="phoneNoTypeId"></p-sortIcon>
+                        </th>
+                      <th>عملیات</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-patient let-rowIndex="rowIndex">
+                    <tr>
+                        <td> {{rowIndex+1}}</td>
+                        <td>
+                            {{patient.number}}
+                        </td>
+                        <td>
+                            {{patient.typeText}}
+                        </td>
+                        <td>
+                            <button class="btn btn-outline-danger mx-1" (click)="deletePatientPhone(patient.id)">حذف</button>
+                            <button class="btn main-btn mx-1" (click)="editPhoneNum(patient)">ویرایش</button>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
         </div>
     </p-dialog>
 </div>
