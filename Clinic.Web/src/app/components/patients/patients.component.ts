@@ -13,10 +13,11 @@ import { DropdownModule } from 'primeng/dropdown';
 import { ToastrModule, ToastrService } from 'ngx-toastr';
 import { firstValueFrom } from 'rxjs';
 import swal from 'sweetalert2';
+import { NewContactComponent } from '../contacts/new-contact/new-contact.component';
 @Component({
   selector: 'app-patients',
   standalone: true,
-  imports: [TableModule, FormsModule, SelectButtonModule, DialogModule, CommonModule, SelectButtonModule, InputMaskModule, DropdownModule, RouterLink],
+  imports: [TableModule, FormsModule, SelectButtonModule, DialogModule, CommonModule, SelectButtonModule, InputMaskModule, DropdownModule, RouterLink, NewContactComponent],
   templateUrl: './patients.component.html',
   styleUrl: './patients.component.css'
 })
@@ -57,6 +58,7 @@ export class PatientsComponent {
   selectedEditPhoneNum: any;
   selectedEditPhonePatientId: any;
   hasPhoneNum: boolean;
+  displayDialog: boolean = false;
   constructor(
     private patientService: PatientService,
     private router: Router,
@@ -116,16 +118,11 @@ export class PatientsComponent {
       editOrNew: this.editpatientMode ? this.newPatient.id : -1,
       mobile: this.newPatient.mobile,
     }
-    if (this.newPatient.firstName && this.newPatient.lastName && this.newPatient.gender && this.newPatient.fatherName && this.newPatient.birthDate && this.newPatient.job) {
-      let res: any = await firstValueFrom(this.patientService.savePatient(model));
-      if (res) {
-        this.toastR.success('با موفقیت ثبت شد!');
-        this.closeCreatePatientModal();
-        this.getPatients();
-      }
-    }
-    else {
-      this.toastR.error('خطا', 'مقادیر را به درستی وارد کنید');
+    let res: any = await firstValueFrom(this.patientService.savePatient(model));
+    if (res) {
+      this.toastR.success('با موفقیت ثبت شد!');
+      this.closeCreatePatientModal();
+      this.getPatients();
     }
   }
 
@@ -279,5 +276,11 @@ export class PatientsComponent {
         this.toastR.error('خطایی رخ داد', 'خطا!')
       }
     })
+  }
+
+  async closeModal(data) {
+    this.displayDialog = false;
+    await this.getContacts();
+    this.newPatient.referringContactId = this.contactsList.filter(x => x.firstName == data.firstName)[0];
   }
 }

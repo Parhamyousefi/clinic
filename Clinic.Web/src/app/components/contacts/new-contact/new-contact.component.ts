@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { DropdownModule } from "primeng/dropdown";
 import { ContactService } from '../../../_services/contact.service';
@@ -36,6 +36,8 @@ export class NewContactComponent {
   selectedEditContactId: any;
   editMode: boolean;
   selectedEditContact: any;
+  isCurrentUrl: any;
+  @Output() closeModal = new EventEmitter<any>();
 
   constructor(
     private contactService: ContactService,
@@ -48,12 +50,21 @@ export class NewContactComponent {
   }
 
   ngOnInit() {
-    this.selectedEditContactId = this.activeRoute.snapshot.paramMap.get('id');
+    if (this.router.url.startsWith('/new-contact')) {
+      this.isCurrentUrl = true;
+      this.selectedEditContactId = this.activeRoute.snapshot.paramMap.get('id');
+    } else {
+      this.isCurrentUrl = false;
+      this.selectedEditContactId = -1
+    }
+
     // this.getContactData();
     this.getContactTypes();
     this.getJobs();
     this.getCountries();
-    this.editSelectedContact(this.selectedEditContactId);
+    if(this.selectedEditContactId != -1){
+      this.editSelectedContact(this.selectedEditContactId);
+    }
   }
 
   async getContactTypes() {
@@ -91,30 +102,34 @@ export class NewContactComponent {
   async saveContact() {
     try {
       let model = {
-        "contactTypeId": this.newContactModel.selectedType,
-        "titleId": this.newContactModel.selectedTitle.code,
-        "firstName": this.newContactModel.firstName,
-        "lastName": this.newContactModel.lastName,
-        "preferredName": this.newContactModel.mainName,
+        "contactTypeId": this.newContactModel.selectedType || null,
+        "titleId": this.newContactModel.selectedTitle?.code || null,
+        "firstName": this.newContactModel.firstName || null,
+        "lastName": this.newContactModel.lastName || null,
+        "preferredName": this.newContactModel.mainName || null,
         "occupation": null,
-        "companyName": this.newContactModel.coName,
+        "companyName": this.newContactModel.coName || null,
         "providerNumber": null,
-        "email": this.newContactModel.email,
-        "address1": this.newContactModel.address,
+        "email": this.newContactModel.email || null,
+        "address1": this.newContactModel.address || null,
         "address2": null,
         "address3": null,
-        "city": this.newContactModel.city,
+        "city": this.newContactModel.city || null,
         "state": null,
-        "postCode": this.newContactModel.postalCode,
-        "countryId": this.newContactModel.country.code,
+        "postCode": this.newContactModel.postalCode || null,
+        "countryId": this.newContactModel.country?.code || null,
         "notes": null,
-        "jobId": this.newContactModel.selectedJob.code,
-        "editOrNew": this.selectedEditContactId
+        "jobId": this.newContactModel.selectedJob?.code || null,
+        "editOrNew": this.selectedEditContactId 
       }
       let res: any = await this.contactService.saveContact(model).toPromise();
       if (res['status'] == 0) {
         this.toastR.success('با موفقیت ثبت شد');
-        this.router.navigate(['/contacts'])
+        if (this.isCurrentUrl) {
+          this.router.navigate(['/contacts']);
+        } else {
+          this.close(model);
+        }
       }
     }
     catch {
@@ -142,5 +157,10 @@ export class NewContactComponent {
       this.newContactModel.selectedJob = this.jobsList.filter(job => job.id == selectedEditContact.countryId)[0];
     }
   }
+
+  close(modal) {
+    this.closeModal.emit(modal);
+  }
+
 
 }
