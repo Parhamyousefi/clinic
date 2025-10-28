@@ -20,8 +20,16 @@
         <p-accordionTab [header]="item.name" [selected]="index== 0? true: false">
           <div class="Service-box mb-3 pointer" *ngFor="let value of item.values">
             <p class="Service-box-header mb-0">{{value.billableItemName}}</p>
-            <p class=" text-center mb-1">{{value.createdDate | JustDateZone}}</p>
-            <p class=" text-center mb-1">{{value.doctorName}}</p>
+            <div class="service"
+              [ngClass]="{'selected-servise': selectedService?.['invoiceItemId'] == value.invoiceItemId}"
+              (click)="onClick($event,value,1)">
+              <p class=" text-center mb-1">
+                {{value.createdDate | JustDateZone}}
+              </p>
+              <p class="service text-center mb-1">
+                {{value.doctorName}}
+              </p>
+            </div>
           </div>
         </p-accordionTab>
       </p-accordion>

@@ -80,5 +80,21 @@ namespace Clinic.Api.Controllers
             var result = await _reportService.GetIncomeReportDetails(model);
             return Ok(result);
         }
+
+        [HttpPost("getOutPatientSummaryReport")]
+        [Authorize("Admin","Doctor")]
+        public async Task<IActionResult> GetOutPatientSummaryReport(OutPatientReportFilterDto model)
+        {
+            var result = await _reportService.GetOutPatientSummaryReport(model);
+            return Ok(result);
+        }
+
+        [HttpPost("getOutPatientReportBasedOnCreator")]
+        [Authorize("Admin","Doctor")]
+        public async Task<IActionResult> GetOutPatientReportBasedOnCreator(OutPatientReportFilterDto model)
+        {
+            var result = await _reportService.GetOutPatientReportBasedOnCreator(model);
+            return Ok(result);
+        }
     }
 }

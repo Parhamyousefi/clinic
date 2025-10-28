@@ -100,3 +100,12 @@
   width: 80px;
   height: 80px;
 }
+
+
+.service:hover {
+  color: #00c4b4;
+}
+
+.selected-servise {
+  color: #00c4b4;
+}

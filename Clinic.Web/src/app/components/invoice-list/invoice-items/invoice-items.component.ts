@@ -26,7 +26,7 @@ export class InvoiceItemsComponent implements OnInit {
   servicesList: any = [];
   selectedservice: any;
   type = 1;
-  number: number;
+  number: number = 1;
   discount: any = null;
   price: any;
   amount: any;
@@ -36,7 +36,7 @@ export class InvoiceItemsComponent implements OnInit {
   totalDiscount: number;
   @Input('invoiceId')
   set invoiceId(invoiceId: number) {
-    if (invoiceId !== null) {
+    if (invoiceId != -1 || invoiceId != null) {
       this._invoiceId = invoiceId;
       this.getBillableItems();
       this.getProducts();
@@ -80,14 +80,14 @@ export class InvoiceItemsComponent implements OnInit {
   hadelType(type) {
     this.type = type;
     this.paymentType = null;
-    this.number = null;
+    this.number = 1;
     this.discount = null;
     this.amount = null;
   }
 
   selectedItemMetod() {
     this.paymentType = null;
-    this.number = null;
+    this.number = 1;
     this.discount = null;
     this.amount = null;
     if (this.type == 1) {
@@ -115,7 +115,7 @@ export class InvoiceItemsComponent implements OnInit {
   }
 
   async saveInvoiceItem() {
-    if (!this.number || this.discount == null || !this.paymentType || (!this.selectedservice && this.type == 1) || (this.type == 2 && !this.selectedProduct)) {
+    if ((!this.selectedservice && this.type == 1) || (this.type == 2 && !this.selectedProduct)) {
       this.toastR.error('خطا', 'مقادیر را وارد کنید');
       return
     }
@@ -133,7 +133,7 @@ export class InvoiceItemsComponent implements OnInit {
       if (res.status == 0) {
         this.toastR.success('با موفقیت ثبت شد!');
         this.paymentType = null;
-        this.number = null;
+        this.number = 1;
         this.discount = null;
         this.amount = null;
         this.selectedservice = null;
@@ -170,6 +170,8 @@ export class InvoiceItemsComponent implements OnInit {
   calculateAmount(paymentType: number, price: number, number: number, discount: number): any {
     const totalPrice = price * number;
     switch (paymentType) {
+      case 0:
+        return totalPrice;
       case 1:
         return totalPrice - discount;
       case 2:

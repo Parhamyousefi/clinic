@@ -33,6 +33,6 @@ export class InvoiceListComponent implements OnInit {
   }
 
   goToEditPage(id, type) {
-    this.router.navigate(['/new-invoice/' + id + '/' + type])
+    this.router.navigate(['/new-invoice', id, "n", "n", "n", type]);
   }
 }

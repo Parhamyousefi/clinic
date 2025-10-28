@@ -1,55 +1,56 @@
 <div class="appContainer">
-    <div class="col-12 text-right">
-        <h4> صورت حساب جدید</h4>
+  <div class="col-12 text-right">
+    <h4> صورت حساب جدید</h4>
+  </div>
+  <hr>
+  <div class="col-12 text-left">
+    <button *ngIf="type == 1" class="btn btn-danger" (click)="goToEditPage()">ویرایش</button>
+    <button *ngIf="editOrNew != -1" class="btn btn-warning" (click)="savereceipt()">دخیره دریافت</button>
+  </div>
+
+  <div *ngIf="type == 2" class="col-12">
+    <div class="d-lg-flex align-items-baseline my-3">
+      <div class="col-lg-4 col-12">
+        <p-dropdown [options]="clinicsList" placeholder="مکان" [(ngModel)]="selectedClinic" optionLabel="name"
+          dataKey="id" class="full-width text-right" [disabled]="selectedClinicId !=null" />
+      </div>
+      <div class="col-lg-4 col-12">
+        <p-dropdown [options]="patientsList" placeholder="بیمار" [(ngModel)]="selectedPatient" optionLabel="name"
+          dataKey="id" class="full-width text-right" (ngModelChange)="getPatientAppointments()"
+          [disabled]="patientId !=null" />
+      </div>
+      <div class="col-lg-4 col-12">
+        <p-dropdown [options]="patientAppointmentsList" placeholder="وقت" [(ngModel)]="selectedPatientAppointment"
+          optionLabel="name" dataKey="id" class="full-width text-right" [disabled]="selectedappointmentId !=null" />
+      </div>
     </div>
-    <hr>
-    <div *ngIf="type == 1" class="col-12 text-left">
-        <button class="btn btn-danger" (click)="goToEditPage()">ویرایش</button>
+    <div class="col-lg-8 col-12 my-3">
+      <textarea class="form-control" placeholder="یادداشت" [(ngModel)]="note" name="" id=""></textarea>
     </div>
-    <div *ngIf="type == 2" class="col-12">
-        <div class="d-lg-flex align-items-baseline my-3">
-            <div class="col-lg-4 col-12">
-                <p-dropdown [options]="clinicsList" placeholder="مکان" [(ngModel)]="selectedClinic" optionLabel="name"
-                    dataKey="id" class="full-width text-right" />
-            </div>
-            <div class="col-lg-4 col-12">
-                <p-dropdown [options]="patientsList" placeholder="بیمار" [(ngModel)]="selectedPatient"
-                    optionLabel="name" dataKey="id" class="full-width text-right"
-                    (ngModelChange)="getPatientAppointments()" />
-            </div>
-            <div class="col-lg-4 col-12">
-                <p-dropdown [options]="patientAppointmentsList" placeholder="وقت"
-                    [(ngModel)]="selectedPatientAppointment" optionLabel="name" dataKey="id"
-                    class="full-width text-right" />
-            </div>
-        </div>
-        <div class="col-lg-8 col-12 my-3">
-            <textarea class="form-control" placeholder="یادداشت" [(ngModel)]="note" name="" id=""></textarea>
-        </div>
-        <div class="col-12 text-center">
-            <button class="btn btn-danger" (click)="saveInvoice()">ذخیره</button>
-        </div>
+    <div class="col-12 text-center">
+      <button class="btn btn-danger" (click)="saveInvoice()">ذخیره</button>
     </div>
-    <div *ngIf="type == 1" class="col-12 text-right">
-        <div class="col-12">
-            <h6>مکان</h6>
-            <p>{{selectedClinicTitle}}</p>
-        </div>
-        <div class="col-12">
-            <h6>بیمار</h6>
-            <p>{{selectedPatientTitle}}</p>
-        </div>
-        <div class="col-lg-4 col-12 my-3">
-            <h6>وقت</h6>
-            <p-dropdown [options]="patientAppointmentsList" [disabled]="true" [(ngModel)]="selectedPatientAppointment"
-                optionLabel="name" dataKey="id" class="full-width text-right" />
-        </div>
-        <div class="col-12">
-            <h6>یادداشت</h6>
-            <p>{{note}}</p>
-        </div>
+  </div>
+  <div *ngIf="type == 1" class="col-12 text-right">
+    <div class="col-12">
+      <h6>مکان</h6>
+      <p>{{selectedClinicTitle}}</p>
     </div>
-    <div class="col-12 mt-3">
-        <app-invoice-items [invoiceId]="editOrNew" [viewOrEdit]="type"></app-invoice-items>
+    <div class="col-12">
+      <h6>بیمار</h6>
+      <p>{{selectedPatientTitle}}</p>
     </div>
+    <div class="col-lg-4 col-12 my-3">
+      <h6>وقت</h6>
+      <p-dropdown [options]="patientAppointmentsList" [disabled]="true" [(ngModel)]="selectedPatientAppointment"
+        optionLabel="name" dataKey="id" class="full-width text-right" />
+    </div>
+    <div class="col-12">
+      <h6>یادداشت</h6>
+      <p>{{note}}</p>
+    </div>
+  </div>
+  <div class="col-12 mt-3">
+    <app-invoice-items [invoiceId]="editOrNew" [viewOrEdit]="type"></app-invoice-items>
+  </div>
 </div>

@@ -13,5 +13,7 @@ namespace Clinic.Api.Application.Interfaces
         Task<IEnumerable<GetPractitionerIncomeReportResponse>> GetPractitionerIncome(IncomeReportFilterDto model);
         Task<IEnumerable<GetBusinessIncomeReportResponse>> GetBusinessIncome(IncomeReportFilterDto model);
         Task<IEnumerable<GetIncomeReportDetailResponse>> GetIncomeReportDetails(IncomeReportFilterDto model);
+        Task<GlobalResponse> GetOutPatientSummaryReport(OutPatientReportFilterDto model);
+        Task<GlobalResponse> GetOutPatientReportBasedOnCreator(OutPatientReportFilterDto model);
     }
 }
