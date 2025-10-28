@@ -83,6 +83,7 @@ namespace Clinic.Api.Infrastructure.Services
                     _context.Appointments.Update(existingAppointment);
                     await _context.SaveChangesAsync();
                     result.Data = existingAppointment.Id;
+                    result.Message = "Appointment Updated Successfully";
                     result.Status = 0;
                     return result;
                 }
@@ -191,11 +192,7 @@ namespace Clinic.Api.Infrastructure.Services
                 {
                     var fromDate = model.FromDate.Value.Date;
                     var toDate = model.ToDate.Value.Date;
-
-                    query = query.Where(a =>
-                         a.Start.Date <= fromDate &&
-                          a.End.Date >= toDate
-                            );
+                    query = query.Where(a => a.Start.Date >= fromDate && a.End.Date <= toDate);
                 }
 
                 if (model.Clinic.HasValue)
@@ -205,11 +202,9 @@ namespace Clinic.Api.Infrastructure.Services
                 {
                     var from = model.From.Value;
                     var to = model.To.Value;
-
                     query = query.Where(a =>
-           (a.Start.Hour > from.Hour || (a.Start.Hour == from.Hour && a.Start.Minute >= from.Minute)) &&
-           (a.Start.Hour < to.Hour || (a.Start.Hour == to.Hour && a.Start.Minute <= to.Minute))
-       );
+                        (a.Start.Hour > from.Hour || (a.Start.Hour == from.Hour && a.Start.Minute >= from.Minute)) &&
+                        (a.Start.Hour < to.Hour || (a.Start.Hour == to.Hour && a.Start.Minute <= to.Minute)));
                 }
 
                 if (model.Service.HasValue)
@@ -217,36 +212,90 @@ namespace Clinic.Api.Infrastructure.Services
                     int serviceId = model.Service.Value;
 
                     query = query.Where(a =>
-                          _context.Treatments.Any(t =>
-                             t.AppointmentId == a.Id &&
-                              t.TreatmentTemplateId == serviceId
-                                    ) &&
-                              _context.BillableItems.Any(b =>
-                                    b.TreatmentTemplateId == serviceId
-                            )
-                       );
+                        (from t in _context.Treatments
+                         join b in _context.BillableItems on t.TreatmentTemplateId equals b.TreatmentTemplateId
+                         where t.AppointmentId == a.Id && b.Id == serviceId
+                         select t).Any());
                 }
 
-                var result = await (from a in query
-                                    join p in _context.Patients on a.PatientId equals p.Id
-                                    join u in _context.Users on a.PractitionerId equals u.Id
-                                    join at in _context.AppointmentTypes on a.AppointmentTypeId equals at.Id
-                                    from t in _context.Treatments.Where(t => t.AppointmentId == a.Id).DefaultIfEmpty()
-                                    from b in _context.BillableItems.Where(b => b.TreatmentTemplateId == t.TreatmentTemplateId).DefaultIfEmpty()
+                var result = await (
+       from a in query
+       join p in _context.Patients on a.PatientId equals p.Id
+       join u in _context.Users on a.PractitionerId equals u.Id
+       join at in _context.AppointmentTypes on a.AppointmentTypeId equals at.Id
+       join ph in _context.PatientPhones on p.Id equals ph.PatientId into phoneGroup
+       from ph in phoneGroup.OrderByDescending(x => x.CreatedOn).Take(1).DefaultIfEmpty()
+       select new
+       {
+           Appointment = a,
+           Patient = p,
+           Practitioner = u,
+           AppointmentType = at,
+           PhoneNumber = ph != null ? ph.Number : null
+       }
+   ).ToListAsync();
 
-                                    select new GetTodayAppointmentsInfoDto
-                                    {
-                                        Id = a.Id,
-                                        Time = a.Start.ToString("HH:mm"),
-                                        Date = a.Start.Date,
-                                        PatientName = p.FirstName + " " + p.LastName,
-                                        AppointmentTypeName = at.Name,
-                                        BillableItemName = b != null ? b.Name : string.Empty,
-                                        PractitionerName = u.FirstName + " " + u.LastName
-                                    })
-           .ToListAsync();
 
-                return result;
+                var appointmentIds = result.Select(r => r.Appointment.Id).ToList();
+                var appointmentIdsNullable = appointmentIds.Select(id => (int?)id).ToList();
+
+                var treatments = await _context.Treatments
+                    .Where(t => t.AppointmentId != null && appointmentIdsNullable.Contains(t.AppointmentId))
+                    .ToListAsync();
+
+                var treatmentTemplateIds = treatments
+                    .Select(t => t.TreatmentTemplateId)
+                    .Distinct()
+                    .ToList();
+
+                var billableItems = await _context.BillableItems
+                    .Where(b => b.TreatmentTemplateId != null && treatmentTemplateIds.Contains(b.TreatmentTemplateId.Value))
+                    .ToListAsync();
+
+                var invoices = await _context.Invoices
+                    .Where(i => i.AppointmentId != null && appointmentIds.Contains(i.AppointmentId.Value))
+                    .ToListAsync();
+
+                var final = result.Select(r =>
+                {
+                    var appointmentId = r.Appointment.Id;
+                    var hasInvoice = invoices.Any(i => i.AppointmentId == appointmentId && (i.IsCanceled == false || i.IsCanceled == null));
+                    var relatedTreatments = treatments.Where(t => t.AppointmentId == appointmentId).ToList();
+                    var hasTreatment = relatedTreatments.Any();
+
+                    var relatedTemplateIds = relatedTreatments
+                        .Select(t => t.TreatmentTemplateId)
+                        .Distinct()
+                        .ToList();
+
+                    var relatedBillableNames = billableItems
+                        .Where(b => b.TreatmentTemplateId != null && relatedTemplateIds.Contains(b.TreatmentTemplateId.Value))
+                        .Select(b => b.Name)
+                        .Distinct()
+                        .ToList();
+
+                    return new GetTodayAppointmentsInfoDto
+                    {
+                        Id = appointmentId,
+                        Date = r.Appointment.Start.Date,
+                        Time = r.Appointment.Start.ToString("HH:mm"),
+                        PatientName = (r.Patient.FirstName + " " + r.Patient.LastName).Trim(),
+                        PatientId = r.Patient.Id,
+                        PractitionerName = (r.Practitioner.FirstName + " " + r.Practitioner.LastName).Trim(),
+                        AppointmentTypeName = r.AppointmentType.Name,
+                        BillableItemNames = relatedBillableNames.ToList(),
+                        Status = !hasInvoice && !hasTreatment ? 1 :
+                                 hasInvoice && !hasTreatment ? 2 :
+                                 hasInvoice && hasTreatment ? 3 : 0,
+                        PatientPhone = r.PhoneNumber,
+                        TotalDiscount = invoices
+            .Where(i => i.AppointmentId == appointmentId && (i.IsCanceled == false || i.IsCanceled == null))
+            .Select(i => i.TotalDiscount)
+            .FirstOrDefault()
+                    };
+                }).ToList();
+
+                return final;
             }
             catch (Exception ex)
             {

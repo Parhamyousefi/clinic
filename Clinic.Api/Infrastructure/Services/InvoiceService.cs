@@ -31,10 +31,14 @@ namespace Clinic.Api.Infrastructure.Services
 
                 if (model.EditOrNew == -1)
                 {
+                    string? lastId = await _context.Invoices.MaxAsync(r => r.InvoiceNo);
+                    var Id = Convert.ToInt32(lastId);
+                    model.InvoiceNo = (Id + 1).ToString();
                     var invoice = _mapper.Map<InvoicesContext>(model);
                     invoice.CreatorId = userId;
                     invoice.CreatedOn = DateTime.UtcNow;
                     invoice.PractitionerId = userId;
+                    invoice.InvoiceNo = (Id + 1).ToString();
                     _context.Invoices.Add(invoice);
                     await _context.SaveChangesAsync();
                     result.Message = $"Invoice Saved Successfully , Id : {invoice.Id}";
@@ -153,7 +157,7 @@ namespace Clinic.Api.Infrastructure.Services
                 }
 
                 await _context.SaveChangesAsync();
-                
+
                 var invoiceInfo = await _context.Invoices
                     .Where(inv => inv.Id == model.InvoiceId)
                     .Select(inv => new { inv.AppointmentId, inv.PatientId })
@@ -466,6 +470,70 @@ namespace Clinic.Api.Infrastructure.Services
             {
                 var expenses = await _context.Expenses.ToListAsync();
                 return expenses;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<GlobalResponse> SaveInvoiceDiscount(SaveInvoiceDiscountDto model)
+        {
+            var result = new GlobalResponse();
+
+            try
+            {
+                var userId = _token.GetUserId();
+
+                var existingInvoice = await _context.Invoices.FirstOrDefaultAsync(i => i.Id == model.InvoiceId);
+
+                if (existingInvoice == null)
+                {
+                    throw new Exception("Invoice Not Found");
+                }
+
+                _mapper.Map(model, existingInvoice);
+                existingInvoice.ModifierId = userId;
+                existingInvoice.LastUpdated = DateTime.UtcNow;
+                existingInvoice.TotalDiscount = model.TotalDiscount;
+                _context.Invoices.Update(existingInvoice);
+                await _context.SaveChangesAsync();
+                result.Message = $"Invoice Discount Updated Successfully , Id : {existingInvoice.Id}";
+                result.Status = 0;
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+
+        public async Task<IEnumerable<GetInvoiceDetailsResponse>> GetInvoiceDetails(int appointmentId)
+        {
+            try
+            {
+                var query = _context.Invoices.AsQueryable();
+                var result = await (from i in query
+                                    join b in _context.Businesses on i.BusinessId equals b.Id
+                                    join t in _context.Treatments on appointmentId equals t.AppointmentId
+                                    join u in _context.Users on i.PractitionerId equals u.Id
+
+                                    select new GetInvoiceDetailsResponse
+                                    {
+                                        SystemCode = i.Id,
+                                        InvoiceNo = i.InvoiceNo,
+                                        BussinessName = b.Name,
+                                        Amount = i.Amount,
+                                        TotalDiscount = i.TotalDiscount,
+                                        Receipt = i.Receipt,
+                                        Payment = i.Payment,
+                                        RemainingAmount = (i.Amount - i.TotalDiscount) - i.Receipt,
+                                        VisitTime = t.VisitTime,
+                                        DoctorName = u.FirstName + " " + u.LastName
+                                    }).ToListAsync();
+
+                return result;
             }
             catch (Exception ex)
             {

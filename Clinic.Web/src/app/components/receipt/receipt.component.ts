@@ -8,6 +8,7 @@ import { DropdownModule } from 'primeng/dropdown';
 import { InvoiceService } from '../../_services/invoice.service';
 import { ActivatedRoute } from '@angular/router';
 import { PaymentService } from '../../_services/payment.service';
+import { filter } from 'rxjs';
 
 @Component({
   selector: 'app-receipt',
@@ -35,18 +36,21 @@ export class ReceiptComponent {
   petientId: any;
   patientSelected: any;
   isPatientReceipt: boolean = false;
+  patientId: any;
 
   async ngOnInit() {
     this.checkRout = this.activeRoute.snapshot.routeConfig.path;
     this.petientId = +this.activeRoute.snapshot.paramMap.get('id') || null;
     this.isPayment = this.checkRout === "payment" ? true : false;
     await this.getPatients();
+        this.newReceiptModel.selectedPatient = this.patientsList.filter(patient => patient.id == this.patientId)[0];
+
     if (this.petientId != null) {
       this.isPatientReceipt = true;
       this.patientSelect();
-
     }
   }
+
   async getPatients() {
     try {
       let res: any = await this.patientService.getPatients().toPromise();

@@ -3,7 +3,6 @@ using Clinic.Api.Application.JwtAuth.Helpers;
 using Clinic.Api.Domain.Entities;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.IdentityModel.JsonWebTokens;

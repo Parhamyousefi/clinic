@@ -23,10 +23,10 @@ export const Menu: imenu[] = [
   { id: 4, text: "دریافت ها", link: '/receipt-list', roleAccess: [], icon: 'fa fa-credit-card-alt' },
   { id: 5, text: "پرداخت ها", link: '/payment-list', roleAccess: [], icon: 'fa fa-credit-card-alt' },
   { id: 6, text: "کالاهای مصرفی", link: '/product-list', roleAccess: [], icon: 'fa fa-th-large' },
-  { id: 7, text: "هزینه ها", link: '/', roleAccess: [], icon: 'fa fa-money' },
+  { id: 7, text: "هزینه ها", link: '/expenses', roleAccess: [], icon: 'fa fa-money' },
   { id: 8, text: "اشخاص", link: '/contacts', roleAccess: [], icon: 'fa fa-user' },
   { id: 9, text: "گزارشات", link: '/', roleAccess: [], icon: 'fa fa-bar-chart' },
-  { id: 10, text: "راهنما", link: '/', roleAccess: [], icon: 'fa fa-info-circle' },
+  // { id: 10, text: "راهنما", link: '/', roleAccess: [], icon: 'fa fa-info-circle' },
 ];
 
 

@@ -1,14 +1,15 @@
-<div class="appContainer p-0">
+<div class="patientAppContainer p-0">
   <div class="col-12 pt-2 d-flex justify-content-between align-items-center border-bottom">
     <div>
-      <h4 class="text-right mb-0">{{ patientInfo.title}} {{patientName}} / پرونده بالینی</h4>
+      <!-- <h4 class="text-right mb-0">{{ patientInfo.title}} {{patientName}} / پرونده بالینی</h4> -->
+      <h4 class="text-right mb-0">پرونده بالینی</h4>
       <div class="d-flex align-items-center mt-1 mb-2">
         <div class="text-end text-00c4b4 ml-5">کد سیستمی : <strong class="text-dark">{{patientInfo.patientCode
-                        || "-"}}</strong></div>
+            || "-"}}</strong></div>
         <div class="text-end text-00c4b4 ml-5">سن : <strong class="text-dark">{{patientInfo.age ||
-                        "-"}}</strong></div>
+            "-"}}</strong></div>
         <div class="text-end text-00c4b4 ml-5">کد ملی : <strong class="text-dark">{{patientInfo.nationalCode ||
-                        "-"}}</strong></div>
+            "-"}}</strong></div>
       </div>
     </div>
     <button *ngIf="selectedService?.['type'] == 1" (click)="getAllValues()" class="btn btn-sm btn-pink">save</button>
@@ -29,8 +30,8 @@
       <p-accordion *ngFor="let item of patientServiceListTab, let index= index">
         <p-accordionTab [selected]="true">
           <ng-template pTemplate="header">
-            <div class="d-flex justify-content-between align-items-center ">
-              <div class="d-flex flex-column">
+            <div class="d-flex flex-column justify-content-between align-items-center ">
+              <div class="d-flex col-12 justify-content-between">
                 <div class="fw-bold">{{ item.billableItemName }}</div>
                 <div class="text-muted">{{ item.createdDate | JustDateZone }}</div>
               </div>
@@ -132,13 +133,13 @@
                     <select *ngSwitchCase="'Combo'" [id]="item.id" [(ngModel)]="item.value" class="form-control">
                       <option value="" disabled selected hidden>Select an option</option>
                       <option *ngFor="let option of item.answers" [value]="option.id">{{
-                                                option.title }}</option>
+                        option.title }}</option>
                     </select>
 
                     <select *ngSwitchCase="'textCombo'" [id]="item.id" [(ngModel)]="item.value" class="form-control">
                       <option value="" disabled selected hidden>Select an option</option>
                       <option *ngFor="let option of item.answers" [value]="option.id">{{
-                                                option.title }}</option>
+                        option.title }}</option>
                     </select>
 
                     <p-multiSelect *ngSwitchCase="'MultiSelect'" [id]="item.id" [(ngModel)]="item.value"

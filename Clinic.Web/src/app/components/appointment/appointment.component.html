@@ -60,10 +60,12 @@
                             </thead>
                             <tbody class="d-flex flex-column">
                                 <tr class="d-flex" *ngFor="let time of hours">
-                                    <td class="col-2 d-flex justify-content-center align-items-center">{{time}}</td>
+                                    <td class="col-2 d-flex justify-content-center align-items-center">{{time.time}}
+                                    </td>
                                     <td class="col-10 p-2 d-flex appointments-container"
+                                        [ngClass]="{'bg-muted text-secondary': isBeforeNow || (!isBeforeNow && timeIsBeforeNow(appointmentDate, time.time))}"
                                         (click)="setNewAppointment(time)">
-                                        <div *ngFor="let appointment of timeSheetData[time]"
+                                        <div *ngFor="let appointment of timeSheetData[time.time]"
                                             class="appointment text-right p-2 pointer"
                                             (click)="editAppointment(appointment)">
                                             <div class="mt-2">نوع وقت : {{appointment.typeName}}</div>
@@ -85,7 +87,7 @@
                                 <tr class="tr-sticky w-100 d-flex">
                                     <th class="table-time col-2"></th>
                                     <th *ngFor="let day of weekDays" class="text-center col-2"
-                                        [ngClass]="{'today-bg': day.isToday}">
+                                        [ngClass]="{'today-bg': day.isToday, 'text-muted bg-muted': day.isPast}">
                                         <div>{{day.dayName}}</div>
                                         <div>{{day.dayNumber}}</div>
                                     </th>
@@ -93,10 +95,11 @@
                             </thead>
                             <tbody class="d-flex flex-column">
                                 <tr class="d-flex" *ngFor="let time of hours; let rowIndex = index">
-                                    <td class="col-2 d-flex justify-content-center align-items-center">{{time}}</td>
-                                    <td *ngFor="let day of weeklyTimetable[time] " class="text-center col-2"
-                                        [ngClass]="{'today-bg': day.isToday}"
-                                        (click)="setWeeklyNewAppointment(day.fullDate,time)">
+                                    <td class="col-2 d-flex justify-content-center align-items-center">{{time.time}}
+                                    </td>
+                                    <td *ngFor="let day of weeklyTimetable[time.time] " class="text-center col-2"
+                                        [ngClass]="{'today-bg': day.isToday, 'text-muted bg-muted': day.isPast ||(day.isToday && timeIsBeforeNow(day.fullDate, time.time))}"
+                                        (click)="setWeeklyNewAppointment(day.fullDate,time.time,day.isPast)">
                                         <div *ngFor="let appointment of day.dayAppointments">
                                             <div class="mt-2">
                                                 {{appointment.patientName}}</div>
@@ -127,15 +130,15 @@
         [ngClass]="{'modalShadow' : showNewAppointment}" class="p-2">
         <div class="col-12 new-appointment-modal">
             <div class="col-12 d-flex justify-content-between mt-3">
-                <div class="col-6 text-right">نوع وقت</div>
-                <div class="col-6">
+                <div class="col-3 text-right">نوع وقت</div>
+                <div class="col-9">
                     <p-dropdown [options]="appointmentTypes" [(ngModel)]="newAppointmentModel.selectedType"
                         optionLabel="name" placeholder="نوع وقت را انتخاب کنید" class="full-width text-right" />
                 </div>
             </div>
             <div class="col-12 d-flex justify-content-between mt-3">
-                <div class="col-6 text-right">انتخاب بیمار</div>
-                <div class="col-6">
+                <div class="col-3 text-right">انتخاب بیمار</div>
+                <div class="col-9">
                     <p-dropdown [options]="patientsList" [(ngModel)]="newAppointmentModel.selectedPatient"
                         optionLabel="name" placeholder="بیمار مورد نظر را انتخاب کنید" class="full-width text-right" />
                 </div>

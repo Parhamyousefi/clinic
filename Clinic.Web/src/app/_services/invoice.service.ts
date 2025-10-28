@@ -110,4 +110,41 @@ export class InvoiceService {
     };
     return this.http.get(uri, httpOptions);
   }
+
+  getExpenses() {
+    const token: any = localStorage.getItem("token");
+    const uri = this.url + `api/Invoice/getExpenses`;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      }),
+    };
+    return this.http.get(uri, httpOptions);
+  }
+
+  saveExpenses(data) {
+    const uri = this.url + `api/Invoice/saveExpense`;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + this.token,
+        responseType: 'text'
+      }),
+    };
+    return this.http.post(uri, data, httpOptions);
+  }
+
+
+  saveInvoiceDiscount(data) {
+    const uri = this.url + `api/Invoice/saveInvoiceDiscount`;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + this.token,
+        responseType: 'text'
+      }),
+    };
+    return this.http.post(uri, data, httpOptions);
+  }
 }

@@ -5,20 +5,24 @@ import { SharedModule } from '../../share/shared.module';
 import { MainService } from './../../_services/main.service';
 import moment from 'moment-jalaali';
 import { FormControl } from '@angular/forms';
-
+import { RouterLink } from "@angular/router";
+import { InputMaskModule } from 'primeng/inputmask';
+import { InvoiceService } from '../../_services/invoice.service';
 @Component({
   selector: 'app-today-appointments',
   standalone: true,
-  imports: [SharedModule],
+  imports: [SharedModule, RouterLink, InputMaskModule],
   templateUrl: './today-appointments.component.html',
   styleUrl: './today-appointments.component.css'
 })
 export class TodayAppointmentsComponent implements OnInit {
+  appointmentDiscount: any;
 
   constructor(
     private treatmentsService: TreatmentsService,
     private userService: UserService,
-    private mainService: MainService
+    private mainService: MainService,
+    private invoiceService: InvoiceService
   ) { }
 
   clinicsList: any = [];
@@ -30,7 +34,17 @@ export class TodayAppointmentsComponent implements OnInit {
   selectedTimefrom: any = '00:00';
   selectedDateTo: any;
   selectedTimeTo: any = '23:00';
-
+  showNewDiscount: boolean = false;
+  visitStatusList: any = [
+    { name: "همه", code: 0 },
+    { name: "انتظار", code: 1 },
+    { name: "پذیرش شده", code: 2 },
+    { name: "ملاقات شده", code: 3 },
+  ]
+  filteredAppointments: any = [];
+  showAppointmentDetail: any;
+  appointmentDetailItem: any = [];
+  selectedStatus: any = '';
   async ngOnInit() {
     this.selectedDatefrom = new FormControl(moment().format('jYYYY/jMM/jDD'));
     this.selectedDateTo = new FormControl(moment().format('jYYYY/jMM/jDD'));
@@ -53,6 +67,11 @@ export class TodayAppointmentsComponent implements OnInit {
     try {
       let res: any = await this.treatmentsService.getTodayAppointments(model).toPromise();
       this.todayAppointmentsList = res;
+      this.filteredAppointments = this.todayAppointmentsList;
+      if (this.selectedStatus && this.selectedStatus.code !== 0) {
+        this.filteredAppointments = this.todayAppointmentsList.filter(x => x.status === this.selectedStatus.code);
+      }
+
     }
     catch { }
   }
@@ -106,5 +125,45 @@ export class TodayAppointmentsComponent implements OnInit {
   }
 
   onDateChange(newDate: string) {
+  }
+
+  openDiscount(event) {
+    event.stopPropagation();
+    this.showNewDiscount = true;
+  }
+
+  async submitDiscount() {
+    try {
+      let model = {
+        "invoiceId": 0,
+        "totalDiscount": 0
+      }
+      let res: any = await this.invoiceService.saveInvoiceDiscount(model).toPromise();
+      this.showNewDiscount = false;
+    }
+    catch { }
+  }
+
+  filterAppointments(searchText: any) {
+    if (!searchText) {
+      this.filteredAppointments = this.todayAppointmentsList;
+      return;
+    }
+
+    const text = searchText.toLowerCase();
+
+    this.filteredAppointments = this.todayAppointmentsList.filter(item => {
+      return (
+        item.patientPhone?.toLowerCase().includes(text) ||
+        item.patientName?.toLowerCase().includes(text) ||
+        item.id.toString().includes(text)
+      );
+    });
+  }
+
+  openAppointmentDetail(event, item) {
+    event.stopPropagation();
+    this.showAppointmentDetail = true;
+    this.appointmentDetailItem[0] = item;
   }
 }

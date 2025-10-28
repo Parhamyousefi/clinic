@@ -18,27 +18,67 @@ namespace Clinic.Api.Controllers
         }
 
         [HttpPost("getInvoicesByClinic")]
-        [Authorize("Admin","Doctor")]
+        [Authorize("Admin", "Doctor")]
         public async Task<IActionResult> GetInvoicesByClinic(InvoiceFilterDto model)
         {
-            var result = await _reportService.GetInvoicesByService(model);
+            var result = await _reportService.GetInvoicesByClinic(model);
             return Ok(result);
         }
 
         [HttpPost("getInvoicesByService")]
-        [Authorize("Admin","Doctor")]
+        [Authorize("Admin", "Doctor")]
         public async Task<IActionResult> GetInvoicesByService(InvoiceFilterDto model)
         {
             var result = await _reportService.GetInvoicesByService(model);
             return Ok(result);
         }
 
-        [HttpPost("getAppointmentsAndUnpaidInvoices")]
-        [Authorize("Doctor","Admin")]
-        public async Task<GlobalResponse> GetAppointmentsAndUnpaidInvoices(InvoiceFilterDto model)
+        [HttpPost("getSubmitedAppointments")]
+        [Authorize("Doctor", "Admin")]
+        public async Task<IActionResult> GetSubmitedAppointments(InvoiceFilterDto model)
         {
-            var result = await _reportService.GetAppointmentsAndUnpaidInvoices(model);
-            return result;
+            var result = await _reportService.GetSubmitedAppointments(model);
+            return Ok(result);
+        }
+
+        [HttpPost("getSubmitedInvoices")]
+        [Authorize("Admin", "Doctor")]
+        public async Task<IActionResult> GetSubmitedInvoices(InvoiceFilterDto model)
+        {
+            var result = await _reportService.GetSubmitedInvoices(model);
+            return Ok(result);
+        }
+
+        [HttpPost("getUnpaidInvoices")]
+        [Authorize("Admin","Doctor")]
+        public async Task<IActionResult> GetUnpaidInvoices(InvoiceFilterDto model)
+        {
+            var result = await _reportService.GetUnpaidInvoices(model);
+            return Ok(result);
+        }
+
+        [HttpPost("getPractitionerIncome")]
+        [Authorize("Admin","Doctor")]
+        public async Task<IActionResult> GetPractitionerIncome(IncomeReportFilterDto model)
+        {
+            var result = await _reportService.GetPractitionerIncome(model);
+            return Ok(result);
+        }
+
+        [HttpPost("getBusinessIncome")]
+        [Authorize("Admin", "Doctor")]
+        public async Task<IActionResult> GetBusinessIncome(IncomeReportFilterDto model)
+        {
+            var result = await _reportService.GetBusinessIncome(model);
+            return Ok(result);
+        }
+
+        [HttpPost("getIncomeReportDetails")]
+        [Authorize("Admin","Doctor")]
+        public async Task<IActionResult> GetIncomeReportDetails(IncomeReportFilterDto model)
+        {
+            var result = await _reportService.GetIncomeReportDetails(model);
+            return Ok(result);
         }
     }
 }
