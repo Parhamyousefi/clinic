@@ -49,7 +49,6 @@ export class NavbarComponent {
   reportMenu: imenu[] = [
     { id: 1, text: "گزارش خلاصه عملکرد", link: '/report/business-report', roleAccess: [], icon: 'fa fa-bar-chart' },
     { id: 2, text: " گزارش صورتحسابهای سرپایی ", link: '/', roleAccess: [], icon: 'fa fa-bar-chart' },
-    // { id: 3, text: " گزارش صورتحسابهای بستری", link: '/', roleAccess: [], icon: 'fa fa-bar-chart' },
     { id: 4, text: "گزارش صورتحسابهای تغییر کرده", link: '/', roleAccess: [], icon: 'fa fa-bar-chart' },
     { id: 5, text: "گزارش درآمد", link: '/', roleAccess: [], icon: 'fa fa-bar-chart' },
     { id: 6, text: " گزارش بیماران مراجعه نکرده", link: '/', roleAccess: [], icon: 'fa fa-bar-chart' },
