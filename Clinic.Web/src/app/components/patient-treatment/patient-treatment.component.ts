@@ -30,7 +30,7 @@ export class PatientTreatmentComponent {
   selectedService: any = null;
   public Editor = ClassicEditor;
   @ViewChild(PdfMakerComponent) pdfMakerComponent!: PdfMakerComponent;
-  showAttacheFile: boolean = false;
+  showAttachFile: boolean = false;
   fileToUpload: any;
   base64: any;
   fileName: any;
@@ -76,7 +76,6 @@ export class PatientTreatmentComponent {
     }
   }
 
-
   async getPatientServices() {
     let res: any = await this.treatmentService.getPatientServices(this.selectedId).toPromise();
     this.patientServiceListTab = res;
@@ -88,16 +87,14 @@ export class PatientTreatmentComponent {
             id: item.itemCategoryId,
             name: item.itemCategoryName,
             values: []
-          };
+          }
         }
         acc[key].values.push(item);
         return acc;
       }, {} as Record<number, { id: number; name: string; values: typeof res }>)
-    );
+    )
     this.patientServiceList = grouped;
   }
-
-
 
   async getSectionPerService(id) {
     this.questionsPerSectionList = [];
@@ -125,12 +122,10 @@ export class PatientTreatmentComponent {
         });
       });
     });
-    console.log(this.questionsPerSectionList);
     setTimeout(() => {
       this.setValues();
     }, 1000);
   }
-
 
   onClick(event: MouseEvent, service, type) {
     event.stopPropagation();
@@ -146,13 +141,10 @@ export class PatientTreatmentComponent {
         this.base64 = null;
         this.fileName = null;
         this.fileType = null;
-        this.showAttacheFile = true;
-        break;
-      default:
+        this.showAttachFile = true;
         break;
     }
   }
-
 
   onClickTab(event: MouseEvent, id, type) {
     event.stopPropagation();
@@ -166,12 +158,8 @@ export class PatientTreatmentComponent {
       case 4:
         this.selectedService = null;
         break;
-      default:
-        break;
     }
   }
-
-
 
   async getAllValues() {
     const result = [];
@@ -180,7 +168,7 @@ export class PatientTreatmentComponent {
         sectionId: section.id,
         sectionName: section.name,
         values: []
-      };
+      }
 
       section.values.forEach(item => {
         let value;
@@ -225,7 +213,6 @@ export class PatientTreatmentComponent {
     this.getPatientTreatments();
   }
 
-
   onCheckboxChange(event: any, item: any) {
     if (!item.value) {
       item.value = [];
@@ -237,7 +224,6 @@ export class PatientTreatmentComponent {
       item.value = item.value.filter(id => id !== optionId);
     }
   }
-
 
   async saveQuestionValue(item) {
     let model = {
@@ -281,7 +267,6 @@ export class PatientTreatmentComponent {
     }
   }
 
-
   async setValues() {
     await this.questionsPerSectionList.forEach(element => {
       let index = this.patientServiceListTab.findIndex(item => item.invoiceItemId == element.invoiceItemId);
@@ -321,10 +306,9 @@ export class PatientTreatmentComponent {
     if (type == 1) {
       this.pdfMakerComponent.generatePDF('print');
     } else {
-      this.pdfMakerComponent.generatePDF('download')
+      this.pdfMakerComponent.generatePDF('download');
     }
   }
-
 
   handleFileInput(files: any) {
     let size = files[0].size;
@@ -333,8 +317,8 @@ export class PatientTreatmentComponent {
       this.toastR.error("فرمت وارد شده معتبر نمی باشد.", "خطا");
       return;
     }
-    if (size > 50000000) {
-      this.toastR.error("حداکثر سایز فایل 50 مگابایت می باشد", "خطا");
+    if (size > 5000000) {
+      this.toastR.error("حداکثر سایز فایل 5 مگابایت می باشد", "خطا");
       return;
     }
     this.fileToUpload = files.item(0);
@@ -366,7 +350,7 @@ export class PatientTreatmentComponent {
     if (res['status'] == 0) {
       this.toastR.success('با موفقیت ثبت شد');
       this.getPatientTreatments();
-      this.showAttacheFile = false;
+      this.showAttachFile = false;
       this.fileName = '';
       this.fileType = '';
       this.fileToUpload = null;
@@ -395,5 +379,4 @@ export class PatientTreatmentComponent {
       }
     })
   }
-
 }

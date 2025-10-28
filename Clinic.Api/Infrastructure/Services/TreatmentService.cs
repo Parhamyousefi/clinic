@@ -181,6 +181,8 @@ namespace Clinic.Api.Infrastructure.Services
         {
             try
             {
+                var userId = _token.GetUserId();
+
                 var today = DateTime.Today;
                 var query = _context.Appointments.AsQueryable();
 
@@ -224,6 +226,7 @@ namespace Clinic.Api.Infrastructure.Services
        join u in _context.Users on a.PractitionerId equals u.Id
        join at in _context.AppointmentTypes on a.AppointmentTypeId equals at.Id
        join ph in _context.PatientPhones on p.Id equals ph.PatientId into phoneGroup
+       where a.PractitionerId == userId
        from ph in phoneGroup.OrderByDescending(x => x.CreatedOn).Take(1).DefaultIfEmpty()
        select new
        {

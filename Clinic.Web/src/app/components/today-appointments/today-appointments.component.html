@@ -4,12 +4,17 @@
     </div>
     <hr>
     <div class="col-12">
-        <div class="d-lg-flex align-items-baseline my-3">
-            <div class="col-lg-2 col-12">
-                <p-dropdown [options]="visitStatusList" placeholder="مکان" [(ngModel)]="selectedClinic"
-                    optionLabel="name" dataKey="id" class="full-width text-right" />
+        <div class="d-lg-flex flex-wrap align-items-baseline my-3">
+            <div class="col-12 d-flex justify-content-center">
+                <input type="text" class="col-12 form-control"
+                    placeholder="جستجو بر اساس شماره موبایل ، نام و شماره پرونده"
+                    (input)="filterAppointments($event.target.value)">
             </div>
             <div class="col-lg-2 col-12">
+                <p-dropdown [options]="visitStatusList" placeholder="وضعیت مراجعه" [(ngModel)]="selectedStatus"
+                    optionLabel="name" class="full-width text-right p-0" />
+            </div>
+            <div class="col-lg-2 col-12 mt-3">
                 <p-dropdown [options]="clinicsList" placeholder="مکان" [(ngModel)]="selectedClinic" optionLabel="name"
                     dataKey="id" class="full-width text-right" />
             </div>
@@ -41,7 +46,7 @@
         <div class="text-center mb-3">
             <button class="btn btn-danger" (click)="getAppointment()">جستجو</button>
         </div>
-        <p-table #dt styleClass="p-datatable-gridlines" [value]="todayAppointmentsList" [autoLayout]="true"
+        <p-table #dt styleClass="p-datatable-gridlines" [value]="filteredAppointments" [autoLayout]="true"
             [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
             currentPageReportTemplate="نمایش {first} تا {last} " [rowsPerPageOptions]="[10,25,50]">
             <ng-template pTemplate="header">
@@ -49,11 +54,12 @@
                     <th pSortableColumn="fldFirstName">زمان ملاقات
                         <p-sortIcon field="fldFirstName"></p-sortIcon>
                     </th>
-                    <th> نام</th>
-                    <th> نوع وقت</th>
-                    <th> خدمت</th>
-                    <th> پزشک</th>
-                    <th> عملیات</th>
+                    <th>نام</th>
+                    <th>نوع وقت</th>
+                    <th>خدمت</th>
+                    <th>پزشک</th>
+                    <th>تخفیف</th>
+                    <th>عملیات</th>
                 </tr>
                 <tr>
                     <th>
@@ -70,6 +76,7 @@
                         <input type="text" (input)="dt.filter($event.target?.value, 'fldEmail', 'contains')"
                             class="form-control">
                     </th>
+                    <th></th>
                     <th></th>
                 </tr>
             </ng-template>
@@ -92,7 +99,9 @@
                     </td>
                     <td class="px-2">
                         <div class="py-2 widthClassPrime">
-                            <span>{{item.billableItemName}}</span>
+                            <span *ngFor="let billable of item.billableItemNames" class="text-00c4b4">
+                                {{billable}}
+                            </span>
                         </div>
                     </td>
                     <td class="px-2">
@@ -101,10 +110,21 @@
                         </div>
                     </td>
                     <td class="px-2">
-                        <button class="btn btn-danger"
+                        <div class="py-2 widthClassPrime">
+                            {{item.totalDiscount}}
+                        </div>
+                    </td>
+                    <td class="px-2 d-flex flex-wrap">
+                        <button class="btn btn-danger btn-sm ml-2"
                             [routerLink]="'/new-invoice/' + item.patientId +'/2/'+selectedClinic.code">صدور
                             صورتحساب</button>
-                        <button class="btn btn-outline-secondary mt-2" (click)="openDiscount($event)">ثبت تخفیف</button>
+                        <button class="btn btn-outline-danger btn-sm" (click)="openDiscount($event)">ثبت
+                            تخفیف</button>
+                        <button class="btn btn-outline-secondary mt-2 btn-sm"
+                            [routerLink]="'/receipt/'+item.patientId">ثبت
+                            دریافت</button>
+                        <button class="btn main-btn-outline mt-2 btn-sm mr-2"
+                            (click)="openAppointmentDetail($event,item)">جزئیات</button>
                     </td>
                 </tr>
             </ng-template>
@@ -114,8 +134,86 @@
     <p-dialog id="new-appointment-modal" header="افزودن تخفیف" [(visible)]="showNewDiscount" [closable]="true"
         [ngClass]="{'modalShadow' : showNewDiscount}" class="p-2">
         <div class="col-12 d-flex flex-column">
-            <input type="text" class="col-12" placeholder="100,000">
+            <input type="text" class="col-12 form-control" placeholder="100,000">
             <button class="btn main-btn mt-2" (click)="submitDiscount()">ثبت</button>
+        </div>
+    </p-dialog>
+
+    <p-dialog id="appointment-detail" header="جزئیات وقت" [(visible)]="showAppointmentDetail" [closable]="true"
+        [ngClass]="{'modalShadow' : showAppointmentDetail}" class="p-2">
+        <div>
+            <p-table #dt styleClass="p-datatable-gridlines" [value]="appointmentDetailItem" [autoLayout]="true"
+                [paginator]="false">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>کد سیستمی</th>
+                        <th>مکان</th>
+                        <th>شماره صورتحساب</th>
+                        <th>مبلغ صورتحساب</th>
+                        <th>تخفیف</th>
+                        <th>دریافتی</th>
+                        <th>پرداختی</th>
+                        <th>مانده</th>
+                        <th>زمان پذیرش</th>
+                        <th>کاربر پذیرش کننده</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-item>
+                    <tr [routerLink]="'/patient/treatment/' + item.patientId" class="pointer">
+                        <td class="px-2">
+                            <div class="py-2 widthClassPrime">
+                                <span>{{item.id}}</span>
+                            </div>
+                        </td>
+                        <td class="px-2">
+                            <div class="py-2 widthClassPrime">
+
+                            </div>
+                        </td>
+                        <td class="px-2">
+                            <div class="py-2 widthClassPrime">
+
+                            </div>
+                        </td>
+                        <td class="px-2">
+                            <div class="py-2 widthClassPrime">
+
+                            </div>
+                        </td>
+                        <td class="px-2">
+                            <div class="py-2 widthClassPrime">
+                                {{item.totalDiscount}}
+                            </div>
+                        </td>
+                        <td class="px-2">
+                            <div class="py-2 widthClassPrime">
+
+                            </div>
+                        </td>
+                        <td class="px-2">
+                            <div class="py-2 widthClassPrime">
+
+                            </div>
+                        </td>
+                        <td class="px-2">
+                            <div class="py-2 widthClassPrime">
+
+                            </div>
+                        </td>
+                        <td class="px-2">
+                            <div class="py-2 widthClassPrime">
+                                {{item.date | JustDateZone}}
+                            </div>
+                        </td>
+                        <td class="px-2">
+                            <div class="py-2 widthClassPrime">
+                                {{item.practitionerName}}
+                            </div>
+                        </td>
+
+                    </tr>
+                </ng-template>
+            </p-table>
         </div>
     </p-dialog>
 </div>
