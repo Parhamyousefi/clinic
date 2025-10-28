@@ -44,5 +44,6 @@
         public decimal OutBalance { get; set; }
         public decimal InBalance { get; set; }
         public bool Paperless { get; set; }
+        public string Mobile { get; set; }
     }
 }

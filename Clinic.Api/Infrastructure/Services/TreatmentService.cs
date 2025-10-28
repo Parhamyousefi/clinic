@@ -283,7 +283,7 @@ namespace Clinic.Api.Infrastructure.Services
                         PatientId = r.Patient.Id,
                         PractitionerName = (r.Practitioner.FirstName + " " + r.Practitioner.LastName).Trim(),
                         AppointmentTypeName = r.AppointmentType.Name,
-                        BillableItemNames = relatedBillableNames.ToList(),
+                        BillableItemNames = relatedBillableNames,
                         Status = !hasInvoice && !hasTreatment ? 1 :
                                  hasInvoice && !hasTreatment ? 2 :
                                  hasInvoice && hasTreatment ? 3 : 0,

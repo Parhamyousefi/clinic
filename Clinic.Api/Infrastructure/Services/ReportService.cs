@@ -174,30 +174,37 @@ namespace Clinic.Api.Infrastructure.Services
                         toDateTime = model.To.Value.Date.AddDays(1).AddTicks(-1);
                 }
 
-                var query = _context.Invoices
+                var invoicesQuery = _context.Invoices
                     .Where(i => i.PractitionerId != null);
 
                 if (fromDateTime.HasValue)
-                    query = query.Where(i => i.CreatedOn >= fromDateTime.Value);
+                    invoicesQuery = invoicesQuery.Where(i => i.CreatedOn >= fromDateTime.Value);
 
                 if (toDateTime.HasValue)
-                    query = query.Where(i => i.CreatedOn <= toDateTime.Value);
+                    invoicesQuery = invoicesQuery.Where(i => i.CreatedOn <= toDateTime.Value);
+
+                var query = from invoice in invoicesQuery
+                            join user in _context.Users
+                                on invoice.PractitionerId equals user.Id
+                            select new
+                            {
+                                user.FirstName,
+                                user.LastName,
+                                invoice.Receipt,
+                                invoice.Payment,
+                                invoice.TotalDiscount
+                            };
 
                 var result = await query
-                    .Join(_context.Users,
-                        invoice => invoice.PractitionerId,
-                        user => user.Id,
-                        (invoice, user) => new
-                        {
-                            user.FirstName,
-                            user.LastName,
-                            invoice.Receipt
-                        })
                     .GroupBy(x => new { x.FirstName, x.LastName })
                     .Select(g => new GetPractitionerIncomeReportResponse
                     {
                         PractitionerName = $"{g.Key.FirstName} {g.Key.LastName}",
-                        TotalReceipt = g.Sum(x => x.Receipt)
+                        TotalReceipt = g.Sum(x =>
+                            (x.Receipt)
+                            - (x.Payment)
+                            - (x.TotalDiscount)
+                        )
                     })
                     .OrderByDescending(x => x.TotalReceipt)
                     .ToListAsync();
@@ -209,6 +216,8 @@ namespace Clinic.Api.Infrastructure.Services
                 throw new Exception(ex.Message);
             }
         }
+
+
 
         public async Task<IEnumerable<GetBusinessIncomeReportResponse>> GetBusinessIncome(IncomeReportFilterDto model)
         {
@@ -233,32 +242,39 @@ namespace Clinic.Api.Infrastructure.Services
                         toDateTime = model.To.Value.Date.AddDays(1).AddTicks(-1);
                 }
 
-                var query = _context.Invoices
+                var invoicesQuery = _context.Invoices
                     .Where(i => i.BusinessId != null);
 
                 if (fromDateTime.HasValue)
-                    query = query.Where(i => i.CreatedOn >= fromDateTime.Value);
+                    invoicesQuery = invoicesQuery.Where(i => i.CreatedOn >= fromDateTime.Value);
 
                 if (toDateTime.HasValue)
-                    query = query.Where(i => i.CreatedOn <= toDateTime.Value);
+                    invoicesQuery = invoicesQuery.Where(i => i.CreatedOn <= toDateTime.Value);
+
+                var query = from invoice in invoicesQuery
+                            join business in _context.Businesses
+                                on invoice.BusinessId equals business.Id
+                            select new
+                            {
+                                business.Name,
+                                invoice.Receipt,
+                                invoice.Payment,
+                                invoice.TotalDiscount
+                            };
 
                 var result = await query
-                    .Join(_context.Businesses,
-                        invoice => invoice.BusinessId,
-                        business => business.Id,
-                        (invoice, business) => new
-                        {
-                            business.Name,
-                            invoice.Receipt
-                        })
                     .GroupBy(x => x.Name)
                     .Select(g => new GetBusinessIncomeReportResponse
                     {
                         BusinessName = g.Key,
-                        TotalReceipt = g.Sum(x => (decimal?)(x.Receipt)) ?? 0
+                        TotalReceipt = g.Sum(x =>
+                            (x.Receipt)
+                            - (x.Payment)
+                            - (x.TotalDiscount)
+                        )
                     })
                     .OrderByDescending(x => x.TotalReceipt)
-                    .ToListAsync();
+                      .ToListAsync();
 
                 return result;
             }
@@ -267,6 +283,7 @@ namespace Clinic.Api.Infrastructure.Services
                 throw new Exception(ex.Message);
             }
         }
+
 
         public async Task<IEnumerable<GetIncomeReportDetailResponse>> GetIncomeReportDetails(IncomeReportFilterDto model)
         {
@@ -291,36 +308,41 @@ namespace Clinic.Api.Infrastructure.Services
                         toDateTime = model.To.Value.Date.AddDays(1).AddTicks(-1);
                 }
 
-                var query = _context.Invoices
+                var invoicesQuery = _context.Invoices
                     .Where(i => i.PractitionerId != null && i.BusinessId != null);
 
                 if (fromDateTime.HasValue)
-                    query = query.Where(i => i.CreatedOn >= fromDateTime.Value);
+                    invoicesQuery = invoicesQuery.Where(i => i.CreatedOn >= fromDateTime.Value);
 
                 if (toDateTime.HasValue)
-                    query = query.Where(i => i.CreatedOn <= toDateTime.Value);
+                    invoicesQuery = invoicesQuery.Where(i => i.CreatedOn <= toDateTime.Value);
+
+                var query = from invoice in invoicesQuery
+                            join user in _context.Users
+                                on invoice.PractitionerId equals user.Id
+                            join business in _context.Businesses
+                                on invoice.BusinessId equals business.Id
+                            select new
+                            {
+                                user.FirstName,
+                                user.LastName,
+                                business.Name,
+                                invoice.Receipt,
+                                invoice.Payment,
+                                invoice.TotalDiscount
+                            };
 
                 var result = await query
-                    .Join(_context.Users,
-                        invoice => invoice.PractitionerId,
-                        user => user.Id,
-                        (invoice, user) => new { invoice, user })
-                    .Join(_context.Businesses,
-                        combined => combined.invoice.BusinessId,
-                        business => business.Id,
-                        (combined, business) => new
-                        {
-                            combined.user.FirstName,
-                            combined.user.LastName,
-                            business.Name,
-                            combined.invoice.Receipt
-                        })
                     .GroupBy(x => new { x.FirstName, x.LastName, x.Name })
                     .Select(g => new GetIncomeReportDetailResponse
                     {
                         PractitionerName = $"{g.Key.FirstName} {g.Key.LastName}",
                         BusinessName = g.Key.Name,
-                        TotalReceipt = g.Sum(x => (decimal?)(x.Receipt)) ?? 0
+                        TotalReceipt = g.Sum(x =>
+                            (x.Receipt)
+                            - (x.Payment)
+                            - (x.TotalDiscount)
+                        )
                     })
                     .OrderByDescending(x => x.TotalReceipt)
                     .ToListAsync();
@@ -332,6 +354,7 @@ namespace Clinic.Api.Infrastructure.Services
                 throw new Exception(ex.Message);
             }
         }
+
 
         public async Task<GlobalResponse> GetOutPatientSummaryReport(OutPatientReportFilterDto model)
         {
@@ -408,12 +431,17 @@ namespace Clinic.Api.Infrastructure.Services
                 var canceledCount = data.Count(x => x.IsCanceled);
                 var totalAmount = data.Sum(x => x.Amount);
                 var totalDiscount = data.Sum(x => x.TotalDiscount);
-                var totalReceivable = data.Sum(x => x.Amount - x.TotalDiscount);
+                var totalReceivable = totalAmount - totalDiscount;
                 var totalReceived = data.Sum(x => x.Receipt);
                 var totalPaid = data.Sum(x => x.Payment);
-                var netReceived = totalReceived - totalPaid;
+
+                var netReceived = (totalReceived - totalPaid - totalDiscount);
+
                 var totalUnreceived = totalReceivable - totalReceived;
-                var totalOverReceived = totalReceived > totalReceivable ? totalReceived - totalReceivable : 0;
+
+                var totalOverReceived = totalReceived > totalReceivable
+                    ? totalReceived - totalReceivable
+                    : 0;
 
                 response.Status = 1;
                 response.Message = "Success";
@@ -440,6 +468,7 @@ namespace Clinic.Api.Infrastructure.Services
                 return response;
             }
         }
+
 
         public async Task<GlobalResponse> GetOutPatientReportBasedOnCreator(OutPatientReportFilterDto model)
         {
@@ -514,22 +543,36 @@ namespace Clinic.Api.Infrastructure.Services
                     return response;
                 }
 
+                var totalCount = data.Count;
+                var canceledCount = data.Count(x => x.IsCanceled);
+                var totalAmount = data.Sum(x => x.Amount);
+                var totalDiscount = data.Sum(x => x.TotalDiscount);
+                var totalReceivable = totalAmount - totalDiscount;
+                var totalReceived = data.Sum(x => x.Receipt);
+                var totalPaid = data.Sum(x => x.Payment);
+
+                var netReceived = (totalReceived - totalPaid - totalDiscount);
+
+                var totalUnreceived = totalReceivable - totalReceived;
+
+                var totalOverReceived = totalReceived > totalReceivable
+                    ? totalReceived - totalReceivable
+                    : 0;
+
                 var groupedData = data
                     .GroupBy(x => new { x.CreatorId, x.CreatorName })
                     .Select(g => new
                     {
                         CreatorName = g.Key.CreatorName,
-                        Count = g.Count(),
-                        TotalAmount = g.Sum(x => x.Amount),
-                        TotalDiscount = g.Sum(x => x.TotalDiscount),
-                        TotalReceivable = g.Sum(x => x.Amount - x.TotalDiscount),
-                        TotalReceived = g.Sum(x => x.Receipt),
-                        TotalPaid = g.Sum(x => x.Payment),
-                        NetReceived = g.Sum(x => (x.Receipt) - (x.Payment)),
-                        TotalUnreceived = g.Sum(x => (x.Amount - x.TotalDiscount) - (x.Receipt)),
-                        TotalOverReceived = g.Sum(x => (x.Receipt) > (x.Amount - x.TotalDiscount)
-                            ? (x.Receipt) - (x.Amount - x.TotalDiscount)
-                            : 0)
+                        Count = totalCount,
+                        TotalAmount = totalAmount,
+                        TotalDiscount = totalDiscount,
+                        TotalReceivable = totalReceivable,
+                        TotalReceived = totalReceived,
+                        TotalPaid = totalPaid,
+                        NetReceived = netReceived,
+                        TotalUnreceived = totalUnreceived,
+                        TotalOverReceived = totalOverReceived
                     })
                     .OrderByDescending(x => x.Count)
                     .ToList();
@@ -547,6 +590,5 @@ namespace Clinic.Api.Infrastructure.Services
                 return response;
             }
         }
-
     }
 }

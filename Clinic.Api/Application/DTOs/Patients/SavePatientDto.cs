@@ -40,5 +40,6 @@
         public decimal InBalance { get; set; }
         public bool Paperless { get; set; }
         public int EditOrNew { get; set; }
+        public string Mobile { get; set; }
     }
 }

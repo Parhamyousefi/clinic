@@ -181,12 +181,12 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NjA3ODY4M
 
 ### Get Today Appointments
 POST {{Clinic_Api_Host}}/api/treatment/getTodayAppointments
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NjE2NTg3NzUsImlhdCI6MTc2MTA1Mzk3NSwidXNlcklkIjoiMiIsInVzZXJuYW1lIjoibmltYSIsInVzZXJSb2xlIjoiQWRtaW4iLCJuYmYiOjE3NjEwNTM5NzV9.RisBksPpDw5Iyx0CaZG1bRk1WXhVRhgJrCrVEcYxWBI
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NjIyNTUyNjUsImlhdCI6MTc2MTY1MDQ2NSwidXNlcklkIjoiMiIsInVzZXJuYW1lIjoibmltYSIsInVzZXJSb2xlIjoiQWRtaW4iLCJuYmYiOjE3NjE2NTA0NjV9.wm0OznYEfUUHydSG-9c2pifOXorr_uNRxK_R5hyd3TE
 Content-Type: application/json
 
 {
-  "fromDate": "2025-10-12",  
-  "toDate": "2025-10-12",         
+  "fromDate": "2025-02-19",  
+  "toDate": "2025-02-19",         
   "clinic": null,                  
   "service": null,            
   "from": null,                       
