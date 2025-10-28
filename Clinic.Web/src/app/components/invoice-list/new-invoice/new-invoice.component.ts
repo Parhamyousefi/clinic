@@ -1,5 +1,5 @@
 import { InvoiceService } from './../../../_services/invoice.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { UserService } from '../../../_services/user.service';
 import { SharedModule } from '../../../share/shared.module';
 import { PatientService } from '../../../_services/patient.service';
@@ -42,26 +42,32 @@ export class NewInvoiceComponent implements OnInit {
   selectedPatientTitle: any;
   selectedClinicTitle: any;
   selectedClinicId: any;
+  selectedappointmentId: any;
   patientId: any;
+  @ViewChild(InvoiceItemsComponent) invoiceItemsComponent: InvoiceItemsComponent;
 
   async ngOnInit() {
     this.activeRoute.params.subscribe(async () => {
-      this.selectedClinicId = +this.activeRoute.snapshot.paramMap.get('clinicId') || null;
-      if (this.selectedClinicId) {
-        this.patientId = this.activeRoute.snapshot.paramMap.get('id') || null;
-      } else {
-        this.editOrNew = +this.activeRoute.snapshot.paramMap.get('id') || null;
-      }
+      this.editOrNew = this.activeRoute.snapshot.paramMap.get('invoiceId') == 'n' ? -1 : +this.activeRoute.snapshot.paramMap.get('invoiceId');
+      this.patientId = this.activeRoute.snapshot.paramMap.get('patientId') == 'n' ? null : +this.activeRoute.snapshot.paramMap.get('patientId');
+      this.selectedClinicId = this.activeRoute.snapshot.paramMap.get('clinicId') == 'n' ? null : +this.activeRoute.snapshot.paramMap.get('clinicId');
+      this.selectedappointmentId = this.activeRoute.snapshot.paramMap.get('appointmentId') == 'n' ? null : +this.activeRoute.snapshot.paramMap.get('appointmentId');
       this.type = +this.activeRoute.snapshot.paramMap.get('type') || 2;
 
       await this.getPatients();
       if (this.patientId != null) {
         this.selectedPatient = this.patientsList.filter(patient => patient.id == this.patientId)[0];
+        await this.getPatientAppointments();
+        if (this.selectedappointmentId != null) {
+          this.selectedPatientAppointment = this.patientAppointmentsList.filter(item => item.id == this.selectedappointmentId)[0];
+        }
       }
+
       await this.getClinics();
       if (this.selectedClinicId != null) {
         this.selectedClinic = this.clinicsList.filter(clinic => clinic.id == this.selectedClinicId)[0];
       }
+
       if (this.editOrNew != -1) {
         this.getInvoices();
         this.setSelectedPatient(this.editOrNew);
@@ -115,7 +121,8 @@ export class NewInvoiceComponent implements OnInit {
         if (this.editOrNew == -1) {
           const match = res.message.match(/Id\s*:\s*(\d+)/);
           const id = match ? parseInt(match[1], 10) : null;
-          this.router.navigate(['/new-invoice/' + id + '/2']);
+          this.router.navigate(['/new-invoice', id, "n", "n", "n", 2]);
+
         }
       } else {
         this.toastR.error('خطا');
@@ -158,10 +165,35 @@ export class NewInvoiceComponent implements OnInit {
   }
 
   goToEditPage() {
-    this.router.navigate(['/new-invoice/' + this.editOrNew + '/' + 2])
+    this.router.navigate(['/new-invoice', this.editOrNew, "n", "n", "n", 2]);
   }
 
   setSelectedPatient(patientId) {
     this.selectedPatient = this.patientsList.filter(patient => patient.id == patientId)[0];
+  }
+
+  async savereceipt() {
+    if (this.selectedPatient.code == null) {
+      this.toastR.error('خطا', 'بیمار مورد نظر را انتخاب کنید');
+      return;
+    }
+    let model = {
+      receiptNo: null,
+      patientId: this.selectedPatient.code,
+      cash: +this.invoiceItemsComponent.totalAmount,
+      eftPos: null,
+      other: null,
+      notes: this.note,
+      allowEdit: true,
+      receiptTypeId: 0
+    }
+    try {
+      let data = await this.invoiceService.saveReceipt(model).toPromise();
+      if (data['status'] == 0) {
+        this.toastR.success('با موفقیت ثبت شد!');
+      }
+    } catch {
+      this.toastR.error('خطا', 'خطا در انجام عملیات')
+    }
   }
 }
