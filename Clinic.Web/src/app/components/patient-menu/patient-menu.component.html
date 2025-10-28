@@ -1,46 +1,45 @@
 <div class="patient-navbar">
-    <div class="col-12 d-flex flex-md-row flex-column align-items-center justify-content-between pt-2">
-        <div class="col-md-4 col-12 d-flex align-items-center">
-            <i class="fa fa-user-circle fa-2x text-00c4b4 ml-2" aria-hidden="true"></i>
-            <h4 class="m-0">{{patientName}}</h4>
-        </div>
-        <div class="col-md-8 col-12 d-flex justify-content-end">
-            <button class="btn main-btn mx-1 p-1" [routerLink]="'new-invoice/'+patientId">صدور صورتحساب</button>
-            <app-pdf-maker [_patientData]="patientInfo" [type]="1"></app-pdf-maker>
-            <!-- <button class="btn main-btn mx-1" routerLink="">ویرایش</button> -->
-            <!-- <button class="btn btn-secondary mx-1" routerLink="">مجوز وقت دهی</button> -->
-            <button class="btn btn-outline-danger mx-1 p-1" (click)="deletePatient(patientId)">حذف</button>
-        </div>
+  <div class="col-12 d-flex flex-md-row flex-column align-items-center justify-content-between pt-2">
+    <div class="col-md-4 col-12 d-flex align-items-center">
+      <i class="fa fa-user-circle fa-2x text-00c4b4 ml-2" aria-hidden="true"></i>
+      <h4 class="m-0">{{patientName}}</h4>
     </div>
-    <div class="w-100 note-container mt-2 p-2 d-flex align-items-center">
-        <div class="d-flex note-items-container ml-2">
-            <div *ngFor="let note of patientsNote" class="note-item p-2 mx-1 my-1 pointer" (click)="editNote(note)"
-                (mouseover)="hoveredNote = note.noteId" (mouseleave)="hoveredNote= ''">
-                {{note.note}}
-                <span *ngIf="hoveredNote == note.noteId" (click)="deleteNote($event,note.noteId)"
-                    class="bg-danger delete-note p-1 d-flex justify-content-center align-items-center">
-                    <i class="fa fa-times text-white"></i>
-                </span>
-            </div>
-        </div>
-        <btn *ngIf="!openNoteInput" class="add-note-btn rounded p-1 pointer d-flex align-items-center"
-            (click)="openNoteInput = true">افزودن یادداشت</btn>
-        <div [ngClass]="{'closed-note-container' : !openNoteInput}" class="note-input-container d-flex">
-            <input type="text" name="note" id="patient-note" class="note-input form-control mr-2 h-100"
-                [(ngModel)]="patientNote">
-            <button class="btn main-btn-outline mx-1" (click)="saveNote()">ذخیره</button>
-            <button class="btn btn-outline-secondary mx-1" (click)="openNoteInput = false">انصراف</button>
-        </div>
+    <div class="col-md-8 col-12 d-flex justify-content-end">
+      <button class="btn main-btn mx-1 p-1" [routerLink]="'/new-invoice/' + patientId +'/2/1'">صدور صورتحساب</button>
+      <app-pdf-maker [_patientData]="patientInfo" [type]="1"></app-pdf-maker>
+      <!-- <button class="btn main-btn mx-1" routerLink="">ویرایش</button> -->
+      <!-- <button class="btn btn-secondary mx-1" routerLink="">مجوز وقت دهی</button> -->
+      <button class="btn btn-outline-danger mx-1 p-1" (click)="deletePatient(patientId)">حذف</button>
     </div>
+  </div>
+  <div class="w-100 note-container mt-2 p-2 d-flex align-items-center">
+    <div class="d-flex note-items-container ml-2">
+      <div *ngFor="let note of patientsNote" class="note-item p-2 mx-1 my-1 pointer" (click)="editNote(note)"
+        (mouseover)="hoveredNote = note.noteId" (mouseleave)="hoveredNote= ''">
+        {{note.note}}
+        <span *ngIf="hoveredNote == note.noteId" (click)="deleteNote($event,note.noteId)"
+          class="bg-danger delete-note p-1 d-flex justify-content-center align-items-center">
+          <i class="fa fa-times text-white"></i>
+        </span>
+      </div>
+    </div>
+    <btn *ngIf="!openNoteInput" class="add-note-btn rounded p-1 pointer d-flex align-items-center"
+      (click)="openNoteInput = true">افزودن یادداشت</btn>
+    <div [ngClass]="{'closed-note-container' : !openNoteInput}" class="note-input-container d-flex">
+      <input type="text" name="note" id="patient-note" class="note-input form-control mr-2 h-100"
+        [(ngModel)]="patientNote">
+      <button class="btn main-btn-outline mx-1" (click)="saveNote()">ذخیره</button>
+      <button class="btn btn-outline-secondary mx-1" (click)="openNoteInput = false">انصراف</button>
+    </div>
+  </div>
 </div>
 
 <div class="patient-menu px-3">
-    <div *ngFor="let item of patientMenu"
-        [ngClass]="{'selected-sidebar-menu text-dark': selectedSideBarItem == item.id}"
-        class="sidebar-item d-flex align-items-center pointer mt-3 p-2 text-secondary"
-        [routerLink]="item.link + '/' + patientId" (click)="selectedSideBarItem = item.id">
-        <i class="fa fa-plus ml-2 sidebar-item-icon" [ngClass]="{'text-dark': selectedSideBarItem == item.id}"
-            aria-hidden="true"></i>
-        <p class="m-0">{{item.text}}</p>
-    </div>
+  <div *ngFor="let item of patientMenu" [ngClass]="{'selected-sidebar-menu text-dark': selectedSideBarItem == item.id}"
+    class="sidebar-item d-flex align-items-center pointer mt-3 p-2 text-secondary"
+    [routerLink]="item.link + '/' + patientId" (click)="selectedSideBarItem = item.id">
+    <i class="fa fa-plus ml-2 sidebar-item-icon" [ngClass]="{'text-dark': selectedSideBarItem == item.id}"
+      aria-hidden="true"></i>
+    <p class="m-0">{{item.text}}</p>
+  </div>
 </div>
