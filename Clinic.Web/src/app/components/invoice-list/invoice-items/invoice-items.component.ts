@@ -66,7 +66,6 @@ export class InvoiceItemsComponent implements OnInit {
     catch { }
   }
 
-
   async getProducts() {
     try {
       let res = await this.mainService.getProducts().toPromise();
@@ -115,8 +114,6 @@ export class InvoiceItemsComponent implements OnInit {
     }
   }
 
-
-
   async saveInvoiceItem() {
     if ((!this.selectedservice && this.type == 1) || (this.type == 2 && !this.selectedProduct)) {
       this.toastR.error('خطا', 'مقادیر را وارد کنید');
@@ -149,7 +146,6 @@ export class InvoiceItemsComponent implements OnInit {
       this.toastR.error('خطا');
     }
   }
-
 
   async getInvoiceItems() {
     try {

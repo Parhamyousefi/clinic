@@ -72,9 +72,8 @@ export class NewInvoiceComponent implements OnInit {
         this.getInvoices();
         this.setSelectedPatient(this.editOrNew);
       }
+      await this.getPatientAppointments();
     });
-
-
   }
 
   async getPatients() {
@@ -103,7 +102,7 @@ export class NewInvoiceComponent implements OnInit {
   }
 
   async saveInvoice() {
-    if (!this.selectedPatient || !this.selectedClinic || !this.note || !this.selectedPatientAppointment) {
+    if (!this.selectedPatient || !this.selectedClinic || !this.selectedPatientAppointment) {
       this.toastR.error('خطا', 'مقادیر را وارد کنید');
       return
     }
@@ -132,8 +131,6 @@ export class NewInvoiceComponent implements OnInit {
     }
   }
 
-
-
   async getPatientAppointments() {
     try {
       let res = await this.patientService.getPatientAppointments(this.selectedPatient.code).toPromise();
@@ -147,8 +144,6 @@ export class NewInvoiceComponent implements OnInit {
     catch { }
   }
 
-
-
   async getInvoices() {
     try {
       let res: any = await this.invoiceService.getInvoices().toPromise();
@@ -158,7 +153,6 @@ export class NewInvoiceComponent implements OnInit {
       this.selectedPatient = this.patientsList.filter(x => x.id == item[0]['patientId'])[0];
       this.selectedPatientTitle = item[0]['patientName'];
       this.note = item[0]['notes'];
-      await this.getPatientAppointments();
       this.selectedPatientAppointment = this.patientAppointmentsList.filter(x => x.id == item[0]['appointmentId'])[0];
     }
     catch { }
