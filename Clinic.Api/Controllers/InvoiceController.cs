@@ -128,11 +128,11 @@ namespace Clinic.Api.Controllers
             return Ok(result);
         }
 
-        [HttpGet("cancelInvoice/{invoiceId}/{isCancel}")]
+        [HttpGet("cancelInvoice/{invoiceId}")]
         [Authorize("Admin","Doctor")]
-        public async Task<IActionResult> CancelInvoice(int invoiceId, bool isCancel)
+        public async Task<IActionResult> CancelInvoice(int invoiceId)
         {
-            var result = await _invoicesService.CancelInvoice(invoiceId, isCancel);
+            var result = await _invoicesService.CancelInvoice(invoiceId);
             return Ok(result);
         }
     }

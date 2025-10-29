@@ -540,7 +540,7 @@ namespace Clinic.Api.Infrastructure.Services
             }
         }
 
-        public async Task<GlobalResponse> CancelInvoice(int invoiceId, bool isCancel)
+        public async Task<GlobalResponse> CancelInvoice(int invoiceId)
         {
             var result = new GlobalResponse();
 
@@ -556,7 +556,7 @@ namespace Clinic.Api.Infrastructure.Services
 
                 existingInvoice.ModifierId = userId;
                 existingInvoice.LastUpdated = DateTime.UtcNow;
-                existingInvoice.IsCanceled = isCancel;
+                existingInvoice.IsCanceled = true;
                 _context.Invoices.Update(existingInvoice);
                 await _context.SaveChangesAsync();
                 result.Message = "Invoice Canceled Successfully";
