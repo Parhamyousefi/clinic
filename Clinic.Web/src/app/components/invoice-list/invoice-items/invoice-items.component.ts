@@ -7,6 +7,7 @@ import { InvoiceService } from '../../../_services/invoice.service';
 import { ToastrService } from 'ngx-toastr';
 import { firstValueFrom } from 'rxjs';
 import Swal from 'sweetalert2';
+import { UtilService } from '../../../_services/util.service';
 @Component({
   selector: 'app-invoice-items',
   standalone: true,
@@ -20,7 +21,8 @@ export class InvoiceItemsComponent implements OnInit {
     private treatmentsService: TreatmentsService,
     private toastR: ToastrService,
     private invoiceService: InvoiceService,
-    private mainService: MainService
+    private mainService: MainService,
+    private utilService: UtilService
   ) { }
 
   servicesList: any = [];
@@ -50,7 +52,13 @@ export class InvoiceItemsComponent implements OnInit {
   selectedProduct: any;
   invoiceItemsList: any = [];
   @Input() viewOrEdit;
+  stateOptions: any[] = [{ label: 'اضافه نمودن خدمت', value: 1 }, { label: 'اضافه نمودن کالای مصرفی', value: 2 }];
+  selectedType: number = 1;
+  userType: number;
+  @Input() isCanceled;
+
   async ngOnInit() {
+    this.userType = this.utilService.checkUserType();
     await this.getBillableItems();
     await this.getProducts();
   }

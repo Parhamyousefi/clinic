@@ -81,7 +81,7 @@ export class PatientsComponent {
     }
     this.patientsList.forEach(async patient => {
       patient.patientPhone = await this.getPatientPhone(patient.id);
-      patient.phoneNum = patient.patientPhone.number;
+      patient.phoneNum = patient.patientPhone?.number;
       patient.fullName = patient.firstName + ' ' + patient.lastName;
     });
   }
