@@ -14,9 +14,9 @@
       <ng-template pTemplate="header">
         <tr>
           <th>ردیف</th>
-          <th>نام و نام خانوادگی</th>
+          <th pSortableColumn="fullName"><p-sortIcon field="fullName"></p-sortIcon> نام و نام خانوادگی</th>
           <th>نام پدر</th>
-          <th>شماره همراه</th>
+          <th pSortableColumn="mobile"><p-sortIcon field="mobile"></p-sortIcon> شماره همراه</th>
           <th>کد ملی</th>
           <th>توضیحات</th>
           <th>عملیات</th>
@@ -40,7 +40,7 @@
       <ng-template pTemplate="body" let-patient let-rowIndex="rowIndex">
         <tr>
           <td> {{rowIndex+1}}</td>
-          <td class="pointer text-00c4b4" [routerLink]="'/patient-treatment/' + patient.id">
+          <td class="pointer text-00c4b4" [routerLink]="'/patient/treatment/' + patient.id">
             {{patient.firstName}} {{patient.lastName}}
           </td>
           <td>
