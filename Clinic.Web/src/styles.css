@@ -269,7 +269,7 @@ p-dropdown.p-element {
 
 .p-dialog .p-dialog-header {
   border: 1px solid lightgray;
-  padding: 0;
+  /* padding: 0; */
 }
 
 .p-dialog .p-dialog-content {

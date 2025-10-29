@@ -76,7 +76,7 @@
     <p-header>
       <div class="col-12 d-flex justify-content-between align-items-center">
         <h4>ایجاد بیمار</h4>
-        <button class="btn main-btn text-white">معرف جدید</button>
+        <button class="btn main-btn text-white" (click)="displayDialog = true">معرف جدید</button>
       </div>
     </p-header>
     <div class="col-12 create-patient-modal">
@@ -159,14 +159,14 @@
           <label for="firstReagent" class="text-right">
             <span class="text-danger ml-1">*</span> معرف اول
           </label>
-          <p-dropdown [options]="firstReagent" id="firstReagent" [(ngModel)]="newPatient.referringContactId"
+          <p-dropdown [options]="contactsList" id="firstReagent" [(ngModel)]="newPatient.referringContactId"
             optionLabel="name" class="full-width text-right" />
         </div>
         <div class="col-md-4 col-12 d-flex flex-column">
           <label for="secondReagent" class="text-right">
             معرف دوم
           </label>
-          <p-dropdown [options]="secondReagent" id="secondReagent" [(ngModel)]="newPatient.referringContact2Id"
+          <p-dropdown [options]="contactsList" id="secondReagent" [(ngModel)]="newPatient.referringContact2Id"
             optionLabel="name" class="full-width text-right" />
         </div>
         <div class="col-md-4 col-12 d-flex flex-column">
@@ -229,5 +229,13 @@
       <button class="btn main-btn px-3 py-2 mx-1" (click)="savePhone()">ثبت</button>
       <button class="btn btn-outline-danger px-3 py-2 mx-1" (click)="closeAddPhoneNum()">انصراف</button>
     </div>
+  </p-dialog>
+
+
+  <p-dialog [(visible)]="displayDialog" [modal]="true" [style]="{width: '600px'}">
+    <p-header>
+      <div class="col-6 text-right d-flex align-items-center"> معرف جدید</div>
+    </p-header>
+    <app-new-contact (closeModal)="closeModal($event)"></app-new-contact>
   </p-dialog>
 </div>

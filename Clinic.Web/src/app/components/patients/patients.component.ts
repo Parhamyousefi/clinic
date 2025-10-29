@@ -13,10 +13,11 @@ import { DropdownModule } from 'primeng/dropdown';
 import { ToastrModule, ToastrService } from 'ngx-toastr';
 import { firstValueFrom } from 'rxjs';
 import swal from 'sweetalert2';
+import { NewContactComponent } from '../contacts/new-contact/new-contact.component';
 @Component({
   selector: 'app-patients',
   standalone: true,
-  imports: [TableModule, FormsModule, SelectButtonModule, DialogModule, CommonModule, SelectButtonModule, InputMaskModule, DropdownModule, RouterLink],
+  imports: [TableModule, FormsModule, SelectButtonModule, DialogModule, CommonModule, SelectButtonModule, InputMaskModule, DropdownModule, RouterLink, NewContactComponent],
   templateUrl: './patients.component.html',
   styleUrl: './patients.component.css'
 })
@@ -57,9 +58,11 @@ export class PatientsComponent {
   selectedEditPhoneNum: any;
   selectedEditPhonePatientId: any;
   hasPhoneNum: boolean;
+  patientPhoneList = [];
+  displayDialog: boolean;
+
   constructor(
     private patientService: PatientService,
-    private router: Router,
     private mainService: MainService,
     private contactService: ContactService,
     private toastR: ToastrService
@@ -114,18 +117,13 @@ export class PatientsComponent {
       jobId: this.newPatient.job.code,
       referringInpatientInsurerId: this.newPatient.referringInpatientInsurerId,
       editOrNew: this.editpatientMode ? this.newPatient.id : -1,
-      mobile: this.newPatient.mobile,
+      mobile: this.newPatient.mobile
     }
-    if (this.newPatient.firstName && this.newPatient.lastName && this.newPatient.gender && this.newPatient.fatherName && this.newPatient.birthDate && this.newPatient.job) {
-      let res: any = await firstValueFrom(this.patientService.savePatient(model));
-      if (res) {
-        this.toastR.success('با موفقیت ثبت شد!');
-        this.closeCreatePatientModal();
-        this.getPatients();
-      }
-    }
-    else {
-      this.toastR.error('خطا', 'مقادیر را به درستی وارد کنید');
+    let res: any = await firstValueFrom(this.patientService.savePatient(model));
+    if (res) {
+      this.toastR.success('با موفقیت ثبت شد!');
+      this.closeCreatePatientModal();
+      this.getPatients();
     }
   }
 
@@ -136,7 +134,6 @@ export class PatientsComponent {
       this.jobList.forEach(job => {
         job.code = job.id
       });
-
     }
   }
 
@@ -177,24 +174,23 @@ export class PatientsComponent {
     this.selectedPatientAddPhoneId = '';
     this.selectedEditPhoneNum = '';
     this.patientPhoneEditMode = false;
+     this.patientPhoneList = [];
+    this.getPatients();
   }
 
 
-  openAddPhoneNumModal(patientId) {
-    if (this.patientPhoneEditMode) {
-      this.hasPhoneNum = true;
-    }
-    else {
-      this.hasPhoneNum = false;
-    }
-    this.showAddPhoneNum = true;
+  async openAddPhoneNumModal(patientId) {
     this.selectedPatientAddPhoneId = patientId;
+    this.showAddPhoneNum = true;
+    await this.getPatientPhone(patientId);
+    await this.creatPatientPhone();
   }
 
   async getPatientPhone(patientId) {
     try {
       const res: any = await this.patientService.getPatientPhone(patientId).toPromise();
       if (res.length > 0) {
+        this.patientPhoneList = res;
         return res[0];
       }
       else {
@@ -231,7 +227,6 @@ export class PatientsComponent {
     this.patientPhoneEditMode = true;
     this.phoneNum.phoneNumber = patientPhone.number;
     this.phoneNum.phoneType = this.phoneTypeList.filter(type => type.code == patientPhone.phoneNoTypeId)[0];
-    this.openAddPhoneNumModal(patientPhone.patientId);
   }
 
   async deletePatient(patientId) {
@@ -279,5 +274,18 @@ export class PatientsComponent {
         this.toastR.error('خطایی رخ داد', 'خطا!')
       }
     })
+  }
+  creatPatientPhone() {
+    if(this.patientPhoneList.length>0){
+      this.patientPhoneList.forEach(element => {
+        element.typeText = this.phoneTypeList.filter(type => type.code == element.phoneNoTypeId)[0].name;
+      });
+    }
+  }
+
+  async closeModal(data) {
+    this.displayDialog = false;
+    await this.getContacts();
+    this.newPatient.referringContactId = this.contactsList.filter(x => x.firstName == data.firstName)[0];
   }
 }

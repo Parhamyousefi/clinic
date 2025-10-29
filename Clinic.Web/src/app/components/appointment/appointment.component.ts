@@ -11,6 +11,7 @@ import { DropdownModule } from 'primeng/dropdown';
 import { ToastrService } from 'ngx-toastr';
 import { PatientService } from '../../_services/patient.service';
 import { TreatmentsService } from '../../_services/treatments.service';
+import { firstValueFrom } from 'rxjs';
 @Component({
   selector: 'app-appointment',
   standalone: true,
@@ -100,6 +101,7 @@ export class AppointmentComponent {
 
   isBeforeNow: boolean;
   isCalendarVisible = true;
+  newPateint: any = [];
   constructor(
     private userService: UserService,
     private toastR: ToastrService,
@@ -420,5 +422,36 @@ export class AppointmentComponent {
   }
 
 
+  async createPatient() {
+    if (!this.newPateint.firstName || !this.newPateint.lastName || !this.newPateint.mobile) {
+      this.toastR.error('تمامی موارد خواسته شده رو تکمیل کیند');
+      return
+    }
+    let model = {
+      titleId: null,
+      firstName: this.newPateint.firstName,
+      lastName: this.newPateint.lastName,
+      gender: null,
+      fatherName: null,
+      birthDate: null,
+      city: null,
+      note: null,
+      referringInsurerId: null,
+      referringInsurer2Id: null,
+      referringContactId: null,
+      referringContact2Id: null,
+      nationalCode: null,
+      jobId: null,
+      referringInpatientInsurerId: null,
+      editOrNew: -1,
+      mobile: this.newPateint.mobile,
+    }
+    let res: any = await firstValueFrom(this.patientService.savePatient(model));
+    if (res) {
+      this.toastR.success('با موفقیت ثبت شد!');
+      await this.getPatients();
+      this.newAppointmentModel.selectedPatient = this.patientsList.filter(x => x.firstName == this.newPateint.firstName)[0];
+    }
 
+  }
 }
