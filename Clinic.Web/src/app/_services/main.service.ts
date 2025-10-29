@@ -26,9 +26,96 @@ export class MainService {
     return this.http.get(uri, httpOptions);
   }
 
-  getBillableItems() {
+
+
+  getCountries() {
     const token: any = localStorage.getItem("token");
-    const uri = this.url + `api/main/getBillableItems`;
+    const uri = this.url + `api/Main/getCountries`;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      }),
+    };
+    return this.http.get(uri, httpOptions);
+  }
+
+  getProducts() {
+    const token: any = localStorage.getItem("token");
+    const uri = this.url + `api/Main/getProducts`;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      }),
+    };
+    return this.http.get(uri, httpOptions);
+  }
+
+  saveProduct(data) {
+    const token: any = localStorage.getItem("token");
+    const uri = this.url + `api/Main/saveProduct`;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+        responseType: 'text'
+      }),
+    };
+    return this.http.post(uri, data, httpOptions);
+  }
+  deleteProduct(productId) {
+    const token: any = localStorage.getItem("token");
+    const uri = this.url + `api/Main/deleteProduct/${productId}`;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      }),
+    };
+    return this.http.get(uri, httpOptions);
+  }
+
+  getClinics() {
+    const token: any = localStorage.getItem("token");
+    const uri = this.url + `api/main/getClinics`;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      }),
+    };
+    return this.http.get(uri, httpOptions);
+  }
+
+  saveNote(data) {
+    const token: any = localStorage.getItem("token");
+    const uri = this.url + `api/Main/saveNote`;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+        responseType: 'text'
+      }),
+    };
+    return this.http.post(uri, data, httpOptions);
+  }
+
+  getNotes(id) {
+    const token: any = localStorage.getItem("token");
+    const uri = this.url + `api/main/getNotes/` + id;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      }),
+    };
+    return this.http.get(uri, httpOptions);
+  }
+
+  deleteNote(id) {
+    const token: any = localStorage.getItem("token");
+    const uri = this.url + `api/main/deleteNote/` + id;
     const httpOptions = {
       headers: new HttpHeaders({
         "Content-Type": "application/json",

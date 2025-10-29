@@ -2,121 +2,320 @@
 @import "primeng/resources/primeng.css";
 
 @font-face {
-    font-family: "iran-sans";
-    src: url("assets/fonts/IRANSans.eot") format("eot"), url("assets/fonts/IRANSans.ttf") format("truetype"), url("assets/fonts/IRANSans.woff") format("woff"), url("assets/fonts/IRANSans.woff2") format("woff2");
-    font-style: normal;
-    font-weight: normal;
+  font-family: "iran-sans";
+  src: url("assets/fonts/IRANSans.eot") format("eot"), url("assets/fonts/IRANSans.ttf") format("truetype"), url("assets/fonts/IRANSans.woff") format("woff"), url("assets/fonts/IRANSans.woff2") format("woff2");
+  font-style: normal;
+  font-weight: normal;
 }
 
 
-/* * {
+/* * { 
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 } */
 
 body {
-    font-family: "iran-sans" !important;
+  font-family: "iran-sans" !important;
 }
 
 .appContainer {
-    width: calc(100% - 270px);
-    margin-top: 80px;
-    height: 100vh;
-    padding: 20px;
-    margin-right: 270px;
-    direction: rtl;
+  width: calc(100% - 270px);
+  margin-top: 80px;
+  height: 100vh;
+  padding: 20px;
+  margin-right: 270px;
+  direction: rtl !important;
+}
+
+.patientAppContainer {
+  width: calc(100% - 450px);
+  margin-top: 200px;
+  height: 100vh;
+  padding: 20px;
+  margin-right: 450px;
+  direction: rtl !important;
 }
 
 .pointer {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .navbar {
-    z-index: 90;
-    direction: rtl;
-    width: calc(100% - 250px);
-    height: 80px;
-    position: fixed;
-    top: 0;
-    right: 250px;
-    background-color: #ffff;
-    box-shadow: 0px 15px 25px rgba(0, 0, 0, 0.05);
+  z-index: 90;
+  direction: rtl;
+  width: calc(100% - 250px);
+  height: 80px;
+  position: fixed;
+  top: 0;
+  right: 250px;
+  background-color: #ffff;
+  /* background: rgba(99, 198, 179, 1); */
+  box-shadow: 0px 15px 25px rgba(0, 0, 0, 0.05);
 }
 
 .sidebar {
+  display: flex;
+  flex-flow: row;
+  direction: rtl;
+  text-align: center;
+  width: 250px;
+  height: 100%;
+  /* background-color: #ffff !important; */
+  /* background: rgba(99, 198, 179, 1); */
+  background: rgb(114 217 197);
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 99;
+  box-shadow: 0 0 5px rgb(0 0 0 / 20%);
+  transition: .2s all ease;
+}
+
+/* .patient-mode-sidebar {
     display: flex;
-    flex-flow: column;
+    flex-flow: row;
     direction: rtl;
     text-align: center;
-    width: 250px;
+    width: 400px;
     height: 100%;
-    background-color: #ffff !important;
+    background-color: none !important;
     position: fixed;
     top: 0;
     right: 0;
     z-index: 99;
     box-shadow: 0 0 5px rgb(0 0 0 / 20%);
-    animation-name: fadeRight;
-    animation-duration: 0.8s;
-}
+transition: .2s all ease;
+} */
 
 .modalShadow {
-    position: fixed;
-    z-index: 1000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0, 0, 0, 0.4);
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.4);
 }
 
 .p-datatable-table {
-    text-align: center !important;
-    font-family: "iran-sans" !important;
+  text-align: center !important;
+  font-family: "iran-sans" !important;
 }
 
 .p-paginator {
-    direction: ltr !important;
+  direction: ltr !important;
 }
 
 .full-width .p-dropdown {
-    width: 100%;
-    padding: 5px;
+  width: 100%;
+  padding: 5px;
 }
 
 .p-element {
-    font-family: "iran-sans" !important;
+  font-family: "iran-sans" !important;
 }
 
 .mat-calendar {
-    font-family: "iran-sans" !important;
+  font-family: "iran-sans" !important;
 }
 
 .mat-mdc-text-field-wrapper.mdc-text-field--outlined .mdc-text-field__input {
-    text-align: center;
+  text-align: center;
 }
 
 .ngx-timepicker {
-    direction: ltr;
-    justify-content: center;
+  direction: ltr;
+  justify-content: center;
 }
 
 ngx-material-timepicker-toggle {
-    display: none;
+  display: none;
 }
 
 .ngx-timepicker {
-    border: 1px solid rgba(0, 0, 0, .12);
-    padding: 0.8rem;
-    border-radius: 8px;
+  border: 1px solid rgba(0, 0, 0, .12);
+  padding: 0.8rem;
+  border-radius: 8px;
 }
 
 mat-label {
-    font-family: "iran-sans" !important;
+  font-family: "iran-sans" !important;
 }
 
 .p-datatable.p-datatable-gridlines:has(.p-datatable-thead):has(.p-datatable-tbody) .p-datatable-tbody>tr>td {
-    text-align: center;
+  text-align: center;
+}
+
+
+.mobile-sidebar {
+  transition: .2s all ease;
+  display: none;
+}
+
+.mobile-nav {
+  width: 100% !important;
+  right: 0;
+}
+
+.main-btn {
+  background-color: #00c4b4;
+  color: #FFFFFF;
+}
+
+.main-btn-outline {
+  border: 1px solid #00c4b4;
+  color: #00c4b4;
+}
+
+.main-btn-outline:hover {
+  background-color: #63C6B3;
+}
+
+.bg-main {
+  background-color: #63C6B3;
+  color: #FFFFFF;
+}
+
+.bg-main-outline {
+  background: rgba(99, 198, 179, 0.5);
+}
+
+/* calender */
+#appointment .day-col {
+  padding: 0.8rem !important;
+}
+
+#appointment .datepicker-outer-container .datepicker-inner-container .dp-btn {
+  border-radius: 50% !important;
+  width: 30px;
+  height: 30px;
+  margin: auto;
+}
+
+.datepicker-outer-container .datepicker-inner-container .dp-btn.selected {
+  background-color: rgb(0 196 180) !important;
+}
+
+.p-dropdown {
+  width: 100%;
+}
+
+p-dropdown.p-element {
+  padding: 0.4rem;
+}
+
+.p-dropdown-label {
+  padding: 0.4rem;
+
+}
+
+
+.mobile-sidebar {
+  transition: .2s all ease;
+  display: none;
+}
+
+.mobile-nav {
+  width: 100% !important;
+  right: 0;
+}
+
+.main-btn {
+  background-color: #00c4b4;
+  color: #FFFFFF;
+}
+
+.bg-main {
+  background-color: #63C6B3;
+  color: #FFFFFF;
+}
+
+.bg-main-outline {
+  background: rgba(99, 198, 179, 0.5);
+}
+
+.text-00c4b4 {
+  color: #00c4b4;
+}
+
+.btn-pink {
+  background-color: hotpink;
+  color: white;
+  border: none;
+}
+
+.btn-pink:hover {
+  background-color: hotpink;
+  color: white;
+}
+
+.drop {
+  border-width: 0px !important;
+}
+
+.drop .cont .browse {
+  margin: 0 !important;
+  background-color: #919191 !important;
+  width: fit-content !important;
+}
+
+.dashed_upload {
+  /* height: 50px !important; */
+  border: 1px dashed #63C6B3;
+  border-radius: 20px;
+}
+
+.p-dialog .p-dialog-header {
+  border: 1px solid lightgray;
+  /* padding: 0; */
+}
+
+.p-dialog .p-dialog-content {
+  padding: 1rem;
+}
+
+.reportAppContainer {
+  width: calc(100% - 500px);
+  margin-top: 100px;
+  height: 100vh;
+  padding: 20px;
+  margin-right: 500px;
+  direction: rtl !important;
+}
+
+.p-selectbutton.p-buttonset {
+  direction: ltr;
+  text-align: right;
+}
+
+.p-ripple.p-element.p-button.p-component.p-highlight {
+  background-color: #72d9c5;
+  box-shadow: none;
+  border-color: #72d9c5;
+}
+
+.text-72d9c5 {
+  color: #72d9c5;
+}
+
+@media (max-width: 768px) {
+  .appContainer {
+    width: 100%;
+    margin-top: 80px;
+    height: 100vh;
+    padding: 20px;
+    margin-right: 0;
+    direction: rtl !important;
+  }
+
+  .patientAppContainer {
+    width: 100%;
+    margin-top: 140px;
+    height: 100vh;
+    padding: 20px;
+    margin-right: 0;
+    direction: rtl !important;
+  }
 }

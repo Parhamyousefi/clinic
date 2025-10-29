@@ -26,4 +26,163 @@ export class PatientService {
     };
     return this.http.get(uri, httpOptions);
   }
+
+  savePatient(data) {
+    const uri = this.url + `api/Patient/savePatient`;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + this.token,
+        responseType: 'text'
+      }),
+    };
+    return this.http.post(uri, data, httpOptions);
+  }
+
+  savePatientPhone(data) {
+    const uri = this.url + `api/Patient/savePatientPhone`;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + this.token,
+        responseType: 'text'
+      }),
+    };
+    return this.http.post(uri, data, httpOptions);
+  }
+
+  getPatientPhone(patientId) {
+    const token: any = localStorage.getItem("token");
+    const uri = this.url + `api/Patient/getPatientPhone/${patientId}`;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      }),
+    };
+    return this.http.get(uri, httpOptions);
+  }
+
+  deletePatient(patientId) {
+    const token: any = localStorage.getItem("token");
+    const uri = this.url + `api/Patient/deletePatient/` + patientId;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      }),
+    };
+    return this.http.get(uri, httpOptions);
+  }
+
+  deletePatientPhone(patientId) {
+    const token: any = localStorage.getItem("token");
+    const uri = this.url + `api/Patient/deletePatientPhone/` + patientId;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      }),
+    };
+    return this.http.get(uri, httpOptions);
+  }
+
+  getPatientAppointments(patientId) {
+    const token: any = localStorage.getItem("token");
+    const uri = this.url + `api/Patient/getPatientAppointments/` + patientId;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      }),
+    };
+    return this.http.get(uri, httpOptions);
+  }
+
+  getPatientById(patientId) {
+    const token: any = localStorage.getItem("token");
+    const uri = this.url + `api/Patient/getPatientById/` + patientId;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      }),
+    };
+    return this.http.get(uri, httpOptions);
+  }
+
+
+  saveAttachment(data) {
+    const uri = this.url + `api/Patient/saveAttachment`;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + this.token,
+        responseType: 'text'
+      }),
+    };
+    return this.http.post(uri, data, httpOptions);
+  }
+
+  getAttachment(patientId) {
+    const token: any = localStorage.getItem("token");
+    const uri = this.url + `api/Patient/getAttachment/` + patientId;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      }),
+    };
+    return this.http.get(uri, httpOptions);
+  }
+  
+
+  getPatientReceipts(patientId) {
+    const token: any = localStorage.getItem("token");
+    const uri = this.url + `api/Patient/getPatientReceipts/` + patientId;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      }),
+    };
+    return this.http.get(uri, httpOptions);
+  }
+  deleteAttachment(patientId) {
+    const token: any = localStorage.getItem("token");
+    const uri = this.url + `api/Patient/deleteAttachment/` + patientId;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      }),
+    };
+    return this.http.get(uri, httpOptions);
+  }
+  
+  getPatientPayments(patientId) {
+    const token: any = localStorage.getItem("token");
+    const uri = this.url + `api/Patient/getPatientPayments/` + patientId;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      }),
+    };
+    return this.http.get(uri, httpOptions);
+  }
+
+  getPatientInvoices(patientId) {
+    const token: any = localStorage.getItem("token");
+    const uri = this.url + `api/Patient/getPatientInvoices/` + patientId;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      }),
+    };
+    return this.http.get(uri, httpOptions);
+  }
+
+
 }

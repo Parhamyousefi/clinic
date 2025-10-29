@@ -1,0 +1,77 @@
+<button *ngIf="type == 1" class="btn btn-primary mx-2 p-1" (click)="generatePDF('print')">
+  چاپ فرم بیمار
+</button>
+
+
+<div *ngIf="showPdfContent" id="pdf-content" class="hidden-canvas-zone">
+  <div class="col-12" *ngIf="type == 1">
+    <div class="d-flex justify-content-between align-items-center my-3">
+      <div>
+        <img src="../../../assets/images/logo.png" alt="لوگو" class="pl-2" style="height: 40px;">
+      </div>
+      <h4 class="text-center flex-grow-1 me-n5">Outpatient Sheet</h4>
+      <div class="text-end">Patient Code: <strong>{{patientData.patientCode || "-"}}</strong></div>
+    </div>
+    <div class="d-flex mb-2">
+      <div class="col text-end">Name: <strong>{{patientData.firstName}} {{patientData.lastName}}</strong>
+      </div>
+      <div class="col text-end">Age: <strong>{{patientData.age}}</strong></div>
+    </div>
+    <div class="d-flex mb-2">
+      <div class="col text-end">
+        Date: <strong>{{ todayDate }}</strong> - Time: <strong>{{ todayTime }}</strong>
+      </div>
+      <div class="col text-end">Contact Phone No.: <strong>{{patientData.mobile || "-"}}</strong></div>
+    </div>
+    <div class="d-flex mb-2">
+      <div class="col text-end">Referring Doctor: <strong>{{patientData.referringDoctorName || "-"}}</strong>
+      </div>
+      <div class="col text-end">Occupation: <strong>{{patientData.jobName || "-"}}</strong></div>
+    </div>
+    <hr style="border-top: 3px solid #000000 !important;" class="mt-3">
+    <div class="d-flex" style="height:900px">
+      <div class="col-10" style="height:900px"></div>
+      <div style="border-left: 3px solid #000000 !important; height:900px" class="col-2"></div>
+    </div>
+  </div>
+  <div class="col-12 text-dark" style="direction: rtl;" *ngIf="type == 2">
+    <div class="d-flex justify-content-between align-items-center px-4 border-bottom pt-2 mb-2 pb-1">
+      <h6 class="mb-0 text-dark"><strong>{{patientData.firstName}} {{patientData.lastName}}</strong></h6>
+      <p class="mb-0 text-dark">{{selectedServiceForPDF2.billableItemName}}</p>
+    </div>
+
+    <div class="col-12 header-box-for-pdf2">
+      <div class="d-flex mb-2">
+        <div class="col text-right">پزشک : <strong>{{patientData.referringDoctorName || "-"}}</strong>
+        </div>
+        <div class="col text-right">معرف: <strong> - </strong></div>
+      </div>
+      <div class="d-flex mb-2">
+        <div class="col text-right">سن بیمار: <strong>{{patientData.age}}</strong></div>
+        <div class="col text-right"> کد بیمار: <strong>{{patientData.patientCode || "-"}}</strong></div>
+      </div>
+      <div class="d-flex mb-2">
+        <div class="col text-right">
+          زمان گزارش: <strong>{{ todayDateForPDf2 }}</strong>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-4" *ngFor="let value of selectedServiceForPDF2.sections">
+      <div class="mb-3">
+        <div class="text-left value-box-for-pdf2 p-2">
+          <span>{{value.title}}</span>
+        </div>
+        <div class="px-2 mt-1">
+          <div *ngFor="let question of value.questions">
+            <div *ngIf="question.selectedValue"
+              class="d-flex justify-content-between align-items-center mt-1 border-bottom">
+              <p class="mb-0" [innerHTML]="question.selectedValue"></p>
+              <p class="mb-0"><strong>{{ question.title }}</strong></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

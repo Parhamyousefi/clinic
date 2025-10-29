@@ -271,11 +271,12 @@ namespace Clinic.Api.Infrastructure.Services
             try
             {
                 var query = _context.MedicalAlerts.AsQueryable();
-                var result = await (from n in query
+                var result = await (from m in query
+                                    where m.PatientId == patientId
                                     select new GetNotesResponse
                                     {
-                                        NoteId = n.Id,
-                                        Note = n.Message,
+                                        NoteId = m.Id,
+                                        Note = m.Message
                                     })
                                     .ToListAsync();
                 return result;

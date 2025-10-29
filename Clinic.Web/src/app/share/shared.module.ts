@@ -10,15 +10,20 @@ import {
   PriceWithoutTaxPipe,
   JustDateZone
 } from './custom.pipe';
-import { MatDatepickerModulePersian } from 'ngx-persian-datepicker';
 import { TableModule } from 'primeng/table';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DropdownModule } from 'primeng/dropdown';
 import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
-
+import { NgPersianDatepickerModule } from 'ng-persian-datepicker';
+import { AccordionModule } from 'primeng/accordion';
+import { MultiSelectModule } from 'primeng/multiselect';
+import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
+import { DialogModule } from 'primeng/dialog';
+import { ImageModule } from 'primeng/image';
+import { SelectButtonModule } from 'primeng/selectbutton';
 
 @NgModule({
   declarations: [
@@ -55,7 +60,15 @@ import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
     MatInputModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    NgxMaterialTimepickerModule
+    NgxMaterialTimepickerModule,
+    NgPersianDatepickerModule,
+    ReactiveFormsModule,
+    AccordionModule,
+    MultiSelectModule,
+    CKEditorModule,
+    DialogModule,
+    ImageModule,
+    SelectButtonModule
   ],
   exports: [
     NumberSplitPipe,
@@ -87,7 +100,16 @@ import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
     DropdownModule,
     MatInputModule,
     MatDatepickerModule,
-    NgxMaterialTimepickerModule
+    NgxMaterialTimepickerModule,
+    NgPersianDatepickerModule,
+    ReactiveFormsModule,
+    CommonModule,
+    AccordionModule,
+    MultiSelectModule,
+    CKEditorModule,
+    DialogModule,
+    ImageModule,
+    SelectButtonModule
   ]
 })
 export class SharedModule { }

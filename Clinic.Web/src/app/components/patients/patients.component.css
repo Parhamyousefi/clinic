@@ -2,6 +2,14 @@
     text-align: center;
 }
 
+.new-appointment-btn {
+    background-color: #00c4b4;
+    font-weight: 800;
+    font-size: 20px;
+    color: #FFFFFF;
+}
+
+
 .new-appointment-containter {
     direction: rtl !important;
 }
@@ -21,4 +29,62 @@
 ::ng-deep .p-selectbutton .p-button.p-highlight {
     background-color: #00c4b4;
     border: 1px solid #00c4b4;
+}
+
+:ng-deep .birthdate-input {
+    background-color: red !important;
+    width: 100% !important;
+}
+
+.create-patient-btn {
+    background-color: #00c4b4;
+}
+
+::ng-deep .full-width .p-dropdown {
+    width: 100%;
+    padding: 5px;
+    max-height: 40px;
+}
+
+::ng-deep .p-dropdown .p-dropdown-label {
+    font-family: 'iran-sans' !important;
+}
+
+::ng-deep .p-dropdown .p-inputtext {
+    padding: 0 !important;
+}
+
+.back-to-patient {
+    background-color: #00c4b4;
+    font-weight: 800;
+    font-size: 20px;
+    color: #FFFFFF;
+}
+
+
+::ng-deep #create-patient-modal .ng-tns-c662934324-1 .p-dialog-mask .ng-star-inserted div {
+    min-width: 30%;
+    min-height: 300px;
+}
+
+.main-btn {
+    background-color: #00c4b4;
+    color: #FFFFFF;
+}
+
+.main-outline-btn {
+    border: 1px solid #00c4b4;
+    color: #00c4b4;
+}
+
+::ng-deep #create-patient-modal .p-dialog-title {
+    width: 100% !important;
+}
+
+.add-phone-modal {
+    direction: rtl;
+}
+
+::ng-deep .p-dialog-title {
+    width: 100% !important;
 }

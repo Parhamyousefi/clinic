@@ -1,0 +1,102 @@
+<div class="appContainer">
+    <div class="col-12 text-right">
+        <div class="w-100 d-flex justify-content-between">
+            <h4 class="m-0">هزینه ها</h4>
+            <button class="btn main-btn p-2 px-3" (click)="showNewExpense()">+</button>
+        </div>
+
+        <hr>
+    </div>
+    <div>
+        <p-table id="expensesTable" #dt styleClass="" class="expenses-table" [value]="expensesList" [pageLinks]="20"
+            [autoLayout]="true" [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
+            currentPageReportTemplate="نمایش {first} تا {last} " [rowsPerPageOptions]="[10,25,50]">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>#</th>
+                    <th>شماره</th>
+                    <th>تاریخ</th>
+                    <th>مبلغ</th>
+                    <th>فروشنده</th>
+                    <th>گروه</th>
+                    <th>عملیات</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-expense let-rowIndex="rowIndex">
+                <tr>
+                    <td class="text-center"> {{rowIndex+1}}</td>
+                    <td class="text-center">
+                        {{expense.id}}
+                    </td>
+                    <td class="text-center">
+                        {{expense.createdOn | ShamsiFullDateInOneLineZone}}
+                    </td>
+                    <td class="text-center">
+                        {{expense.amount}}
+                    </td>
+                    <td class="text-center">
+                        {{expense.vendor}}
+                    </td>
+                    <td class="text-center">
+                        {{expense.category}}
+                    </td>
+                    <td class="text-center">
+                        <button class="btn main-outline-btn mx-1 main-btn-outline"
+                            (click)="editExpense(expense)">ویرایش</button>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+
+
+
+    <p-dialog id="create-expense-modal" [(visible)]="showAddExpense" [closable]="false"
+        [ngClass]="{'modalShadow' : showAddExpense}" class="p-2">
+        <p-header>
+            <p>هزینه</p>
+        </p-header>
+
+        <div class="col-12">
+            <div class="col-12 d-flex flex-column text-right">
+                <label for="date">تاریخ</label>
+                <ng-persian-datepicker>
+                    <input type="text" class="form-control" [formControl]="newExpense.date" />
+                </ng-persian-datepicker>
+            </div>
+            <div class="col-12 d-flex flex-column text-right mt-2">
+                <label for="location">مکان</label>
+                <p-dropdown id="location" [options]="clinicsList" [(ngModel)]="newExpense.selectedclinic"
+                    optionLabel="name" class="form-control" class="full-width text-right" />
+            </div>
+            <div class="col-12 d-flex flex-column text-right">
+                <label for="seller">فروشنده</label>
+                <input name="seller" class="form-control" [(ngModel)]="newExpense.seller" type="text">
+            </div>
+            <div class="col-12 d-flex flex-column text-right">
+                <label for="group">گروه</label>
+                <input name="group" class="form-control" [(ngModel)]="newExpense.group" type="text">
+            </div>
+            <div class="col-12 d-flex flex-column text-right">
+                <label for="payment">مبلغ</label>
+                <input name="payment" class="form-control" [(ngModel)]="newExpense.amount" type="text">
+            </div>
+            <div class="col-12 d-flex flex-column text-right">
+                <label for="note">یادداشت</label>
+                <textarea name="note" [(ngModel)]="newExpense.note" id="note"></textarea>
+            </div>
+            <div class="col-12 d-flex flex-column text-right">
+                <label for="status">هزینه بابت خرید کالا است؟</label>
+                <div class="d-flex justify-content-center">
+                    <p-selectButton id="status" [options]="expenseStatus" [(ngModel)]="newExpense.status"
+                        optionLabel="label" optionValue="value" class="select-btn" />
+                </div>
+            </div>
+        </div>
+        <div class="col-12 d-flex justify-content-between mt-2">
+            <button class="btn btn-outline-danger col-5" (click)="showAddExpense = false">انصراف</button>
+            <button class="btn main-btn-outline col-5" (click)="saveExpense()">ذخیره</button>
+        </div>
+    </p-dialog>
+
+</div>

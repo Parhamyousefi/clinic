@@ -16,10 +16,10 @@
 }
 
 .logo-container {
-    width: 70px !important;
+    width: 300px !important;
     height: 70px !important;
-    border-radius: 50%;
-    background-color: #00c4b4;
+    /* border-radius: 50%;
+    background-color: #00c4b4; */
 }
 
 .login-card {
@@ -103,4 +103,8 @@
 
 .login-btn:hover {
     background-color: #007469;
+}
+
+.title {
+    color: #253E8A;
 }
