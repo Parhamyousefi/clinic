@@ -33,6 +33,25 @@ namespace Clinic.Api.Infrastructure.Services
             {
                 var userId = _token.GetUserId();
 
+                if (!string.IsNullOrWhiteSpace(model.NationalCode) && model.NationalCode != "0000000000")
+                {
+                    bool nationalCodeExists;
+
+                    if (model.EditOrNew == -1)
+                    {
+                        nationalCodeExists = await _context.Patients
+                            .AnyAsync(p => p.NationalCode == model.NationalCode);
+                    }
+                    else
+                    {
+                        nationalCodeExists = await _context.Patients
+                            .AnyAsync(p => p.NationalCode == model.NationalCode && p.Id != model.EditOrNew);
+                    }
+
+                    if (nationalCodeExists)
+                        throw new Exception("National Code Exists");
+                }
+
                 if (model.EditOrNew == -1)
                 {
                     int? lastId = await _context.Patients.MaxAsync(r => r.PatientCode);
