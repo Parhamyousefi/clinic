@@ -10,34 +10,36 @@
                     placeholder="جستجو بر اساس شماره موبایل ، نام و شماره پرونده"
                     (input)="filterAppointments($event.target.value)">
             </div>
-            <div class="col-lg-2 col-12">
-                <p-dropdown [options]="visitStatusList" placeholder="وضعیت مراجعه" [(ngModel)]="selectedStatus"
-                    optionLabel="name" class="full-width text-right p-0" />
+            <div class="col-lg-4 col-12">
+                <!-- <p-dropdown [options]="visitStatusList" placeholder="وضعیت مراجعه" [(ngModel)]="selectedStatus"
+                    optionLabel="name" class="full-width text-right p-0" /> -->
+                <p-multiSelect id="visitStatus" [options]="visitStatusList" [(ngModel)]="selectedStatus"
+                    optionLabel="name" placeholder="وضعیت مراجعه" />
             </div>
-            <div class="col-lg-2 col-12 mt-3">
+            <div class="col-lg-4 col-12 mt-3">
                 <p-dropdown [options]="clinicsList" placeholder="مکان" [(ngModel)]="selectedClinic" optionLabel="name"
                     dataKey="id" class="full-width text-right" />
             </div>
-            <div class="col-lg-2 col-12">
+            <div class="col-lg-4 col-12">
                 <p-dropdown [options]="servicesList" placeholder="خدمات" [(ngModel)]="selectedservice"
-                    optionLabel="name" dataKey="id" class="full-width text-right" />
+                    optionLabel="name" dataKey="id" class="full-width text-right p-0" />
             </div>
-            <div class="col-lg-2 col-12">
+            <div class="col-lg-3 col-12 mt-2">
                 <ng-persian-datepicker (dateSelect)="onDateChange($event)">
                     <input type="text" class="form-control" [formControl]="selectedDatefrom" />
                 </ng-persian-datepicker>
             </div>
-            <div class="col-lg-2 col-12">
+            <div class="col-lg-3 col-12 mt-2">
                 <ngx-timepicker-field [format]="24" (timeSet)="selectedTimefrom = $event" [(ngModel)]="selectedTimefrom"
                     [defaultTime]="'08:00'">
                 </ngx-timepicker-field>
             </div>
-            <div class="col-lg-2 col-12">
+            <div class="col-lg-3 col-12 mt-2">
                 <ng-persian-datepicker (dateValueChange)="onDateChange($event)">
                     <input type="text" class="form-control" [formControl]="selectedDateTo" />
                 </ng-persian-datepicker>
             </div>
-            <div class="col-lg-2 col-12">
+            <div class="col-lg-3 col-12 mt-2">
                 <ngx-timepicker-field [format]="24" (timeSet)="selectedTimeTo = $event" [(ngModel)]="selectedTimeTo"
                     [defaultTime]="'23:00'">
                 </ngx-timepicker-field>
@@ -118,24 +120,32 @@
                         <button class="btn btn-danger btn-sm mt-2 mr-2"
                             [routerLink]="'/new-invoice/n/' + item.patientId +'/'+ selectedClinic.code +'/'+ item.id +'/2'">صدور
                             صورتحساب</button>
-                        <button class="btn btn-outline-danger mt-2 btn-sm mr-2" (click)="openDiscount($event)">ثبت
+                        <button *ngIf="item.invoiceId && !item.totalDiscount"
+                            class="btn btn-outline-danger mt-2 btn-sm mr-2" (click)="openDiscount($event,item,0)">ثبت
+                            تخفیف</button>
+                        <button *ngIf="item.invoiceId && item.totalDiscount"
+                            class="btn btn-outline-danger mt-2 btn-sm mr-2" (click)="openDiscount($event,item,1)">ویرایش
                             تخفیف</button>
                         <button class="btn btn-outline-secondary mt-2 btn-sm mr-2"
                             [routerLink]="'/receipt/'+item.patientId">ثبت
                             دریافت</button>
-                        <button class="btn main-btn-outline mt-2 btn-sm mr-2"
+                        <button *ngIf="item.invoiceId" class="btn main-btn-outline mt-2 btn-sm mr-2"
                             (click)="openAppointmentDetail($event,item)">جزئیات</button>
+                        <button class="btn main-btn-outline mt-2 btn-sm mr-2"
+                            (click)="openAppointmentDetail($event,item)">پرداخت</button>
+
                     </td>
                 </tr>
             </ng-template>
         </p-table>
     </div>
 
-    <p-dialog id="new-appointment-modal" header="افزودن تخفیف" [(visible)]="showNewDiscount" [closable]="true"
+    <p-dialog id="new-discount-modal" header="افزودن تخفیف" [(visible)]="showNewDiscount" [closable]="false"
         [ngClass]="{'modalShadow' : showNewDiscount}" class="p-2">
         <div class="col-12 d-flex flex-column">
-            <input type="text" class="col-12 form-control" placeholder="100,000">
+            <input type="text" class="col-12 form-control" [(ngModel)]="discount.amount" placeholder="100,000">
             <button class="btn main-btn mt-2" (click)="submitDiscount()">ثبت</button>
+            <button class="btn btn-outline-danger mt-2" (click)="cancelDiscount()">انصراف</button>
         </div>
     </p-dialog>
 
@@ -143,41 +153,49 @@
         [ngClass]="{'modalShadow' : showAppointmentDetail}" class="p-2">
         <div>
             <p-table #dt styleClass="p-datatable-gridlines" [value]="appointmentDetailItem" [autoLayout]="true"
-                [paginator]="false">
+                [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
+                currentPageReportTemplate="نمایش {first} تا {last} " [rowsPerPageOptions]="[10,25,50]">
                 <ng-template pTemplate="header">
                     <tr>
-                        <th>کد سیستمی</th>
+                        <th>#</th>
+                        <th pSortableColumn="systemCode"><p-sortIcon field="systemCode"></p-sortIcon>کد سیستمی</th>
                         <th>مکان</th>
-                        <th>شماره صورتحساب</th>
-                        <th>مبلغ صورتحساب</th>
-                        <th>تخفیف</th>
-                        <th>دریافتی</th>
-                        <th>پرداختی</th>
-                        <th>مانده</th>
-                        <th>زمان پذیرش</th>
+                        <th pSortableColumn="invoiceNo"><p-sortIcon field="invoiceNo"></p-sortIcon>شماره صورتحساب</th>
+                        <th pSortableColumn="amount"><p-sortIcon field="amount"></p-sortIcon>مبلغ صورتحساب</th>
+                        <th pSortableColumn="totalDiscount"><p-sortIcon field="totalDiscount"></p-sortIcon>تخفیف</th>
+                        <th pSortableColumn="receipt"><p-sortIcon field="receipt"></p-sortIcon>دریافتی</th>
+                        <th pSortableColumn="payment"><p-sortIcon field="payment"></p-sortIcon>پرداختی</th>
+                        <th pSortableColumn="remainingAmount"><p-sortIcon field="remainingAmount"></p-sortIcon>مانده
+                        </th>
+                        <th pSortableColumn="visitTime"><p-sortIcon field="visitTime"></p-sortIcon>زمان پذیرش</th>
                         <th>کاربر پذیرش کننده</th>
                     </tr>
                 </ng-template>
-                <ng-template pTemplate="body" let-item>
-                    <tr [routerLink]="'/patient/treatment/' + item.patientId" class="pointer">
+                <ng-template pTemplate="body" let-item let-rowIndex="rowIndex">
+                    <tr class="pointer">
                         <td class="px-2">
                             <div class="py-2 widthClassPrime">
-                                <span>{{item.id}}</span>
+                                <span>{{rowIndex+1}}</span>
                             </div>
                         </td>
                         <td class="px-2">
                             <div class="py-2 widthClassPrime">
-
+                                <span>{{item.systemCode}}</span>
                             </div>
                         </td>
                         <td class="px-2">
                             <div class="py-2 widthClassPrime">
-
+                                {{item.bussinessName}}
                             </div>
                         </td>
                         <td class="px-2">
                             <div class="py-2 widthClassPrime">
-
+                                {{item.invoiceNo}}
+                            </div>
+                        </td>
+                        <td class="px-2">
+                            <div class="py-2 widthClassPrime">
+                                {{item.amount}}
                             </div>
                         </td>
                         <td class="px-2">
@@ -187,22 +205,22 @@
                         </td>
                         <td class="px-2">
                             <div class="py-2 widthClassPrime">
-
+                                {{item.receipt}}
                             </div>
                         </td>
                         <td class="px-2">
                             <div class="py-2 widthClassPrime">
-
+                                {{item.payment}}
                             </div>
                         </td>
                         <td class="px-2">
                             <div class="py-2 widthClassPrime">
-
+                                {{item.remainingAmount}}
                             </div>
                         </td>
                         <td class="px-2">
                             <div class="py-2 widthClassPrime">
-                                {{item.date | JustDateZone}}
+                                {{item.visitTime | JustDateZone}}
                             </div>
                         </td>
                         <td class="px-2">

@@ -8,10 +8,12 @@ import { FormControl } from '@angular/forms';
 import { RouterLink } from "@angular/router";
 import { InputMaskModule } from 'primeng/inputmask';
 import { InvoiceService } from '../../_services/invoice.service';
+import { ToastrService } from 'ngx-toastr';
+import { MultiSelectModule } from 'primeng/multiselect';
 @Component({
   selector: 'app-today-appointments',
   standalone: true,
-  imports: [SharedModule, RouterLink, InputMaskModule],
+  imports: [SharedModule, RouterLink, InputMaskModule, MultiSelectModule],
   templateUrl: './today-appointments.component.html',
   styleUrl: './today-appointments.component.css'
 })
@@ -22,7 +24,8 @@ export class TodayAppointmentsComponent implements OnInit {
     private treatmentsService: TreatmentsService,
     private userService: UserService,
     private mainService: MainService,
-    private invoiceService: InvoiceService
+    private invoiceService: InvoiceService,
+    private toastR: ToastrService
   ) { }
 
   clinicsList: any = [];
@@ -36,15 +39,21 @@ export class TodayAppointmentsComponent implements OnInit {
   selectedTimeTo: any = '23:00';
   showNewDiscount: boolean = false;
   visitStatusList: any = [
-    { name: "همه", code: 0 },
-    { name: "انتظار", code: 1 },
+    { name: "انتظار ", code: 1 },
     { name: "پذیرش شده", code: 2 },
     { name: "ملاقات شده", code: 3 },
+    { name: "تسویه نشده", code: 4 },
+    { name: "تخفیف گرفته", code: 5 },
   ]
   filteredAppointments: any = [];
   showAppointmentDetail: any;
   appointmentDetailItem: any = [];
-  selectedStatus: any = '';
+  selectedStatus: any = [];
+  discountAppointment: any = [];
+  discount: any = [];
+  appointmentInvoices: any = [];
+
+
   async ngOnInit() {
     this.selectedDatefrom = new FormControl(moment().format('jYYYY/jMM/jDD'));
     this.selectedDateTo = new FormControl(moment().format('jYYYY/jMM/jDD'));
@@ -68,8 +77,18 @@ export class TodayAppointmentsComponent implements OnInit {
       let res: any = await this.treatmentsService.getTodayAppointments(model).toPromise();
       this.todayAppointmentsList = res;
       this.filteredAppointments = this.todayAppointmentsList;
-      if (this.selectedStatus && this.selectedStatus.code !== 0) {
-        this.filteredAppointments = this.todayAppointmentsList.filter(x => x.status === this.selectedStatus.code);
+      if (this.selectedStatus.length > 0 && this.selectedStatus.code !== 0) {
+        if (this.selectedStatus.code == 4 || this.selectedStatus.code == 5) {
+          // if (this.selectedStatus == 4) {
+          //   this.filteredAppointments = this.todayAppointmentsList.filter(appointment =>  );
+          // }
+          if (this.selectedStatus.code == 5) {
+            this.filteredAppointments = this.todayAppointmentsList.filter(appointment => appointment.totalDiscount > 0);
+          }
+        }
+        else {
+          this.filteredAppointments = this.todayAppointmentsList.filter(x => x.status === this.selectedStatus.code);
+        }
       }
 
     }
@@ -127,18 +146,26 @@ export class TodayAppointmentsComponent implements OnInit {
   onDateChange(newDate: string) {
   }
 
-  openDiscount(event) {
+  openDiscount(event, item, isEdit) {
     event.stopPropagation();
+    if (isEdit) {
+      this.discount.amount = item.totalDiscount;
+    }
     this.showNewDiscount = true;
+    this.discountAppointment = item
   }
 
   async submitDiscount() {
     try {
       let model = {
-        "invoiceId": 0,
-        "totalDiscount": 0
+        "invoiceId": this.discountAppointment.invoiceId,
+        "totalDiscount": this.discount.amount
       }
       let res: any = await this.invoiceService.saveInvoiceDiscount(model).toPromise();
+      if (res.status == 0) {
+        this.toastR.success('با موفقیت ثبت شد!');
+        this.getAppointment();
+      }
       this.showNewDiscount = false;
     }
     catch { }
@@ -161,9 +188,24 @@ export class TodayAppointmentsComponent implements OnInit {
     });
   }
 
-  openAppointmentDetail(event, item) {
+  async openAppointmentDetail(event, item) {
     event.stopPropagation();
-    this.showAppointmentDetail = true;
-    this.appointmentDetailItem[0] = item;
+    this.appointmentDetailItem = [];
+    try {
+      this.showAppointmentDetail = true;
+      // this.invoiceService.getInvoiceDetails(item.id).toPromise();
+      let res: any = await this.invoiceService.getInvoiceDetails(item.id).toPromise();
+      if (res.length > 0) {
+        this.appointmentDetailItem = res;
+      }
+    }
+    catch { }
   }
+
+  cancelDiscount() {
+    this.discountAppointment = [];
+    this.showNewDiscount = false;
+  }
+
+
 }
