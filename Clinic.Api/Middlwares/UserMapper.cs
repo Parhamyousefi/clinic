@@ -12,7 +12,7 @@
                     result[1] = "QE5#AGj@@UV+!Ad2@!msuv6!";
                     break;
                 case "7":
-                    result[0] = "Secretary-Reception";
+                    result[0] = "Secretary";
                     result[1] = "M)tCXD%Y@uEQTj*@FLmuD)P$";
                     break;
                 case "9":
