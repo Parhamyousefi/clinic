@@ -42,6 +42,7 @@ export class LoginComponent {
         if (res.token && res.secretCode) {
           localStorage.setItem("token", res.token);
           localStorage.setItem("userName", this.model.userName);
+          localStorage.setItem('xP98_g#d94H0w', res.secret);
           this.router.navigate(["/appointment"]);
         }
       }

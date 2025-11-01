@@ -95,6 +95,10 @@ export const routes: Routes = [
         canActivate: [AuthGuard]
     },
     {
+        path: 'patient-treatment/:id', component: PatientTreatmentComponent,
+        canActivate: [AuthGuard]
+    },
+    {
         path: 'payment', component: ReceiptComponent,
         canActivate: [AuthGuard]
     },

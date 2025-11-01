@@ -508,7 +508,6 @@ namespace Clinic.Api.Infrastructure.Services
             }
         }
 
-
         public async Task<IEnumerable<GetInvoiceDetailsResponse>> GetInvoiceDetails(int appointmentId)
         {
             try
@@ -533,6 +532,35 @@ namespace Clinic.Api.Infrastructure.Services
                                         DoctorName = u.FirstName + " " + u.LastName
                                     }).ToListAsync();
 
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<GlobalResponse> CancelInvoice(int invoiceId, bool isCancel)
+        {
+            var result = new GlobalResponse();
+
+            try
+            {
+                var userId = _token.GetUserId();
+
+                var existingInvoice = await _context.Invoices.FirstOrDefaultAsync(e => e.Id == invoiceId);
+                if (existingInvoice == null)
+                {
+                    throw new Exception("Invoice Not Found");
+                }
+
+                existingInvoice.ModifierId = userId;
+                existingInvoice.LastUpdated = DateTime.UtcNow;
+                existingInvoice.IsCanceled = isCancel;
+                _context.Invoices.Update(existingInvoice);
+                await _context.SaveChangesAsync();
+                result.Message = "Invoice Canceled Successfully";
+                result.Status = 0;
                 return result;
             }
             catch (Exception ex)

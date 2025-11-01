@@ -15,7 +15,7 @@ import { PdfMakerComponent } from '../../share/pdf-maker/pdf-maker.component';
 export class PatientInfoComponent {
   patientName: string;
   selectedEditContactId: string;
-  patientInfo: any;
+  patientInfo: any = [];
   constructor(
     private patientService: PatientService,
     private toastR: ToastrService,
