@@ -5,7 +5,7 @@ import { SharedModule } from '../../share/shared.module';
 import { MainService } from './../../_services/main.service';
 import moment from 'moment-jalaali';
 import { FormControl } from '@angular/forms';
-import { RouterLink } from "@angular/router";
+import { Router, RouterLink } from "@angular/router";
 import { InputMaskModule } from 'primeng/inputmask';
 import { InvoiceService } from '../../_services/invoice.service';
 import { ToastrService } from 'ngx-toastr';
@@ -25,7 +25,8 @@ export class TodayAppointmentsComponent implements OnInit {
     private userService: UserService,
     private mainService: MainService,
     private invoiceService: InvoiceService,
-    private toastR: ToastrService
+    private toastR: ToastrService,
+    private router: Router
   ) { }
 
   clinicsList: any = [];
@@ -74,25 +75,35 @@ export class TodayAppointmentsComponent implements OnInit {
       to: this.convertTimeToUTC(this.selectedTimeTo)
     }
     try {
-      let res: any = await this.treatmentsService.getTodayAppointments(model).toPromise();
+      const res: any = await this.treatmentsService.getTodayAppointments(model).toPromise();
       this.todayAppointmentsList = res;
-      this.filteredAppointments = this.todayAppointmentsList;
-      if (this.selectedStatus.length > 0 && this.selectedStatus.code !== 0) {
-        if (this.selectedStatus.code == 4 || this.selectedStatus.code == 5) {
-          // if (this.selectedStatus == 4) {
-          //   this.filteredAppointments = this.todayAppointmentsList.filter(appointment =>  );
-          // }
-          if (this.selectedStatus.code == 5) {
-            this.filteredAppointments = this.todayAppointmentsList.filter(appointment => appointment.totalDiscount > 0);
+      this.filteredAppointments = [];
+
+      if (this.selectedStatus && this.selectedStatus.length > 0) {
+        this.selectedStatus.forEach(status => {
+          let filtered = [];
+
+          switch (status.code) {
+            case 4:
+              filtered = this.todayAppointmentsList.filter(a => a.receipt == 0);
+              break;
+
+            case 5:
+              filtered = this.todayAppointmentsList.filter(a => a.totalDiscount > 0);
+              break;
+
+            default:
+              filtered = this.todayAppointmentsList.filter(a => a.status === status.code);
+              break;
           }
-        }
-        else {
-          this.filteredAppointments = this.todayAppointmentsList.filter(x => x.status === this.selectedStatus.code);
-        }
+
+          this.filteredAppointments.push(...filtered);
+        });
+      } else {
+        this.filteredAppointments = [...this.todayAppointmentsList];
       }
 
-    }
-    catch { }
+    } catch { }
   }
 
   async getClinics() {
@@ -207,5 +218,10 @@ export class TodayAppointmentsComponent implements OnInit {
     this.showNewDiscount = false;
   }
 
+  navigateToTreatment(item) {
+    if (item.status != 1) {
+      this.router.navigate(["/patient/treatment/" + item.patientId])
+    }
+  }
 
 }

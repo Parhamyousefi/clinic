@@ -83,15 +83,16 @@
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-item>
-                <tr [routerLink]="'/patient/treatment/' + item.patientId" class="pointer">
+                <tr (click)="navigateToTreatment(item)" [ngClass]="{'pointer': item.status != 1}">
                     <td class="px-2">
                         <div class="py-2 widthClassPrime">
-                            <span>{{item.date|JustDateZone}}</span>
+                            <span>{{item.time}}</span>
                         </div>
                     </td>
                     <td class="px-2">
                         <div class="py-2 widthClassPrime ">
-                            <span class="patient-name">{{item.patientName}}</span>
+                            <span class="patient-name"
+                                [ngClass]="{'text-dark': item.status == 1,'text-primary': item.status == 2,'text-success': item.status == 3}">{{item.patientName}}</span>
                         </div>
                     </td>
                     <td class="px-2">
@@ -129,10 +130,10 @@
                         <button class="btn btn-outline-secondary mt-2 btn-sm mr-2"
                             [routerLink]="'/receipt/'+item.patientId">ثبت
                             دریافت</button>
-                        <button *ngIf="item.invoiceId" class="btn main-btn-outline mt-2 btn-sm mr-2"
-                            (click)="openAppointmentDetail($event,item)">جزئیات</button>
                         <button class="btn main-btn-outline mt-2 btn-sm mr-2"
                             (click)="openAppointmentDetail($event,item)">پرداخت</button>
+                        <button *ngIf="item.invoiceId" class="btn main-btn-outline mt-2 btn-sm mr-2"
+                            (click)="openAppointmentDetail($event,item)">جزئیات</button>
 
                     </td>
                 </tr>

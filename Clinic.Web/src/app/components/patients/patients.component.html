@@ -63,7 +63,8 @@
             <button class="btn main-btn" *ngIf="patient.phoneNum" (click)="editPhoneNum(patient.patientPhone)">ویرایش
               شماره تلفن</button>
             <button class="btn main-outline-btn mx-1" (click)="editPatient(patient)">ویرایش</button>
-            <button class="btn btn-outline-danger mx-1" (click)="deletePatient(patient.id)">حذف</button>
+            <button class="btn btn-outline-danger mx-1" *ngIf="userType == 1"
+              (click)="deletePatient(patient.id)">حذف</button>
           </td>
         </tr>
       </ng-template>
@@ -197,7 +198,10 @@
         </div>
       </div>
       <div class="col-12 d-flex justify-content-center">
-        <button class="btn create-patient-btn text-white px-3 py-1 mx-1" (click)="createPatient()">ذخیره</button>
+        <button class="btn create-patient-btn text-white px-3 py-1 mx-1" (click)="createPatient(0)">ذخیره</button>
+        <button *ngIf="editpatientMode" class="btn create-patient-btn text-white px-3 py-1 mx-1"
+          (click)="createPatient(1)">ذخیره و صدور
+          صورتحساب</button>
         <button class="btn btn-outline-danger px-3 py-1 mx-1" (click)="closeCreatePatientModal()">انصراف</button>
       </div>
     </div>

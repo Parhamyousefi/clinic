@@ -1,0 +1,41 @@
+<div class="appContainer">
+    <div class="col-12 d-flex flex-wrap">
+        <div class="d-lg-flex flex-wrap align-items-baseline my-3">
+            <div class="col-lg-4 col-12">
+                <!-- <p-dropdown [options]="visitStatusList" placeholder="وضعیت مراجعه" [(ngModel)]="selectedStatus"
+                    optionLabel="name" class="full-width text-right p-0" /> -->
+                <p-multiSelect id="visitStatus" [options]="visitStatusList" [(ngModel)]="selectedStatus"
+                    optionLabel="name" placeholder="وضعیت مراجعه" />
+            </div>
+            <div class="col-lg-4 col-12 mt-3">
+                <p-dropdown [options]="clinicsList" placeholder="مکان" [(ngModel)]="selectedClinic" optionLabel="name"
+                    dataKey="id" class="full-width text-right" />
+            </div>
+            <div class="col-lg-4 col-12">
+                <p-dropdown [options]="servicesList" placeholder="خدمات" [(ngModel)]="selectedservice"
+                    optionLabel="name" dataKey="id" class="full-width text-right p-0" />
+            </div>
+            <div class="col-lg-3 col-12 mt-2">
+                <ng-persian-datepicker (dateSelect)="onDateChange($event)">
+                    <input type="text" class="form-control" [formControl]="selectedDatefrom" />
+                </ng-persian-datepicker>
+            </div>
+            <div class="col-lg-3 col-12 mt-2">
+                <ngx-timepicker-field [format]="24" (timeSet)="selectedTimefrom = $event" [(ngModel)]="selectedTimefrom"
+                    [defaultTime]="'08:00'">
+                </ngx-timepicker-field>
+            </div>
+            <div class="col-lg-3 col-12 mt-2">
+                <ng-persian-datepicker (dateValueChange)="onDateChange($event)">
+                    <input type="text" class="form-control" [formControl]="selectedDateTo" />
+                </ng-persian-datepicker>
+            </div>
+            <div class="col-lg-3 col-12 mt-2">
+                <ngx-timepicker-field [format]="24" (timeSet)="selectedTimeTo = $event" [(ngModel)]="selectedTimeTo"
+                    [defaultTime]="'23:00'">
+                </ngx-timepicker-field>
+            </div>
+        </div>
+
+    </div>
+</div>
