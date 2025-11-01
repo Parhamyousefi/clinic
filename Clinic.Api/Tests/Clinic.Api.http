@@ -1,11 +1,11 @@
-@Clinic_Api_Host = https://localhost:7281
+@Clinic_Api_Host = https://localhost:8585
 
 ### Login
 POST {{Clinic_Api_Host}}/api/user/login
 Content-Type: application/json
 {
-  "Username": "nima",
-  "password": "123456"
+  "Username": "doctor",
+  "password": "1234567"
 }
 
 ### Get All (requires JWT)
@@ -181,12 +181,12 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NjA3ODY4M
 
 ### Get Today Appointments
 POST {{Clinic_Api_Host}}/api/treatment/getTodayAppointments
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NjIyNTUyNjUsImlhdCI6MTc2MTY1MDQ2NSwidXNlcklkIjoiMiIsInVzZXJuYW1lIjoibmltYSIsInVzZXJSb2xlIjoiQWRtaW4iLCJuYmYiOjE3NjE2NTA0NjV9.wm0OznYEfUUHydSG-9c2pifOXorr_uNRxK_R5hyd3TE
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NjI1OTQ1NzcsImlhdCI6MTc2MTk4OTc3NywidXNlcklkIjoiNiIsInVzZXJuYW1lIjoiZG9jdG9yIiwidXNlclJvbGUiOiJEb2N0b3IiLCJuYmYiOjE3NjE5ODk3Nzd9.rAoDTADiCF2toegBwXXTiNssKXz-vNQTo5-dDtpnb8s
 Content-Type: application/json
 
 {
-  "fromDate": "2025-02-19",  
-  "toDate": "2025-02-19",         
+  "fromDate": "2025-09-02",  
+  "toDate": "2025-09-23",         
   "clinic": null,                  
   "service": null,            
   "from": null,                       
