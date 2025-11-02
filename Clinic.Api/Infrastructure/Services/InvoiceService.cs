@@ -568,5 +568,34 @@ namespace Clinic.Api.Infrastructure.Services
                 throw new Exception(ex.Message);
             }
         }
+
+        public async Task<GlobalResponse> ApproveDiscount(int invoiceId)
+        {
+            var result = new GlobalResponse();
+
+            try
+            {
+                var userId = _token.GetUserId();
+
+                var existingInvoice = await _context.Invoices.FirstOrDefaultAsync(i => i.Id == invoiceId);
+                if (existingInvoice == null)
+                {
+                    throw new Exception("Invoice Not Found");
+                }
+
+                existingInvoice.ModifierId = userId;
+                existingInvoice.LastUpdated = DateTime.UtcNow;
+                existingInvoice.AcceptDiscount = true;
+                _context.Invoices.Update(existingInvoice);
+                await _context.SaveChangesAsync();
+                result.Message = "Discount Approved Successfully";
+                result.Status = 0;
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }

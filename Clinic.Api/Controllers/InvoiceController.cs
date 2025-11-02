@@ -135,5 +135,13 @@ namespace Clinic.Api.Controllers
             var result = await _invoicesService.CancelInvoice(invoiceId);
             return Ok(result);
         }
+
+        [HttpGet("approveDiscount/{invoiceId}")]
+        [Authorize("Admin","Doctor","Secretary")]
+        public async Task<IActionResult> ApproveDiscount(int invoiceId)
+        {
+            var result = await _invoicesService.ApproveDiscount(invoiceId);
+            return Ok(result);
+        }
     }
 }
