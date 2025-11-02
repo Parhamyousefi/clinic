@@ -115,7 +115,7 @@ namespace Clinic.Api.Infrastructure.Services
                                           PatientName = p.FirstName + " " + p.LastName,
                                           BusinessName = b.Name
                                       })
-           .ToListAsync();
+                                 .ToListAsync();
 
                 return invoices;
             }

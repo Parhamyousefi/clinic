@@ -5,8 +5,6 @@ using Clinic.Api.Application.Interfaces;
 using Clinic.Api.Domain.Entities;
 using Clinic.Api.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
-using static Clinic.Api.Middlwares.Exceptions;
 
 namespace Clinic.Api.Infrastructure.Services
 {
@@ -39,7 +37,7 @@ namespace Clinic.Api.Infrastructure.Services
                 if (model.EditOrNew == -1)
                 {
                     if (model.Start >= model.End)
-                        throw new ValidationException(1001, "Start date must be earlier than End date.");
+                        throw new Exception("Start date must be earlier than End date.");
 
                     if (model.PatientId == null)
                         model.PatientId = userId;
@@ -56,7 +54,7 @@ namespace Clinic.Api.Infrastructure.Services
         ));
 
                     if (hasOverlap)
-                        throw new ConflictException(1002, "Patient already has an appointment in this business during this time.");
+                        throw new Exception("Patient already has an appointment in this business during this time.");
 
                     model.ByInvoice = true;
                     var appointment = _mapper.Map<AppointmentsContext>(model);
