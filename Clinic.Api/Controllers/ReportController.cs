@@ -1,5 +1,4 @@
-﻿using Clinic.Api.Application.DTOs;
-using Clinic.Api.Application.DTOs.Report;
+﻿using Clinic.Api.Application.DTOs.Report;
 using Clinic.Api.Application.Interfaces;
 using Clinic.Api.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -18,7 +17,7 @@ namespace Clinic.Api.Controllers
         }
 
         [HttpPost("getInvoicesByClinic")]
-        [Authorize("Admin", "Doctor")]
+        [Authorize("Admin", "Doctor", "Secretary")]
         public async Task<IActionResult> GetInvoicesByClinic(InvoiceFilterDto model)
         {
             var result = await _reportService.GetInvoicesByClinic(model);
@@ -26,7 +25,7 @@ namespace Clinic.Api.Controllers
         }
 
         [HttpPost("getInvoicesByService")]
-        [Authorize("Admin", "Doctor")]
+        [Authorize("Admin", "Doctor", "Secretary")]
         public async Task<IActionResult> GetInvoicesByService(InvoiceFilterDto model)
         {
             var result = await _reportService.GetInvoicesByService(model);
@@ -34,7 +33,7 @@ namespace Clinic.Api.Controllers
         }
 
         [HttpPost("getSubmitedAppointments")]
-        [Authorize("Doctor", "Admin")]
+        [Authorize("Doctor", "Admin", "Secretary")]
         public async Task<IActionResult> GetSubmitedAppointments(InvoiceFilterDto model)
         {
             var result = await _reportService.GetSubmitedAppointments(model);
@@ -42,7 +41,7 @@ namespace Clinic.Api.Controllers
         }
 
         [HttpPost("getSubmitedInvoices")]
-        [Authorize("Admin", "Doctor")]
+        [Authorize("Admin", "Doctor", "Secretary")]
         public async Task<IActionResult> GetSubmitedInvoices(InvoiceFilterDto model)
         {
             var result = await _reportService.GetSubmitedInvoices(model);
@@ -50,7 +49,7 @@ namespace Clinic.Api.Controllers
         }
 
         [HttpPost("getUnpaidInvoices")]
-        [Authorize("Admin","Doctor")]
+        [Authorize("Admin", "Doctor", "Secretary")]
         public async Task<IActionResult> GetUnpaidInvoices(InvoiceFilterDto model)
         {
             var result = await _reportService.GetUnpaidInvoices(model);
@@ -58,7 +57,7 @@ namespace Clinic.Api.Controllers
         }
 
         [HttpPost("getPractitionerIncome")]
-        [Authorize("Admin","Doctor")]
+        [Authorize("Admin", "Doctor", "Secretary")]
         public async Task<IActionResult> GetPractitionerIncome(IncomeReportFilterDto model)
         {
             var result = await _reportService.GetPractitionerIncome(model);
@@ -66,7 +65,7 @@ namespace Clinic.Api.Controllers
         }
 
         [HttpPost("getBusinessIncome")]
-        [Authorize("Admin", "Doctor")]
+        [Authorize("Admin", "Doctor", "Secretary")]
         public async Task<IActionResult> GetBusinessIncome(IncomeReportFilterDto model)
         {
             var result = await _reportService.GetBusinessIncome(model);
@@ -74,7 +73,7 @@ namespace Clinic.Api.Controllers
         }
 
         [HttpPost("getIncomeReportDetails")]
-        [Authorize("Admin","Doctor")]
+        [Authorize("Admin", "Doctor", "Secretary")]
         public async Task<IActionResult> GetIncomeReportDetails(IncomeReportFilterDto model)
         {
             var result = await _reportService.GetIncomeReportDetails(model);
@@ -82,7 +81,7 @@ namespace Clinic.Api.Controllers
         }
 
         [HttpPost("getOutPatientSummaryReport")]
-        [Authorize("Admin","Doctor")]
+        [Authorize("Admin", "Doctor", "Secretary")]
         public async Task<IActionResult> GetOutPatientSummaryReport(OutPatientReportFilterDto model)
         {
             var result = await _reportService.GetOutPatientSummaryReport(model);
@@ -90,10 +89,26 @@ namespace Clinic.Api.Controllers
         }
 
         [HttpPost("getOutPatientReportBasedOnCreator")]
-        [Authorize("Admin","Doctor")]
+        [Authorize("Admin", "Doctor", "Secretary")]
         public async Task<IActionResult> GetOutPatientReportBasedOnCreator(OutPatientReportFilterDto model)
         {
             var result = await _reportService.GetOutPatientReportBasedOnCreator(model);
+            return Ok(result);
+        }
+
+        [HttpPost("getUnvisitedSummary")]
+        [Authorize("Admin","Doctor","Secretary")]
+        public async Task<IActionResult> GetUnvisitedSummary(GetUnvisitedPatientsDto model)
+        {
+            var result = await _reportService.GetUnvisitedSummary(model);
+            return Ok(result);
+        }
+
+        [HttpPost("getUnvisitedDetails")]
+        [Authorize("Admin","Doctor","Secretary")]
+        public async Task<IActionResult> GetUnvisitedDetails(GetUnvisitedPatientsDto model)
+        {
+            var result = await _reportService.GetUnvisitedDetails(model);
             return Ok(result);
         }
     }

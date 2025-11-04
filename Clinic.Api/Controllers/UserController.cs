@@ -26,20 +26,28 @@ public class UserController : ControllerBase
         }
     }
 
-    [Authorize("Admin")]
     [HttpGet("getAllUsers")]
+    [Authorize("Admin","Secretary")]
     public async Task<IActionResult> GetAll() => Ok(await _svc.GetAllAsync());
 
-    [Authorize("Admin")]
     [HttpGet("getUserById/{id}")]
+    [Authorize("Admin", "Secretary")]
     public async Task<IActionResult> GetById(int id)
     {
         var u = await _svc.GetByIdAsync(id);
         return u is null ? NotFound() : Ok(u);
     }
 
+    [HttpGet("getUsers/{roleId}")]
+    [Authorize("Admin","Secretary","Doctor")]
+    public async Task<IActionResult> GetUsers(int roleId)
+    {
+        var result = await _svc.GetUsers(roleId);
+        return Ok(result);
+    }
+
+    [HttpGet("deleteUser/{id}")]
     [Authorize("Admin")]
-    [HttpDelete("deleteUser/{id}")]
     public async Task<IActionResult> Delete(int id)
     {
         var result = await _svc.DeleteAsync(id);
@@ -49,8 +57,9 @@ public class UserController : ControllerBase
         return NoContent();
     }
 
-    [Authorize("Admin")]
+   
     [HttpPost("createUser")]
+    [Authorize("Admin", "Secretary")]
     public async Task<IActionResult> CreateUser(CreateUserDto model)
     {
         try
@@ -64,8 +73,8 @@ public class UserController : ControllerBase
         }
     }
 
-    [Authorize("Admin")]
     [HttpPut("updateUser")]
+    [Authorize("Admin", "Secretary")]
     public async Task<IActionResult> UpdateUser(UpdateUserDto model)
     {
         var result = await _svc.UpdateUserAsync(model);
@@ -76,7 +85,7 @@ public class UserController : ControllerBase
     }
 
     [HttpPut("assignRole")]
-    [Authorize("Admin")]
+    [Authorize("Admin", "Secretary")]
     public async Task<IActionResult> AssignRoleToUser(AssignRoleDto model)
     {
         var result = await _svc.AssignRoleAsync(model.UserId, model.RoleId);

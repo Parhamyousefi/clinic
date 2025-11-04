@@ -6,7 +6,6 @@ using Clinic.Api.Infrastructure.Data;
 using Clinic.Api.Middlwares;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using static Clinic.Api.Middlwares.Exceptions;
 
 namespace Clinic.Api.Infrastructure.Services
 {
@@ -65,6 +64,19 @@ namespace Clinic.Api.Infrastructure.Services
             }
         }
 
+        public async Task<IEnumerable<UserContext>> GetUsers(int roleId)
+        {
+            try
+            {
+                var result = await _context.Users.Where(u => u.RoleId == roleId).ToListAsync();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
         public async Task<LoginResponseDto> LoginAsync(LoginUserDto model)
         {
             try
@@ -72,7 +84,7 @@ namespace Clinic.Api.Infrastructure.Services
                 var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == model.Username);
                 if (user == null ||
                     _passwordHasher.VerifyHashedPassword(user, user.Password, model.Password) != PasswordVerificationResult.Success)
-                    throw new InvalidModelData(1009, "Invalid username or password.");
+                    throw new Exception("Invalid username or password.");
 
                 var roleName = await _context.Roles
                       .Where(r => r.Id == user.RoleId)
@@ -138,7 +150,7 @@ namespace Clinic.Api.Infrastructure.Services
             {
                 var existingUser = await _context.Users.FirstOrDefaultAsync(u => u.Email == model.Username);
                 if (existingUser != null)
-                    throw new InvalidModelData(1006, "Email already exists.");
+                    throw new Exception("Email already exists.");
 
                 var hasher = new PasswordHasher<object>();
                 var hashedPassword = hasher.HashPassword(null, model.Password);
@@ -169,7 +181,7 @@ namespace Clinic.Api.Infrastructure.Services
             try
             {
                 var user = await _uow.Users.GetByIdAsync(model.Id);
-                if (user == null) throw new NotFoundException(1008, "User Not Exists");
+                if (user == null) throw new Exception("User Not Exists");
 
                 if (!string.IsNullOrEmpty(model.Username))
                     user.Email = model.Username;
@@ -208,11 +220,11 @@ namespace Clinic.Api.Infrastructure.Services
             {
                 var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == model.Username);
                 if (user == null)
-                    throw new NotFoundException(1007, "User not found");
+                    throw new Exception("User not found");
 
                 var passwordVerification = _passwordHasher.VerifyHashedPassword(user, user.Password, model.OldPassword);
                 if (passwordVerification != PasswordVerificationResult.Success)
-                    throw new OldPasswordIncorrect(1010, "Old password is incorrect");
+                    throw new Exception("Old password is incorrect");
 
                 user.Password = _passwordHasher.HashPassword(user, model.NewPassword);
                 _context.Users.Update(user);

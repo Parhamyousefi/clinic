@@ -590,5 +590,120 @@ namespace Clinic.Api.Infrastructure.Services
                 return response;
             }
         }
+
+        public async Task<GetUnvisitedSummaryResponse> GetUnvisitedSummary(GetUnvisitedPatientsDto model)
+        {
+            try
+            {
+                var userIds = (model.UserIds ?? "")
+                    .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                    .Select(id => int.TryParse(id, out var parsedId) ? parsedId : (int?)null)
+                    .Where(id => id.HasValue)
+                    .Select(id => id.Value)
+                    .ToList();
+
+                var businessIds = (model.BusinessIds ?? "")
+                    .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                    .Select(id => int.TryParse(id, out var parsedId) ? parsedId : (int?)null)
+                    .Where(id => id.HasValue)
+                    .Select(id => id.Value)
+                    .ToList();
+
+                var query = _context.Appointments.AsQueryable();
+
+                query = query.Where(a => a.Start.Date >= model.FromDate.Date && a.End.Date <= model.ToDate.Date);
+
+                if (userIds.Any())
+                    query = query.Where(a => a.PractitionerId.HasValue && userIds.Contains(a.PractitionerId.Value));
+
+                if (businessIds.Any())
+                    query = query.Where(a => a.BusinessId != null && businessIds.Contains(a.BusinessId.Value));
+
+                query = query.Where(a => a.Arrived != null && a.Cancelled != null);
+
+                var arrivedCount = await query.CountAsync(a => a.Arrived == 0);
+                var cancelledCount = await query.CountAsync(a => a.Cancelled == true);
+
+                var result = new GetUnvisitedSummaryResponse
+                {
+                    UnArrivedCount = arrivedCount,
+                    CancelledCount = cancelledCount,
+                    TotalCount = arrivedCount + cancelledCount
+                };
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<GlobalResponse> GetUnvisitedDetails(GetUnvisitedPatientsDto model)
+        {
+            var response = new GlobalResponse();
+
+            try
+            {
+                var fromDate = model.FromDate.Date;
+                var toDate = model.ToDate.Date.AddDays(1).AddTicks(-1);
+
+                var userIds = (model.UserIds ?? "")
+                     .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                     .Select(id => int.TryParse(id, out var parsedId) ? parsedId : (int?)null)
+                     .Where(id => id.HasValue)
+                     .Select(id => id.Value)
+                     .ToList();
+
+                var businessIds = (model.BusinessIds ?? "")
+                    .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                    .Select(id => int.TryParse(id, out var parsedId) ? parsedId : (int?)null)
+                    .Where(id => id.HasValue)
+                    .Select(id => id.Value)
+                    .ToList();
+
+                var query = _context.Appointments
+                    .Where(a => a.Start >= fromDate && a.Start <= toDate)
+                    .Where(a => a.Arrived == 0 || a.Cancelled == true);
+
+                if (userIds.Any())
+                    query = query.Where(a => a.PractitionerId.HasValue && userIds.Contains(a.PractitionerId.Value));
+
+                if (businessIds.Any())
+                    query = query.Where(a => a.BusinessId.HasValue && businessIds.Contains(a.BusinessId.Value));
+
+                var data = await (
+                    from a in query
+                    join p in _context.Patients on a.PatientId equals p.Id
+                    select new
+                    {
+                        Time = a.Start,
+                        PatientName = (p.FirstName + " " + p.LastName).Trim(),
+                        Reason = a.CancelNotes,
+                        Notes = a.Note
+                    }
+                ).OrderByDescending(x => x.Time)
+                 .ToListAsync();
+
+                if (!data.Any())
+                {
+                    response.Status = 0;
+                    response.Message = "No records found.";
+                    return response;
+                }
+
+                response.Status = 1;
+                response.Message = "Success";
+                response.Data = data;
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                response.Status = 3;
+                response.Message = ex.Message;
+                return response;
+            }
+        }
     }
 }
