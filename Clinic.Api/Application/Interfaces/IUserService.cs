@@ -12,5 +12,6 @@ namespace Clinic.Api.Application.Interfaces
         Task<int> CreateUserAsync(CreateUserDto model);
         Task<bool> UpdateUserAsync(UpdateUserDto model);
         Task<bool> ForgotPasswordAsync(ForgotPasswordDto model);
+        Task<IEnumerable<UserDto>> GetUsers(int roleId);
     }
 }

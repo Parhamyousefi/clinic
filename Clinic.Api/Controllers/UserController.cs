@@ -27,7 +27,7 @@ public class UserController : ControllerBase
     }
 
     [HttpGet("getAllUsers")]
-    [Authorize("Admin", "Secretary")]
+    [Authorize("Admin","Secretary")]
     public async Task<IActionResult> GetAll() => Ok(await _svc.GetAllAsync());
 
     [HttpGet("getUserById/{id}")]
@@ -38,7 +38,15 @@ public class UserController : ControllerBase
         return u is null ? NotFound() : Ok(u);
     }
 
-    [HttpDelete("deleteUser/{id}")]
+    [HttpGet("getUsers/{roleId}")]
+    [Authorize("Admin","Secretary","Doctor")]
+    public async Task<IActionResult> GetUsers(int roleId)
+    {
+        var result = await _svc.GetUsers(roleId);
+        return Ok(result);
+    }
+
+    [HttpGet("deleteUser/{id}")]
     [Authorize("Admin")]
     public async Task<IActionResult> Delete(int id)
     {

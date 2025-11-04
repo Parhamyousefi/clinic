@@ -64,6 +64,19 @@ namespace Clinic.Api.Infrastructure.Services
             }
         }
 
+        public async Task<IEnumerable<UserContext>> GetUsers(int roleId)
+        {
+            try
+            {
+                var result = await _context.Users.Where(u => u.RoleId == roleId).ToListAsync();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
         public async Task<LoginResponseDto> LoginAsync(LoginUserDto model)
         {
             try
