@@ -21,7 +21,7 @@ export class AppComponent {
     router.events.subscribe((event: Event) => {
       let url = location.pathname.split('?')[0];
       if (event instanceof NavigationEnd) {
-        if ((url == '/')) {
+        if ((url == '/') || (url == '/change-password')) {
           this.showNavbar = false;
           return;
         }

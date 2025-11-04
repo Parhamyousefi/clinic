@@ -1,5 +1,4 @@
 import { Routes } from '@angular/router';
-import { LoginComponent } from './login/login.component';
 import { AppointmentComponent } from './components/appointment/appointment.component';
 import { AuthGuard } from './auth.guard';
 import { TodayAppointmentsComponent } from './components/today-appointments/today-appointments.component';
@@ -21,9 +20,17 @@ import { ExpensesComponent } from './components/expenses/expenses.component';
 import { BusinessReportComponent } from './components/reports/business-report/business-report.component';
 import { PatientReceiptsComponent } from './components/patient-receipts/patient-receipts.component';
 import { PatientPaymentComponent } from './components/patient-payment/patient-payment.component';
+import { LoginComponent } from './user-registration/login/login.component';
+import { ChangePasswordComponent } from './user-registration/change-password/change-password.component';
 
 export const routes: Routes = [
     { path: '', component: LoginComponent },
+
+    {
+        path: 'change-password', component: ChangePasswordComponent,
+        canActivate: [AuthGuard]
+    },
+
     {
         path: 'appointment', component: AppointmentComponent,
         canActivate: [AuthGuard]

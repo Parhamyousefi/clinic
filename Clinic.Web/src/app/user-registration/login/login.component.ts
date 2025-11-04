@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { UserService } from '../_services/user.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { UserService } from '../../_services/user.service';
 
 @Component({
   selector: 'app-login',
