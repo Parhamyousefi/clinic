@@ -497,6 +497,15 @@ namespace Clinic.Api.Infrastructure.Services
                         .ToList();
                 }
 
+                var creatorIds = new List<int>();
+                if (!string.IsNullOrEmpty(model.CreatorId))
+                {
+                    creatorIds = model.CreatorId
+                        .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                        .Select(u => int.Parse(u.Trim()))
+                        .ToList();
+                }
+
                 var serviceIds = new List<int>();
                 if (!string.IsNullOrEmpty(model.ServiceId))
                 {
@@ -530,7 +539,7 @@ namespace Clinic.Api.Infrastructure.Services
                                 (string.IsNullOrEmpty(model.IsPaid) ||
                                     (model.IsPaid == "1" && invoice.Receipt > 0) ||
                                     (model.IsPaid == "0" && (invoice.Receipt == null || invoice.Receipt == 0))) &&
-                                (model.CreatorId == 0 || invoice.CreatorId == model.CreatorId)
+                                (creatorIds.Count == 0 || creatorIds.Contains(invoice.CreatorId.Value))
                             select new
                             {
                                 CreatorId = invoice.CreatorId,
