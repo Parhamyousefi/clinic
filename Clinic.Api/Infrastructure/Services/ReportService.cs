@@ -404,7 +404,7 @@ namespace Clinic.Api.Infrastructure.Services
                                 (string.IsNullOrEmpty(model.IsPaid) ||
                                     (model.IsPaid == "1" && invoice.Receipt > 0) ||
                                     (model.IsPaid == "0" && (invoice.Receipt == null || invoice.Receipt == 0))) &&
-                                (model.CreatorId == 0 || invoice.CreatorId == model.CreatorId)
+                                (model.CreatorId == null || model.CreatorId == 0 || invoice.CreatorId == model.CreatorId)
                             select new
                             {
                                 invoice.Id,

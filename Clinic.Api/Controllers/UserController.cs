@@ -57,7 +57,6 @@ public class UserController : ControllerBase
         return NoContent();
     }
 
-   
     [HttpPost("createUser")]
     [Authorize("Admin", "Secretary")]
     public async Task<IActionResult> CreateUser(CreateUserDto model)
