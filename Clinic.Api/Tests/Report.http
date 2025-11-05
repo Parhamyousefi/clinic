@@ -81,10 +81,10 @@ Authorization: Bearer
 ### Get Outpatient Summary Report
 POST {{Clinic_Api_Host}}/api/report/getOutPatientSummaryReport
 Content-Type: application/json
-Authorization: Bearer
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NjI5MzA4NTUsImlhdCI6MTc2MjMyNjA1NSwidXNlcklkIjoiMiIsInVzZXJuYW1lIjoibmltYSIsInVzZXJSb2xlIjoiQWRtaW4iLCJuYmYiOjE3NjIzMjYwNTV9.UkbIF1QZWXRflpt5rEsA5xIjRgaPB7y1YymTu1mdCs4
 {
-  "fromDate": "2025-08-18T00:00:00",
-  "toDate": "2025-08-18T00:00:00",
+  "fromDate": "2023-07-23T00:00:00",
+  "toDate": "2023-07-30T00:00:00",
   "fromTime": null,
   "toTime": null,
   "userId": null,
