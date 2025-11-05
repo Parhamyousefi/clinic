@@ -11,15 +11,15 @@
             <ng-template pTemplate="header">
                 <tr>
                     <th>ردیف</th>
-                    <th>تاریخ</th>
+                    <th pSortableColumn="start"><p-sortIcon field="start"></p-sortIcon> تاریخ</th>
                     <th>کجا</th>
                     <th>پزشک</th>
                     <th>نوع</th>
                     <th>خدمات</th>
                     <th>کاربر ثبت کننده</th>
-                    <th>زمان ثبت</th>
+                    <th pSortableColumn="createdOn"><p-sortIcon field="createdOn"></p-sortIcon>زمان ثبت</th>
                     <th>کابر تغییر دهنده</th>
-                    <th>زمان تغییر</th>
+                    <th pSortableColumn="lastUpdated"><p-sortIcon field="lastUpdated"></p-sortIcon>زمان تغییر</th>
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-appointment let-rowIndex="rowIndex">

@@ -8,7 +8,7 @@
 
 .sidebar-items {
   overflow-y: auto;
-  width: 100%;
+  width: calc(100% - 20px);
 }
 
 .sidebar-items {
@@ -59,10 +59,10 @@
 }
 
 .profile-avatar {
-    width: 40px;
-    height: 40px;
-    background-color: #a3a3a3;
-    border-radius: 100%;
+  width: 40px;
+  height: 40px;
+  background-color: #a3a3a3;
+  border-radius: 100%;
 }
 
 .navbar-item {
