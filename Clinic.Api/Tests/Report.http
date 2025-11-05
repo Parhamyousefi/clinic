@@ -1,0 +1,135 @@
+@Clinic_Api_Host = https://localhost:8585
+
+### GetInvoices By Clinic
+Post {{Clinic_Api_Host}}/api/report/getInvoicesByClinic
+Content-Type: application/json
+Authorization: Bearer
+{
+  "fromDate": "2025-08-18T00:00:00",
+  "toDate": "2025-08-18T00:00:00"
+}
+
+### GetInvoicesByService
+POST {{Clinic_Api_Host}}/api/report/getInvoicesByService
+Content-Type: application/json
+Authorization: Bearer
+{
+  "fromDate": "2025-08-18T00:00:00",
+  "toDate": "2025-08-18T00:00:00"
+}
+
+### Get Submited Appointments
+POST {{Clinic_Api_Host}}/api/report/getSubmitedAppointments
+Content-Type: application/json
+Authorization: Bearer
+{
+   "fromDate": "2025-08-18T00:00:00",
+  "toDate": "2025-08-18T00:00:00"
+}
+
+### Get Submited Invoices
+POST {{Clinic_Api_Host}}/api/report/getSubmitedInvoices
+Content-Type: application/json
+Authorization: Bearer
+{
+   "fromDate": "2025-08-18T00:00:00",
+  "toDate": "2025-08-18T00:00:00"
+}
+
+### Get Unpaid Invoices
+POST {{Clinic_Api_Host}}/api/report/getUnpaidInvoices
+Content-Type: application/json
+Authorization: Bearer
+{
+   "fromDate": "2025-08-18T00:00:00",
+  "toDate": "2025-08-18T00:00:00"
+}
+
+### Get Practitioner Income
+POST {{Clinic_Api_Host}}/api/report/getPractitionerIncome
+Content-Type: application/json
+Authorization: Bearer
+{
+  "from": "2025-08-18T00:00:00",
+  "to": "2025-08-18T00:00:00",
+  "fromTime": null,
+  "toTime": null
+}
+
+### Get Business Income
+POST {{Clinic_Api_Host}}/api/report/getBusinessIncome
+Content-Type: application/json
+Authorization: Bearer
+{
+  "from": "2025-08-18T00:00:00",
+  "to": "2025-08-18T00:00:00",
+  "fromTime": null,
+  "toTime": null
+}
+
+### Get Income Report Details
+POST {{Clinic_Api_Host}}/api/report/getIncomeReportDetails
+Content-Type: application/json
+Authorization: Bearer
+{
+  "from": "2025-08-18T00:00:00",
+  "to": "2025-08-18T00:00:00",
+  "fromTime": null,
+  "toTime": null
+}
+
+### Get Outpatient Summary Report
+POST {{Clinic_Api_Host}}/api/report/getOutPatientSummaryReport
+Content-Type: application/json
+Authorization: Bearer
+{
+  "fromDate": "2025-08-18T00:00:00",
+  "toDate": "2025-08-18T00:00:00",
+  "fromTime": null,
+  "toTime": null,
+  "userId": null,
+  "serviceId": null,
+  "product": null,
+  "creatorId": null,
+  "isPaid": null,
+  "referral": null
+}
+
+### Get Outpatient Report Based On Creator
+POST {{Clinic_Api_Host}}/api/report/getOutPatientReportBasedOnCreator
+Content-Type: application/json
+Authorization: Bearer
+{
+  "fromDate": "2025-08-18T00:00:00",
+  "toDate": "2025-08-18T00:00:00",
+  "fromTime": null,
+  "toTime": null,
+  "userId": null,
+  "serviceId": null,
+  "product": null,
+  "creatorId": null,
+  "isPaid": null,
+  "referral": null
+}
+
+### Get Unvisited Summary
+POST {{Clinic_Api_Host}}/api/report/getUnvisitedSummary
+Content-Type: application/json
+Authorization: Bearer
+{
+  "fromDate": "2025-08-18T00:00:00",
+  "toDate": "2025-08-18T00:00:00",
+  "userIds": null,
+  "businessIds": null
+}
+
+### Get Unvisited Details
+POST {{Clinic_Api_Host}}/api/report/getUnvisitedDetails
+Content-Type: application/json
+Authorization: Bearer
+{
+  "fromDate": "2025-08-18T00:00:00",
+  "toDate": "2025-08-18T00:00:00",
+  "userIds": null,
+  "businessIds": null
+}

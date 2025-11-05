@@ -81,7 +81,7 @@ namespace Clinic.Api.Infrastructure.Services
         {
             try
             {
-                var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == model.Username);
+                var user = await _context.Users.FirstOrDefaultAsync(u => u.FirstName == model.Username);
                 if (user == null ||
                     _passwordHasher.VerifyHashedPassword(user, user.Password, model.Password) != PasswordVerificationResult.Success)
                     throw new Exception("Invalid username or password.");
@@ -148,7 +148,7 @@ namespace Clinic.Api.Infrastructure.Services
         {
             try
             {
-                var existingUser = await _context.Users.FirstOrDefaultAsync(u => u.Email == model.Username);
+                var existingUser = await _context.Users.FirstOrDefaultAsync(u => u.FirstName == model.Username);
                 if (existingUser != null)
                     throw new Exception("Email already exists.");
 
@@ -182,26 +182,6 @@ namespace Clinic.Api.Infrastructure.Services
             {
                 var user = await _uow.Users.GetByIdAsync(model.Id);
                 if (user == null) throw new Exception("User Not Exists");
-
-                if (!string.IsNullOrEmpty(model.Username))
-                    user.Email = model.Username;
-
-                if (!string.IsNullOrEmpty(model.FirstName))
-                    user.FirstName = model.FirstName;
-
-                if (!string.IsNullOrEmpty(model.LastName))
-                    user.LastName = model.LastName;
-
-                if (model.RoleId.HasValue)
-                    user.RoleId = model.RoleId.Value;
-
-                if (model.IsActive.HasValue)
-                    user.IsActive = model.IsActive.Value;
-
-                if (!string.IsNullOrEmpty(model.Password))
-                {
-                    user.Password = _passwordHasher.HashPassword(user, model.Password);
-                }
 
                 _context.Users.Update(user);
                 await _uow.SaveAsync();
