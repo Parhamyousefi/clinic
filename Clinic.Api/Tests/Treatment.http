@@ -1,0 +1,142 @@
+@Clinic_Api_Host = https://localhost:8585
+
+### Create Appointment
+POST {{Clinic_Api_Host}}/api/treatment/createAppointment
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NjE1NzAwMjUsImlhdCI6MTc2MDk2NTIyNSwidXNlcklkIjoiMiIsInVzZXJuYW1lIjoibmltYSIsInVzZXJSb2xlIjoiQWRtaW4iLCJuYmYiOjE3NjA5NjUyMjV9.HuMiNQYHgiChPcEZegH14f6AuMf-WKbT9lm91_EPAQ4
+
+{
+  "businessId": 2,
+  "practitionerId": 4,
+  "patientId": 6,
+  "appointmentTypeId": 1,
+  "start": "2025-08-18T10:00:00",
+  "end": "2025-08-20T11:00:00",
+  "repeatId": null,
+  "repeatEvery": null,
+  "endsAfter": null,
+  "note": "salaaaaaaaaaaaam",
+  "arrived": 0,
+  "waitListId": null,
+  "cancelled": false,
+  "appointmentCancelTypeId": null,
+  "cancelNotes": null,
+  "isUnavailbleBlock": false,
+  "lastUpdated": null,
+  "isAllDay": false,
+  "sendReminder": true,
+  "appointmentSMS": null,
+  "ignoreDidNotCome": false,
+  "byInvoice": false,
+  "editOrNew": 20
+}
+
+### Get appointments with date
+POST {{Clinic_Api_Host}}/api/treatment/getAppointments
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwidXNlcm5hbWUiOiJuaW1hIiwicm9sZSI6IkFkbWluIiwiZXhwIjoxNzU1NDI5OTMwLCJpc3MiOiJDbGluaWMuQXBpIiwiYXVkIjoiQ2xpbmljLkFwaS5Vc2VycyJ9.f4r_G_wCuE1JQi-ZV1T0c0ZrGRQATltfv2laPiZDOjU
+{
+  "clinicId": 1,
+  "Date": "2025-08-25",
+  "doctorId": null
+}
+
+
+### Get Treatments
+GET {{Clinic_Api_Host}}/api/treatment/getTreatments/2
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwidXNlcm5hbWUiOiJuaW1hIiwicm9sZSI6IkFkbWluIiwiZXhwIjoxNzU1NTM0MjE2LCJpc3MiOiJDbGluaWMuQXBpIiwiYXVkIjoiQ2xpbmljLkFwaS5Vc2VycyJ9.m2aC3StvAxkQ8MWLhJDmDW0vkMv3i6rK0qxQXJH6k5A
+
+### Get Today Appointments
+POST {{Clinic_Api_Host}}/api/treatment/getTodayAppointments
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NjI1OTQ1NzcsImlhdCI6MTc2MTk4OTc3NywidXNlcklkIjoiNiIsInVzZXJuYW1lIjoiZG9jdG9yIiwidXNlclJvbGUiOiJEb2N0b3IiLCJuYmYiOjE3NjE5ODk3Nzd9.rAoDTADiCF2toegBwXXTiNssKXz-vNQTo5-dDtpnb8s
+Content-Type: application/json
+
+{
+  "fromDate": "2025-09-02",  
+  "toDate": "2025-09-23",         
+  "clinic": null,                  
+  "service": null,            
+  "from": null,                       
+  "to": null     
+}
+
+### Get Week Appointments
+GET {{Clinic_Api_Host}}/api/treatment/getWeeklyAppointments
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTg3MTgzMjksImlhdCI6MTc1ODExMzUyOSwidXNlcklkIjoiMiIsInVzZXJuYW1lIjoibmltYSIsInVzZXJSb2xlIjoiQWRtaW4iLCJuYmYiOjE3NTgxMTM1Mjl9.AMFg58a7xg8wMW0XzHYGvbSTlRj29g_KYVXXuU1d9I0
+Content-Type: application/json
+
+### Save BillableItems
+POST {{Clinic_Api_Host}}/api/treatment/saveBillableItem
+Authorization: Bearer
+Content-Type: application/json
+{
+  "code": null,
+  "name": "salam",
+  "price": 10,
+  "isOther": true,
+  "itemTypeId": 1,
+  "duration": 1,
+  "allowEditPrice": true,
+  "treatmentTemplateId": null,
+  "forceOneInvoice": true,
+  "isTreatmentDataRequired": true,
+  "group": null,
+  "parentId": null,
+  "itemCategoryId": null,
+  "orderInItemCategory": null,
+  "autoCopyTreatment": true,
+  "discountPercent": null,
+  "needAccept": true,
+  "lastTimeColor": null,
+  "editOrNew": -1
+}
+
+### Delete BillableItem
+GET {{Clinic_Api_Host}}/api/treatment/deleteBillableItem/1
+Authorization: Bearer
+Content-Type: application/json
+
+### Get Section Per Service
+GET {{Clinic_Api_Host}}/api/treatment/getSectionPerService/1
+Authorization: Bearer
+Content-Type: application/json
+
+### Get Question Per Section
+GET {{Clinic_Api_Host}}/api/treatment/getQuestionsPerSection/1
+Authorization: Bearer
+Content-Type: application/json
+
+### Get Answers Per Question
+GET {{Clinic_Api_Host}}/api/treatment/getAnswersPerQuestion/1
+Authorization: Bearer
+Content-Type: application/json
+
+### Get Patient Services 
+GET {{Clinic_Api_Host}}/api/treatment/getPatientServices/1
+Authorization: Bearer
+Content-Type: application/json
+
+### Get Patient Treatments 
+GET {{Clinic_Api_Host}}/api/treatment/getPatientTreatments/677613
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NjA5NDczMzQsImlhdCI6MTc2MDM0MjUzNCwidXNlcklkIjoiMiIsInVzZXJuYW1lIjoibmltYSIsInVzZXJSb2xlIjoiQWRtaW4iLCJuYmYiOjE3NjAzNDI1MzR9.bEgZQkG1AOhPp5DjJaQx9jnkbbxKKEskSgEWZzC1gcs
+Content-Type: application/json
+
+### Delete Appointment
+GET {{Clinic_Api_Host}}/api/treatment/deleteAppointment/1
+Authorization: Bearer
+Content-Type: application/json
+
+### Delete Treatment
+GET {{Clinic_Api_Host}}/api/treatment/deleteTreatment/1
+Authorization: Bearer
+Content-Type: application/json
+
+### Get Appointment Types
+GET {{Clinic_Api_Host}}/api/treatment/getAppointmentTypes
+Authorization: Bearer
+Content-Type: application/json
+
+### Get Billable Items
+GET {{Clinic_Api_Host}}/api/treatment/getBillableItems
+Authorization: Bearer
+Content-Type: application/json

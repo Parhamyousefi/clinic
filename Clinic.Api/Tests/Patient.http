@@ -1,0 +1,125 @@
+@Clinic_Api_Host = https://localhost:8585
+
+### Create a new patient
+POST {{Clinic_Api_Host}}/api/patient/savePatient
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTg0NDExNzEsImlhdCI6MTc1NzgzNjM3MSwidXNlcklkIjoiMiIsInVzZXJuYW1lIjoibmltYSIsInVzZXJSb2xlIjoiQWRtaW4iLCJuYmYiOjE3NTc4MzYzNzF9.cwqL8VDBlDE5Q6vrDosRtSm0-zdAowbGmenaE-m4SVY
+
+{
+  "titleId": 1,
+  "firstName": "Nima2234",
+  "lastName": "Ghahremanian",
+  "gender": 1,
+  "fatherName": "Ali",
+  "birthDate": "1995-08-16",
+  "email": "nima@example.com",
+  "address1": "Street 123",
+  "address2": "Apt 4B",
+  "address3": "District 7",
+  "city": "Tehran",
+  "state": "Tehran",
+  "postCode": "1234567890",
+  "countryId": 276,
+  "reminderTypeId": 2,
+  "unsubscribeFromSMSMarketing": false,
+  "receiveBookingConfirmationEmails": true,
+  "invoiceTo": "Nima Ghahremanian",
+  "emailInvoiceTo": "billing@example.com",
+  "invoiceExtraInformation": "Paid by insurance",
+  "emergencyContact": "09121234567",
+  "referenceNumber": "REF-001",
+  "referringDoctorId": 2,
+  "notes": "Patient has no allergies",
+  "referringInsurerId": 3,
+  "referringInsurer2Id": null,
+  "referringContactId": 7,
+  "referringContact2Id": null,
+  "referringPatientId": null,
+  "patientCode": 101,
+  "nationalCode": "1234567890",
+  "jobId": 4,
+  "referringInpatientInsurerId": null,
+  "balance": 500000.00,
+  "outBalance": 200000.00,
+  "inBalance": 300000.00,
+  "paperless": true,
+  "editOrNew": -1
+}
+
+### Delete Patient
+GET {{Clinic_Api_Host}}/api/patient/deletePatient/1
+Authorization: Bearer
+Content-Type: application/json
+
+### Get Patients
+GET {{Clinic_Api_Host}}/api/patient/getPatients
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTg0NDExNzEsImlhdCI6MTc1NzgzNjM3MSwidXNlcklkIjoiMiIsInVzZXJuYW1lIjoibmltYSIsInVzZXJSb2xlIjoiQWRtaW4iLCJuYmYiOjE3NTc4MzYzNzF9.cwqL8VDBlDE5Q6vrDosRtSm0-zdAowbGmenaE-m4SVY
+
+### Get Patient ById
+GET {{Clinic_Api_Host}}/api/patient/getPatientById/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTg2Mjc0MDUsImlhdCI6MTc1ODAyMjYwNSwidXNlcklkIjoiMiIsInVzZXJuYW1lIjoibmltYSIsInVzZXJSb2xlIjoiQWRtaW4iLCJuYmYiOjE3NTgwMjI2MDV9.Bn_rBQnDX91i78gu4NdJPaL5PWHqnh-dMhZnvzJss1U
+Content-Type: application/json
+
+### Save Patient Phones
+POST {{Clinic_Api_Host}}/api/patient/savePatientPhone
+Authorization: Bearer 
+Content-Type: application/json
+{
+  "patientId": 1,
+  "phoneNoTypeId": 1,
+  "number": "09129561523",
+}
+
+### Get Patient Phone
+GET {{Clinic_Api_Host}}/api/patient/getPatientPhone/1
+Authorization: Bearer
+Content-Type: application/json
+
+### Delete Patient Phone 
+GET {{Clinic_Api_Host}}/api/patient/deletePatientPhone/1
+Authorization: Bearer
+Content-Type: application/json
+
+### Get Patient Invoices
+GET {{Clinic_Api_Host}}/api/patient/getPatientInvoices/1
+Authorization: Bearer
+Content-Type: application/json
+
+### Get Patient Receipts
+GET {{Clinic_Api_Host}}/api/patient/getPatientReceipts/34
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NjA1MTU2MTIsImlhdCI6MTc1OTkxMDgxMiwidXNlcklkIjoiMiIsInVzZXJuYW1lIjoibmltYSIsInVzZXJSb2xlIjoiQWRtaW4iLCJuYmYiOjE3NTk5MTA4MTJ9.xu6WOOL6m9f4wldEiAMBxy40_EB_auY4VESE9180Ug8
+Content-Type: application/json
+
+### Get Patient Payments
+GET {{Clinic_Api_Host}}/api/patient/getPatientPayments/2
+Authorization: Bearer
+Content-Type: application/json
+
+### Get Patient Appointments
+GET {{Clinic_Api_Host}}/api/patient/getPatientAppointments/1
+Authorization: Bearer
+Content-Type: application/json
+
+### Save Attachment
+POST {{Clinic_Api_Host}}/api/patient/saveAttachment
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NjEzODY5ODIsImlhdCI6MTc2MDc4MjE4MiwidXNlcklkIjoiMiIsInVzZXJuYW1lIjoibmltYSIsInVzZXJSb2xlIjoiQWRtaW4iLCJuYmYiOjE3NjA3ODIxODJ9.MEURmD3D6fvkxLULhm-SuAy_PhCc_8kdZv2vMqUc1Q8
+Content-Type: application/json
+{
+  "patientId": 1,
+  "filename": "test.png",
+  "base64": "",
+  "editOrNew": -1,
+  "invoiceItemId": 10281424
+}
+
+### Get Attachment
+Get {{Clinic_Api_Host}}/api/patient/getAttachment/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NjEzODY5ODIsImlhdCI6MTc2MDc4MjE4MiwidXNlcklkIjoiMiIsInVzZXJuYW1lIjoibmltYSIsInVzZXJSb2xlIjoiQWRtaW4iLCJuYmYiOjE3NjA3ODIxODJ9.MEURmD3D6fvkxLULhm-SuAy_PhCc_8kdZv2vMqUc1Q8
+Content-Type: application/json
+
+### Delete Attachment
+GET {{Clinic_Api_Host}}/api/patient/deleteAttachment/1
+Authorization: Bearer
+Content-Type: application/json
+

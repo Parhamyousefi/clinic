@@ -1,0 +1,32 @@
+@Clinic_Api_Host = https://localhost:8585
+
+### Save Payments
+POST {{Clinic_Api_Host}}/api/payment/savePayment
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwidXNlcm5hbWUiOiJuaW1hIiwicm9sZSI6IkFkbWluIiwiZXhwIjoxNzU2NjUyMjE4LCJpc3MiOiJDbGluaWMuQXBpIiwiYXVkIjoiQ2xpbmljLkFwaS5Vc2VycyJ9.MVn8XLhTQglJ3ysHtn5YrIrZ7DEoFZ4Eh93JbgAE-cQ
+Content-Type: application/json
+{
+  "paymentNo": null,
+  "patientId": 2,
+  "cash": null,
+  "eFTPos": null,
+  "other": null,
+  "notes": null,
+  "allowEdit": true,
+  "paymentTypeId": 1,
+  "editOrNew": -1
+}
+
+### Get All Payments
+GET {{Clinic_Api_Host}}/api/payment/getAllPayments
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwidXNlcm5hbWUiOiJuaW1hIiwicm9sZSI6IkFkbWluIiwiZXhwIjoxNzU2NjUyMjE4LCJpc3MiOiJDbGluaWMuQXBpIiwiYXVkIjoiQ2xpbmljLkFwaS5Vc2VycyJ9.MVn8XLhTQglJ3ysHtn5YrIrZ7DEoFZ4Eh93JbgAE-cQ
+Content-Type: application/json
+
+### Get Payment
+GET {{Clinic_Api_Host}}/api/payment/getPayment/2
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwidXNlcm5hbWUiOiJuaW1hIiwicm9sZSI6IkFkbWluIiwiZXhwIjoxNzU2NjUyMjE4LCJpc3MiOiJDbGluaWMuQXBpIiwiYXVkIjoiQ2xpbmljLkFwaS5Vc2VycyJ9.MVn8XLhTQglJ3ysHtn5YrIrZ7DEoFZ4Eh93JbgAE-cQ
+Content-Type: application/json
+
+### Delete Payment
+GET {{Clinic_Api_Host}}/api/payment/deletePayment/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwidXNlcm5hbWUiOiJuaW1hIiwicm9sZSI6IkFkbWluIiwiZXhwIjoxNzU2NjUyMjE4LCJpc3MiOiJDbGluaWMuQXBpIiwiYXVkIjoiQ2xpbmljLkFwaS5Vc2VycyJ9.MVn8XLhTQglJ3ysHtn5YrIrZ7DEoFZ4Eh93JbgAE-cQ
+Content-Type: application/json

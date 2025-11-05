@@ -1,0 +1,22 @@
+@Clinic_Api_Host = https://localhost:8585
+
+### Get Questions 
+GET {{Clinic_Api_Host}}/api/question/getQuestions
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwidXNlcm5hbWUiOiJuaW1hIiwicm9sZSI6IkFkbWluIiwiZXhwIjoxNzU1NTM0MjE2LCJpc3MiOiJDbGluaWMuQXBpIiwiYXVkIjoiQ2xpbmljLkFwaS5Vc2VycyJ9.m2aC3StvAxkQ8MWLhJDmDW0vkMv3i6rK0qxQXJH6k5A
+
+### Save or Update QuestionValue
+POST {{Clinic_Api_Host}}/api/Question/saveQuestionValue
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NjA3ODY4MzEsImlhdCI6MTc2MDE4MjAzMSwidXNlcklkIjoiMiIsInVzZXJuYW1lIjoibmltYSIsInVzZXJSb2xlIjoiQWRtaW4iLCJuYmYiOjE3NjAxODIwMzF9.PZk551c_2wz7du9ihwKJg33DI6F3BbTzL-h0H2E9XVg
+{
+  "questionId": 4,
+  "selectedValue": "Yes",
+  "invoiceItemId": 10,
+  "answerId": 2
+}
+
+### Delete Question Value
+GET {{Clinic_Api_Host}}/api/question/deleteQuestionValue/1
+Content-Type: application/json
+Authorization: Bearer
