@@ -1,4 +1,5 @@
-﻿using Clinic.Api.Application.DTOs.Users;
+﻿using Clinic.Api.Application.DTOs;
+using Clinic.Api.Application.DTOs.Users;
 using Clinic.Api.Domain.Entities;
 
 namespace Clinic.Api.Application.Interfaces
@@ -14,5 +15,7 @@ namespace Clinic.Api.Application.Interfaces
         Task<bool> UpdateUserAsync(UpdateUserDto model);
         Task<bool> ForgotPasswordAsync(ForgotPasswordDto model);
         Task<IEnumerable<UserContext>> GetUsers(int roleId);
+        Task<GlobalResponse> SaveUserBusiness(SaveUserBusinessDto model);
+        Task<IEnumerable<UserBusinessesContext>> GetUserBusiness(int userId);
     }
 }

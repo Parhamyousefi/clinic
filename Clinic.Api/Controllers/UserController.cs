@@ -97,4 +97,22 @@ public class UserController : ControllerBase
         var result = await _svc.ForgotPasswordAsync(model);
         return Ok(new { success = result, message = "Password updated successfully" });
     }
+
+    [HttpPost("saveUserBusiness")]
+    [Authorize("Admin","Secretary")]
+    public async Task<IActionResult> SaveUserBusiness(SaveUserBusinessDto model)
+    {
+        var result = await _svc.SaveUserBusiness(model);
+        return Ok(result);
+    }
+
+    [HttpGet("getUserBusiness/{userId}")]
+    [Authorize("Admin", "Secretary")]
+    public async Task<IActionResult> GetUserBusiness(int userId)
+    {
+        var result = await _svc.GetUserBusiness(userId);
+        return Ok(result);
+    }
+
+
 }
