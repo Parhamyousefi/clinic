@@ -112,8 +112,11 @@ namespace Clinic.Api.Controllers
             return Ok(result);
         }
 
-        [HttpPost("saveDoctorSchedule")]
-        [Authorize("Admin", "Doctor", "Secretary")]
-        public async Task<IActionResult> SaveDoctorSchedule()
+        //[HttpPost("saveDoctorSchedule")]
+        //[Authorize("Admin", "Doctor", "Secretary")]
+        //public async Task<IActionResult> SaveDoctorSchedule()
+        //{
+
+        //}
     }
 }
