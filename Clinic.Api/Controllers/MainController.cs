@@ -111,5 +111,9 @@ namespace Clinic.Api.Controllers
             var result = await _mainService.DeleteNote(noteId);
             return Ok(result);
         }
+
+        [HttpPost("saveDoctorSchedule")]
+        [Authorize("Admin", "Doctor", "Secretary")]
+        public async Task<IActionResult> SaveDoctorSchedule()
     }
 }

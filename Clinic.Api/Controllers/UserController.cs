@@ -61,15 +61,8 @@ public class UserController : ControllerBase
     [Authorize("Admin", "Secretary")]
     public async Task<IActionResult> CreateUser(CreateUserDto model)
     {
-        try
-        {
             var userId = await _svc.CreateUserAsync(model);
             return Ok(new { UserId = userId });
-        }
-        catch (ArgumentException ex)
-        {
-            return BadRequest(new { Message = ex.Message });
-        }
     }
 
     [HttpPut("updateUser")]
