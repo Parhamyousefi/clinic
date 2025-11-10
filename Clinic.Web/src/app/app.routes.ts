@@ -22,6 +22,8 @@ import { BusinessReportComponent } from './components/reports/business-report/bu
 import { PatientReceiptsComponent } from './components/patient-receipts/patient-receipts.component';
 import { PatientPaymentComponent } from './components/patient-payment/patient-payment.component';
 import { OutinvoiceReportComponent } from './components/outinvoice-report/outinvoice-report.component';
+import { NewUsersComponent } from './components/new-users/new-users.component';
+import { UserListComponent } from './components/user-list/user-list.component';
 
 export const routes: Routes = [
     { path: '', component: LoginComponent },
@@ -125,6 +127,14 @@ export const routes: Routes = [
     },
     {
         path: 'outinvoice-report', component: OutinvoiceReportComponent,
+        canActivate: [AuthGuard]
+    },
+    {
+        path: 'user/new', component: NewUsersComponent,
+        canActivate: [AuthGuard]
+    },
+    {
+        path: 'userlist', component: UserListComponent,
         canActivate: [AuthGuard]
     },
 ];
