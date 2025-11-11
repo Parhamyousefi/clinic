@@ -9,7 +9,7 @@
         public string? UserId { get; set; }
         public string? ServiceId { get; set; }
         public string? Product { get; set; }
-        public int? CreatorId { get; set; }
+        public string? CreatorId { get; set; }
         public string? IsPaid { get; set; }
         public string? Referral { get; set; }
     }
