@@ -1,6 +1,7 @@
 ﻿using Clinic.Api.Application.DTOs;
 using Clinic.Api.Application.DTOs.Main;
 using Clinic.Api.Domain.Entities;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Clinic.Api.Application.Interfaces
 {
@@ -18,5 +19,7 @@ namespace Clinic.Api.Application.Interfaces
         Task<GlobalResponse> SaveNote(SaveNoteDto model);
         Task<IEnumerable<GetNotesResponse>> GetNotes(int patientId);
         Task<GlobalResponse> DeleteNote(int noteId);
+        Task<GlobalResponse> SaveDoctorSchedule(SaveDoctorScheduleDto model);
+        Task<IEnumerable<SchedulesContext>> GetDoctorSchedules(int userId);
     }
 }
