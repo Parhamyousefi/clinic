@@ -309,5 +309,61 @@ namespace Clinic.Api.Infrastructure.Services
                 throw new Exception(ex.Message);
             }
         }
+
+        public async Task<GlobalResponse> SaveDoctorSchedule(SaveDoctorScheduleDto model)
+        {
+            var result = new GlobalResponse();
+
+            try
+            {
+                var userId = _token.GetUserId();
+
+                if (model.EditOrNew == -1)
+                {
+                    var schedule = _mapper.Map<SchedulesContext>(model);
+                    schedule.CreatorId = userId;
+                    schedule.CreatedOn = DateTime.UtcNow;
+                    _context.Schedules.Add(schedule);
+                    await _context.SaveChangesAsync();
+                    result.Message = "Schedule Saved Successfully";
+                    result.Status = 0;
+                    return result;
+                }
+                else
+                {
+                    var existingSchedule = await _context.Schedules.FirstOrDefaultAsync(j => j.Id == model.EditOrNew);
+                    if (existingSchedule == null)
+                    {
+                        throw new Exception("Schedule Not Found");
+                    }
+
+                    _mapper.Map(model, existingSchedule);
+                    existingSchedule.ModifierId = userId;
+                    existingSchedule.LastUpdated = DateTime.UtcNow;
+                    _context.Schedules.Update(existingSchedule);
+                    await _context.SaveChangesAsync();
+                    result.Message = "Schedule Updated Successfully";
+                    result.Status = 0;
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error while creating schedule: {ex.Message}");
+            }
+        }
+
+        public async Task<IEnumerable<SchedulesContext>> GetDoctorSchedules(int userId)
+        {
+            try
+            {
+                var result = await _context.Schedules.Where(s => s.PractitionerId == userId).ToListAsync();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }
