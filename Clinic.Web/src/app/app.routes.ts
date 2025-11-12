@@ -25,6 +25,7 @@ import { ChangePasswordComponent } from './user-registration/change-password/cha
 import { OutinvoiceReportComponent } from './components/outinvoice-report/outinvoice-report.component';
 import { NewUsersComponent } from './components/new-users/new-users.component';
 import { UserListComponent } from './components/user-list/user-list.component';
+import { UserAppointmentSettingComponent } from './components/user-list/user-appointment-setting/user-appointment-setting.component';
 
 export const routes: Routes = [
     { path: '', component: LoginComponent },
@@ -144,4 +145,10 @@ export const routes: Routes = [
         path: 'userlist', component: UserListComponent,
         canActivate: [AuthGuard]
     },
+    {
+        path: 'userlist/user-appointment-setting/:uid', component: UserAppointmentSettingComponent,
+        canActivate: [AuthGuard]
+    },
+
+
 ];

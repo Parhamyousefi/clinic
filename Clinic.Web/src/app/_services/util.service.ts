@@ -1,10 +1,22 @@
 import { Injectable } from '@angular/core';
 
+
 export const RoleMap = new Map([
-  ['QE5#AGj@@UV+!Ad2@!msuv6!', 1], //Admin
-  ['cMI(3H!++nysmyT5CwXe*sVf', 2], //Doctor
-  ['M)tCXD%Y@uEQTj*@FLmuD)P$', 3] //Secretary
-])
+    ['QE5#AGj@@UV+!Ad2@!msuv6!', 6], //Admin
+    ['M)tCXD%Y@uEQTj*@FLmuD)P$', 7], //Secretary - Reception
+    ['0N4hrN4RdZiCSgLrDGDY5lU3', 8], //Secretary - Timing
+    ['cMI(3H!++nysmyT5CwXe*sVf', 9], //Doctor
+    ['S%T6RLp2vtABa@rfTahIg8JZ', 10], //Technician
+    ['R#cjGk$RjeXxy%m3bB5KxKUR', 11], //Medical Record
+    ['@#(RES2^yQ%AwrJ9(P&rq7&X', 12], //Inpatient
+    ['z&pMHUN^K3S#DR@P5+RZbKnB', 13], //Supervisor
+    ['%N!jpwfkpMqdw&4W5)qAr79y', 14], //Finance
+    ['es*y5#WQwPI3^VLhdcm#@T3E', 15], //Assistant
+    ['x(CtV8C5@yarxzd$xPe$F%uv', 16], //Manager
+    ['WJDNcw%+nv74^Zrms(G%E!@3', 17], //Secretary Mix
+    ['H*5#H)Wf8LRTw%!a#(cK44kC', 18], //Manager - Test
+    ['uM54#sJa(3$qjB64rjvT3x24', 19], //Research
+  ])
 
 @Injectable({
   providedIn: 'root'
