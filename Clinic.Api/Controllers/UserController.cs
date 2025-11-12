@@ -108,7 +108,7 @@ public class UserController : ControllerBase
     }
 
     [HttpGet("getRoles")]
-    [Authorize("Admin","Secretary","Doctor")]
+    //[Authorize("Admin","Secretary","Doctor")]
     public async Task<IActionResult> GetRoles()
     {
         var result = await _svc.GetRoles();

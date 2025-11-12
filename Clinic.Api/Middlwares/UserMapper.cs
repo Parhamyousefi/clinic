@@ -7,13 +7,17 @@
             string[] result = new string[2];
             switch (roleId)
             {
-                case "2":
+                case "6":
                     result[0] = "Admin";
                     result[1] = "QE5#AGj@@UV+!Ad2@!msuv6!";
                     break;
                 case "7":
-                    result[0] = "Secretary";
+                    result[0] = "Secretary-Reception";
                     result[1] = "M)tCXD%Y@uEQTj*@FLmuD)P$";
+                    break;
+                case "8":
+                    result[0] = "Secretary-Timing";
+                    result[1] = "0N4hrN4RdZiCSgLrDGDY5lU3";
                     break;
                 case "9":
                     result[0] = "Doctor";
