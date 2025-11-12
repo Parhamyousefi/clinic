@@ -47,10 +47,10 @@
                         {{user.isActive ? 'بله' : 'خیر'}}
                     </td>
                     <td class="text-center">
-                        {{user.roleId}}
+                        {{user.roleName}}
                     </td>
                     <td class="text-center">
-                        <button class="btn main-btn" (click)="showtimeSchedule()">تنظیم زمان های حضور</button>
+                        <button class="btn main-btn" (click)="showtimeSchedule(user)">تنظیم زمان ها</button>
                     </td>
 
                 </tr>
@@ -58,12 +58,13 @@
         </p-table>
     </div>
 
-    <p-dialog id="create-expense-modal" [(visible)]="showtimeModal" [closable]="false"
+    <p-dialog id="create-expense-modal" [(visible)]="showtimeModal" [closable]="true"
         [ngClass]="{'modalShadow' : showtimeModal}" class="p-2">
         <p-header>
-            <p>تنظیم زمان های حضور</p>
+            <h4>تنظیم زمان ها</h4>
         </p-header>
         <div class="col-12">
+            <attendance-schedule [userId$]="selectedScheduleUser"></attendance-schedule>
         </div>
     </p-dialog>
 </div>

@@ -34,6 +34,7 @@ export class NewUsersComponent {
   selectedEditUserId: any;
   usersList: any;
   selectedEditUser: any;
+  roles: any = [];
   constructor(
     private userService: UserService,
     private toastR: ToastrService,
@@ -46,6 +47,7 @@ export class NewUsersComponent {
   ngOnInit() {
     this.getClinics();
     this.getAppointmentTypes();
+    this.getRoles();
   }
 
   async createUser() {
@@ -63,7 +65,7 @@ export class NewUsersComponent {
       "email": this.newUser.email,
       "firstName": this.newUser.firstName,
       "lastName": this.newUser.lastName,
-      "roleId": 0,
+      "roleId": this.fieldConvert(this.newUser.role.code),
       "isActive": this.newUser.isActive,
       "showInOnlineBookings": this.newUser.ShowDocInReserve,
       "loadLastDataOnNewTreatment": this.newUser.copyPatientData,
@@ -119,4 +121,19 @@ export class NewUsersComponent {
       return null;
     }
   }
+
+  async getRoles() {
+    try {
+      let res: any = await this.userService.getRoles().toPromise();
+      if (res.length > 0) {
+        this.roles = res;
+        this.roles.forEach((type: any) => {
+          type.code = type.id;
+        });
+      }
+
+    }
+    catch { }
+  }
+
 }
