@@ -1,5 +1,5 @@
 import { MainService } from './../../_services/main.service';
-import { Component } from '@angular/core';
+import { Component, ElementRef, Renderer2 } from '@angular/core';
 import { SharedModule, ShamsiUTCPipe } from "../../share/shared.module";
 import { FormControl, FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -12,6 +12,7 @@ import { ToastrService } from 'ngx-toastr';
 import { PatientService } from '../../_services/patient.service';
 import { TreatmentsService } from '../../_services/treatments.service';
 import { firstValueFrom } from 'rxjs';
+import { UtilService } from '../../_services/util.service';
 @Component({
   selector: 'app-appointment',
   standalone: true,
@@ -56,10 +57,6 @@ export class AppointmentComponent {
       isBeforeNow: slotTime.isBefore(now)
     };
   });
-
-
-
-
 
 
   weekDays: any = [];
@@ -107,7 +104,10 @@ export class AppointmentComponent {
     private toastR: ToastrService,
     private treatmentService: TreatmentsService,
     private patientService: PatientService,
-    private mainService: MainService
+    private mainService: MainService,
+    private utilService: UtilService,
+    private renderer: Renderer2,
+    private el: ElementRef
   ) {
   }
 
@@ -119,6 +119,7 @@ export class AppointmentComponent {
   };
 
   dateNew: any;
+  holidays: any = [];
   async ngOnInit() {
     this.getWeeklyAppointments();
     this.dateNew = new FormControl(moment().format('jYYYY/jMM/jDD'));
@@ -135,7 +136,87 @@ export class AppointmentComponent {
     this.today = this.today._d;
     this.getCurrentWeek();
     this.getWeeklyAppointments();
+    this.utilService.getIranianHolidaysWithFridays().subscribe(days => {
+      this.holidays = days
+      this.addHoliday();
+      // this.holidays = days.map(date => ({
+      //   date,
+      //   title: 'تعطیل رسمی',
+      //   holiday: true,
+      //   color: '#ff0000' // قرمز
+      // }));
+    });
   }
+
+
+  ngAfterViewInit() {
+    const calendarEl = this.el.nativeElement.querySelector('#appointment');
+    const observer = new MutationObserver(() => {
+      this.addHoliday();
+    });
+
+    observer.observe(calendarEl, {
+      childList: true,
+      subtree: true
+    });
+  }
+
+
+
+  addHoliday() {
+    setTimeout(() => {
+      const cells = this.el.nativeElement.querySelectorAll('.dp-btn');
+      cells.forEach((cell: HTMLElement) => {
+        const label = cell.innerText.trim();
+        const fullDate = this.buildFullDate(label);
+        if (this.isHoliday(fullDate)) {
+          this.renderer.addClass(cell, 'holiday-day');
+        }
+      });
+    }, 300);
+  }
+
+
+  buildFullDate(dayLabel: string): string {
+    let jalaliYear = moment().format('jYYYY');
+    let jalaliMonth = moment().format('jMM');
+    const switchViewEl = document.querySelector('.switch-view.dp-btn');
+    if (switchViewEl) {
+      const text = switchViewEl.textContent?.trim();
+      const parts = text?.split(' ');
+      if (parts && parts.length === 2) {
+        const monthName = parts[0];
+        const yearText = parts[1];
+        const monthMap: { [key: string]: string } = {
+          'فروردین': '01',
+          'اردیبهشت': '02',
+          'خرداد': '03',
+          'تیر': '04',
+          'مرداد': '05',
+          'شهریور': '06',
+          'مهر': '07',
+          'آبان': '08',
+          'آذر': '09',
+          'دی': '10',
+          'بهمن': '11',
+          'اسفند': '12'
+        };
+        jalaliMonth = monthMap[monthName] || jalaliMonth;
+        jalaliYear = yearText;
+      }
+    }
+
+    const paddedDay = dayLabel.padStart(2, '0');
+    return `${jalaliYear}/${jalaliMonth}/${paddedDay}`;
+  }
+
+
+  isHoliday(date: string): boolean {
+    return this.holidays.includes(date);
+  }
+
+
+
 
   changeDate(status: number) {
     let formattedDate: any = '';
@@ -382,7 +463,7 @@ export class AppointmentComponent {
 
       this.weeklyTimetable[this.hours[startIndex].time][appointment.dayOfWeek].dayAppointments.push(appointment);
     });
-    console.log(this.weeklyTimetable);
+    // console.log(this.weeklyTimetable);
 
   }
 
