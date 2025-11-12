@@ -1,0 +1,71 @@
+@Clinic_Api_Host = https://localhost:8585
+
+### Login
+POST {{Clinic_Api_Host}}/api/user/login
+Content-Type: application/json
+{
+  "Username": "John",
+  "password": "123456"
+}
+
+### Get All (requires JWT)
+GET {{Clinic_Api_Host}}/api/user/getAllUsers
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwidXNlcm5hbWUiOiJuaW1hIiwicm9sZSI6IkFkbWluIiwiZXhwIjoxNzU1MDA3NjQzLCJpc3MiOiJDbGluaWMuQXBpIiwiYXVkIjoiQ2xpbmljLkFwaS5Vc2VycyJ9.tnOvt8qWS1Mq4mUQZ7u53JrTJeEzFL1qHKHCvfe9DCI
+Content-Type: application/json
+
+### Get By ID
+GET {{Clinic_Api_Host}}/api/user/getUserById/3
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwidXNlcm5hbWUiOiJuaW1hIiwicm9sZSI6IkFkbWluIiwiZXhwIjoxNzU0NzUzNzIxLCJpc3MiOiJDbGluaWMuQXBpIiwiYXVkIjoiQ2xpbmljLkFwaS5Vc2VycyJ9.mE3Dgii81P3hn9_wcWbmo7v4pYU3n6z2MKMr4h5eW5o
+Content-Type: application/json
+
+### Get User By Roles
+GET {{Clinic_Api_Host}}/api/user/getUsers/2
+Authorization: Bearer
+Content-Type: application/json
+
+### Delete Usser
+Delete {{Clinic_Api_Host}}/api/user/deleteUser/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwidXNlcm5hbWUiOiJuaW1hIiwicm9sZSI6IkFkbWluIiwiZXhwIjoxNzU0NzUzNzIxLCJpc3MiOiJDbGluaWMuQXBpIiwiYXVkIjoiQ2xpbmljLkFwaS5Vc2VycyJ9.mE3Dgii81P3hn9_wcWbmo7v4pYU3n6z2MKMr4h5eW5o
+
+### Assign Role to User
+PUT {{Clinic_Api_Host}}/api/user/assign-role
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwidXNlcm5hbWUiOiJuaW1hIiwicm9sZSI6IkFkbWluIiwiZXhwIjoxNzU0NzUzNzIxLCJpc3MiOiJDbGluaWMuQXBpIiwiYXVkIjoiQ2xpbmljLkFwaS5Vc2VycyJ9.mE3Dgii81P3hn9_wcWbmo7v4pYU3n6z2MKMr4h5eW5o
+{
+  "userId": 1,
+  "roleId": 2
+}
+
+### Create User (Admin only, requires JWT)
+POST {{Clinic_Api_Host}}/api/user/createUser
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTc0MjE1MDMsImlhdCI6MTc1NjgxNjcwMywidXNlcklkIjoiMiIsInVzZXJuYW1lIjoibmltYSIsInVzZXJSb2xlIjoiQWRtaW4iLCJuYmYiOjE3NTY4MTY3MDN9.sk81ZXdOnVOyuSwtFrgc-gmHE0JPVd7PtdJwVw2pPhc
+{
+  "Username": "doctor",
+  "password": "1234567",
+  "firstName": "New",
+  "lastName": "Doctor",
+  "roleId": 9,
+  "isActive": true
+}
+
+### Update User (Admin only, requires JWT)
+PUT {{Clinic_Api_Host}}/api/user/updateUser
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwidXNlcm5hbWUiOiJuaW1hIiwicm9sZSI6IkFkbWluIiwiZXhwIjoxNzU0NzUzNzIxLCJpc3MiOiJDbGluaWMuQXBpIiwiYXVkIjoiQ2xpbmljLkFwaS5Vc2VycyJ9.mE3Dgii81P3hn9_wcWbmo7v4pYU3n6z2MKMr4h5eW5o
+{
+  "id": 3,
+  "Username": "parhamversionpiercing",
+  "firstName": "UpdatedFirstName",
+  "lastName": "UpdatedLastName",
+  "roleId": 1,
+  "isActive": true
+}
+
+### Forgot Password
+POST {{Clinic_Api_Host}}/api/user/forgotPassword
+Content-Type: application/json
+{
+  "username": "john.doe",
+  "newPassword": "MyNewSecurePass123"
+}

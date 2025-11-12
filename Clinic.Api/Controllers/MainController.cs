@@ -17,7 +17,7 @@ namespace Clinic.Api.Controllers
         }
 
         [HttpGet("getSections")]
-        [Authorize("Admin", "Doctor")]
+        [Authorize("Admin", "Doctor", "Secretary")]
         public async Task<IActionResult> GetSections()
         {
             var result = await _mainService.GetSections();
@@ -25,7 +25,7 @@ namespace Clinic.Api.Controllers
         }
 
         [HttpGet("getClinics")]
-        [Authorize("Admin", "Doctor")]
+        [Authorize("Admin", "Doctor", "Secretary")]
         public async Task<IActionResult> GetClinics()
         {
             var result = await _mainService.GetClinics();
@@ -33,7 +33,7 @@ namespace Clinic.Api.Controllers
         }
 
         [HttpPost("saveJob")]
-        [Authorize("Admin", "Doctor")]
+        [Authorize("Admin", "Doctor", "Secretary")]
         public async Task<IActionResult> SaveJob(SaveJobDto model)
         {
             var result = await _mainService.SaveJob(model);
@@ -41,7 +41,7 @@ namespace Clinic.Api.Controllers
         }
 
         [HttpGet("getJobs")]
-        [Authorize("Admin", "Doctor")]
+        [Authorize("Admin", "Doctor", "Secretary")]
         public async Task<IActionResult> GetJobs()
         {
             var result = await _mainService.GetJobs();
@@ -57,7 +57,7 @@ namespace Clinic.Api.Controllers
         }
 
         [HttpGet("getCountries")]
-        [Authorize("Admin", "Doctor")]
+        [Authorize("Admin", "Doctor", "Secretary")]
         public async Task<IActionResult> GetCountries()
         {
             var result = await _mainService.GetCountries();
@@ -65,7 +65,7 @@ namespace Clinic.Api.Controllers
         }
 
         [HttpPost("saveProduct")]
-        [Authorize("Admin", "Doctor")]
+        [Authorize("Admin", "Doctor", "Secretary")]
         public async Task<IActionResult> SaveProduct(SaveProductDto model)
         {
             var result = await _mainService.SaveProduct(model);
@@ -73,7 +73,7 @@ namespace Clinic.Api.Controllers
         }
 
         [HttpGet("getProducts")]
-        [Authorize("Admin", "Doctor")]
+        [Authorize("Admin", "Doctor", "Secretary")]
         public async Task<IActionResult> GetProducts()
         {
             var result = await _mainService.GetProducts();
@@ -89,7 +89,7 @@ namespace Clinic.Api.Controllers
         }
 
         [HttpPost("saveNote")]
-        [Authorize("Admin", "Doctor")]
+        [Authorize("Admin", "Doctor", "Secretary")]
         public async Task<IActionResult> SaveNote(SaveNoteDto model)
         {
             var result = await _mainService.SaveNote(model);
@@ -97,7 +97,7 @@ namespace Clinic.Api.Controllers
         }
 
         [HttpGet("getNotes/{patientId}")]
-        [Authorize("Admin", "Doctor")]
+        [Authorize("Admin", "Doctor", "Secretary")]
         public async Task<IActionResult> GetNotes(int patientId)
         {
             var result = await _mainService.GetNotes(patientId);
@@ -111,5 +111,12 @@ namespace Clinic.Api.Controllers
             var result = await _mainService.DeleteNote(noteId);
             return Ok(result);
         }
+
+        //[HttpPost("saveDoctorSchedule")]
+        //[Authorize("Admin", "Doctor", "Secretary")]
+        //public async Task<IActionResult> SaveDoctorSchedule()
+        //{
+
+        //}
     }
 }

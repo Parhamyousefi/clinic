@@ -1,14 +1,11 @@
-﻿namespace Clinic.Api.Middlwares
+﻿using System.Globalization;
+
+namespace Clinic.Api.Middlwares
 {
     public class AppException : Exception
     {
-        public int ErrorId { get; }
-        public string Description { get; }
-
-        public AppException(int errorId, string description) : base(description)
-        {
-            ErrorId = errorId;
-            Description = description;
-        }
+        public AppException() : base() { }
+        public AppException(string message) : base(message) { }
+        public AppException(string message, params object[] args) : base(String.Format(CultureInfo.CurrentCulture, message, args)) { }
     }
 }

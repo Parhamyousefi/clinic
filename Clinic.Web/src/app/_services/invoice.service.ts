@@ -147,9 +147,34 @@ export class InvoiceService {
     return this.http.post(uri, data, httpOptions);
   }
 
+
+  getInvoiceDetails(appointmentId) {
+    const token: any = localStorage.getItem("token");
+    const uri = this.url + `api/Invoice/getInvoiceDetails/${appointmentId}`;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      }),
+    };
+    return this.http.get(uri, httpOptions);
+  }
+
   cancelInvoice(invoiceId) {
     const token: any = localStorage.getItem("token");
     const uri = this.url + `api/Invoice/cancelInvoice/${invoiceId}`;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      }),
+    };
+    return this.http.get(uri, httpOptions);
+  }
+
+  approveDiscount(invoiceId) {
+    const token: any = localStorage.getItem("token");
+    const uri = this.url + `api/Invoice/approveDiscount/${invoiceId}`;
     const httpOptions = {
       headers: new HttpHeaders({
         "Content-Type": "application/json",

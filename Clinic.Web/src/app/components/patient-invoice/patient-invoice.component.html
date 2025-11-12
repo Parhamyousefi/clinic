@@ -10,14 +10,14 @@
             <ng-template pTemplate="header">
                 <tr>
                     <th>ردیف</th>
-                    <th>زمان</th>
-                    <th>شماره</th>
+                    <th pSortableColumn="createdOn"><p-sortIcon field="createdOn"></p-sortIcon>زمان</th>
+                    <th pSortableColumn="id"><p-sortIcon field="id"></p-sortIcon>شماره</th>
                     <th>مکان</th>
-                    <th>مبلغ</th>
-                    <th>تخفیف</th>
-                    <th>دریافتی</th>
-                    <th>پرداختی</th>
-                    <th>مانده</th>
+                    <th pSortableColumn="amount"><p-sortIcon field="amount"></p-sortIcon>مبلغ</th>
+                    <th pSortableColumn="totalDiscount"><p-sortIcon field="totalDiscount"></p-sortIcon>تخفیف</th>
+                    <th pSortableColumn="mobile"><p-sortIcon field="mobile"></p-sortIcon>دریافتی</th>
+                    <th pSortableColumn="mobile"><p-sortIcon field="mobile"></p-sortIcon>پرداختی</th>
+                    <th pSortableColumn="mobile"><p-sortIcon field="mobile"></p-sortIcon>مانده</th>
                     <th>پزشک</th>
                     <th>عملیات</th>
                 </tr>
@@ -49,7 +49,8 @@
                     <td class="text-center">
                     </td>
                     <td class="text-center">
-                        <button class="btn main-btn" [routerLink]="'/new-invoice/' + invoice.id + '/n/n/n/1'">مشاهده</button>
+                        <button class="btn main-btn"
+                            [routerLink]="'/new-invoice/' + invoice.id + '/n/n/n/1'">مشاهده</button>
                     </td>
 
                 </tr>

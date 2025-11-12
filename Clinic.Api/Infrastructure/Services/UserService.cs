@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Clinic.Api.Application.DTOs;
 using Clinic.Api.Application.DTOs.Users;
 using Clinic.Api.Application.Interfaces;
 using Clinic.Api.Domain.Entities;
@@ -6,7 +7,6 @@ using Clinic.Api.Infrastructure.Data;
 using Clinic.Api.Middlwares;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using static Clinic.Api.Middlwares.Exceptions;
 
 namespace Clinic.Api.Infrastructure.Services
 {
@@ -18,13 +18,15 @@ namespace Clinic.Api.Infrastructure.Services
         private readonly IPasswordHasher<UserContext> _passwordHasher;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IMapper _mapper;
+        private readonly IReadTokenClaims _claims;
 
         public UserService(IUnitOfWork uow,
             ITokenService token,
             ApplicationDbContext context,
             IPasswordHasher<UserContext> passwordHasher,
             IHttpContextAccessor httpContextAccessor,
-            IMapper mapper
+            IMapper mapper,
+            IReadTokenClaims claims
             )
         {
             _uow = uow;
@@ -33,6 +35,7 @@ namespace Clinic.Api.Infrastructure.Services
             _passwordHasher = passwordHasher;
             _httpContextAccessor = httpContextAccessor;
             _mapper = mapper;
+            _claims = claims;
         }
 
         public async Task<IEnumerable<UserDto>> GetAllAsync() =>
@@ -65,6 +68,19 @@ namespace Clinic.Api.Infrastructure.Services
             }
         }
 
+        public async Task<IEnumerable<UserContext>> GetUsers(int roleId)
+        {
+            try
+            {
+                var result = await _context.Users.Where(u => u.RoleId == roleId).ToListAsync();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
         public async Task<LoginResponseDto> LoginAsync(LoginUserDto model)
         {
             try
@@ -72,7 +88,7 @@ namespace Clinic.Api.Infrastructure.Services
                 var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == model.Username);
                 if (user == null ||
                     _passwordHasher.VerifyHashedPassword(user, user.Password, model.Password) != PasswordVerificationResult.Success)
-                    throw new InvalidModelData(1009, "Invalid username or password.");
+                    throw new Exception("Invalid username or password.");
 
                 var roleName = await _context.Roles
                       .Where(r => r.Id == user.RoleId)
@@ -132,31 +148,93 @@ namespace Clinic.Api.Infrastructure.Services
             }
         }
 
-        public async Task<int> CreateUserAsync(CreateUserDto model)
+        public async Task<GlobalResponse> CreateUserAsync(CreateUserDto model)
         {
+            var response = new GlobalResponse();
+
             try
             {
                 var existingUser = await _context.Users.FirstOrDefaultAsync(u => u.Email == model.Username);
                 if (existingUser != null)
-                    throw new InvalidModelData(1006, "Email already exists.");
+                    throw new Exception("Email already exists.");
 
                 var hasher = new PasswordHasher<object>();
                 var hashedPassword = hasher.HashPassword(null, model.Password);
 
                 var user = new UserContext
                 {
-                    Email = model.Username,
+                    Email = model.Email,
                     Password = hashedPassword,
                     FirstName = model.FirstName,
                     LastName = model.LastName,
                     RoleId = model.RoleId,
-                    IsActive = model.IsActive
+                    IsActive = model.IsActive,
+                    IsPractitioner = model.IsDoctor,
+                    ShowTreatmentOnClickPatientName = model.ShowTreatmentOnClick,
+                    CanChangeOldTreatment = model.CanChangeOldTreatment,
+                    SuspendReservationDays = model.SuspendReservationDays,
+                    OutOfRange = model.OutOfRangePatients,
+                    Designation = model.DoctorSkill,
+                    Description = model.Description,
+                    TitleId = model.TitleId,
+                    ShowInOnlineBookings = model.ShowInOnlineBookings,
+                    LoadLastDataOnNewTreatment = model.LoadLastDataOnNewTreatment,
+                    SMSEnabled = model.SMSEnabled,
+                    CanConfirmInvoice = model.CanConfirmInvoice
                 };
 
                 await _uow.Users.AddAsync(user);
                 await _uow.SaveAsync();
 
-                return user.Id;
+                var creatorId = _claims.GetUserId();
+
+                if (!string.IsNullOrEmpty(model.BusinessIds))
+                {
+                    var businessIds = model.BusinessIds
+                        .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                        .Select(id => int.Parse(id.Trim()))
+                        .ToList();
+
+                    foreach (var businessId in businessIds)
+                    {
+                        var userBusiness = new UserBusinessesContext
+                        {
+                            BusinessId = businessId,
+                            User_Id = user.Id,
+                            CreatorId = creatorId,
+                            CreatedOn = DateTime.UtcNow,
+                            IsActive = true
+                        };
+                        await _context.UserBusinesses.AddAsync(userBusiness);
+                    }
+                }
+
+                if (!string.IsNullOrEmpty(model.AppointmentTypesIds))
+                {
+                    var appointmentTypeIds = model.AppointmentTypesIds
+                        .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                        .Select(id => int.Parse(id.Trim()))
+                        .ToList();
+
+                    foreach (var typeId in appointmentTypeIds)
+                    {
+                        var practitionerType = new AppointmentTypePractitionersContext
+                        {
+                            AppointmentTypeId = typeId,
+                            PractitionerId = user.Id,
+                            CreatorId = creatorId,
+                            CreatedOn = DateTime.UtcNow,
+                            IsActive = true
+                        };
+                        await _context.AppointmentTypePractitioners.AddAsync(practitionerType);
+                    }
+                }
+
+                await _context.SaveChangesAsync();
+
+                response.Status = 0;
+                response.Data = user.Id;
+                return response;
             }
             catch (Exception ex)
             {
@@ -169,27 +247,7 @@ namespace Clinic.Api.Infrastructure.Services
             try
             {
                 var user = await _uow.Users.GetByIdAsync(model.Id);
-                if (user == null) throw new NotFoundException(1008, "User Not Exists");
-
-                if (!string.IsNullOrEmpty(model.Username))
-                    user.Email = model.Username;
-
-                if (!string.IsNullOrEmpty(model.FirstName))
-                    user.FirstName = model.FirstName;
-
-                if (!string.IsNullOrEmpty(model.LastName))
-                    user.LastName = model.LastName;
-
-                if (model.RoleId.HasValue)
-                    user.RoleId = model.RoleId.Value;
-
-                if (model.IsActive.HasValue)
-                    user.IsActive = model.IsActive.Value;
-
-                if (!string.IsNullOrEmpty(model.Password))
-                {
-                    user.Password = _passwordHasher.HashPassword(user, model.Password);
-                }
+                if (user == null) throw new Exception("User Not Exists");
 
                 _context.Users.Update(user);
                 await _uow.SaveAsync();
@@ -208,11 +266,11 @@ namespace Clinic.Api.Infrastructure.Services
             {
                 var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == model.Username);
                 if (user == null)
-                    throw new NotFoundException(1007, "User not found");
+                    throw new Exception("User not found");
 
                 var passwordVerification = _passwordHasher.VerifyHashedPassword(user, user.Password, model.OldPassword);
                 if (passwordVerification != PasswordVerificationResult.Success)
-                    throw new OldPasswordIncorrect(1010, "Old password is incorrect");
+                    throw new Exception("Old password is incorrect");
 
                 user.Password = _passwordHasher.HashPassword(user, model.NewPassword);
                 _context.Users.Update(user);
@@ -260,6 +318,65 @@ namespace Clinic.Api.Infrastructure.Services
                 return forwardedIp;
 
             return context.Connection.RemoteIpAddress?.ToString() ?? "Unknown";
+        }
+
+        public async Task<GlobalResponse> SaveUserBusiness(SaveUserBusinessDto model)
+        {
+            var result = new GlobalResponse();
+
+            try
+            {
+                var userId = _claims.GetUserId();
+
+                if (model.EditOrNew == -1)
+                {
+                    var userBusiness = _mapper.Map<UserBusinessesContext>(model);
+                    userBusiness.CreatorId = userId;
+                    userBusiness.CreatedOn = DateTime.UtcNow;
+                    userBusiness.PractitionerId = 0;
+                    userBusiness.IsActive = true;
+                    userBusiness.User_Id = model.UserId;
+                    _context.UserBusinesses.Add(userBusiness);
+                    await _context.SaveChangesAsync();
+                    result.Message = "User Business Saved Successfully";
+                    result.Status = 0;
+                    return result;
+                }
+                else
+                {
+                    var existingBusiness = await _context.UserBusinesses.FirstOrDefaultAsync(j => j.Id == model.EditOrNew);
+                    if (existingBusiness == null)
+                    {
+                        throw new Exception("User Business Not Found");
+                    }
+
+                    _mapper.Map(model, existingBusiness);
+                    existingBusiness.ModifierId = userId;
+                    existingBusiness.LastUpdated = DateTime.UtcNow;
+                    _context.UserBusinesses.Update(existingBusiness);
+                    await _context.SaveChangesAsync();
+                    result.Message = "User Business Updated Successfully";
+                    result.Status = 0;
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<IEnumerable<UserBusinessesContext>> GetUserBusiness(int userId)
+        {
+            try
+            {
+                var res = await _context.UserBusinesses.Where(s => s.User_Id == userId).ToListAsync();
+                return res;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
     }
 }

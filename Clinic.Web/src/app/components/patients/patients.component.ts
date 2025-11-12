@@ -14,6 +14,7 @@ import { ToastrModule, ToastrService } from 'ngx-toastr';
 import { firstValueFrom } from 'rxjs';
 import swal from 'sweetalert2';
 import { NewContactComponent } from '../contacts/new-contact/new-contact.component';
+import { UtilService } from '../../_services/util.service';
 @Component({
   selector: 'app-patients',
   standalone: true,
@@ -60,16 +61,19 @@ export class PatientsComponent {
   hasPhoneNum: boolean;
   patientPhoneList = [];
   displayDialog: boolean;
-
+  userType: any;
   constructor(
     private patientService: PatientService,
     private mainService: MainService,
     private contactService: ContactService,
-    private toastR: ToastrService
+    private toastR: ToastrService,
+    private router: Router,
+    private utilService: UtilService
   ) {
   }
 
   ngOnInit() {
+    this.userType = this.utilService.checkUserType();
     this.getPatients();
     this.getJobs();
     this.getContacts();
@@ -93,11 +97,11 @@ export class PatientsComponent {
   }
 
 
-  async createPatient() {
+  async createPatient(invoiceStatus) {
     if (!this.newPatient.firstName || !this.newPatient.lastName || !this.newPatient.gender || !this.newPatient.birthDate || !this.newPatient.nationalCode || !this.newPatient.fatherName
       || !this.newPatient.mobile || !this.newPatient.referringContactId
     ) {
-      this.toastR.error('تمامی موارد خواسته شده رو تکمیل کیند');
+      this.toastR.error('تمامی موارد خواسته شده رو تکمیل کنید');
       return
     }
     let model = {
@@ -111,7 +115,7 @@ export class PatientsComponent {
       note: this.newPatient.note,
       referringInsurerId: this.newPatient.mainInsurance,
       referringInsurer2Id: this.newPatient.takmiliInsurance,
-      referringContactId: this.newPatient.referringContactId,
+      referringContactId: this.newPatient.referringContactId.code,
       referringContact2Id: this.newPatient.referringContact2Id,
       nationalCode: this.newPatient.nationalCode,
       jobId: this.newPatient.job.code,
@@ -122,8 +126,11 @@ export class PatientsComponent {
     let res: any = await firstValueFrom(this.patientService.savePatient(model));
     if (res) {
       this.toastR.success('با موفقیت ثبت شد!');
-      this.closeCreatePatientModal();
       this.getPatients();
+      if (invoiceStatus) {
+        this.router.navigate(['patient/invoice/' + this.newPatient.id])
+      }
+      this.closeCreatePatientModal();
     }
   }
 
@@ -174,7 +181,7 @@ export class PatientsComponent {
     this.selectedPatientAddPhoneId = '';
     this.selectedEditPhoneNum = '';
     this.patientPhoneEditMode = false;
-     this.patientPhoneList = [];
+    this.patientPhoneList = [];
     this.getPatients();
   }
 
@@ -276,7 +283,7 @@ export class PatientsComponent {
     })
   }
   creatPatientPhone() {
-    if(this.patientPhoneList.length>0){
+    if (this.patientPhoneList.length > 0) {
       this.patientPhoneList.forEach(element => {
         element.typeText = this.phoneTypeList.filter(type => type.code == element.phoneNoTypeId)[0].name;
       });
@@ -288,4 +295,5 @@ export class PatientsComponent {
     await this.getContacts();
     this.newPatient.referringContactId = this.contactsList.filter(x => x.firstName == data.firstName)[0];
   }
+
 }

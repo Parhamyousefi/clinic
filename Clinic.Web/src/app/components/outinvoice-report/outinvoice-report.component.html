@@ -1,0 +1,213 @@
+<div class="appContainer">
+    <div class="col-12 text-right">
+        <h4>گزارش صورتحساب های سرپایی</h4>
+    </div>
+    <hr>
+    <div class="col-12 d-flex flex-column justify-content-center">
+        <div class="d-lg-flex flex-wrap align-items-baseline my-3">
+            <div class="col-lg-3 col-12 mt-2">
+                <label for="dateFrom" class="text-right w-100">از تاریخ</label>
+                <ng-persian-datepicker id="dateFrom" (dateSelect)="onDateChange($event)">
+                    <input type="text" class="form-control" [formControl]="selectedDatefrom" />
+                </ng-persian-datepicker>
+            </div>
+            <div class="col-lg-3 col-12 mt-2">
+                <label for="timeFrom" class="text-right w-100">از ساعت</label>
+                <ngx-timepicker-field [format]="24" id="timeFrom" (timeSet)="selectedTimefrom = $event"
+                    [(ngModel)]="newReport.selectedTimefrom" [defaultTime]="'08:00'">
+                </ngx-timepicker-field>
+            </div>
+            <div class="col-lg-3 col-12 mt-2">
+                <label for="dateTo" class="text-right w-100">تا تاریخ</label>
+                <ng-persian-datepicker id="dateTo" (dateValueChange)="onDateChange($event)">
+                    <input type="text" class="form-control" [formControl]="selectedDateTo" />
+                </ng-persian-datepicker>
+            </div>
+            <div class="col-lg-3 col-12 mt-2">
+                <label for="timeTo" class="text-right w-100">از ساعت</label>
+                <ngx-timepicker-field id="timeTo" [format]="24" (timeSet)="selectedTimeTo = $event"
+                    [(ngModel)]="newReport.selectedTimeTo" [defaultTime]="'23:00'">
+                </ngx-timepicker-field>
+            </div>
+            <div class="col-lg-3 col-12 mt-2">
+                <label for="doctor" class="text-right w-100">دکتر</label>
+                <p-multiSelect id="services" [options]="doctorsList" [(ngModel)]="newReport.selectedDoctor"
+                    optionLabel="name" optionValue="id" />
+            </div>
+            <div class="col-lg-3 col-12 mt-2">
+                <label for="services" class="text-right w-100">خدمت</label>
+                <p-multiSelect id="services" [options]="servicesList" [(ngModel)]="newReport.selectedservice"
+                    optionLabel="name" optionValue="id" placeholder="خدمات" />
+            </div>
+            <div class="col-lg-3 col-12 mt-2">
+                <label for="product" class="text-right w-100">کالا</label>
+                <p-multiSelect id="product" [options]="productsList" [(ngModel)]="newReport.selectedProduct"
+                    optionLabel="name" optionValue="id" />
+            </div>
+            <div class="col-lg-3 col-12 mt-2">
+                <label for="practitionerName" class="text-right w-100">کاربر ثبت کننده</label>
+                <p-multiSelect id="services" [options]="usersList" [(ngModel)]="newReport.creatorId" optionLabel="name"
+                    optionValue="id" />
+            </div>
+            <div class="col-lg-3 col-12 mt-2 d-flex flex-column align-items-center">
+                <label for="tasviehStatus" class="text-right w-100">
+                    تسویه
+                </label>
+                <p-selectButton [options]="tasviehStatus" [(ngModel)]="newReport.isPaidStatus" optionLabel="label"
+                    optionValue="value" class="select-btn" />
+            </div>
+            <div class="col-lg-3 col-12 mt-2">
+                <label for="firstReagent" class="text-right w-100">
+                    معرف
+                </label>
+                <p-multiSelect id="tasviehStatus" [options]="contactsList" [(ngModel)]="newReport.referringContactId"
+                    optionLabel="name" optionValue="id" />
+            </div>
+        </div>
+        <div class="col-12 text-center">
+            <button class="btn main-btn" (click)="getReports()">ایجاد گزارش</button>
+        </div>
+    </div>
+    <!-- Summary Report -->
+    <hr class="my-4">
+    <div class="col-12">
+        <h6 class="text-right mb-3"><i class="fa fa-bar-chart" aria-hidden="true"></i> خلاصه گزارش</h6>
+        <p-table id="summaryTable" #dt styleClass="" class="summary-table" [value]="reportList" [autoLayout]="true">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>تعداد کل</th>
+                    <th>تعداد کنسل شده</th>
+                    <th>جمع صورتحساب</th>
+                    <th>جمع قابل دریافت</th>
+                    <th>جمع دریافتی</th>
+                    <th>جمع پرداختی</th>
+                    <th>خالص دریافتی</th>
+                    <th>جمع دریافت نشده</th>
+                    <th>جمع اضافه دریافتی</th>
+                </tr>
+                <!-- <tr>
+                    <th></th>
+                    <th>
+                        <input type="text" (input)="dt.filter($event.target?.value, 'firstName', 'contains')"
+                            class="form-control">
+                    </th>
+                    <th>
+                        <input type="text" (input)="dt.filter($event.target?.value, 'phoneNum', 'contains')"
+                            class="form-control">
+                    </th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </tr> -->
+            </ng-template>
+            <ng-template pTemplate="body" let-report>
+                <tr>
+                    <td class="text-center">{{report.totalCount}}</td>
+                    <td class="text-center">{{report.canceledCount}}</td>
+                    <td class="text-center">{{report.totalAmount}}</td>
+                    <td class="text-center">{{report.totalReceivable}}</td>
+                    <td class="text-center">{{report.totalReceived}}</td>
+                    <td class="text-center">{{report.totalPaid}}</td>
+                    <td class="text-center">{{report.netReceived}}</td>
+                    <td class="text-center">{{report.totalUnreceived}}</td>
+                    <td class="text-center">{{report.totalOverReceived}}</td>
+                </tr>
+            </ng-template>
+        </p-table>
+
+    </div>
+
+    <!-- summary report creator based -->
+    <hr class="my-4">
+    <div class="col-12">
+        <h6 class="text-right mb-3"><i class="fa fa-bar-chart" aria-hidden="true"></i> خلاصه گزارش بر اساس کاربر ثبت
+            کننده</h6>
+        <p-table id="summaryTable" #dt styleClass="" class="summary-table" [value]="reportListCreatorBased"
+            [autoLayout]="true">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>#</th>
+                    <th>کاربر</th>
+                    <th>تعداد</th>
+                    <th>جمع صورتحساب</th>
+                    <th>جمع تخفیفات</th>
+                    <th>جمع قابل دریافت</th>
+                    <th>جمع دریافتی</th>
+                    <th>جمع پرداختی</th>
+                    <th>خالص دریافتی</th>
+                    <th>جمع دریافت نشده</th>
+                    <th>جمع اضافه دریافتی</th>
+                </tr>
+                <!-- <tr>
+                    <th></th>
+                    <th>
+                        <input type="text" (input)="dt.filter($event.target?.value, 'firstName', 'contains')"
+                            class="form-control">
+                    </th>
+                    <th>
+                        <input type="text" (input)="dt.filter($event.target?.value, 'phoneNum', 'contains')"
+                            class="form-control">
+                    </th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </tr> -->
+            </ng-template>
+            <ng-template pTemplate="body" let-report let-rowIndex="rowIndex">
+                <tr>
+                    <td class="text-center"> {{rowIndex+1}}</td>
+                    <td class="text-center">{{report.creatorName}}</td>
+                    <td class="text-center">{{report.count}}</td>
+                    <td class="text-center">{{report.totalAmount}}</td>
+                    <td class="text-center">{{report.totalDiscount}}</td>
+                    <td class="text-center">{{report.totalReceivable}}</td>
+                    <td class="text-center">{{report.totalReceived}}</td>
+                    <td class="text-center">{{report.totalPaid}}</td>
+                    <td class="text-center">{{report.netReceived}}</td>
+                    <td class="text-center">{{report.totalUnreceived}}</td>
+                    <td class="text-center">{{report.totalOverReceived}}</td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+
+    <!-- Report Detail -->
+    <hr class="my-4">
+    <div class="col-12">
+        <h6 class="text-right mb-3"><i class="fa fa-bar-chart" aria-hidden="true"></i> جزئیات گزارش</h6>
+        <p-table id="summaryTable" #dt styleClass="" class="summary-table" [value]="reportDetailsList"
+            [autoLayout]="true">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>#</th>
+                    <th>کلینیک</th>
+                    <th>کاربر ثبت کننده</th>
+                    <th>جمع صورتحساب</th>
+
+                </tr>
+                <!-- <tr>
+                    <th></th>
+                    <th>
+                        <input type="text" (input)="dt.filter($event.target?.value, 'firstName', 'contains')"
+                            class="form-control">
+                    </th>
+                    <th>
+                        <input type="text" (input)="dt.filter($event.target?.value, 'phoneNum', 'contains')"
+                            class="form-control">
+                    </th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </tr> -->
+            </ng-template>
+            <ng-template pTemplate="body" let-report let-rowIndex="rowIndex">
+                <tr>
+                    <td class="text-center"> {{rowIndex+1}}</td>
+                    <td class="text-center">{{report.businessName}}</td>
+                    <td class="text-center">{{report.practitionerName}}</td>
+                    <td class="text-center">{{report.totalReceipt}}</td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</div>
