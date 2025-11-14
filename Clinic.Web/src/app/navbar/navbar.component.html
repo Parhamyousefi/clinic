@@ -31,7 +31,7 @@
     </div>
   </div>
   <div [ngClass]="{'closed-sidebar d-none' : !openSidebar}" class="main-sidebar">
-    <div class="sidebar-items mx-4 mt-3">
+    <div class="sidebar-items mx-2 mt-3">
       <div *ngFor="let item of sidebarMenu"
         [ngClass]="{'selected-sidebar-menu text-dark': selectedPatientSideBarItem == item.id}"
         class="sidebar-item d-flex align-items-center pointer mt-3 p-2 text-white" [routerLink]="item.link"

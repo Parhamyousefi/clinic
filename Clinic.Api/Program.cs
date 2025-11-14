@@ -147,7 +147,7 @@ app.UseStaticFiles(new StaticFileOptions()
 app.UseSerilogRequestLogging();
 app.UseSwagger();
 app.UseSwaggerUI();
-app.UseMiddleware<GlobalExceptionMiddleware>();
+app.UseMiddleware<ErrorHandlerMiddlware>();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
