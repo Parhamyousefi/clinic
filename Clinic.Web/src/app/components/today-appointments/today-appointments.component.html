@@ -134,6 +134,10 @@
                             (click)="openAppointmentDetail($event,item)">پرداخت</button>
                         <button *ngIf="item.invoiceId" class="btn main-btn-outline mt-2 btn-sm mr-2"
                             (click)="openAppointmentDetail($event,item)">جزئیات</button>
+                        <button *ngIf="item.hasDiscount && isAdminOrDoctor"
+                            class="btn main-btn-outline mt-2 btn-sm mr-2" (click)="approveDiscount($event,item)">تایید
+                            تخفیف</button>
+
 
                     </td>
                 </tr>

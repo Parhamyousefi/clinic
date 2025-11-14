@@ -10,6 +10,7 @@ import { InputMaskModule } from 'primeng/inputmask';
 import { InvoiceService } from '../../_services/invoice.service';
 import { ToastrService } from 'ngx-toastr';
 import { MultiSelectModule } from 'primeng/multiselect';
+import { UtilService } from '../../_services/util.service';
 @Component({
   selector: 'app-today-appointments',
   standalone: true,
@@ -26,7 +27,8 @@ export class TodayAppointmentsComponent implements OnInit {
     private mainService: MainService,
     private invoiceService: InvoiceService,
     private toastR: ToastrService,
-    private router: Router
+    private router: Router,
+    private utilService: UtilService
   ) { }
 
   clinicsList: any = [];
@@ -53,9 +55,12 @@ export class TodayAppointmentsComponent implements OnInit {
   discountAppointment: any = [];
   discount: any = [];
   appointmentInvoices: any = [];
-
+  userType: any;
+  isAdminOrDoctor: boolean;
 
   async ngOnInit() {
+    this.userType = this.utilService.checkUserType();
+    this.isAdminOrDoctor = this.userType == 3 ? false : true;
     this.selectedDatefrom = new FormControl(moment().format('jYYYY/jMM/jDD'));
     this.selectedDateTo = new FormControl(moment().format('jYYYY/jMM/jDD'));
     await this.getClinics();
@@ -77,6 +82,9 @@ export class TodayAppointmentsComponent implements OnInit {
     try {
       const res: any = await this.treatmentsService.getTodayAppointments(model).toPromise();
       this.todayAppointmentsList = res;
+      this.todayAppointmentsList.forEach(appointment => {
+        appointment.hasDiscount = appointment.totalDiscount > 0 ? true : false;
+      });
       this.filteredAppointments = [];
 
       if (this.selectedStatus && this.selectedStatus.length > 0) {
@@ -222,6 +230,17 @@ export class TodayAppointmentsComponent implements OnInit {
     if (item.status != 1) {
       this.router.navigate(["/patient/treatment/" + item.patientId])
     }
+  }
+
+  async approveDiscount(event, item) {
+    event.stopPropagation();
+    try {
+      let res: any = await this.invoiceService.approveDiscount(item.invoiceId).toPromise();
+      if (res.status == 0) {
+        this.toastR.success('با موفقیت تایید شد!');
+      }
+    }
+    catch { }
   }
 
 }

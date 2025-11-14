@@ -1,4 +1,8 @@
 <div class="appContainer">
+    <div class="col-12 text-right">
+        <h4>گزارش صورتحساب های سرپایی</h4>
+    </div>
+    <hr>
     <div class="col-12 d-flex flex-column justify-content-center">
         <div class="d-lg-flex flex-wrap align-items-baseline my-3">
             <div class="col-lg-3 col-12 mt-2">
@@ -28,21 +32,22 @@
             <div class="col-lg-3 col-12 mt-2">
                 <label for="doctor" class="text-right w-100">دکتر</label>
                 <p-multiSelect id="services" [options]="doctorsList" [(ngModel)]="newReport.selectedDoctor"
-                    optionLabel="name" />
+                    optionLabel="name" optionValue="id" />
             </div>
             <div class="col-lg-3 col-12 mt-2">
                 <label for="services" class="text-right w-100">خدمت</label>
                 <p-multiSelect id="services" [options]="servicesList" [(ngModel)]="newReport.selectedservice"
-                    optionLabel="name" placeholder="خدمات" />
+                    optionLabel="name" optionValue="id" placeholder="خدمات" />
             </div>
             <div class="col-lg-3 col-12 mt-2">
                 <label for="product" class="text-right w-100">کالا</label>
-                <input name="product" class="form-control" type="text" [(ngModel)]="newReport.selectedProduct">
+                <p-multiSelect id="product" [options]="productsList" [(ngModel)]="newReport.selectedProduct"
+                    optionLabel="name" optionValue="id" />
             </div>
             <div class="col-lg-3 col-12 mt-2">
                 <label for="practitionerName" class="text-right w-100">کاربر ثبت کننده</label>
-                <p-multiSelect id="services" [options]="usersList" [(ngModel)]="newReport.creatorId"
-                    optionLabel="name" />
+                <p-multiSelect id="services" [options]="usersList" [(ngModel)]="newReport.creatorId" optionLabel="name"
+                    optionValue="id" />
             </div>
             <div class="col-lg-3 col-12 mt-2 d-flex flex-column align-items-center">
                 <label for="tasviehStatus" class="text-right w-100">
@@ -56,20 +61,18 @@
                     معرف
                 </label>
                 <p-multiSelect id="tasviehStatus" [options]="contactsList" [(ngModel)]="newReport.referringContactId"
-                    optionLabel="name" />
+                    optionLabel="name" optionValue="id" />
             </div>
         </div>
         <div class="col-12 text-center">
-            <button class="btn main-btn" (click)="getSummaryReport()">ایجاد گزارش</button>
+            <button class="btn main-btn" (click)="getReports()">ایجاد گزارش</button>
         </div>
     </div>
-    <hr>
     <!-- Summary Report -->
+    <hr class="my-4">
     <div class="col-12">
-        <p class="text-right">خلاصه گزارش</p>
-        <p-table id="summaryTable" #dt styleClass="" class="summary-table" [value]="summaryReport" [pageLinks]="20"
-            [autoLayout]="true" [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
-            currentPageReportTemplate="نمایش {first} تا {last} " [rowsPerPageOptions]="[10,25,50]">
+        <h6 class="text-right mb-3"><i class="fa fa-bar-chart" aria-hidden="true"></i> خلاصه گزارش</h6>
+        <p-table id="summaryTable" #dt styleClass="" class="summary-table" [value]="reportList" [autoLayout]="true">
             <ng-template pTemplate="header">
                 <tr>
                     <th>تعداد کل</th>
@@ -97,17 +100,17 @@
                     <th></th>
                 </tr> -->
             </ng-template>
-            <ng-template pTemplate="body" let-contact let-rowIndex="rowIndex">
+            <ng-template pTemplate="body" let-report>
                 <tr>
-                    <td> {{rowIndex+1}}</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td class="text-center">{{report.totalCount}}</td>
+                    <td class="text-center">{{report.canceledCount}}</td>
+                    <td class="text-center">{{report.totalAmount}}</td>
+                    <td class="text-center">{{report.totalReceivable}}</td>
+                    <td class="text-center">{{report.totalReceived}}</td>
+                    <td class="text-center">{{report.totalPaid}}</td>
+                    <td class="text-center">{{report.netReceived}}</td>
+                    <td class="text-center">{{report.totalUnreceived}}</td>
+                    <td class="text-center">{{report.totalOverReceived}}</td>
                 </tr>
             </ng-template>
         </p-table>
@@ -115,21 +118,27 @@
     </div>
 
     <!-- summary report creator based -->
+    <hr class="my-4">
     <div class="col-12">
-        <p class="text-right">خلاصه گزارش بر اساس کاربر ثبت کننده</p>
-        <p-table id="summaryTable" #dt styleClass="" class="summary-table" [value]="summaryReport" [pageLinks]="20"
-            [autoLayout]="true" [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
-            currentPageReportTemplate="نمایش {first} تا {last} " [rowsPerPageOptions]="[10,25,50]">
+        <h6 class="text-right mb-3"><i class="fa fa-bar-chart" aria-hidden="true"></i> خلاصه گزارش بر اساس کاربر ثبت
+            کننده</h6>
+        <p-table id="summaryTable" #dt styleClass="" class="summary-table" [value]="reportListCreatorBased"
+            [autoLayout]="true">
             <ng-template pTemplate="header">
                 <tr>
-                    <th>ردیف</th>
-                    <th pSortableColumn="firstName"><p-sortIcon field="firstName"></p-sortIcon> نام و نام خانوادگی</th>
-                    <th pSortableColumn="phoneNum"><p-sortIcon field="phoneNum"></p-sortIcon> تلفن</th>
-                    <th>شغل</th>
-                    <th>شرکت</th>
-                    <th>عملیات</th>
+                    <th>#</th>
+                    <th>کاربر</th>
+                    <th>تعداد</th>
+                    <th>جمع صورتحساب</th>
+                    <th>جمع تخفیفات</th>
+                    <th>جمع قابل دریافت</th>
+                    <th>جمع دریافتی</th>
+                    <th>جمع پرداختی</th>
+                    <th>خالص دریافتی</th>
+                    <th>جمع دریافت نشده</th>
+                    <th>جمع اضافه دریافتی</th>
                 </tr>
-                <tr>
+                <!-- <tr>
                     <th></th>
                     <th>
                         <input type="text" (input)="dt.filter($event.target?.value, 'firstName', 'contains')"
@@ -142,54 +151,41 @@
                     <th></th>
                     <th></th>
                     <th></th>
-                </tr>
+                </tr> -->
             </ng-template>
-            <ng-template pTemplate="body" let-contact let-rowIndex="rowIndex">
+            <ng-template pTemplate="body" let-report let-rowIndex="rowIndex">
                 <tr>
-                    <td> {{rowIndex+1}}</td>
-                    <td class="text-center">
-                        {{contact.firstName}} {{contact.lastName}}
-                    </td>
-                    <td class="text-center">
-                        {{contact.phoneNum || "-"}}
-                    </td>
-                    <td class="text-center">
-                        {{contact.jobTitle}}
-                    </td>
-                    <td class="text-center">
-                        {{contact.companyName}}
-                    </td>
-                    <td class="text-center">
-                        <button class="btn main-btn" *ngIf="!contact.phoneNum"
-                            (click)="openAddPhoneNumModal(contact.id)">افزودن شماره
-                            تلفن</button>
-                        <button class="btn main-btn" *ngIf="contact.phoneNum"
-                            (click)="editPhoneNum(contact.phone)">ویرایش
-                            شماره تلفن</button>
-                        <button class="btn main-outline-btn mx-1" (click)="editContact(contact)">ویرایش</button>
-                        <button class="btn btn-outline-secondary mx-1" (click)="deleteContact(contact.id)">حذف</button>
-                    </td>
+                    <td class="text-center"> {{rowIndex+1}}</td>
+                    <td class="text-center">{{report.creatorName}}</td>
+                    <td class="text-center">{{report.count}}</td>
+                    <td class="text-center">{{report.totalAmount}}</td>
+                    <td class="text-center">{{report.totalDiscount}}</td>
+                    <td class="text-center">{{report.totalReceivable}}</td>
+                    <td class="text-center">{{report.totalReceived}}</td>
+                    <td class="text-center">{{report.totalPaid}}</td>
+                    <td class="text-center">{{report.netReceived}}</td>
+                    <td class="text-center">{{report.totalUnreceived}}</td>
+                    <td class="text-center">{{report.totalOverReceived}}</td>
                 </tr>
             </ng-template>
         </p-table>
     </div>
 
     <!-- Report Detail -->
+    <hr class="my-4">
     <div class="col-12">
-        <p class="text-right">جزئیات گزارش</p>
-        <p-table id="summaryTable" #dt styleClass="" class="summary-table" [value]="summaryReport" [pageLinks]="20"
-            [autoLayout]="true" [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
-            currentPageReportTemplate="نمایش {first} تا {last} " [rowsPerPageOptions]="[10,25,50]">
+        <h6 class="text-right mb-3"><i class="fa fa-bar-chart" aria-hidden="true"></i> جزئیات گزارش</h6>
+        <p-table id="summaryTable" #dt styleClass="" class="summary-table" [value]="reportDetailsList"
+            [autoLayout]="true">
             <ng-template pTemplate="header">
                 <tr>
-                    <th>ردیف</th>
-                    <th pSortableColumn="firstName"><p-sortIcon field="firstName"></p-sortIcon> نام و نام خانوادگی</th>
-                    <th pSortableColumn="phoneNum"><p-sortIcon field="phoneNum"></p-sortIcon> تلفن</th>
-                    <th>شغل</th>
-                    <th>شرکت</th>
-                    <th>عملیات</th>
+                    <th>#</th>
+                    <th>کلینیک</th>
+                    <th>کاربر ثبت کننده</th>
+                    <th>جمع صورتحساب</th>
+
                 </tr>
-                <tr>
+                <!-- <tr>
                     <th></th>
                     <th>
                         <input type="text" (input)="dt.filter($event.target?.value, 'firstName', 'contains')"
@@ -202,33 +198,14 @@
                     <th></th>
                     <th></th>
                     <th></th>
-                </tr>
+                </tr> -->
             </ng-template>
-            <ng-template pTemplate="body" let-contact let-rowIndex="rowIndex">
+            <ng-template pTemplate="body" let-report let-rowIndex="rowIndex">
                 <tr>
-                    <td> {{rowIndex+1}}</td>
-                    <td class="text-center">
-                        {{contact.firstName}} {{contact.lastName}}
-                    </td>
-                    <td class="text-center">
-                        {{contact.phoneNum || "-"}}
-                    </td>
-                    <td class="text-center">
-                        {{contact.jobTitle}}
-                    </td>
-                    <td class="text-center">
-                        {{contact.companyName}}
-                    </td>
-                    <td class="text-center">
-                        <button class="btn main-btn" *ngIf="!contact.phoneNum"
-                            (click)="openAddPhoneNumModal(contact.id)">افزودن شماره
-                            تلفن</button>
-                        <button class="btn main-btn" *ngIf="contact.phoneNum"
-                            (click)="editPhoneNum(contact.phone)">ویرایش
-                            شماره تلفن</button>
-                        <button class="btn main-outline-btn mx-1" (click)="editContact(contact)">ویرایش</button>
-                        <button class="btn btn-outline-secondary mx-1" (click)="deleteContact(contact.id)">حذف</button>
-                    </td>
+                    <td class="text-center"> {{rowIndex+1}}</td>
+                    <td class="text-center">{{report.businessName}}</td>
+                    <td class="text-center">{{report.practitionerName}}</td>
+                    <td class="text-center">{{report.totalReceipt}}</td>
                 </tr>
             </ng-template>
         </p-table>

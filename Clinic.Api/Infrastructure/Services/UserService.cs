@@ -148,8 +148,10 @@ namespace Clinic.Api.Infrastructure.Services
             }
         }
 
-        public async Task<int> CreateUserAsync(CreateUserDto model)
+        public async Task<GlobalResponse> CreateUserAsync(CreateUserDto model)
         {
+            var response = new GlobalResponse();
+
             try
             {
                 var existingUser = await _context.Users.FirstOrDefaultAsync(u => u.Email == model.Username);
@@ -230,7 +232,9 @@ namespace Clinic.Api.Infrastructure.Services
 
                 await _context.SaveChangesAsync();
 
-                return user.Id;
+                response.Status = 0;
+                response.Data = user.Id;
+                return response;
             }
             catch (Exception ex)
             {
