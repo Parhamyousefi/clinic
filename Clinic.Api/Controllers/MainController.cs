@@ -113,7 +113,7 @@ namespace Clinic.Api.Controllers
         }
 
         [HttpPost("saveDoctorSchedule")]
-        [Authorize("Admin", "Doctor", "Secretary")]
+        [Authorize("Admin")]
         public async Task<IActionResult> SaveDoctorSchedule(SaveDoctorScheduleDto model)
         {
             var result = await _mainService.SaveDoctorSchedule(model);
@@ -121,7 +121,7 @@ namespace Clinic.Api.Controllers
         }
 
         [HttpGet("getDoctorSchedules/{userId}")]
-        [Authorize("Admin","Doctor","Secretary")]
+        [Authorize("Admin")]
         public async Task<IActionResult> GetDoctorSchedules(int userId)
         {
             var result = await _mainService.GetDoctorSchedules(userId);
