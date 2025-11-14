@@ -1,0 +1,60 @@
+<div class="appContainer">
+  <h4 class="text-right"> تنظیمات وقت دهی {{userName}}</h4>
+  <hr>
+
+  <div class="item-box">
+    <div class="header">
+      <h6> تنظیمات وقت دهی بر اساس مکان </h6>
+    </div>
+    <div>
+      <form class="d-lg-flex align-items-center g-2 my-3">
+        <div class="col">
+          <p-dropdown optionLabel="name" dataKey="id" [options]="clinicsList" placeholder="مکان"
+            [(ngModel)]="selectedClinic" class=" text-right" [ngModelOptions]="{ standalone: true }" />
+        </div>
+        <div class="col">
+          <select [(ngModel)]="defaultType" [ngModelOptions]="{ standalone: true }" class="form-select form-control">
+            <option value=null> نوع وقت دهی پیش فرض</option>
+            <option *ngFor="let item of appointmentTypes" [value]="item.id">{{item.name}}</option>
+          </select>
+        </div>
+        <div class="col">
+          <select [(ngModel)]="defaultNewPatientType" [ngModelOptions]="{ standalone: true }"
+            class="form-select form-control">
+            <option value=null> نوع وقت دهی بیمار جدید</option>
+            <option *ngFor="let item of appointmentTypes" [value]="item.id">{{item.name}}</option>
+          </select>
+        </div>
+
+        <div class="col">
+          <input type="number" class="form-control" [(ngModel)]="numberOutTurn" [ngModelOptions]="{ standalone: true }"
+            placeholder=" تعداد خارج از نوبت">
+        </div>
+
+        <div class="col">
+          <select [(ngModel)]="minuteSelected" [ngModelOptions]="{ standalone: true }" class="form-select form-control">
+            <option value=null> تعداد دقایق ملاقات</option>
+            <option *ngFor="let item of minutes" [value]="item">{{item}}</option>
+          </select>
+        </div>
+
+        <div class="col">
+          <select [(ngModel)]="fromSelected" [ngModelOptions]="{ standalone: true }" class="form-select form-control">
+            <option value=null> نمایش وقت از ساعت</option>
+            <option *ngFor="let item of times" [value]="item">{{item}}</option>
+          </select>
+        </div>
+
+        <div class="col">
+          <select [(ngModel)]="toSelected" [ngModelOptions]="{ standalone: true }" class="form-select form-control">
+            <option value=null> نمایش وقت تا ساعت</option>
+            <option *ngFor="let item of times" [value]="item">{{item}}</option>
+          </select>
+        </div>
+        <div class="col d-flex">
+            <input type="checkbox" class="ml-2" [(ngModel)]="freeTime" [ngModelOptions]="{ standalone: true }">
+            <label for="freeTimeCheckbox" class="form-label ms-2"> امکان داشتن بیش از یک وقت آزاد برای بیمار </label>
+        </div>
+      </form>
+    </div>
+  </div>

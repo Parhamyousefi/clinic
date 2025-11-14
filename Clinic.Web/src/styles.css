@@ -290,6 +290,18 @@ p-dropdown.p-element {
   text-align: right;
 }
 
+.holiday-day {
+  background-color: #ffe5e5;
+  color: #d60000;
+  font-weight: bold;
+  border-radius: 50%;
+  box-shadow: 0 0 4px rgba(214, 0, 0, 0.4);
+}
+
+.other-month{
+  display: none !important;
+}
+
 .p-ripple.p-element.p-button.p-component.p-highlight {
   background-color: #72d9c5;
   box-shadow: none;
