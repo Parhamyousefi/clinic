@@ -69,3 +69,7 @@ Content-Type: application/json
   "username": "john.doe",
   "newPassword": "MyNewSecurePass123"
 }
+
+### Get Roles
+GET {{Clinic_Api_Host}}/api/user/getRoles
+Content-Type: application/json

@@ -112,11 +112,20 @@ namespace Clinic.Api.Controllers
             return Ok(result);
         }
 
-        //[HttpPost("saveDoctorSchedule")]
-        //[Authorize("Admin", "Doctor", "Secretary")]
-        //public async Task<IActionResult> SaveDoctorSchedule()
-        //{
+        [HttpPost("saveDoctorSchedule")]
+        [Authorize("Admin")]
+        public async Task<IActionResult> SaveDoctorSchedule(SaveDoctorScheduleDto model)
+        {
+            var result = await _mainService.SaveDoctorSchedule(model);
+            return Ok(result);
+        }
 
-        //}
+        [HttpGet("getDoctorSchedules/{userId}")]
+        [Authorize("Admin")]
+        public async Task<IActionResult> GetDoctorSchedules(int userId)
+        {
+            var result = await _mainService.GetDoctorSchedules(userId);
+            return Ok(result);
+        }
     }
 }
