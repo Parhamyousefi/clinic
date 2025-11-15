@@ -184,13 +184,13 @@ mat-label {
 
 /* calender */
 #appointment .day-col {
-  padding: 0.8rem !important;
+  padding: 0.5rem !important;
 }
 
 #appointment .datepicker-outer-container .datepicker-inner-container .dp-btn {
   border-radius: 50% !important;
-  width: 30px;
-  height: 30px;
+  width: 20px;
+  height: 20px;
   margin: auto;
 }
 
