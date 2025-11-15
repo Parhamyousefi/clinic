@@ -353,11 +353,96 @@ namespace Clinic.Api.Infrastructure.Services
             }
         }
 
-        public async Task<IEnumerable<SchedulesContext>> GetDoctorSchedules(int userId)
+        public async Task<IEnumerable<SchedulesContext>> GetDoctorSchedules(int? userId)
         {
             try
             {
+                var userRole = _token.GetUserRole();
+
+                if (userRole == "Doctor")
+                {
+                    userId = _token.GetUserId();
+                }
                 var result = await _context.Schedules.Where(s => s.PractitionerId == userId).ToListAsync();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<GlobalResponse> SaveUserAppointmentsSettings(SaveUserAppointmentsSettingsDto model)
+        {
+            var result = new GlobalResponse();
+
+            try
+            {
+                var userId = _token.GetUserId();
+
+                if (model.EditOrNew == -1)
+                {
+                    var userAppointment = _mapper.Map<UserAppointmentsContext>(model);
+                    userAppointment.CreatorId = userId;
+                    userAppointment.CreatedOn = DateTime.UtcNow;
+                    _context.UserAppointment.Add(userAppointment);
+                    await _context.SaveChangesAsync();
+                    result.Message = "User Appointment Settings Saved Successfully";
+                    result.Status = 0;
+                    return result;
+                }
+                else
+                {
+                    var existingUserAppointment = await _context.UserAppointment.FirstOrDefaultAsync(j => j.Id == model.EditOrNew);
+                    if (existingUserAppointment == null)
+                    {
+                        throw new Exception("User Appointment Settings Not Found");
+                    }
+
+                    _mapper.Map(model, existingUserAppointment);
+                    existingUserAppointment.ModifierId = userId;
+                    existingUserAppointment.LastUpdated = DateTime.UtcNow;
+                    _context.UserAppointment.Update(existingUserAppointment);
+                    await _context.SaveChangesAsync();
+                    result.Message = "User Appointment Settings Updated Successfully";
+                    result.Status = 0;
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<IEnumerable<UserAppointmentsContext>> GetUserAppointmentsSettings(int userId)
+        {
+            try
+            {
+                var result = await _context.UserAppointment.Where(s => s.PractitionerId == userId).ToListAsync();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<GlobalResponse> DeleteDoctorSchedule(int scheduleId)
+        {
+            var result = new GlobalResponse();
+
+            try
+            {
+                var schedule = await _context.Schedules.FindAsync(scheduleId);
+
+                if (schedule == null)
+                    throw new Exception("Schedule Not Found");
+
+                _context.Schedules.Remove(schedule);
+                await _context.SaveChangesAsync();
+                result.Message = "Schedule Deleted Successfully";
+                result.Status = 0;
                 return result;
             }
             catch (Exception ex)
