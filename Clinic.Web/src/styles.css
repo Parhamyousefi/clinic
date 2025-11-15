@@ -298,7 +298,15 @@ p-dropdown.p-element {
   box-shadow: 0 0 4px rgba(214, 0, 0, 0.4);
 }
 
-.other-month{
+.doctor-days {
+  background-color: #00c203;
+  color: white;
+  font-weight: bold;
+  border-radius: 50%;
+  box-shadow: 0 0 4px rgba(141, 255, 1, 0.4);
+}
+
+.other-month {
   display: none !important;
 }
 

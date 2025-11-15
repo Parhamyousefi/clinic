@@ -125,5 +125,16 @@ export class MainService {
     return this.http.get(uri, httpOptions);
   }
 
+  getDoctorSchedules(userId) {
+    const token: any = localStorage.getItem("token");
+    const uri = this.url + `api/main/getDoctorSchedules/` + userId;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      }),
+    };
+    return this.http.get(uri, httpOptions);
+  }
 
 }

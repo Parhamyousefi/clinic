@@ -99,6 +99,8 @@ export class AppointmentComponent {
   isBeforeNow: boolean;
   isCalendarVisible = true;
   newPateint: any = [];
+  doctorList: any = [];
+  selectedDoctor: any;
   constructor(
     private userService: UserService,
     private toastR: ToastrService,
@@ -120,7 +122,9 @@ export class AppointmentComponent {
 
   dateNew: any;
   holidays: any = [];
+  userType: number;
   async ngOnInit() {
+    this.userType = this.utilService.checkUserType();
     this.getWeeklyAppointments();
     this.dateNew = new FormControl(moment().format('jYYYY/jMM/jDD'));
     this.dateNew.valueChanges.subscribe(date => {
@@ -136,23 +140,26 @@ export class AppointmentComponent {
     this.today = this.today._d;
     this.getCurrentWeek();
     this.getWeeklyAppointments();
-    this.utilService.getIranianHolidaysWithFridays().subscribe(days => {
+    const jalaliYear = moment().format('jYYYY');
+    this.utilService.getIranianHolidaysWithFridays(jalaliYear).subscribe(days => {
       this.holidays = days
       this.addHoliday();
-      // this.holidays = days.map(date => ({
-      //   date,
-      //   title: 'تعطیل رسمی',
-      //   holiday: true,
-      //   color: '#ff0000' // قرمز
-      // }));
     });
+    this.getUsers();
   }
 
 
   ngAfterViewInit() {
     const calendarEl = this.el.nativeElement.querySelector('#appointment');
     const observer = new MutationObserver(() => {
-      this.addHoliday();
+      const switchViewEl = document.querySelector('.switch-view.dp-btn');
+      const text = switchViewEl.textContent?.trim();
+      const parts = text?.split(' ');
+      this.utilService.getIranianHolidaysWithFridays(parts[1]).subscribe(days => {
+        this.holidays = days
+        this.addHoliday();
+        this.getDoctorSchedules();
+      });
     });
 
     observer.observe(calendarEl, {
@@ -278,10 +285,6 @@ export class AppointmentComponent {
     }
     catch { }
   }
-
-
-
-
 
   async createAppointment() {
     try {
@@ -484,7 +487,6 @@ export class AppointmentComponent {
       Wednesday: 4,
       Thursday: 5
     }
-
     const result = Object.entries(data)
       .flatMap(([day, appointments]) =>
         (appointments as any[]).map((appointment) => ({
@@ -533,6 +535,66 @@ export class AppointmentComponent {
       await this.getPatients();
       this.newAppointmentModel.selectedPatient = this.patientsList.filter(x => x.firstName == this.newPateint.firstName)[0];
     }
-
   }
+
+  async getUsers() {
+    let res: any = await this.userService.getAllUsers().toPromise();
+    this.doctorList = res.filter(x => x.roleId == 9);
+    this.doctorList.forEach(user => {
+      user.code = user.id;
+      user.name = user.firstName + ' ' + user.lastName;
+    });
+    this.selectedDoctor = this.doctorList[0];
+    this.getDoctorSchedules();
+  }
+
+  async getDoctorSchedules() {
+    if (!this.selectedDoctor.code) {
+      return
+    }
+    try {
+      let res: any = await this.mainService.getDoctorSchedules(this.selectedDoctor.code).toPromise();
+      if (res.length > 0) {
+        let weekday: any = [];
+        let year: string;
+        await res.forEach(element => {
+          year = moment(element.createdOn).format('jYYYY');
+          weekday.push(element.day);
+        });
+        const unique = [...new Set(weekday)];
+        this.getWeekdayDatesForDoctor(year, unique);
+      } else {
+        this.addDaysForDoctor([]);
+      }
+    }
+    catch { }
+  }
+
+  getWeekdayDatesForDoctor(jalaliYear: string, weekdays) {
+    const dates: string[] = [];
+    let date = moment(`${jalaliYear}/01/01`, 'jYYYY/jMM/jDD');
+    while (date.jYear() === parseInt(jalaliYear)) {
+      if (weekdays.includes(date.day())) {
+        dates.push(date.format('jYYYY/jMM/jDD'));
+      }
+      date.add(1, 'day');
+    }
+    this.addDaysForDoctor(dates)
+  }
+
+  addDaysForDoctor(dates: string[]) {
+    setTimeout(() => {
+      const cells = this.el.nativeElement.querySelectorAll('.dp-btn');
+      cells.forEach((cell: HTMLElement) => {
+        const label = cell.innerText.trim();
+        const fullDate = this.buildFullDate(label);
+        if (dates.includes(fullDate)) {
+          this.renderer.addClass(cell, 'doctor-days');
+        } else {
+          this.renderer.removeClass(cell, 'doctor-days');
+        }
+      });
+    }, 300);
+  }
+
 }
