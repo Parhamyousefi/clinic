@@ -137,4 +137,29 @@ export class MainService {
     return this.http.get(uri, httpOptions);
   }
 
+  getUserAppointmentsSettings(userId) {
+    const token: any = localStorage.getItem("token");
+    const uri = this.url + `api/main/getUserAppointmentsSettings/` + userId;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      }),
+    };
+    return this.http.get(uri, httpOptions);
+  }
+
+
+  saveUserAppointmentsSettings(data) {
+    const token: any = localStorage.getItem("token");
+    const uri = this.url + `api/Main/saveUserAppointmentsSettings`;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+        responseType: 'text'
+      }),
+    };
+    return this.http.post(uri, data, httpOptions);
+  }
 }

@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { MainService } from '../../../_services/main.service';
 import { TreatmentsService } from '../../../_services/treatments.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-user-appointment-setting',
@@ -17,11 +18,13 @@ export class UserAppointmentSettingComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private mainService: MainService,
-    private treatmentService: TreatmentsService
+    private treatmentService: TreatmentsService,
+    private toastR: ToastrService
+
   ) {
     this.route.queryParams.subscribe(params => {
       this.userName = params['userName'];
-      this.userId = params['id'];
+      // this.userId = params['id'];
     });
   }
 
@@ -29,24 +32,30 @@ export class UserAppointmentSettingComponent implements OnInit {
   userId: number;
   clinicsList: any = [];
   selectedClinic: any;
-  times = Array.from({ length: 24 }, (_, i) =>
-    i.toString().padStart(2, '0') + ':00'
-  );
-
+  times = Array.from({ length: 24 }, (_, i) => ({
+    id: i,
+    label: i.toString().padStart(2, '0') + ':00'
+  }));
+  editOrNew = -1;
   appointmentTypes: any = [];
   defaultType: any = null;
   defaultNewPatientType: any = null;
   numberOutTurn: any;
   minutes = [5, 10, 15, 20, 30, 60];
   minuteSelected: any = null;
-  fromSelected: any = null;
-  toSelected: any = null;
-  freeTime: any;
+  calendarTimeFrom: any = null;
+  calendarTimeTo: any = null;
+  multipleAppointment: any;
+  userAppointmentsList: any = [];
 
-  ngOnInit(): void {
-    this.getClinics();
-    this.getAppointmentTypes();
+  async ngOnInit(): Promise<void> {
+    this.userId = +this.route.snapshot.paramMap.get('uid');
+    await this.getClinics();
+    await this.getAppointmentTypes();
+    this.getUserAppointmentsSettings();
+
   }
+
 
   async getClinics() {
     try {
@@ -71,6 +80,69 @@ export class UserAppointmentSettingComponent implements OnInit {
     }
     catch {
     }
+  }
+
+  async getUserAppointmentsSettings() {
+    try {
+      let res: any = await this.mainService.getUserAppointmentsSettings(this.userId).toPromise();
+      if (res.length > 0) {
+        this.userAppointmentsList = res;
+        this.userAppointmentsList.forEach(element => {
+          element.selectedClinics = this.clinicsList.filter(x => x.id == element['businessId'])[0];
+        });
+      }
+    }
+    catch { }
+  }
+
+  async saveUserAppointmentsSettings() {
+    if (!this.selectedClinic.code || this.numberOutTurn == undefined || this.numberOutTurn == null
+      || !this.minuteSelected || !this.calendarTimeFrom || !this.calendarTimeTo
+    ) {
+      this.toastR.error('تمامی موارد خواسته شده رو تکمیل کنید');
+      return
+    }
+    try {
+      let model = {
+        practitionerId: this.userId,
+        businessId: this.selectedClinic.code,
+        defaultAppointmentTypeId: this.defaultType,
+        newPatientAppointmentTypeId: this.defaultNewPatientType,
+        outOfTurn: this.numberOutTurn,
+        timeSlotSize: this.minuteSelected,
+        calendarTimeFrom: this.calendarTimeFrom,
+        calendarTimeTo: this.calendarTimeTo,
+        multipleAppointment: this.multipleAppointment,
+        editOrNew: this.editOrNew
+      }
+      let res: any = await this.mainService.saveUserAppointmentsSettings(model).toPromise();
+      if (res.status == 0) {
+        this.toastR.success('با موفقیت ثبت شد!');
+        this.editOrNew = -1;
+        this.multipleAppointment = false;
+        this.calendarTimeTo = null;
+        this.calendarTimeFrom = null;
+        this.minuteSelected = null;
+        this.numberOutTurn = null;
+        this.defaultNewPatientType = null;
+        this.defaultType = null;
+        this.selectedClinic = null;
+        this.getUserAppointmentsSettings();
+      }
+    }
+    catch { }
+  }
+
+  async edit(item) {
+    this.editOrNew = item.id;
+    this.multipleAppointment = false;
+    this.calendarTimeTo = item.calendarTimeTo;
+    this.calendarTimeFrom = item.calendarTimeFrom;
+    this.minuteSelected = item.timeSlotSize;
+    this.numberOutTurn = item.outOfTurn;
+    this.defaultNewPatientType = item.newPatientAppointmentTypeId;
+    this.defaultType = item.defaultAppointmentTypeId;
+    this.selectedClinic = item.selectedClinics;
   }
 
 
