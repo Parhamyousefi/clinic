@@ -380,31 +380,34 @@ namespace Clinic.Api.Infrastructure.Services
             {
                 var userId = _token.GetUserId();
 
-                if (model.EditOrNew == -1)
+                var existingRecord = await _context.UserAppointment
+                    .FirstOrDefaultAsync(u =>
+                        u.PractitionerId == model.PractitionerId &&
+                        u.BusinessId == model.BusinessId);
+
+                if (existingRecord == null)
                 {
                     var userAppointment = _mapper.Map<UserAppointmentsContext>(model);
                     userAppointment.CreatorId = userId;
                     userAppointment.CreatedOn = DateTime.UtcNow;
+
                     _context.UserAppointment.Add(userAppointment);
                     await _context.SaveChangesAsync();
-                    result.Message = "User Appointment Settings Saved Successfully";
+
+                    result.Message = "User appointment settings created successfully";
                     result.Status = 0;
                     return result;
                 }
                 else
                 {
-                    var existingUserAppointment = await _context.UserAppointment.FirstOrDefaultAsync(j => j.Id == model.EditOrNew);
-                    if (existingUserAppointment == null)
-                    {
-                        throw new Exception("User Appointment Settings Not Found");
-                    }
+                    _mapper.Map(model, existingRecord);
+                    existingRecord.ModifierId = userId;
+                    existingRecord.LastUpdated = DateTime.UtcNow;
 
-                    _mapper.Map(model, existingUserAppointment);
-                    existingUserAppointment.ModifierId = userId;
-                    existingUserAppointment.LastUpdated = DateTime.UtcNow;
-                    _context.UserAppointment.Update(existingUserAppointment);
+                    _context.UserAppointment.Update(existingRecord);
                     await _context.SaveChangesAsync();
-                    result.Message = "User Appointment Settings Updated Successfully";
+
+                    result.Message = "User appointment settings updated successfully";
                     result.Status = 0;
                     return result;
                 }
@@ -415,11 +418,20 @@ namespace Clinic.Api.Infrastructure.Services
             }
         }
 
-        public async Task<IEnumerable<UserAppointmentsContext>> GetUserAppointmentsSettings(int userId)
+        public async Task<IEnumerable<UserAppointmentsContext>> GetUserAppointmentsSettings(int? userId, int? businessId)
         {
             try
             {
-                var result = await _context.UserAppointment.Where(s => s.PractitionerId == userId).ToListAsync();
+                var query = _context.UserAppointment.AsQueryable();
+
+                if (userId.HasValue)
+                    query = query.Where(s => s.PractitionerId == userId.Value);
+
+                if (businessId.HasValue)
+                    query = query.Where(s => s.BusinessId == businessId.Value);
+
+                var result = await query.ToListAsync();
+
                 return result;
             }
             catch (Exception ex)

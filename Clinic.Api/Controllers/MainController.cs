@@ -144,11 +144,11 @@ namespace Clinic.Api.Controllers
             return Ok(result);
         }
 
-        [HttpGet("getUserAppointmentsSettings/{userId}")]
+        [HttpGet("getUserAppointmentsSettings/{userId?}/{businessId?}")]
         [Authorize("Admin","Doctor", "Secretary-Reception")]
-        public async Task<IActionResult> GetUserAppointmentsSettings(int userId)
+        public async Task<IActionResult> GetUserAppointmentsSettings(int? userId, int businessId)
         {
-            var result = await _mainService.GetUserAppointmentsSettings(userId);
+            var result = await _mainService.GetUserAppointmentsSettings(userId, businessId);
             return Ok(result);
         }
     }
