@@ -4,18 +4,30 @@
         <p-dropdown [options]="clinicsList" [(ngModel)]="newSchedule.clinic" optionLabel="name" dataKey="id"
             class="full-width text-right" />
         <hr>
-        <div *ngFor="let day of weekDays" class="d-flex align-items-center justify-content-between">
-            <input class="col-1" type="checkbox">
-            <p class="col-2 text-right m-0">{{day.name}}</p>
-            <p-dropdown class="col-4" [options]="hours" [(ngModel)]="newSchedule[day.code]" optionLabel="name"
-                dataKey="id" class="full-width text-right" />
-            <p class="m-0 mx-2 col-1">تا</p>
-            <p-dropdown class="col-4" [options]="hours" [(ngModel)]="newSchedule[day.code]" optionLabel="name"
-                dataKey="id" class="full-width text-right" />
-            <button class="btn btn-secondary h-100">تنظیم وقفه</button>
+        <div *ngFor="let day of scheduleRows;" class="d-flex flex-column align-items-between justify-content-center">
+            <div class="d-flex align-items-center justify-content-between">
+                <input class="col-1" type="checkbox" [(ngModel)]="day.isActive">
+                <p class="col-2 text-right m-0">{{day.day.name}}</p>
+                <p-dropdown class="col-4" [options]="hours" [(ngModel)]="day.fromTime" optionLabel="name"
+                    class="full-width text-right" />
+                <p class="m-0 mx-2 col-1">تا</p>
+                <p-dropdown class="col-4" [options]="hours" [(ngModel)]="day.toTime" optionLabel="name"
+                    class="full-width text-right" />
+                <button class="btn btn-secondary h-100" (click)="day.isBreak = true">تنظیم وقفه</button>
+            </div>
+            <div *ngIf="day.isBreak" class="d-flex align-items-center justify-content-between">
+                <p class="col-2 text-right m-0">وقفه</p>
+                <p-dropdown class="col-4" [options]="hours" [(ngModel)]="day.fromTime" optionLabel="name"
+                    class="full-width text-right" />
+                <p class="m-0 mx-2 col-1">تا</p>
+                <p-dropdown class="col-4" [options]="hours" [(ngModel)]="day.toTime" optionLabel="name"
+                    class="full-width text-right" />
+                <button class="btn btn-secondary h-100" (click)="day.isBreak = false">حذف</button>
+            </div>
+            <hr>
         </div>
-        <div class="col-12">
-            <button class="btn btn-success">ذخیره</button>
+        <div class="col-12 d-flex justify-content-center mt-3">
+            <button class="btn btn-success px-4 py-2" (click)="saveAll()">ذخیره</button>
         </div>
     </div>
 </div>

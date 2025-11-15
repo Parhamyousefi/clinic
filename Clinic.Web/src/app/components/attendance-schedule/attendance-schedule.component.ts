@@ -17,7 +17,7 @@ import { Subject, Subscription } from 'rxjs';
   styleUrl: './attendance-schedule.component.css'
 })
 export class AttendanceScheduleComponent {
-  @Input() userId$!: Subject<number>;
+  @Input() userId!: number;
   private sub!: Subscription;
   currentUserId!: number;
 
@@ -26,15 +26,18 @@ export class AttendanceScheduleComponent {
   newSchedule: any = [];
   selectedTimefrom: any = '00:00';
   selectedTimeTo: any = '23:00';
+  scheduleRows: any = [];
   weekDays: any = [
-    { code: 0, name: "شنبه" },
-    { code: 1, name: "یکشنبه" },
-    { code: 2, name: "دوشنبه" },
-    { code: 3, name: "سه‌شنبه" },
-    { code: 4, name: "چهارشنبه" },
-    { cpde: 5, name: "پنج‌شنبه" },
-    { code: 6, name: "جمعه" },
+    { code: 6, name: "شنبه" },
+    { code: 0, name: "یکشنبه" },
+    { code: 1, name: "دوشنبه" },
+    { code: 2, name: "سه‌شنبه" },
+    { code: 3, name: "چهارشنبه" },
+    { cpde: 4, name: "پنج‌شنبه" },
+    { code: 5, name: "جمعه" },
   ]
+
+
   hours = Array.from({ length: 48 }, (_, i) => {
     const hour = Math.floor(i / 2);
     const minute = i % 2 === 0 ? '00' : '30';
@@ -52,6 +55,7 @@ export class AttendanceScheduleComponent {
       code: i
     };
   });
+  doctorSchedule: any;
 
   constructor(
     private mainService: MainService,
@@ -60,12 +64,18 @@ export class AttendanceScheduleComponent {
 
   ngOnInit() {
     this.getClinics();
-    this.sub = this.userId$.subscribe((id) => {
-      this.currentUserId = id;
-      console.log('User ID changed:', id);
-      // می‌تونی اینجا مثلا API کال بزنی یا لیست ساعت‌ها رو فیلتر کنی
-    });
+    this.scheduleRows = this.weekDays.map(d => ({
+      day: d,
+      active: false,
+      fromTime: this.hours[0],
+      toTime: this.hours[47],
+      isBreak: false,
+      code: d.code
+    }));
+  }
 
+  ngOnChanges() {
+    this.getDoctorSchedules(this.userId);
   }
 
   async getClinics() {
@@ -83,8 +93,60 @@ export class AttendanceScheduleComponent {
   }
 
 
-  ngOnDestroy(): void {
-    this.sub?.unsubscribe(); // ✅ جلوگیری از memory leak
+  buildPayload(row: any) {
+    return {
+      businessId: this.newSchedule.clinic.code,
+      practitionerId: this.userId,
+      day: row.day.code,
+      fromTime: row.fromTime['name'],
+      toTime: row.toTime['name'],
+      isBreak: row.isBreak,
+      isActive: row.active,
+      duration: 0,
+      editOrNew: -1
+    };
+
+
+
+  }
+
+  saveAll() {
+    // const validation = this.validateRows();
+
+    // if (!validation.valid) {
+    //   alert(validation.message);
+    //   return;
+    // }
+    const activeDays = this.scheduleRows.filter(r => r.isActive);
+    if (activeDays.length === 0) {
+      this.toastR.error("هیچ روزی انتخاب نشده!");
+      return;
+    }
+    activeDays.forEach(day => {
+      let dayModel = this.buildPayload(day);
+      this.saveDoctorSchedule(dayModel);
+
+    });
+  }
+
+  async saveDoctorSchedule(model) {
+    try {
+      let res: any = this.mainService.saveDoctorSchedule(model).toPromise();
+      if (res.status == 0) {
+        this.toastR.success("با موفقیت ذخیره شد!")
+      }
+    }
+    catch { }
+  }
+
+  async getDoctorSchedules(userId) {
+    try {
+      let res: any = this.mainService.getDoctorSchedules(userId).toPromise();
+      if (res.length > 0) {
+        this.doctorSchedule = res;
+      }
+    }
+    catch { }
   }
 
 

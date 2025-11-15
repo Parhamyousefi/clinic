@@ -35,6 +35,8 @@ export class NewUsersComponent {
   usersList: any;
   selectedEditUser: any;
   roles: any = [];
+  userId: any;
+  editMode: any;
   constructor(
     private userService: UserService,
     private toastR: ToastrService,
@@ -45,9 +47,14 @@ export class NewUsersComponent {
   ) { }
 
   ngOnInit() {
+    this.userId = this.activeRoute.snapshot.paramMap.get('id');
     this.getClinics();
     this.getAppointmentTypes();
     this.getRoles();
+    if (this.userId) {
+      this.editMode = true;
+      this.setFromsFields(this.userId);
+    }
   }
 
   async createUser() {
@@ -132,6 +139,22 @@ export class NewUsersComponent {
         });
       }
 
+    }
+    catch { }
+  }
+
+
+  async setFromsFields(id) {
+    try {
+      let res: any = await this.userService.getUserById(id).toPromise();
+      if (res) {
+        let userData = res;
+        this.newUser.firstName = userData.firstName;
+        this.newUser.lastName = userData.lastName;
+        this.newUser.userName = userData.email;
+        this.newUser.isActive = userData.isActive;
+        this.newUser.role = this.roles.filter(role => role.id == userData.roleId)[0];
+      }
     }
     catch { }
   }

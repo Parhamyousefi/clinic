@@ -134,6 +134,10 @@ export const routes: Routes = [
         canActivate: [AuthGuard]
     },
     {
+        path: 'user/new/:id', component: NewUsersComponent,
+        canActivate: [AuthGuard]
+    },
+    {
         path: 'userlist', component: UserListComponent,
         canActivate: [AuthGuard]
     },

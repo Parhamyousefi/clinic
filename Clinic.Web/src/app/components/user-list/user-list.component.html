@@ -10,7 +10,7 @@
                     <th>#</th>
                     <th pSortableColumn="firstName"><p-sortIcon field="firstName"></p-sortIcon>نام</th>
                     <th pSortableColumn="lastName"><p-sortIcon field="lastName"></p-sortIcon>نام خانوادگی</th>
-                    <th>پست الکترونیکی</th>
+                    <th>نام کاربری</th>
                     <th>فعال</th>
                     <th>نقش</th>
                     <th>عملیات</th>
@@ -51,6 +51,9 @@
                     </td>
                     <td class="text-center">
                         <button class="btn main-btn" (click)="showtimeSchedule(user)">تنظیم زمان ها</button>
+                        <button class="btn btn-outline-secondary mx-1"
+                            [routerLink]="['/user/new/' + user.id]">ویرایش</button>
+                        <button class="btn btn-outline-danger" (click)="deleteUser(user.id)">حذف</button>
                     </td>
 
                 </tr>
@@ -64,7 +67,7 @@
             <h4>تنظیم زمان ها</h4>
         </p-header>
         <div class="col-12">
-            <attendance-schedule [userId$]="selectedScheduleUser"></attendance-schedule>
+            <attendance-schedule [userId]="selectedScheduleUser"></attendance-schedule>
         </div>
     </p-dialog>
 </div>
