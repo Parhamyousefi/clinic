@@ -2,6 +2,7 @@
 {
     public class SaveUserAppointmentsSettingsDto
     {
+        public int PractitionerId { get; set; }
         public int BusinessId { get; set; }
         public int? DefaultAppointmentTypeId { get; set; }
         public int? NewPatientAppointmentTypeId { get; set; }
