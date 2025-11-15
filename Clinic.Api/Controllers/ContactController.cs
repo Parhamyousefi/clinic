@@ -17,7 +17,7 @@ namespace Clinic.Api.Controllers
         }
 
         [HttpPost("saveContact")]
-        [Authorize("Admin", "Doctor", "Secretary")]
+        [Authorize("Admin", "Doctor", "Secretary-Reception")]
         public async Task<IActionResult> SaveContact(SaveContactDto model)
         {
             var result = await _contactsService.SaveContact(model);
@@ -25,7 +25,7 @@ namespace Clinic.Api.Controllers
         }
 
         [HttpGet("getContacts")]
-        [Authorize("Admin", "Doctor", "Secretary")]
+        [Authorize("Admin", "Doctor", "Secretary-Reception")]
         public async Task<IActionResult> GetContacts()
         {
             var result = await _contactsService.GetContacts();
@@ -41,7 +41,7 @@ namespace Clinic.Api.Controllers
         }
 
         [HttpGet("getContactTypes")]
-        [Authorize("Admin", "Doctor", "Secretary")]
+        [Authorize("Admin", "Doctor", "Secretary-Reception")]
         public async Task<IActionResult> GetContactTypes()
         {
             var result = await _contactsService.GetContactTypes();
@@ -49,7 +49,7 @@ namespace Clinic.Api.Controllers
         }
 
         [HttpPost("saveContactPhone")]
-        [Authorize("Admin", "Doctor", "Secretary")]
+        [Authorize("Admin", "Doctor", "Secretary-Reception")]
         public async Task<IActionResult> SaveContactPhone(SaveContactPhoneDto model)
         {
             var result = await _contactsService.SaveContactPhone(model);
@@ -57,7 +57,7 @@ namespace Clinic.Api.Controllers
         }
 
         [HttpGet("getContactPhone/{contactId}")]
-        [Authorize("Admin", "Doctor", "Secretary")]
+        [Authorize("Admin", "Doctor", "Secretary-Reception")]
         public async Task<IActionResult> GetContactPhone(int contactId)
         {
             var result = await _contactsService.GetContactPhone(contactId);
