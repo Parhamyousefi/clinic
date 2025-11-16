@@ -422,6 +422,11 @@ namespace Clinic.Api.Infrastructure.Services
         {
             try
             {
+                if (model.UserId == -1)
+                {
+                    model.UserId = _token.GetUserId();
+                }
+
                 var query = _context.UserAppointment.AsQueryable();
 
                 if (model.UserId.HasValue)
