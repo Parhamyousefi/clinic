@@ -418,17 +418,17 @@ namespace Clinic.Api.Infrastructure.Services
             }
         }
 
-        public async Task<IEnumerable<UserAppointmentsContext>> GetUserAppointmentsSettings(int? userId, int? businessId)
+        public async Task<IEnumerable<UserAppointmentsContext>> GetUserAppointmentsSettings(GetUserAppointmentsSettingsDto model)
         {
             try
             {
                 var query = _context.UserAppointment.AsQueryable();
 
-                if (userId.HasValue)
-                    query = query.Where(s => s.PractitionerId == userId.Value);
+                if (model.UserId.HasValue)
+                    query = query.Where(s => s.PractitionerId == model.UserId.Value);
 
-                if (businessId.HasValue)
-                    query = query.Where(s => s.BusinessId == businessId.Value);
+                if (model.BusinessId.HasValue)
+                    query = query.Where(s => s.BusinessId == model.BusinessId.Value);
 
                 var result = await query.ToListAsync();
 
