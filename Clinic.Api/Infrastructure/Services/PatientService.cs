@@ -65,6 +65,7 @@ namespace Clinic.Api.Infrastructure.Services
                     await _context.SaveChangesAsync();
                     result.Message = "Patient Saved Successfully";
                     result.Status = 0;
+                    result.Data = patient.Id;
                     return result;
                 }
                 else
@@ -425,6 +426,57 @@ namespace Clinic.Api.Infrastructure.Services
                 await _context.SaveChangesAsync();
                 result.Message = "Attachment Deleted Successfully";
                 result.Status = 0;
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<GlobalResponse> GetFilteredPatients(GetFilteredPatientsDto model)
+        {
+            var result = new GlobalResponse();
+
+            try
+            {
+                bool noInput =
+                    string.IsNullOrWhiteSpace(model.FirstName) &&
+                    string.IsNullOrWhiteSpace(model.LastName) &&
+                    string.IsNullOrWhiteSpace(model.PatientCode);
+
+                if (noInput)
+                {
+                    result.Status = 0;
+                    result.Message = "No Input";
+                    result.Data = null;
+                    return result;
+                }
+
+                var query = _context.Patients.AsQueryable();
+
+                if (!string.IsNullOrWhiteSpace(model.FirstName))
+                    query = query.Where(p => p.FirstName == model.FirstName);
+
+                if (!string.IsNullOrWhiteSpace(model.LastName))
+                    query = query.Where(p => p.LastName == model.LastName);
+
+                if (!string.IsNullOrWhiteSpace(model.PatientCode))
+                    query = query.Where(p => p.PatientCode.ToString() == model.PatientCode);
+
+                var list = await query.ToListAsync();
+
+                if (list == null || !list.Any())
+                {
+                    result.Status = 1;
+                    result.Message = "No Data Was Found";
+                    result.Data = null;
+                    return result;
+                }
+
+                result.Status = 2;
+                result.Message = "Success";
+                result.Data = list;
                 return result;
             }
             catch (Exception ex)
