@@ -136,6 +136,11 @@ export class AppointmentComponent {
     });
 
     this.today = moment();
+    if (this.userType != 9) {
+      await this.getUsers();
+    } else {
+      this.getDoctorSchedules(2);
+    }
     // this.selectedDate = this.today;
     await this.getPatients();
     await this.getAppointmentTypes();
@@ -149,11 +154,7 @@ export class AppointmentComponent {
       this.holidays = days
       this.addHoliday();
     });
-    if (this.userType != 9) {
-      this.getUsers();
-    } else {
-      this.getDoctorSchedules(2);
-    }
+
   }
 
 
@@ -269,12 +270,11 @@ export class AppointmentComponent {
     this.hours.forEach(hour => this.timeSheetData[hour.time] = []);
     try {
       let formattedDate = moment(date).utc().toISOString();
-
+      let doctor = this.userType == 9 ? null : this.selectedDoctor?.code
       let model = {
-
-        "clinicId": this.selectedClinic.code,
-        "date": formattedDate,
-        "doctorId": null
+        clinicId: this.selectedClinic.code,
+        date: formattedDate,
+        doctorId: doctor
       }
       // let formattedDate = moment(date).format('YYYY-MM-DD');
       let res: any = await this.treatmentService.getAppointments(model).toPromise();
@@ -350,6 +350,8 @@ export class AppointmentComponent {
       this.showNewAppointment = true;
       this.newAppointmentModel.handelNewPateintStatus = false;
       this.newAppointmentModel.time = time['time'];
+      this.patientsList = [];
+      this.searchControl = null;
     }
     this.isTimeInRange(time['time']);
   }
@@ -408,12 +410,14 @@ export class AppointmentComponent {
     this.newAppointmentModel.id = appointment.id;
     this.newAppointmentModel.selectedType = this.appointmentTypes.filter((type: any) => type.id == appointment.appointmentTypeId)[0];
     // this.newAppointmentModel.selectedPatient = this.patientsList.filter((patient: any) => patient.id == appointment.patientId)[0];
-    this.newAppointmentModel.selectedPatient = this.patientsList.filter((patient: any) => patient.id == appointment.patientId)[0]['code'];
+    this.newAppointmentModel.selectedPatient = appointment.patientId;
     this.newAppointmentModel.appointmentStartTime = appointment.start;
     this.newAppointmentModel.appointmentEndTime = appointment.end;
     this.newAppointmentModel.note = appointment.note;
     this.showNewAppointment = true;
     this.newAppointmentModel.handelNewPateintStatus = false;
+    this.patientsList = [];
+    this.searchControl = null;
     this.editmode = true;
   }
 
@@ -468,6 +472,8 @@ export class AppointmentComponent {
       this.showNewAppointment = true;
       this.newAppointmentModel.handelNewPateintStatus = false;
       this.newAppointmentModel.time = time['time'];
+      this.patientsList = [];
+      this.searchControl = null;
     }
     this.isTimeInRange(time['time']);
   }
@@ -551,7 +557,7 @@ export class AppointmentComponent {
     if (res) {
       this.toastR.success('با موفقیت ثبت شد!');
       await this.getPatients();
-      this.newAppointmentModel.selectedPatient = this.patientsList.filter(x => x.firstName == this.newPateint.firstName)[0]['code'];
+      this.newAppointmentModel.selectedPatient = res['data'];
     }
   }
 
@@ -573,6 +579,7 @@ export class AppointmentComponent {
     if (this.newAppointmentModel.time) {
       this.isTimeInRange(this.newAppointmentModel.time);
     }
+    this.getAppointment(this.appointmentDate);
   }
 
   async getDoctorSchedules(type) {
@@ -637,8 +644,18 @@ export class AppointmentComponent {
     if (!this.selectedDoctor.code) {
       return
     }
+    let userId;
+    if (this.userType == 9) {
+      userId = -1;
+    } else {
+      userId = this.selectedDoctor.code
+    }
     try {
-      let res: any = await this.mainService.getUserAppointmentsSettings(this.selectedDoctor.code).toPromise();
+      let model = {
+        userId: userId,
+        businessId: this.selectedClinic ? this.selectedClinic.code : null,
+      }
+      let res: any = await this.mainService.getUserAppointmentsSettings(model).toPromise();
       this.userAppointmentsSettings = res;
       this.filteredHours = this.hours.filter(({ time }) => {
         const [hourStr, minuteStr] = time.split(':');
@@ -677,5 +694,26 @@ export class AppointmentComponent {
       this.newAppointmentModel.handelNewPateintStatus = false;
       this.newAppointmentModel.selectedType = this.appointmentTypes.filter((type: any) => type.id == element.defaultAppointmentTypeId)[0];
     }
+  }
+
+
+  async getFilteredPatient() {
+    try {
+
+      let model = {
+        value: this.searchControl,
+      }
+      let res: any = await this.patientService.getFilteredPatient(model).toPromise();
+      if (res['data'].length > 0) {
+        this.patientsList = res['data'];
+        this.patientsList.forEach(element => {
+          element.name = element.firstName + " " + element.lastName;
+
+        });
+      } else {
+        this.patientsList = [];
+      }
+    }
+    catch { }
   }
 }

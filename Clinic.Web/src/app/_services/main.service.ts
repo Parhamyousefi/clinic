@@ -137,7 +137,7 @@ export class MainService {
     return this.http.get(uri, httpOptions);
   }
 
-   getDoctorSchedulesForDoctor() {
+  getDoctorSchedulesForDoctor() {
     const token: any = localStorage.getItem("token");
     const uri = this.url + `api/main/getDoctorSchedules`;
     const httpOptions = {
@@ -149,16 +149,16 @@ export class MainService {
     return this.http.get(uri, httpOptions);
   }
 
-  getUserAppointmentsSettings(userId) {
+  getUserAppointmentsSettings(model) {
     const token: any = localStorage.getItem("token");
-    const uri = this.url + `api/main/getUserAppointmentsSettings/` + userId;
+    const uri = this.url + `api/main/getUserAppointmentsSettings`;
     const httpOptions = {
       headers: new HttpHeaders({
         "Content-Type": "application/json",
         Authorization: "Bearer " + token,
       }),
     };
-    return this.http.get(uri, httpOptions);
+    return this.http.post(uri,model, httpOptions);
   }
 
 

@@ -84,7 +84,11 @@ export class UserAppointmentSettingComponent implements OnInit {
 
   async getUserAppointmentsSettings() {
     try {
-      let res: any = await this.mainService.getUserAppointmentsSettings(this.userId).toPromise();
+      let model = {
+        userId: this.userId,
+        businessId: null,
+      }
+      let res: any = await this.mainService.getUserAppointmentsSettings(model).toPromise();
       if (res.length > 0) {
         this.userAppointmentsList = res;
         this.userAppointmentsList.forEach(element => {

@@ -153,13 +153,22 @@
       <div *ngIf="!newAppointmentModel?.handelNewPateintStatus" class="col-12 d-flex justify-content-between mt-3">
         <div class="col-3 text-right">انتخاب بیمار</div>
         <div class="col-9">
-          <input [(ngModel)]="searchControl" type="text" class="form-control" placeholder="جستجوی نام یا شناسه" />
+          <div class="input-group">
+            <input [(ngModel)]="searchControl" (keyup.enter)="getFilteredPatient()" type="text" class="form-control"
+              placeholder="جستجوی نام یا شناسه" />
+            <span class="input-group-btn">
+              <button class="btn btn-default" type="button" (click)="getFilteredPatient()">
+                <i class="fa fa-search"></i>
+              </button>
+            </span>
+          </div>
+
           <ul class="dropdown-list" *ngIf="patientsList.length > 0">
-            <li [ngClass]="{'dropdown-selected': newAppointmentModel.selectedPatient == item.code}"
-              *ngFor="let item of patientsList" (click)="newAppointmentModel.selectedPatient =item.code">{{ item.name }}
-              (ID: {{ item.code }})</li>
+            <li [ngClass]="{'dropdown-selected': newAppointmentModel.selectedPatient == item.patientCode}"
+              *ngFor="let item of patientsList" (click)="newAppointmentModel.selectedPatient =item.patientCode">{{ item.name }}
+              (ID: {{ item.patientCode }})</li>
           </ul>
-          <p *ngIf="searchControl.value && patientsList.length === 0">نتیجه‌ای یافت نشد</p>
+          <!-- <p *ngIf="searchControl && patientsList.length === 0">نتیجه‌ای یافت نشد</p> -->
           <!-- <p-dropdown [options]="patientsList" [(ngModel)]="newAppointmentModel.selectedPatient" optionLabel="name"
             placeholder="بیمار مورد نظر را انتخاب کنید" class="full-width text-right" /> -->
         </div>
