@@ -17,7 +17,7 @@ namespace Clinic.Api.Controllers
         }
 
         [HttpPost("createAppointment")]
-        [Authorize("Admin", "Doctor", " ")]
+        [Authorize("Admin", "Doctor", "Secretary-Reception")]
         public async Task<IActionResult> Create(CreateAppointmentDto model)
         {
             var result = await _treatmentsService.CreateAppointmentAsync(model);

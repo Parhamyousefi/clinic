@@ -440,10 +440,7 @@ namespace Clinic.Api.Infrastructure.Services
 
             try
             {
-                bool noInput =
-                    string.IsNullOrWhiteSpace(model.Value);
-
-                if (noInput)
+                if (string.IsNullOrWhiteSpace(model.Value))
                 {
                     result.Status = 0;
                     result.Message = "No Input";
@@ -451,16 +448,14 @@ namespace Clinic.Api.Infrastructure.Services
                     return result;
                 }
 
-                var query = _context.Patients.AsQueryable();
+                string value = model.Value.Trim();
 
-                if (!string.IsNullOrWhiteSpace(model.Value))
-                    query = query.Where(p => p.FirstName == model.Value);
-
-                if (!string.IsNullOrWhiteSpace(model.Value))
-                    query = query.Where(p => p.LastName == model.Value);
-
-                if (!string.IsNullOrWhiteSpace(model.Value))
-                    query = query.Where(p => p.PatientCode.ToString() == model.Value);
+                var query =
+                    _context.Patients.Where(p =>
+                        p.FirstName == value ||
+                        p.LastName == value ||
+                        p.PatientCode.ToString() == value
+                    );
 
                 var list = await query.ToListAsync();
 
