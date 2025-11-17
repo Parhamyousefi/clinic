@@ -246,6 +246,49 @@ namespace Clinic.Api.Infrastructure.Services
                 var user = await _uow.Users.GetByIdAsync(model.Id);
                 if (user == null) throw new Exception("User Not Exists");
 
+                var creatorId = _claims.GetUserId();
+
+                if (!string.IsNullOrEmpty(model.BusinessIds))
+                {
+                    var businessIds = model.BusinessIds
+                        .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                        .Select(id => int.Parse(id.Trim()))
+                        .ToList();
+
+                    foreach (var businessId in businessIds)
+                    {
+                        var userBusiness = new UserBusinessesContext
+                        {
+                            BusinessId = businessId,
+                            User_Id = user.Id,
+                            CreatorId = creatorId,
+                            CreatedOn = DateTime.UtcNow,
+                            IsActive = true
+                        };
+                        await _context.UserBusinesses.AddAsync(userBusiness);
+                    }
+                }
+
+                if (!string.IsNullOrEmpty(model.AppointmentTypesIds))
+                {
+                    var appointmentTypeIds = model.AppointmentTypesIds
+                        .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                        .Select(id => int.Parse(id.Trim()))
+                        .ToList();
+
+                    foreach (var typeId in appointmentTypeIds)
+                    {
+                        var practitionerType = new AppointmentTypePractitionersContext
+                        {
+                            AppointmentTypeId = typeId,
+                            PractitionerId = user.Id,
+                            CreatorId = creatorId,
+                            CreatedOn = DateTime.UtcNow,
+                            IsActive = true
+                        };
+                        await _context.AppointmentTypePractitioners.AddAsync(practitionerType);
+                    }
+                }
                 _context.Users.Update(user);
                 await _uow.SaveAsync();
 
