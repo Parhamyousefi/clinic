@@ -257,8 +257,8 @@ namespace Clinic.Api.Infrastructure.Services
                         {
                             BusinessId = businessId,
                             User_Id = user.Id,
-                            CreatorId = creatorId,
-                            CreatedOn = DateTime.UtcNow,
+                            ModifierId = creatorId,
+                            LastUpdated = DateTime.UtcNow,
                             IsActive = true
                         };
                         await _context.UserBusinesses.AddAsync(userBusiness);
@@ -278,8 +278,8 @@ namespace Clinic.Api.Infrastructure.Services
                         {
                             AppointmentTypeId = typeId,
                             PractitionerId = user.Id,
-                            CreatorId = creatorId,
-                            CreatedOn = DateTime.UtcNow,
+                            ModifierId = creatorId,
+                            LastUpdated = DateTime.UtcNow,
                             IsActive = true
                         };
                         await _context.AppointmentTypePractitioners.AddAsync(practitionerType);
