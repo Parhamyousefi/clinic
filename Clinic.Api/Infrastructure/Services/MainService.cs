@@ -380,31 +380,34 @@ namespace Clinic.Api.Infrastructure.Services
             {
                 var userId = _token.GetUserId();
 
-                if (model.EditOrNew == -1)
+                var existingRecord = await _context.UserAppointment
+                    .FirstOrDefaultAsync(u =>
+                        u.PractitionerId == model.PractitionerId &&
+                        u.BusinessId == model.BusinessId);
+
+                if (existingRecord == null)
                 {
                     var userAppointment = _mapper.Map<UserAppointmentsContext>(model);
                     userAppointment.CreatorId = userId;
                     userAppointment.CreatedOn = DateTime.UtcNow;
+
                     _context.UserAppointment.Add(userAppointment);
                     await _context.SaveChangesAsync();
-                    result.Message = "User Appointment Settings Saved Successfully";
+
+                    result.Message = "User appointment settings created successfully";
                     result.Status = 0;
                     return result;
                 }
                 else
                 {
-                    var existingUserAppointment = await _context.UserAppointment.FirstOrDefaultAsync(j => j.Id == model.EditOrNew);
-                    if (existingUserAppointment == null)
-                    {
-                        throw new Exception("User Appointment Settings Not Found");
-                    }
+                    _mapper.Map(model, existingRecord);
+                    existingRecord.ModifierId = userId;
+                    existingRecord.LastUpdated = DateTime.UtcNow;
 
-                    _mapper.Map(model, existingUserAppointment);
-                    existingUserAppointment.ModifierId = userId;
-                    existingUserAppointment.LastUpdated = DateTime.UtcNow;
-                    _context.UserAppointment.Update(existingUserAppointment);
+                    _context.UserAppointment.Update(existingRecord);
                     await _context.SaveChangesAsync();
-                    result.Message = "User Appointment Settings Updated Successfully";
+
+                    result.Message = "User appointment settings updated successfully";
                     result.Status = 0;
                     return result;
                 }
@@ -415,11 +418,25 @@ namespace Clinic.Api.Infrastructure.Services
             }
         }
 
-        public async Task<IEnumerable<UserAppointmentsContext>> GetUserAppointmentsSettings(int userId)
+        public async Task<IEnumerable<UserAppointmentsContext>> GetUserAppointmentsSettings(GetUserAppointmentsSettingsDto model)
         {
             try
             {
-                var result = await _context.UserAppointment.Where(s => s.PractitionerId == userId).ToListAsync();
+                if (model.UserId == -1)
+                {
+                    model.UserId = _token.GetUserId();
+                }
+
+                var query = _context.UserAppointment.AsQueryable();
+
+                if (model.UserId.HasValue)
+                    query = query.Where(s => s.PractitionerId == model.UserId.Value);
+
+                if (model.BusinessId.HasValue)
+                    query = query.Where(s => s.BusinessId == model.BusinessId.Value);
+
+                var result = await query.ToListAsync();
+
                 return result;
             }
             catch (Exception ex)
@@ -442,6 +459,84 @@ namespace Clinic.Api.Infrastructure.Services
                 _context.Schedules.Remove(schedule);
                 await _context.SaveChangesAsync();
                 result.Message = "Schedule Deleted Successfully";
+                result.Status = 0;
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<GlobalResponse> SaveBusiness(SaveBusinessDto model)
+        {
+            var result = new GlobalResponse();
+            try
+            {
+                var userId = _token.GetUserId();
+
+                if (model.EditOrNew == -1)
+                {
+                    var business = _mapper.Map<BusinessesContext>(model);
+                    business.CreatorId = userId;
+                    business.CreatedOn = DateTime.UtcNow;
+                    _context.Businesses.Add(business);
+                    await _context.SaveChangesAsync();
+                    result.Message = "Business Saved Successfully";
+                    result.Status = 0;
+                    return result;
+                }
+                else
+                {
+                    var existingBusiness = await _context.Businesses.FirstOrDefaultAsync(j => j.Id == model.EditOrNew);
+                    if (existingBusiness == null)
+                    {
+                        throw new Exception("Business Not Found");
+                    }
+
+                    _mapper.Map(model, existingBusiness);
+                    existingBusiness.ModifierId = userId;
+                    existingBusiness.LastUpdated = DateTime.UtcNow;
+                    _context.Businesses.Update(existingBusiness);
+                    await _context.SaveChangesAsync();
+                    result.Message = "Business Updated Successfully";
+                    result.Status = 0;
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<IEnumerable<BusinessesContext>> GetBusinesses()
+        {
+            try
+            {
+                var result = await _context.Businesses.ToListAsync();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<GlobalResponse> DeleteBusiness(int businessId)
+        {
+            var result = new GlobalResponse();
+
+            try
+            {
+                var business = await _context.Businesses.FindAsync(businessId);
+
+                if (business == null)
+                    throw new Exception("Business Not Found");
+
+                _context.Businesses.Remove(business);
+                await _context.SaveChangesAsync();
+                result.Message = "Business Deleted Successfully";
                 result.Status = 0;
                 return result;
             }

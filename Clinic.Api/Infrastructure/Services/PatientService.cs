@@ -65,6 +65,7 @@ namespace Clinic.Api.Infrastructure.Services
                     await _context.SaveChangesAsync();
                     result.Message = "Patient Saved Successfully";
                     result.Status = 0;
+                    result.Data = patient.Id;
                     return result;
                 }
                 else
@@ -425,6 +426,50 @@ namespace Clinic.Api.Infrastructure.Services
                 await _context.SaveChangesAsync();
                 result.Message = "Attachment Deleted Successfully";
                 result.Status = 0;
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<GlobalResponse> GetFilteredPatients(GetFilteredPatientsDto model)
+        {
+            var result = new GlobalResponse();
+
+            try
+            {
+                if (string.IsNullOrWhiteSpace(model.Value))
+                {
+                    result.Status = 0;
+                    result.Message = "No Input";
+                    result.Data = null;
+                    return result;
+                }
+
+                string value = model.Value.Trim();
+
+                var query =
+                    _context.Patients.Where(p =>
+                        p.FirstName == value ||
+                        p.LastName == value ||
+                        p.PatientCode.ToString() == value
+                    );
+
+                var list = await query.ToListAsync();
+
+                if (list == null || !list.Any())
+                {
+                    result.Status = 1;
+                    result.Message = "No Data Was Found";
+                    result.Data = null;
+                    return result;
+                }
+
+                result.Status = 2;
+                result.Message = "Success";
+                result.Data = list;
                 return result;
             }
             catch (Exception ex)

@@ -130,6 +130,12 @@ namespace Clinic.Api.Controllers
             return Ok(result);
         }
 
-        //[HttpGet("getFilteredPatient/{name}/{}")]
+        [HttpPost("getFilteredPatient")]
+        [Authorize("Admin","Doctor","Secretary-Reception")]
+        public async Task<IActionResult> GetFilteredPatient(GetFilteredPatientsDto model)
+        {
+            var result = await _patientService.GetFilteredPatients(model);
+            return Ok(result);
+        }
     }
 }
