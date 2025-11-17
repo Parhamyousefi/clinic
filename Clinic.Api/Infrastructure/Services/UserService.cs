@@ -48,19 +48,12 @@ namespace Clinic.Api.Infrastructure.Services
                 RoleId = u.RoleId
             });
 
-        public async Task<UserDto?> GetByIdAsync(int id)
+        public async Task<IEnumerable<UserContext>> GetByIdAsync(int id)
         {
             try
             {
-                var u = await _uow.Users.GetByIdAsync(id);
-                return u is null ? null : new UserDto
-                {
-                    Id = u.Id,
-                    Email = u.Email,
-                    FirstName = u.FirstName,
-                    LastName = u.LastName,
-                    RoleId = u.RoleId
-                };
+                var u = await _context.Users.Where(u => u.Id == id).ToListAsync();
+                return u;
             }
             catch (Exception ex)
             {
@@ -114,16 +107,20 @@ namespace Clinic.Api.Infrastructure.Services
             }
         }
 
-        public async Task<bool> DeleteAsync(int id)
+        public async Task<GlobalResponse> DeleteAsync(int id)
         {
+            var result = new GlobalResponse();
+
             try
             {
                 var user = await _uow.Users.GetByIdAsync(id);
-                if (user == null) return false;
+                if (user == null) throw new Exception("user not found");
 
                 _context.Users.Remove(user);
                 await _uow.SaveAsync();
-                return true;
+                result.Message = "User Deleted Successfully";
+                result.Status = 0;
+                return result;
             }
             catch (Exception ex)
             {
