@@ -467,5 +467,83 @@ namespace Clinic.Api.Infrastructure.Services
                 throw new Exception(ex.Message);
             }
         }
+
+        public async Task<GlobalResponse> SaveBusiness(SaveBusinessDto model)
+        {
+            var result = new GlobalResponse();
+            try
+            {
+                var userId = _token.GetUserId();
+
+                if (model.EditOrNew == -1)
+                {
+                    var business = _mapper.Map<BusinessesContext>(model);
+                    business.CreatorId = userId;
+                    business.CreatedOn = DateTime.UtcNow;
+                    _context.Businesses.Add(business);
+                    await _context.SaveChangesAsync();
+                    result.Message = "Business Saved Successfully";
+                    result.Status = 0;
+                    return result;
+                }
+                else
+                {
+                    var existingBusiness = await _context.Businesses.FirstOrDefaultAsync(j => j.Id == model.EditOrNew);
+                    if (existingBusiness == null)
+                    {
+                        throw new Exception("Business Not Found");
+                    }
+
+                    _mapper.Map(model, existingBusiness);
+                    existingBusiness.ModifierId = userId;
+                    existingBusiness.LastUpdated = DateTime.UtcNow;
+                    _context.Businesses.Update(existingBusiness);
+                    await _context.SaveChangesAsync();
+                    result.Message = "Business Updated Successfully";
+                    result.Status = 0;
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<IEnumerable<BusinessesContext>> GetBusinesses()
+        {
+            try
+            {
+                var result = await _context.Businesses.ToListAsync();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<GlobalResponse> DeleteBusiness(int businessId)
+        {
+            var result = new GlobalResponse();
+
+            try
+            {
+                var business = await _context.Businesses.FindAsync(businessId);
+
+                if (business == null)
+                    throw new Exception("Business Not Found");
+
+                _context.Businesses.Remove(business);
+                await _context.SaveChangesAsync();
+                result.Message = "Business Deleted Successfully";
+                result.Status = 0;
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }

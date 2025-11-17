@@ -151,5 +151,29 @@ namespace Clinic.Api.Controllers
             var result = await _mainService.GetUserAppointmentsSettings(model);
             return Ok(result);
         }
+
+        [HttpPost("saveBusiness")]
+        [Authorize]
+        public async Task<IActionResult> SaveBusiness(SaveBusinessDto model)
+        {
+            var result = await _mainService.SaveBusiness(model);
+            return Ok(result);
+        }
+
+        [HttpGet("getBusinesses")]
+        [Authorize]
+        public async Task<IActionResult> GetBusinesses()
+        {
+            var result = await _mainService.GetBusinesses();
+            return Ok(result);
+        }
+
+        [HttpGet("deleteBusiness/{businessId}")]
+        [Authorize]
+        public async Task<IActionResult> DeleteBusiness(int businessId)
+        {
+            var result = await _mainService.DeleteBusiness(businessId);
+            return Ok(result);
+        }
     }
 }

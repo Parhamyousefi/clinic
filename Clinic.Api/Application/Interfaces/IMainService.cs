@@ -24,5 +24,8 @@ namespace Clinic.Api.Application.Interfaces
         Task<GlobalResponse> DeleteDoctorSchedule(int scheduleId);
         Task<GlobalResponse> SaveUserAppointmentsSettings(SaveUserAppointmentsSettingsDto model);
         Task<IEnumerable<UserAppointmentsContext>> GetUserAppointmentsSettings(GetUserAppointmentsSettingsDto model);
+        Task<GlobalResponse> SaveBusiness(SaveBusinessDto model);
+        Task<IEnumerable<BusinessesContext>> GetBusinesses();
+        Task<GlobalResponse> DeleteBusiness(int businesseId);
     }
 }
