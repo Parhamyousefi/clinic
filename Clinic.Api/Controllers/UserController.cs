@@ -51,10 +51,7 @@ public class UserController : ControllerBase
     public async Task<IActionResult> Delete(int id)
     {
         var result = await _svc.DeleteAsync(id);
-        if (!result)
-            return NotFound();
-
-        return NoContent();
+        return Ok(result);
     }
 
     [HttpPost("createUser")]
