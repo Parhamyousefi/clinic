@@ -158,7 +158,7 @@ export class MainService {
         Authorization: "Bearer " + token,
       }),
     };
-    return this.http.post(uri,model, httpOptions);
+    return this.http.post(uri, model, httpOptions);
   }
 
 
@@ -173,5 +173,42 @@ export class MainService {
       }),
     };
     return this.http.post(uri, data, httpOptions);
+  }
+
+  saveBusiness(data) {
+    const token: any = localStorage.getItem("token");
+    const uri = this.url + `api/Main/saveBusiness`;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+        responseType: 'text'
+      }),
+    };
+    return this.http.post(uri, data, httpOptions);
+  }
+
+  getBusinesses() {
+    const token: any = localStorage.getItem("token");
+    const uri = this.url + `api/main/getBusinesses`;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      }),
+    };
+    return this.http.get(uri, httpOptions);
+  }
+
+    deleteBusiness(businessId) {
+    const token: any = localStorage.getItem("token");
+    const uri = this.url + `api/main/getBusinesses/${businessId}`;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      }),
+    };
+    return this.http.get(uri, httpOptions);
   }
 }

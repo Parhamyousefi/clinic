@@ -42,7 +42,7 @@ body {
 }
 
 .navbar {
-  z-index: 90;
+  z-index: 10000;
   direction: rtl;
   width: calc(100% - 250px);
   height: 80px;
@@ -318,6 +318,10 @@ p-dropdown.p-element {
 
 .text-72d9c5 {
   color: #72d9c5;
+}
+
+.p-multiselect {
+  width: 100% !important;
 }
 
 @media (max-width: 768px) {
