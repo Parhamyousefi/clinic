@@ -58,7 +58,7 @@ public class UserController : ControllerBase
     }
 
     [HttpPost("createUser")]
-    [Authorize("Admin", "Secretary-Reception")]
+    [Authorize("Admin")]
     public async Task<IActionResult> CreateUser(CreateUserDto model)
     {
             var userId = await _svc.CreateUserAsync(model);
