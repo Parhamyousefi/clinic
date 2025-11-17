@@ -34,8 +34,8 @@ public class UserController : ControllerBase
     [Authorize("Admin", "Secretary-Reception")]
     public async Task<IActionResult> GetById(int id)
     {
-        var u = await _svc.GetByIdAsync(id);
-        return u is null ? NotFound() : Ok(u);
+        var result = await _svc.GetByIdAsync(id);
+        return Ok(result);
     }
 
     [HttpGet("getUsers/{roleId}")]
