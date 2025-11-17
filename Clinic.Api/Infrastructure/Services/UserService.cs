@@ -235,8 +235,10 @@ namespace Clinic.Api.Infrastructure.Services
             }
         }
 
-        public async Task<bool> UpdateUserAsync(UpdateUserDto model)
+        public async Task<GlobalResponse> UpdateUserAsync(UpdateUserDto model)
         {
+            var result = new GlobalResponse();
+
             try
             {
                 var user = await _uow.Users.GetByIdAsync(model.Id);
@@ -288,7 +290,9 @@ namespace Clinic.Api.Infrastructure.Services
                 _context.Users.Update(user);
                 await _uow.SaveAsync();
 
-                return true;
+                result.Status = 0;
+                result.Message = "User Updated Successfully";
+                return result;
             }
             catch (Exception ex)
             {
