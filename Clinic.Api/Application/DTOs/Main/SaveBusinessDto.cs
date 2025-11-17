@@ -20,6 +20,7 @@
         public bool IsInPatient { get; set; }
         public bool SMSEnabled { get; set; }
         public bool? AppointmentByOutOfRange { get; set; }
+        public string? ServiceId { get; set; }
         public int EditOrNew { get; set; }
     }
 }

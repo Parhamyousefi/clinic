@@ -37,6 +37,7 @@ namespace Clinic.Api.Mappings
             CreateMap<SaveInvoiceDiscountDto, InvoicesContext>().ReverseMap();
             CreateMap<SaveDoctorScheduleDto, SchedulesContext>().ReverseMap();
             CreateMap<SaveUserAppointmentsSettingsDto, UserAppointmentsContext>().ReverseMap();
+            CreateMap<SaveBusinessDto, BusinessServicesContext>().ReverseMap();
         }
     }
 }

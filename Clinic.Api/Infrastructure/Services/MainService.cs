@@ -5,6 +5,7 @@ using Clinic.Api.Application.Interfaces;
 using Clinic.Api.Domain.Entities;
 using Clinic.Api.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace Clinic.Api.Infrastructure.Services
 {
@@ -482,6 +483,29 @@ namespace Clinic.Api.Infrastructure.Services
                     business.CreatedOn = DateTime.UtcNow;
                     _context.Businesses.Add(business);
                     await _context.SaveChangesAsync();
+                    var creatorId = _token.GetUserId();
+
+                    if (!string.IsNullOrEmpty(model.ServiceId))
+                    {
+                        var serviceIds = model.ServiceId
+                            .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                            .Select(id => int.Parse(id.Trim()))
+                            .ToList();
+
+                        foreach (var serviceId in serviceIds)
+                        {
+                            var businessService = new BusinessServicesContext
+                            {
+                                BusinessId = business.Id,
+                                BillableItemId = serviceId,
+                                CreatorId = creatorId,
+                                CreatedOn = DateTime.UtcNow,
+                                IsActive = true
+                            };
+                            await _context.BusinessServices.AddAsync(businessService);
+                        }
+                    }
+                    await _context.SaveChangesAsync();
                     result.Message = "Business Saved Successfully";
                     result.Status = 0;
                     return result;
@@ -493,7 +517,26 @@ namespace Clinic.Api.Infrastructure.Services
                     {
                         throw new Exception("Business Not Found");
                     }
+                    if (!string.IsNullOrEmpty(model.ServiceId))
+                    {
+                        var serviceIds = model.ServiceId
+                            .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                            .Select(id => int.Parse(id.Trim()))
+                            .ToList();
 
+                        foreach (var serviceId in serviceIds)
+                        {
+                            var businessService = new BusinessServicesContext
+                            {
+                                BusinessId = existingBusiness.Id,
+                                BillableItemId = serviceId,
+                                ModifierId = userId,
+                                LastUpdated = DateTime.UtcNow,
+                                IsActive = true
+                            };
+                            await _context.BusinessServices.AddAsync(businessService);
+                        }
+                    }
                     _mapper.Map(model, existingBusiness);
                     existingBusiness.ModifierId = userId;
                     existingBusiness.LastUpdated = DateTime.UtcNow;

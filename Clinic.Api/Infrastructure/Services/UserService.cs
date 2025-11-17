@@ -48,19 +48,12 @@ namespace Clinic.Api.Infrastructure.Services
                 RoleId = u.RoleId
             });
 
-        public async Task<UserDto?> GetByIdAsync(int id)
+        public async Task<IEnumerable<UserContext>> GetByIdAsync(int id)
         {
             try
             {
-                var u = await _uow.Users.GetByIdAsync(id);
-                return u is null ? null : new UserDto
-                {
-                    Id = u.Id,
-                    Email = u.Email,
-                    FirstName = u.FirstName,
-                    LastName = u.LastName,
-                    RoleId = u.RoleId
-                };
+                var u = await _context.Users.Where(u => u.Id == id).ToListAsync();
+                return u;
             }
             catch (Exception ex)
             {
@@ -114,16 +107,20 @@ namespace Clinic.Api.Infrastructure.Services
             }
         }
 
-        public async Task<bool> DeleteAsync(int id)
+        public async Task<GlobalResponse> DeleteAsync(int id)
         {
+            var result = new GlobalResponse();
+
             try
             {
                 var user = await _uow.Users.GetByIdAsync(id);
-                if (user == null) return false;
+                if (user == null) throw new Exception("user not found");
 
                 _context.Users.Remove(user);
                 await _uow.SaveAsync();
-                return true;
+                result.Message = "User Deleted Successfully";
+                result.Status = 0;
+                return result;
             }
             catch (Exception ex)
             {
@@ -242,17 +239,64 @@ namespace Clinic.Api.Infrastructure.Services
             }
         }
 
-        public async Task<bool> UpdateUserAsync(UpdateUserDto model)
+        public async Task<GlobalResponse> UpdateUserAsync(UpdateUserDto model)
         {
+            var result = new GlobalResponse();
+
             try
             {
                 var user = await _uow.Users.GetByIdAsync(model.Id);
                 if (user == null) throw new Exception("User Not Exists");
 
+                var creatorId = _claims.GetUserId();
+
+                if (!string.IsNullOrEmpty(model.BusinessIds))
+                {
+                    var businessIds = model.BusinessIds
+                        .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                        .Select(id => int.Parse(id.Trim()))
+                        .ToList();
+
+                    foreach (var businessId in businessIds)
+                    {
+                        var userBusiness = new UserBusinessesContext
+                        {
+                            BusinessId = businessId,
+                            User_Id = user.Id,
+                            ModifierId = creatorId,
+                            LastUpdated = DateTime.UtcNow,
+                            IsActive = true
+                        };
+                        await _context.UserBusinesses.AddAsync(userBusiness);
+                    }
+                }
+
+                if (!string.IsNullOrEmpty(model.AppointmentTypesIds))
+                {
+                    var appointmentTypeIds = model.AppointmentTypesIds
+                        .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                        .Select(id => int.Parse(id.Trim()))
+                        .ToList();
+
+                    foreach (var typeId in appointmentTypeIds)
+                    {
+                        var practitionerType = new AppointmentTypePractitionersContext
+                        {
+                            AppointmentTypeId = typeId,
+                            PractitionerId = user.Id,
+                            ModifierId = creatorId,
+                            LastUpdated = DateTime.UtcNow,
+                            IsActive = true
+                        };
+                        await _context.AppointmentTypePractitioners.AddAsync(practitionerType);
+                    }
+                }
                 _context.Users.Update(user);
                 await _uow.SaveAsync();
 
-                return true;
+                result.Status = 0;
+                result.Message = "User Updated Successfully";
+                return result;
             }
             catch (Exception ex)
             {

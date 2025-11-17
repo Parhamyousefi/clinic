@@ -34,8 +34,8 @@ public class UserController : ControllerBase
     [Authorize("Admin", "Secretary-Reception")]
     public async Task<IActionResult> GetById(int id)
     {
-        var u = await _svc.GetByIdAsync(id);
-        return u is null ? NotFound() : Ok(u);
+        var result = await _svc.GetByIdAsync(id);
+        return Ok(result);
     }
 
     [HttpGet("getUsers/{roleId}")]
@@ -51,10 +51,7 @@ public class UserController : ControllerBase
     public async Task<IActionResult> Delete(int id)
     {
         var result = await _svc.DeleteAsync(id);
-        if (!result)
-            return NotFound();
-
-        return NoContent();
+        return Ok(result);
     }
 
     [HttpPost("createUser")]
@@ -70,10 +67,7 @@ public class UserController : ControllerBase
     public async Task<IActionResult> UpdateUser(UpdateUserDto model)
     {
         var result = await _svc.UpdateUserAsync(model);
-        if (!result)
-            return NotFound("User not found.");
-
-        return NoContent();
+        return Ok(result);
     }
 
     [HttpPut("assignRole")]
