@@ -92,4 +92,16 @@ export class UserService {
     };
     return this.http.get(uri, httpOptions);
   }
+
+  updateUser(data) {
+    const token: any = localStorage.getItem("token");
+    const uri = this.url + "api/user/updateUser";
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      }),
+    };
+    return this.http.put(uri, data, httpOptions);
+  }
 }

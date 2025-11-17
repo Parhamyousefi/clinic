@@ -17,10 +17,10 @@
             </div>
             <div *ngIf="day.isBreak" class="d-flex align-items-center justify-content-between">
                 <p class="col-2 text-right m-0">وقفه</p>
-                <p-dropdown class="col-4" [options]="hours" [(ngModel)]="day.fromTime" optionLabel="name"
+                <p-dropdown class="col-4" [options]="hours" [(ngModel)]="day.breakFromTime" optionLabel="name"
                     class="full-width text-right" />
                 <p class="m-0 mx-2 col-1">تا</p>
-                <p-dropdown class="col-4" [options]="hours" [(ngModel)]="day.toTime" optionLabel="name"
+                <p-dropdown class="col-4" [options]="hours" [(ngModel)]="day.breakToTime" optionLabel="name"
                     class="full-width text-right" />
                 <button class="btn btn-secondary h-100" (click)="day.isBreak = false">حذف</button>
             </div>

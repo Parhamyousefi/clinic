@@ -92,8 +92,35 @@ export class AttendanceScheduleComponent {
     }
   }
 
+  validateRows(rows: any[]) {
+    for (let row of rows) {
+      if (this.timeToNumber(row.fromTime.name) > this.timeToNumber(row.toTime.name)) {
+        this.toastR.error('زمان شروع روز ' + row.day.name + ' بعد از زمان پایان است')
+        return false;
+      }
+    }
+    return true;
+  }
 
-  buildPayload(row: any) {
+  timeToNumber(t) {
+    const [h, m] = t.split(':').map(Number);
+    return h * 60 + m;
+  }
+
+  buildPayload(row: any, isBreak) {
+    if (isBreak) {
+      return {
+        businessId: this.newSchedule.clinic.code,
+        practitionerId: this.userId,
+        day: row.day.code,
+        fromTime: row.breakFromTime['name'],
+        toTime: row.breakToTime['name'],
+        isBreak: row.isBreak,
+        isActive: row.active,
+        duration: 0,
+        editOrNew: -1
+      };
+    }
     return {
       businessId: this.newSchedule.clinic.code,
       practitionerId: this.userId,
@@ -105,28 +132,22 @@ export class AttendanceScheduleComponent {
       duration: 0,
       editOrNew: -1
     };
-
-
-
   }
 
   saveAll() {
-    // const validation = this.validateRows();
-
-    // if (!validation.valid) {
-    //   alert(validation.message);
-    //   return;
-    // }
     const activeDays = this.scheduleRows.filter(r => r.isActive);
     if (activeDays.length === 0) {
       this.toastR.error("هیچ روزی انتخاب نشده!");
       return;
     }
-    activeDays.forEach(day => {
-      let dayModel = this.buildPayload(day);
-      this.saveDoctorSchedule(dayModel);
+    let validation = this.validateRows(activeDays);
+    if (validation) {
+      activeDays.forEach(day => {
+        let dayModel = this.buildPayload(day, day.isBreak);
+        this.saveDoctorSchedule(dayModel);
 
-    });
+      });
+    }
   }
 
   async saveDoctorSchedule(model) {
@@ -148,17 +169,4 @@ export class AttendanceScheduleComponent {
     }
     catch { }
   }
-
-
-  //   {
-  //   "businessId": 0,
-  //   "practitionerId": 0,
-  //   "day": 0,
-  //   "fromTime": "string",
-  //   "toTime": "string",
-  //   "isBreak": true,
-  //   "isActive": true,
-  //   "duration": 0,
-  //   "editOrNew": 0
-  // }
 }
