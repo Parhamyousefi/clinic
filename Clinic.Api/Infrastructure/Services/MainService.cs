@@ -319,30 +319,51 @@ namespace Clinic.Api.Infrastructure.Services
             {
                 var userId = _token.GetUserId();
 
+                if (!model.IsBreak)
+                {
+                    var existingNonBreak = await _context.Schedules
+                        .FirstOrDefaultAsync(s =>
+                            s.BusinessId == model.BusinessId &&
+                            s.PractitionerId == model.PractitionerId &&
+                            s.Day == model.Day &&
+                            s.IsBreak == false
+                        );
+
+                    if (model.EditOrNew == -1 && existingNonBreak != null)
+                    {
+                        model.EditOrNew = existingNonBreak.Id;
+                    }
+                }
+
                 if (model.EditOrNew == -1)
                 {
                     var schedule = _mapper.Map<SchedulesContext>(model);
                     schedule.CreatorId = userId;
                     schedule.CreatedOn = DateTime.UtcNow;
+
                     _context.Schedules.Add(schedule);
                     await _context.SaveChangesAsync();
+
                     result.Message = "Schedule Saved Successfully";
                     result.Status = 0;
                     return result;
                 }
                 else
                 {
-                    var existingSchedule = await _context.Schedules.FirstOrDefaultAsync(j => j.Id == model.EditOrNew);
+                    var existingSchedule = await _context.Schedules
+                        .FirstOrDefaultAsync(j => j.Id == model.EditOrNew);
+
                     if (existingSchedule == null)
-                    {
                         throw new Exception("Schedule Not Found");
-                    }
 
                     _mapper.Map(model, existingSchedule);
+
                     existingSchedule.ModifierId = userId;
                     existingSchedule.LastUpdated = DateTime.UtcNow;
+
                     _context.Schedules.Update(existingSchedule);
                     await _context.SaveChangesAsync();
+
                     result.Message = "Schedule Updated Successfully";
                     result.Status = 0;
                     return result;
@@ -553,12 +574,54 @@ namespace Clinic.Api.Infrastructure.Services
             }
         }
 
-        public async Task<IEnumerable<BusinessesContext>> GetBusinesses()
+        public async Task<IEnumerable<GetBusinessResponse>> GetBusinesses()
         {
             try
             {
-                var result = await _context.Businesses.ToListAsync();
-                return result;
+                var data =
+            from b in _context.Businesses
+            join bs in _context.BusinessServices
+                on b.Id equals bs.BusinessId into servicesGroup
+            select new GetBusinessResponse
+            {
+                Id = b.Id,
+                Name = b.Name,
+                Address = b.Address,
+                Address2 = b.Address2,
+                City = b.City,
+                State = b.State,
+                PostCode = b.PostCode,
+                CountryId = b.CountryId,
+                ContactInformation = b.ContactInformation,
+                DisplayInOnlineBooking = b.DisplayInOnlineBooking,
+                ModifierId = b.ModifierId,
+                CreatedOn = b.CreatedOn,
+                LastUpdated = b.LastUpdated,
+                Location = b.Location,
+                Zoom = b.Zoom,
+                InfoEmail = b.InfoEmail,
+                IsServiceBase = b.IsServiceBase,
+                CreatorId = b.CreatorId,
+                ShowInvoiceInRecord = b.ShowInvoiceInRecord,
+                CheckScheduleOnInvoice = b.CheckScheduleOnInvoice,
+                IsInPatient = b.IsInPatient,
+                SMSEnabled = b.SMSEnabled,
+                AppointmentByOutOfRange = b.AppointmentByOutOfRange,
+
+                Services = servicesGroup.Select(s => new BusinessServiceItemDto
+                {
+                    Id = s.Id,
+                    BusinessId = s.BusinessId,
+                    BillableItemId = s.BillableItemId,
+                    IsActive = s.IsActive,
+                    ModifierId = s.ModifierId,
+                    CreatedOn = s.CreatedOn,
+                    LastUpdated = s.LastUpdated,
+                    CreatorId = s.CreatorId
+                }).ToList()
+            };
+
+                return await data.ToListAsync();
             }
             catch (Exception ex)
             {
