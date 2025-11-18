@@ -12,7 +12,7 @@ namespace Clinic.Api.Application.Interfaces
         Task<GlobalResponse> DeleteAsync(int id);
         Task<bool> AssignRoleAsync(int userId, int roleId);
         Task<GlobalResponse> CreateUserAsync(CreateUserDto model);
-        Task<bool> UpdateUserAsync(UpdateUserDto model);
+        Task<GlobalResponse> UpdateUserAsync(UpdateUserDto model);
         Task<bool> ForgotPasswordAsync(ForgotPasswordDto model);
         Task<IEnumerable<UserContext>> GetUsers(int roleId);
         Task<GlobalResponse> SaveUserBusiness(SaveUserBusinessDto model);

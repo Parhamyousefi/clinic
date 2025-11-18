@@ -239,8 +239,10 @@ namespace Clinic.Api.Infrastructure.Services
             }
         }
 
-        public async Task<bool> UpdateUserAsync(UpdateUserDto model)
+        public async Task<GlobalResponse> UpdateUserAsync(UpdateUserDto model)
         {
+            var result = new GlobalResponse();
+
             try
             {
                 var user = await _uow.Users.GetByIdAsync(model.Id);
@@ -261,8 +263,8 @@ namespace Clinic.Api.Infrastructure.Services
                         {
                             BusinessId = businessId,
                             User_Id = user.Id,
-                            CreatorId = creatorId,
-                            CreatedOn = DateTime.UtcNow,
+                            ModifierId = creatorId,
+                            LastUpdated = DateTime.UtcNow,
                             IsActive = true
                         };
                         await _context.UserBusinesses.AddAsync(userBusiness);
@@ -282,8 +284,8 @@ namespace Clinic.Api.Infrastructure.Services
                         {
                             AppointmentTypeId = typeId,
                             PractitionerId = user.Id,
-                            CreatorId = creatorId,
-                            CreatedOn = DateTime.UtcNow,
+                            ModifierId = creatorId,
+                            LastUpdated = DateTime.UtcNow,
                             IsActive = true
                         };
                         await _context.AppointmentTypePractitioners.AddAsync(practitionerType);
@@ -292,7 +294,9 @@ namespace Clinic.Api.Infrastructure.Services
                 _context.Users.Update(user);
                 await _uow.SaveAsync();
 
-                return true;
+                result.Status = 0;
+                result.Message = "User Updated Successfully";
+                return result;
             }
             catch (Exception ex)
             {

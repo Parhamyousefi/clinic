@@ -67,10 +67,7 @@ public class UserController : ControllerBase
     public async Task<IActionResult> UpdateUser(UpdateUserDto model)
     {
         var result = await _svc.UpdateUserAsync(model);
-        if (!result)
-            return NotFound("User not found.");
-
-        return NoContent();
+        return Ok(result);
     }
 
     [HttpPut("assignRole")]
