@@ -33,10 +33,11 @@ export class NewBusinessComponent implements AfterViewInit {
   editOrNew: number;
   async ngAfterViewInit(): Promise<void> {
     this.editOrNew = +this.activeRoute.snapshot.paramMap.get('id') || -1;
+    this.getBillableItems();
     let location = [35.6892, 51.3890];
     if (this.editOrNew != -1) {
       await this.getBusinesses();
-      location = this.model.locationString.split(',');
+      location = this.model.locationString ? this.model.locationString.split(',') : [35.6892, 51.3890];
     } else {
       this.model.locationString = '';
     }
@@ -79,7 +80,6 @@ export class NewBusinessComponent implements AfterViewInit {
       map.setView(center, 15);
     });
 
-    this.getBillableItems();
   }
 
   async getBillableItems() {
@@ -150,8 +150,13 @@ export class NewBusinessComponent implements AfterViewInit {
       this.model.isInPatient = item[0]['isInPatient'];
       this.model.smsEnabled = item[0]['smsEnabled'];
       this.model.appointmentByOutOfRange = item[0]['appointmentByOutOfRange'];
-      // this.model.selectedServices ? (this.model.selectedServices || []).map(opt => opt.id).join(',') : null
-
+      if (item[0]['services']?.length > 0) {
+        this.model.selectedServices = [];
+        item[0]['services'].forEach(element => {
+          let temp = this.servicesList.filter(x => x.id == element.billableItemId)[0];
+          this.model.selectedServices.push(temp);
+        });
+      }
     }
     catch { }
   }

@@ -200,9 +200,9 @@ export class MainService {
     return this.http.get(uri, httpOptions);
   }
 
-    deleteBusiness(businessId) {
+  deleteBusiness(businessId) {
     const token: any = localStorage.getItem("token");
-    const uri = this.url + `api/main/getBusinesses/${businessId}`;
+    const uri = this.url + `api/main/deleteBusiness/${businessId}`;
     const httpOptions = {
       headers: new HttpHeaders({
         "Content-Type": "application/json",
