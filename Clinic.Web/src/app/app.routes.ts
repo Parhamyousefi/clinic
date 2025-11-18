@@ -26,6 +26,8 @@ import { OutinvoiceReportComponent } from './components/outinvoice-report/outinv
 import { NewUsersComponent } from './components/new-users/new-users.component';
 import { UserListComponent } from './components/user-list/user-list.component';
 import { UserAppointmentSettingComponent } from './components/user-list/user-appointment-setting/user-appointment-setting.component';
+import { BusinessListComponent } from './components/business-list/business-list.component';
+import { NewBusinessComponent } from './components/business-list/new-business/new-business.component';
 
 export const routes: Routes = [
     { path: '', component: LoginComponent },
@@ -149,6 +151,20 @@ export const routes: Routes = [
         path: 'userlist/user-appointment-setting/:uid', component: UserAppointmentSettingComponent,
         canActivate: [AuthGuard]
     },
+    {
+        path: 'business-List',
+        component: BusinessListComponent,
+        canActivate: [AuthGuard]
+    },
+    {
+        path: 'new-business', component: NewBusinessComponent,
+        canActivate: [AuthGuard]
+    },
+    {
+        path: 'new-business/:id', component: NewBusinessComponent,
+        canActivate: [AuthGuard]
+    },
+
 
 
 ];

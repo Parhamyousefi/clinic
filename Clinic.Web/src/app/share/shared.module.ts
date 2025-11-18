@@ -24,6 +24,7 @@ import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { DialogModule } from 'primeng/dialog';
 import { ImageModule } from 'primeng/image';
 import { SelectButtonModule } from 'primeng/selectbutton';
+import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 
 @NgModule({
   declarations: [
@@ -68,7 +69,8 @@ import { SelectButtonModule } from 'primeng/selectbutton';
     CKEditorModule,
     DialogModule,
     ImageModule,
-    SelectButtonModule
+    SelectButtonModule,
+    LeafletModule
   ],
   exports: [
     NumberSplitPipe,
@@ -109,7 +111,8 @@ import { SelectButtonModule } from 'primeng/selectbutton';
     CKEditorModule,
     DialogModule,
     ImageModule,
-    SelectButtonModule
+    SelectButtonModule,
+    LeafletModule
   ]
 })
 export class SharedModule { }

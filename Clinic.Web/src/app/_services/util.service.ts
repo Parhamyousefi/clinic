@@ -55,9 +55,9 @@ export class UtilService {
     });
   }
 
-  getIranianHolidaysWithFridays(): Observable<string[]> {
+  getIranianHolidaysWithFridays(jalaliYear): Observable<string[]> {
     const apiKey = 'KQcB85KNJqb4EnsKohwMJfsqvZsn5l9B';
-    const jalaliYear = moment().format('jYYYY');
+    // const jalaliYear = moment().format('jYYYY');
     const gregorianYear = moment(`${jalaliYear}/01/01`, 'jYYYY/MM/DD').format('YYYY');
     const url = `https://calendarific.com/api/v2/holidays?api_key=${apiKey}&country=IR&year=${gregorianYear}`;
 
