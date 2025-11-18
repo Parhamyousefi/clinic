@@ -32,7 +32,7 @@ namespace Clinic.Api.Infrastructure.Services
                 {
                     var contact = _mapper.Map<ContactsContext>(model);
                     contact.CreatorId = userId;
-                    contact.CreatedOn = DateTime.UtcNow;
+                    contact.CreatedOn = DateTime.Now;
                     _context.Contacts.Add(contact);
                     await _context.SaveChangesAsync();
                     result.Message = "Contact Saved Successfully";
@@ -47,7 +47,7 @@ namespace Clinic.Api.Infrastructure.Services
 
                     _mapper.Map(model, existingContact);
                     existingContact.ModifierId = userId;
-                    existingContact.LastUpdated = DateTime.UtcNow;
+                    existingContact.LastUpdated = DateTime.Now;
                     _context.Contacts.Update(existingContact);
                     await _context.SaveChangesAsync();
                     result.Message = "Contact Updated Successfully";
@@ -119,7 +119,7 @@ namespace Clinic.Api.Infrastructure.Services
                 {
                     var contactPhone = _mapper.Map<ContactPhonesContext>(model);
                     contactPhone.CreatorId = userId;
-                    contactPhone.CreatedOn = DateTime.UtcNow;
+                    contactPhone.CreatedOn = DateTime.Now;
                     _context.ContactPhones.Add(contactPhone);
                     await _context.SaveChangesAsync();
                     result.Message = "Contact Phone Saved Successfully";
@@ -136,7 +136,7 @@ namespace Clinic.Api.Infrastructure.Services
 
                     _mapper.Map(model, existingContactPhone);
                     existingContactPhone.ModifierId = userId;
-                    existingContactPhone.LastUpdated = DateTime.UtcNow;
+                    existingContactPhone.LastUpdated = DateTime.Now;
                     _context.ContactPhones.Update(existingContactPhone);
                     await _context.SaveChangesAsync();
                     result.Message = "Contact Phone Updated Successfully";

@@ -65,7 +65,7 @@ namespace Clinic.Api.Infrastructure.Services
                 {
                     var job = _mapper.Map<JobsContext>(model);
                     job.CreatorId = userId;
-                    job.CreatedOn = DateTime.UtcNow;
+                    job.CreatedOn = DateTime.Now;
                     _context.Jobs.Add(job);
                     await _context.SaveChangesAsync();
                     result.Message = "Job Saved Successfully";
@@ -82,7 +82,7 @@ namespace Clinic.Api.Infrastructure.Services
 
                     _mapper.Map(model, existingJob);
                     existingJob.ModifierId = userId;
-                    existingJob.LastUpdated = DateTime.UtcNow;
+                    existingJob.LastUpdated = DateTime.Now;
                     _context.Jobs.Update(existingJob);
                     await _context.SaveChangesAsync();
                     result.Message = "Job Updated Successfully";
@@ -157,7 +157,7 @@ namespace Clinic.Api.Infrastructure.Services
                 {
                     var product = _mapper.Map<ProductsContext>(model);
                     product.CreatorId = userId;
-                    product.CreatedOn = DateTime.UtcNow;
+                    product.CreatedOn = DateTime.Now;
                     _context.Products.Add(product);
                     await _context.SaveChangesAsync();
                     result.Message = "Product Saved Successfully";
@@ -174,7 +174,7 @@ namespace Clinic.Api.Infrastructure.Services
 
                     _mapper.Map(model, existingProduct);
                     existingProduct.ModifierId = userId;
-                    existingProduct.LastUpdated = DateTime.UtcNow;
+                    existingProduct.LastUpdated = DateTime.Now;
                     _context.Products.Update(existingProduct);
                     await _context.SaveChangesAsync();
                     result.Message = "Product Updated Successfully";
@@ -236,7 +236,7 @@ namespace Clinic.Api.Infrastructure.Services
                 {
                     var notes = _mapper.Map<MedicalAlertsContext>(model);
                     notes.CreatorId = userId;
-                    notes.CreatedOn = DateTime.UtcNow;
+                    notes.CreatedOn = DateTime.Now;
                     _context.MedicalAlerts.Add(notes);
                     await _context.SaveChangesAsync();
                     result.Message = "Medical Note Saved Successfully";
@@ -253,7 +253,7 @@ namespace Clinic.Api.Infrastructure.Services
 
                     _mapper.Map(model, existingNote);
                     existingNote.ModifierId = userId;
-                    existingNote.LastUpdated = DateTime.UtcNow;
+                    existingNote.LastUpdated = DateTime.Now;
                     _context.MedicalAlerts.Update(existingNote);
                     await _context.SaveChangesAsync();
                     result.Message = "Medical Note Updated Successfully";
@@ -339,7 +339,7 @@ namespace Clinic.Api.Infrastructure.Services
                 {
                     var schedule = _mapper.Map<SchedulesContext>(model);
                     schedule.CreatorId = userId;
-                    schedule.CreatedOn = DateTime.UtcNow;
+                    schedule.CreatedOn = DateTime.Now;
 
                     _context.Schedules.Add(schedule);
                     await _context.SaveChangesAsync();
@@ -359,7 +359,7 @@ namespace Clinic.Api.Infrastructure.Services
                     _mapper.Map(model, existingSchedule);
 
                     existingSchedule.ModifierId = userId;
-                    existingSchedule.LastUpdated = DateTime.UtcNow;
+                    existingSchedule.LastUpdated = DateTime.Now;
 
                     _context.Schedules.Update(existingSchedule);
                     await _context.SaveChangesAsync();
@@ -411,7 +411,7 @@ namespace Clinic.Api.Infrastructure.Services
                 {
                     var userAppointment = _mapper.Map<UserAppointmentsContext>(model);
                     userAppointment.CreatorId = userId;
-                    userAppointment.CreatedOn = DateTime.UtcNow;
+                    userAppointment.CreatedOn = DateTime.Now;
 
                     _context.UserAppointment.Add(userAppointment);
                     await _context.SaveChangesAsync();
@@ -424,7 +424,7 @@ namespace Clinic.Api.Infrastructure.Services
                 {
                     _mapper.Map(model, existingRecord);
                     existingRecord.ModifierId = userId;
-                    existingRecord.LastUpdated = DateTime.UtcNow;
+                    existingRecord.LastUpdated = DateTime.Now;
 
                     _context.UserAppointment.Update(existingRecord);
                     await _context.SaveChangesAsync();
@@ -501,7 +501,7 @@ namespace Clinic.Api.Infrastructure.Services
                 {
                     var business = _mapper.Map<BusinessesContext>(model);
                     business.CreatorId = userId;
-                    business.CreatedOn = DateTime.UtcNow;
+                    business.CreatedOn = DateTime.Now;
                     _context.Businesses.Add(business);
                     await _context.SaveChangesAsync();
                     var creatorId = _token.GetUserId();
@@ -520,7 +520,7 @@ namespace Clinic.Api.Infrastructure.Services
                                 BusinessId = business.Id,
                                 BillableItemId = serviceId,
                                 CreatorId = creatorId,
-                                CreatedOn = DateTime.UtcNow,
+                                CreatedOn = DateTime.Now,
                                 IsActive = true
                             };
                             await _context.BusinessServices.AddAsync(businessService);
@@ -552,7 +552,7 @@ namespace Clinic.Api.Infrastructure.Services
                                 BusinessId = existingBusiness.Id,
                                 BillableItemId = serviceId,
                                 ModifierId = userId,
-                                LastUpdated = DateTime.UtcNow,
+                                LastUpdated = DateTime.Now,
                                 IsActive = true
                             };
                             await _context.BusinessServices.AddAsync(businessService);
@@ -560,7 +560,7 @@ namespace Clinic.Api.Infrastructure.Services
                     }
                     _mapper.Map(model, existingBusiness);
                     existingBusiness.ModifierId = userId;
-                    existingBusiness.LastUpdated = DateTime.UtcNow;
+                    existingBusiness.LastUpdated = DateTime.Now;
                     _context.Businesses.Update(existingBusiness);
                     await _context.SaveChangesAsync();
                     result.Message = "Business Updated Successfully";

@@ -36,7 +36,7 @@ namespace Clinic.Api.Infrastructure.Services
                     model.InvoiceNo = (Id + 1).ToString();
                     var invoice = _mapper.Map<InvoicesContext>(model);
                     invoice.CreatorId = userId;
-                    invoice.CreatedOn = DateTime.UtcNow;
+                    invoice.CreatedOn = DateTime.Now;
                     invoice.PractitionerId = userId;
                     invoice.InvoiceNo = (Id + 1).ToString();
                     _context.Invoices.Add(invoice);
@@ -56,7 +56,7 @@ namespace Clinic.Api.Infrastructure.Services
 
                     _mapper.Map(model, existingInvoice);
                     existingInvoice.ModifierId = userId;
-                    existingInvoice.LastUpdated = DateTime.UtcNow;
+                    existingInvoice.LastUpdated = DateTime.Now;
                     existingInvoice.PractitionerId = userId;
                     _context.Invoices.Update(existingInvoice);
                     await _context.SaveChangesAsync();
@@ -139,7 +139,7 @@ namespace Clinic.Api.Infrastructure.Services
                 {
                     invoiceItem = _mapper.Map<InvoiceItemsContext>(model);
                     invoiceItem.CreatorId = userId;
-                    invoiceItem.CreatedOn = DateTime.UtcNow;
+                    invoiceItem.CreatedOn = DateTime.Now;
                     _context.InvoiceItems.Add(invoiceItem);
                 }
                 else
@@ -152,7 +152,7 @@ namespace Clinic.Api.Infrastructure.Services
 
                     _mapper.Map(model, invoiceItem);
                     invoiceItem.ModifierId = userId;
-                    invoiceItem.LastUpdated = DateTime.UtcNow;
+                    invoiceItem.LastUpdated = DateTime.Now;
                     _context.InvoiceItems.Update(invoiceItem);
                 }
 
@@ -182,8 +182,8 @@ namespace Clinic.Api.Infrastructure.Services
                         PatientId = invoiceInfo.PatientId,
                         TreatmentTemplateId = treatmentTemplateId ?? 0,
                         IsFinal = false,
-                        VisitTime = DateTime.UtcNow,
-                        CreatedOn = DateTime.UtcNow,
+                        VisitTime = DateTime.Now,
+                        CreatedOn = DateTime.Now,
                         CreatorId = userId,
                         InvoiceItemId = invoiceItem.Id
                     };
@@ -194,8 +194,8 @@ namespace Clinic.Api.Infrastructure.Services
                 {
                     existingTreatment.AppointmentId = invoiceInfo.AppointmentId;
                     existingTreatment.PatientId = invoiceInfo.PatientId;
-                    existingTreatment.VisitTime = DateTime.UtcNow;
-                    existingTreatment.LastUpdated = DateTime.UtcNow;
+                    existingTreatment.VisitTime = DateTime.Now;
+                    existingTreatment.LastUpdated = DateTime.Now;
                     existingTreatment.ModifierId = userId;
 
                     if (itemChanged)
@@ -300,7 +300,7 @@ namespace Clinic.Api.Infrastructure.Services
                     model.ReceiptNo = lastId + 1;
                     var mappReceipt = _mapper.Map<ReceiptsContext>(model);
                     mappReceipt.CreatorId = userId;
-                    mappReceipt.CreatedOn = DateTime.UtcNow;
+                    mappReceipt.CreatedOn = DateTime.Now;
                     mappReceipt.ReceiptNo = lastId + 1;
                     _context.Receipts.Add(mappReceipt);
                     await _context.SaveChangesAsync();
@@ -311,7 +311,7 @@ namespace Clinic.Api.Infrastructure.Services
 
                 _mapper.Map(model, receipt);
                 receipt.ModifierId = userId;
-                receipt.LastUpdated = DateTime.UtcNow;
+                receipt.LastUpdated = DateTime.Now;
                 _context.Receipts.Update(receipt);
                 await _context.SaveChangesAsync();
                 result.Message = "Receipt Updated Successfully";
@@ -432,7 +432,7 @@ namespace Clinic.Api.Infrastructure.Services
                 if (model.EditOrNew == -1)
                 {
                     var expense = _mapper.Map<ExpensesContext>(model);
-                    expense.CreatedOn = DateTime.UtcNow;
+                    expense.CreatedOn = DateTime.Now;
                     expense.CreatorId = userId;
                     _context.Expenses.Add(expense);
                     await _context.SaveChangesAsync();
@@ -450,7 +450,7 @@ namespace Clinic.Api.Infrastructure.Services
 
                     _mapper.Map(model, existingExpense);
                     existingExpense.ModifierId = userId;
-                    existingExpense.LastUpdated = DateTime.UtcNow;
+                    existingExpense.LastUpdated = DateTime.Now;
                     _context.Expenses.Update(existingExpense);
                     await _context.SaveChangesAsync();
                     result.Message = "Expense Updated Successfully";
@@ -494,7 +494,7 @@ namespace Clinic.Api.Infrastructure.Services
 
                 _mapper.Map(model, existingInvoice);
                 existingInvoice.ModifierId = userId;
-                existingInvoice.LastUpdated = DateTime.UtcNow;
+                existingInvoice.LastUpdated = DateTime.Now;
                 existingInvoice.TotalDiscount = model.TotalDiscount;
                 _context.Invoices.Update(existingInvoice);
                 await _context.SaveChangesAsync();
@@ -555,7 +555,7 @@ namespace Clinic.Api.Infrastructure.Services
                 }
 
                 existingInvoice.ModifierId = userId;
-                existingInvoice.LastUpdated = DateTime.UtcNow;
+                existingInvoice.LastUpdated = DateTime.Now;
                 existingInvoice.IsCanceled = true;
                 _context.Invoices.Update(existingInvoice);
                 await _context.SaveChangesAsync();
@@ -584,7 +584,7 @@ namespace Clinic.Api.Infrastructure.Services
                 }
 
                 existingInvoice.ModifierId = userId;
-                existingInvoice.LastUpdated = DateTime.UtcNow;
+                existingInvoice.LastUpdated = DateTime.Now;
                 existingInvoice.AcceptDiscount = true;
                 _context.Invoices.Update(existingInvoice);
                 await _context.SaveChangesAsync();

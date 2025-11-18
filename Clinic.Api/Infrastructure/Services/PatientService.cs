@@ -59,7 +59,7 @@ namespace Clinic.Api.Infrastructure.Services
                     var patient = _mapper.Map<PatientsContext>(model);
                     patient.CreatorId = userId;
                     patient.ReferringDoctorId = userId;
-                    patient.CreatedOn = DateTime.UtcNow;
+                    patient.CreatedOn = DateTime.Now;
                     patient.PatientCode = lastId + 1;
                     _context.Patients.Add(patient);
                     await _context.SaveChangesAsync();
@@ -80,7 +80,7 @@ namespace Clinic.Api.Infrastructure.Services
                     _mapper.Map(model, existingPatient);
                     existingPatient.ModifierId = userId;
                     existingPatient.ReferringDoctorId = userId;
-                    existingPatient.LastUpdated = DateTime.UtcNow;
+                    existingPatient.LastUpdated = DateTime.Now;
                     _context.Patients.Update(existingPatient);
                     await _context.SaveChangesAsync();
                     result.Message = "Patient Updated Successfully";
@@ -204,7 +204,7 @@ namespace Clinic.Api.Infrastructure.Services
 
                     _mapper.Map(model, existingPatientPhone);
                     existingPatientPhone.ModifierId = userId;
-                    existingPatientPhone.LastUpdated = DateTime.UtcNow;
+                    existingPatientPhone.LastUpdated = DateTime.Now;
                     _context.PatientPhones.Update(existingPatientPhone);
                     await _context.SaveChangesAsync();
                     result.Message = "Patient Phone Updated Successfully";
@@ -349,7 +349,7 @@ namespace Clinic.Api.Infrastructure.Services
                         PatientId = model.PatientId,
                         FileName = relativePath,
                         FileSize = Convert.FromBase64String(model.Base64).LongLength,
-                        CreatedOn = DateTime.UtcNow,
+                        CreatedOn = DateTime.Now,
                         LastUpdated = null,
                         ModifierId = null,
                         CreatorId = userId,
@@ -377,7 +377,7 @@ namespace Clinic.Api.Infrastructure.Services
                     entity.PatientId = model.PatientId;
                     entity.FileName = relativePath;
                     entity.FileSize = Convert.FromBase64String(model.Base64).LongLength;
-                    entity.LastUpdated = DateTime.UtcNow;
+                    entity.LastUpdated = DateTime.Now;
                     entity.ModifierId = userId;
                     entity.TreatmentId = treatment.Id;
 
