@@ -28,6 +28,8 @@ import { UserListComponent } from './components/user-list/user-list.component';
 import { UserAppointmentSettingComponent } from './components/user-list/user-appointment-setting/user-appointment-setting.component';
 import { BusinessListComponent } from './components/business-list/business-list.component';
 import { NewBusinessComponent } from './components/business-list/new-business/new-business.component';
+import { NewServiceComponent } from './components/service-list/new-service/new-service.component';
+import { ServiceListComponent } from './components/service-list/service-list.component';
 
 export const routes: Routes = [
     { path: '', component: LoginComponent },
@@ -164,7 +166,18 @@ export const routes: Routes = [
         path: 'new-business/:id', component: NewBusinessComponent,
         canActivate: [AuthGuard]
     },
-
-
+    {
+        path: 'service-list',
+        component: ServiceListComponent,
+        canActivate: [AuthGuard]
+    },
+    {
+        path: 'new-service', component: NewServiceComponent,
+        canActivate: [AuthGuard]
+    },
+    {
+        path: 'new-service/:id', component: NewServiceComponent,
+        canActivate: [AuthGuard]
+    }
 
 ];
