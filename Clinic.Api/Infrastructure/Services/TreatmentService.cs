@@ -175,7 +175,7 @@ namespace Clinic.Api.Infrastructure.Services
             }
         }
 
-        public async Task<GlobalResponse> GetTodayAppointments(GetTodayAppointmentsDto model)
+        public async Task<IEnumerable<GetTodayAppointmentsInfoDto>> GetTodayAppointments(GetTodayAppointmentsDto model)
         {
             try
             {
