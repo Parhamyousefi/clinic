@@ -15,7 +15,7 @@
       <!-- <div class="navbar-item mx-2 d-flex justify-content-center align-items-center pointer">
         <i class="fa fa-bell-o text-white" aria-hidden="true"></i>
       </div> -->
-      <div class="profile-avatar pointer d-flex justify-content-center align-items-center">
+      <div routerLink="/change-password" class="profile-avatar pointer d-flex justify-content-center align-items-center">
         <i class="fa fa-2 fa-user text-white" aria-hidden="true"></i>
       </div>
     </div>
@@ -31,7 +31,7 @@
     </div>
   </div>
   <div [ngClass]="{'closed-sidebar d-none' : !openSidebar}" class="main-sidebar">
-    <div class="sidebar-items mx-4 mt-3">
+    <div class="sidebar-items mx-2 mt-3">
       <div *ngFor="let item of sidebarMenu"
         [ngClass]="{'selected-sidebar-menu text-dark': selectedPatientSideBarItem == item.id}"
         class="sidebar-item d-flex align-items-center pointer mt-3 p-2 text-white" [routerLink]="item.link"

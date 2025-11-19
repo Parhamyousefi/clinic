@@ -1,0 +1,129 @@
+<div class="appContainer">
+    <div class="col-12 p-0 text-right">
+        <h4>کاربر جدید</h4>
+        <hr>
+    </div>
+    <div class="col-12 d-flex flex-column ">
+        <h5 class="text-right">
+            تنظیمات در برنامه
+        </h5>
+    </div>
+    <hr>
+    <div class="col-12 d-flex flex-wrap">
+        <div class="col-md-4 col-12 d-flex flex-column justify-content-center">
+            <label for="isDoctor" class="text-right">آیا این شخص پزشک است؟</label>
+            <p-selectButton id="isDoctor" [options]="isActive" [(ngModel)]="newUser.isDoctor" optionLabel="label"
+                optionValue="value" class="select-btn" />
+        </div>
+        <div class="col-md-4 col-12 d-flex flex-column justify-content-center">
+            <label for="isActive" class="text-right">حساب کاربری فعال است؟</label>
+            <p-selectButton [options]="isActive" [(ngModel)]="newUser.isActive" optionLabel="label" optionValue="value"
+                class="select-btn" />
+        </div>
+        <div class="col-md-4 col-12 d-flex flex-column justify-content-center">
+            <label for="isActive" class="text-right">نقش</label>
+            <p-dropdown [options]="roles" [(ngModel)]="newUser.role" optionLabel="name" dataKey="id"
+                class="full-width text-right" />
+        </div>
+        <div class="col-md-4 col-12 d-flex justify-content-center align-items-center">
+            <input type="checkbox" [(ngModel)]="newUser.ShowTreatment">
+            <label for="isActive" class="text-right m-0 mr-1">نمایش پرونده بالینی با کلیک روی نام بیمار در اوقات
+                امروز</label>
+        </div>
+        <div class="col-md-4 col-12 d-flex flex-column justify-content-center">
+            <label for="isActive" class="text-right">امکان ویرایش پرونده های قدیمی بیماران</label>
+            <p-selectButton [options]="hasStatus" [(ngModel)]="newUser.showOldTreatments" optionLabel="label"
+                optionValue="value" class="select-btn" />
+        </div>
+        <div class="col-md-4 col-12 d-flex flex-column justify-content-center">
+            <label for="isActive" class="text-right f-14">امکان تغییر وضعیت مراجعه به ملاقات شده با ذخیره پرونده
+                بالینی</label>
+            <p-selectButton [options]="hasStatus" [(ngModel)]="newUser.changeStatus" optionLabel="label"
+                optionValue="value" class="select-btn" />
+        </div>
+        <div class="col-md-4 col-12 d-flex flex-column justify-content-center">
+            <label for="isActive" class="text-right">تعداد بیماران خارج از نوبت بین بیماران وقتی</label>
+            <input type="text" name="isActive" class="form-control" [(ngModel)]="newUser.outOfRange">
+        </div>
+    </div>
+    <hr>
+    <div class="col-12 d-flex flex-column ">
+        <h5 class="text-right">
+            اطلاعات پزشک
+        </h5>
+    </div>
+    <hr>
+    <div class="col-12 d-flex flex-wrap">
+        <div class="col-md-4 col-12 mt-3 d-flex flex-column justify-content-center">
+            <label for="expertise" class="text-right">تخصص</label>
+            <input type="text" name="expertise" class="form-control" [(ngModel)]="newUser.expertise">
+        </div>
+        <div class="col-md-4 col-12 mt-3 d-flex flex-column justify-content-center">
+            <label for="explain" class="text-right">توضیحات</label>
+            <input type="text" name="explain" class="form-control" [(ngModel)]="newUser.describe">
+        </div>
+        <div class="col-md-4 col-12 mt-3 d-flex flex-column justify-content-center">
+            <label for="title" class="text-right">عنوان</label>
+            <p-dropdown id="title" [options]="titleList" [(ngModel)]="newUser.title"
+                [ngModelOptions]="{ standalone: true }" optionLabel="name" class="full-width text-right" />
+        </div>
+        <div class="col-md-4 col-12 mt-3 d-flex flex-column justify-content-center">
+            <label for="firstName" class="text-right">نام</label>
+            <input type="text" name="firstName" class="form-control" [(ngModel)]="newUser.firstName">
+        </div>
+        <div class="col-md-4 col-12 mt-3 d-flex flex-column justify-content-center">
+            <label for="lastName" class="text-right">نام خانوادگی</label>
+            <input type="text" name="lastName" class="form-control" [(ngModel)]="newUser.lastName">
+        </div>
+        <div class="col-md-4 col-12 mt-3 d-flex flex-column justify-content-center">
+            <label for="email" class="text-right">نام کاربری</label>
+            <input type="text" name="email" class="form-control" [(ngModel)]="newUser.userName">
+        </div>
+    </div>
+    <hr>
+    <div class="col-12 d-flex flex-column ">
+        <h5 class="text-right">
+            تغییر رمز عبور
+        </h5>
+    </div>
+    <hr>
+    <div class="col-12 d-flex flex-wrap">
+        <div class="col-md-4 col-12 mt-3 d-flex flex-column justify-content-center">
+            <label for="password" class="text-right">کلمه عبور</label>
+            <input type="text" name="password" class="form-control" [(ngModel)]="newUser.password">
+        </div>
+        <div class="col-md-4 col-12 mt-3 d-flex flex-column justify-content-center">
+            <label for="passwordRepeat" class="text-right">تایید کلمه عبور</label>
+            <input type="text" name="passwordRepeat" class="form-control" [(ngModel)]="newUser.passwordRepeat">
+        </div>
+        <div class="col-md-4 col-12 d-flex justify-content-center align-items-center">
+            <input type="checkbox" name="shoDoc" [(ngModel)]="newUser.ShowDocInReserve">
+            <label for="showDoc" class="text-right m-0 mr-1">نمایش این پزشک در وقت دهی آنلاین</label>
+        </div>
+        <div class="col-md-4 col-12 d-flex justify-content-center align-items-center">
+            <input type="checkbox" name="copyData" [(ngModel)]="newUser.copyPatientData">
+            <label for="copyData" class="text-right m-0 mr-1">کپی اطلاعات آخرین بیمار در پرونده جدید</label>
+        </div>
+        <div class="col-md-4 col-12 d-flex justify-content-center align-items-center">
+            <input type="checkbox" name="sendSms" [(ngModel)]="newUser.sendSms">
+            <label for="sendSms" class="text-right m-0 mr-1">ارسال پیامک برای بیماران این پزشک</label>
+        </div>
+        <div class="col-md-4 col-12 mt-3 d-flex flex-column justify-content-center">
+            <label for="talighDays" class="text-right">تعداد روز تعلیق وقت دهی برای بیمار مراجعه نکرده</label>
+            <input type="text" name="talighDays" class="form-control" [(ngModel)]="newUser.talighDays">
+        </div>
+        <div class="col-md-4 col-12 mt-3 d-flex flex-column justify-content-center">
+            <label for="access" class="text-right">دسترسی به مکان ها</label>
+            <p-multiSelect id="access" class="full-width" [options]="accesses" [(ngModel)]="newUser.access"
+                optionLabel="name" optionValue="id" />
+        </div>
+        <div class="col-md-4 col-12 mt-3 d-flex flex-column justify-content-center">
+            <label for="access" class="text-right">انواع وقت دهی مجاز</label>
+            <p-multiSelect id="access" class="full-width" [options]="appointmentTypes"
+                [(ngModel)]="newUser.appointmentType" optionLabel="name" optionValue="id" />
+        </div>
+    </div>
+    <div class="col-12 text-center">
+        <button class="btn main-btn mt-3 mb-4" (click)="createUser()">ذخیره</button>
+    </div>
+</div>

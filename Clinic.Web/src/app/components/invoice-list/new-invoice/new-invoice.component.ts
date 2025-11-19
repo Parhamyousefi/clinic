@@ -9,6 +9,8 @@ import { firstValueFrom } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import moment from 'moment-jalaali';
 import { MainService } from '../../../_services/main.service';
+import Swal from 'sweetalert2';
+import { PaymentService } from '../../../_services/payment.service';
 
 @Component({
   selector: 'app-new-invoice',
@@ -26,7 +28,8 @@ export class NewInvoiceComponent implements OnInit {
     private toastR: ToastrService,
     private activeRoute: ActivatedRoute,
     private router: Router,
-    private mainService: MainService
+    private mainService: MainService,
+    private paymentService: PaymentService
   ) { }
 
   patientsList: any = [];
@@ -45,6 +48,7 @@ export class NewInvoiceComponent implements OnInit {
   selectedappointmentId: any;
   patientId: any;
   @ViewChild(InvoiceItemsComponent) invoiceItemsComponent: InvoiceItemsComponent;
+  isCanceled: boolean = false;
 
   async ngOnInit() {
     this.activeRoute.params.subscribe(async () => {
@@ -154,6 +158,7 @@ export class NewInvoiceComponent implements OnInit {
       this.selectedPatientTitle = item[0]['patientName'];
       this.note = item[0]['notes'];
       this.selectedPatientAppointment = this.patientAppointmentsList.filter(x => x.id == item[0]['appointmentId'])[0];
+      this.isCanceled = item[0]['isCanceled'];
     }
     catch { }
   }
@@ -166,28 +171,71 @@ export class NewInvoiceComponent implements OnInit {
     this.selectedPatient = this.patientsList.filter(patient => patient.id == patientId)[0];
   }
 
-  async savereceipt() {
+  async savereceipt(type) {
     if (this.selectedPatient.code == null) {
       this.toastR.error('خطا', 'بیمار مورد نظر را انتخاب کنید');
       return;
     }
-    let model = {
-      receiptNo: null,
-      patientId: this.selectedPatient.code,
-      cash: +this.invoiceItemsComponent.totalAmount,
-      eftPos: null,
-      other: null,
-      notes: this.note,
-      allowEdit: true,
-      receiptTypeId: 0
+    let model;
+    if (type == 1) {
+      model = {
+        receiptNo: null,
+        patientId: this.selectedPatient.code,
+        cash: +this.invoiceItemsComponent.totalAmount,
+        eftPos: null,
+        other: null,
+        notes: this.note,
+        allowEdit: true,
+        receiptTypeId: 0
+      }
+    } else {
+      model = {
+        receiptNo: null,
+        patientId: this.selectedPatient.code,
+        cash: +this.invoiceItemsComponent.totalAmount,
+        eftPos: null,
+        other: null,
+        notes: this.note,
+        allowEdit: true,
+        receiptTypeId: 0,
+        editOrNew: -1
+      }
     }
+
     try {
-      let data = await this.invoiceService.saveReceipt(model).toPromise();
+      let data;
+      if (type == 1) {
+        data = await this.invoiceService.saveReceipt(model).toPromise();
+      } else {
+        data = await this.paymentService.savePayment(model).toPromise();
+      }
       if (data['status'] == 0) {
         this.toastR.success('با موفقیت ثبت شد!');
       }
     } catch {
       this.toastR.error('خطا', 'خطا در انجام عملیات')
     }
+  }
+
+  async cancelInvoice(id) {
+    Swal.fire({
+      title: "آیا از ابطال این صورتحساب مطمئن هستید ؟",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "بله انجام بده",
+      cancelButtonText: "منصرف شدم",
+      reverseButtons: false,
+    }).then(async (result) => {
+      try {
+        let res: any = await this.invoiceService.cancelInvoice(this.editOrNew).toPromise();
+        if (res['status'] == 0) {
+          this.toastR.success('با موفقیت ابطال گردید');
+          this.isCanceled = true;
+        }
+      }
+      catch {
+        this.toastR.error('خطایی رخ داد', 'خطا!');
+      }
+    })
   }
 }

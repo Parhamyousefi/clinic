@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { UserService } from '../_services/user.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { UserService } from '../../_services/user.service';
 
 @Component({
   selector: 'app-login',
@@ -42,6 +42,7 @@ export class LoginComponent {
         if (res.token && res.secretCode) {
           localStorage.setItem("token", res.token);
           localStorage.setItem("userName", this.model.userName);
+          localStorage.setItem('xP98_g#d94H0w', res.secretCode);
           this.router.navigate(["/appointment"]);
         }
       }

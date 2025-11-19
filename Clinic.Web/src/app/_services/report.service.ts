@@ -67,4 +67,39 @@ export class ReportService {
     return this.http.post(uri, data, httpOptions);
   }
 
+  getOutPatientSummaryReport(data: any) {
+    const uri = this.url + `api/Report/getOutPatientSummaryReport`;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + this.token,
+      }),
+    };
+    return this.http.post(uri, data, httpOptions);
+  }
+
+  getOutPatientReportBasedOnCreator(data: any) {
+    const uri = this.url + `api/Report/getOutPatientReportBasedOnCreator`;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + this.token,
+      }),
+    };
+    return this.http.post(uri, data, httpOptions);
+  }
+
+  getIncomeReportDetails(data: any) {
+    const uri = this.url + `api/Report/getIncomeReportDetails`;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + this.token,
+      }),
+    };
+    return this.http.post(uri, data, httpOptions);
+  }
+
+
+
 }

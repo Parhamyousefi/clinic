@@ -14,9 +14,9 @@
       <ng-template pTemplate="header">
         <tr>
           <th>ردیف</th>
-          <th>نام و نام خانوادگی</th>
+          <th pSortableColumn="fullName"><p-sortIcon field="fullName"></p-sortIcon> نام و نام خانوادگی</th>
           <th>نام پدر</th>
-          <th>شماره همراه</th>
+          <th pSortableColumn="mobile"><p-sortIcon field="mobile"></p-sortIcon> شماره همراه</th>
           <th>کد ملی</th>
           <th>توضیحات</th>
           <th>عملیات</th>
@@ -40,7 +40,7 @@
       <ng-template pTemplate="body" let-patient let-rowIndex="rowIndex">
         <tr>
           <td> {{rowIndex+1}}</td>
-          <td class="pointer text-00c4b4" [routerLink]="'/patient-treatment/' + patient.id">
+          <td class="pointer text-00c4b4" [routerLink]="'/patient/treatment/' + patient.id">
             {{patient.firstName}} {{patient.lastName}}
           </td>
           <td>
@@ -63,7 +63,8 @@
             <button class="btn main-btn" *ngIf="patient.phoneNum" (click)="editPhoneNum(patient.patientPhone)">ویرایش
               شماره تلفن</button>
             <button class="btn main-outline-btn mx-1" (click)="editPatient(patient)">ویرایش</button>
-            <button class="btn btn-outline-danger mx-1" (click)="deletePatient(patient.id)">حذف</button>
+            <button class="btn btn-outline-danger mx-1" *ngIf="userType == 1"
+              (click)="deletePatient(patient.id)">حذف</button>
           </td>
         </tr>
       </ng-template>
@@ -197,7 +198,10 @@
         </div>
       </div>
       <div class="col-12 d-flex justify-content-center">
-        <button class="btn create-patient-btn text-white px-3 py-1 mx-1" (click)="createPatient()">ذخیره</button>
+        <button class="btn create-patient-btn text-white px-3 py-1 mx-1" (click)="createPatient(0)">ذخیره</button>
+        <button *ngIf="editpatientMode" class="btn create-patient-btn text-white px-3 py-1 mx-1"
+          (click)="createPatient(1)">ذخیره و صدور
+          صورتحساب</button>
         <button class="btn btn-outline-danger px-3 py-1 mx-1" (click)="closeCreatePatientModal()">انصراف</button>
       </div>
     </div>
@@ -230,12 +234,12 @@
       <button class="btn btn-outline-danger px-3 py-2 mx-1" (click)="closeAddPhoneNum()">انصراف</button>
     </div>
   </p-dialog>
+
+
+  <p-dialog [(visible)]="displayDialog" [modal]="true" [style]="{width: '600px'}">
+    <p-header>
+      <div class="col-6 text-right d-flex align-items-center"> معرف جدید</div>
+    </p-header>
+    <app-new-contact (closeModal)="closeModal($event)"></app-new-contact>
+  </p-dialog>
 </div>
-
-
-<p-dialog [(visible)]="displayDialog" [modal]="true" [style]="{width: '600px'}">
-  <p-header>
-    <div class="col-6 text-right d-flex align-items-center"> معرف جدید</div>
-  </p-header>
-  <app-new-contact (closeModal)="closeModal($event)"></app-new-contact>
-</p-dialog>

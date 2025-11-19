@@ -33,7 +33,7 @@ namespace Clinic.Api.Infrastructure.Services
                 {
                     var payments = _mapper.Map<PaymentsContext>(model);
                     payments.CreatorId = userId;
-                    payments.CreatedOn = DateTime.UtcNow;
+                    payments.CreatedOn = DateTime.Now;
                     _context.Payments.Add(payments);
                     await _context.SaveChangesAsync();
                     result.Message = "Payment Saved Successfully";
@@ -52,7 +52,7 @@ namespace Clinic.Api.Infrastructure.Services
 
                     _mapper.Map(model, existingPayments);
                     existingPayments.ModifierId = userId;
-                    existingPayments.LastUpdated = DateTime.UtcNow;
+                    existingPayments.LastUpdated = DateTime.Now;
                     _context.Payments.Update(existingPayments);
                     await _context.SaveChangesAsync();
                     result.Message = "Payment Updated Successfully";

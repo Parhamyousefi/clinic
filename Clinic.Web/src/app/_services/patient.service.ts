@@ -135,7 +135,7 @@ export class PatientService {
     };
     return this.http.get(uri, httpOptions);
   }
-  
+
 
   getPatientReceipts(patientId) {
     const token: any = localStorage.getItem("token");
@@ -159,7 +159,7 @@ export class PatientService {
     };
     return this.http.get(uri, httpOptions);
   }
-  
+
   getPatientPayments(patientId) {
     const token: any = localStorage.getItem("token");
     const uri = this.url + `api/Patient/getPatientPayments/` + patientId;
@@ -182,6 +182,18 @@ export class PatientService {
       }),
     };
     return this.http.get(uri, httpOptions);
+  }
+
+  getFilteredPatient(data) {
+    const uri = this.url + `api/Patient/getFilteredPatient`;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + this.token,
+        responseType: 'text'
+      }),
+    };
+    return this.http.post(uri, data, httpOptions);
   }
 
 

@@ -147,5 +147,38 @@ export class TreatmentsService {
     return this.http.get(uri, httpOptions);
   }
 
+  deleteBillableItem(id) {
+    const token: any = localStorage.getItem("token");
+    const uri = this.url + `api/treatment/deleteBillableItem/${id}`;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      }),
+    };
+    return this.http.get(uri, httpOptions);
+  }
 
+  saveBillableItem(data: any) {
+    const uri = this.url + `api/Treatment/saveBillableItem`;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + this.token,
+      }),
+    };
+    return this.http.post(uri, data, httpOptions);
+  }
+
+  getItemCategory() {
+    const token: any = localStorage.getItem("token");
+    const uri = this.url + `api/treatment/getItemCategory`;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      }),
+    };
+    return this.http.get(uri, httpOptions);
+  }
 }

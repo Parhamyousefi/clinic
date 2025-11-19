@@ -14,11 +14,25 @@
             <ng-template pTemplate="header">
                 <tr>
                     <th>ردیف</th>
-                    <th>نام و نام خانوادگی</th>
-                    <th>تلفن</th>
+                    <th pSortableColumn="firstName"><p-sortIcon field="firstName"></p-sortIcon> نام و نام خانوادگی</th>
+                    <th pSortableColumn="phoneNum"><p-sortIcon field="phoneNum"></p-sortIcon> تلفن</th>
                     <th>شغل</th>
                     <th>شرکت</th>
                     <th>عملیات</th>
+                </tr>
+                <tr>
+                    <th></th>
+                    <th>
+                        <input type="text" (input)="dt.filter($event.target?.value, 'firstName', 'contains')"
+                            class="form-control">
+                    </th>
+                    <th>
+                        <input type="text" (input)="dt.filter($event.target?.value, 'phoneNum', 'contains')"
+                            class="form-control">
+                    </th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-contact let-rowIndex="rowIndex">

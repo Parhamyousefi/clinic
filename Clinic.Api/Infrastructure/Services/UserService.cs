@@ -145,8 +145,10 @@ namespace Clinic.Api.Infrastructure.Services
             }
         }
 
-        public async Task<int> CreateUserAsync(CreateUserDto model)
+        public async Task<GlobalResponse> CreateUserAsync(CreateUserDto model)
         {
+            var response = new GlobalResponse();
+
             try
             {
                 var existingUser = await _context.Users.FirstOrDefaultAsync(u => u.Email == model.Username);
@@ -197,7 +199,7 @@ namespace Clinic.Api.Infrastructure.Services
                             BusinessId = businessId,
                             User_Id = user.Id,
                             CreatorId = creatorId,
-                            CreatedOn = DateTime.UtcNow,
+                            CreatedOn = DateTime.Now,
                             IsActive = true
                         };
                         await _context.UserBusinesses.AddAsync(userBusiness);
@@ -218,7 +220,7 @@ namespace Clinic.Api.Infrastructure.Services
                             AppointmentTypeId = typeId,
                             PractitionerId = user.Id,
                             CreatorId = creatorId,
-                            CreatedOn = DateTime.UtcNow,
+                            CreatedOn = DateTime.Now,
                             IsActive = true
                         };
                         await _context.AppointmentTypePractitioners.AddAsync(practitionerType);
@@ -227,7 +229,9 @@ namespace Clinic.Api.Infrastructure.Services
 
                 await _context.SaveChangesAsync();
 
-                return user.Id;
+                response.Status = 0;
+                response.Data = user.Id;
+                return response;
             }
             catch (Exception ex)
             {
@@ -260,7 +264,7 @@ namespace Clinic.Api.Infrastructure.Services
                             BusinessId = businessId,
                             User_Id = user.Id,
                             ModifierId = creatorId,
-                            LastUpdated = DateTime.UtcNow,
+                            LastUpdated = DateTime.Now,
                             IsActive = true
                         };
                         await _context.UserBusinesses.AddAsync(userBusiness);
@@ -281,7 +285,7 @@ namespace Clinic.Api.Infrastructure.Services
                             AppointmentTypeId = typeId,
                             PractitionerId = user.Id,
                             ModifierId = creatorId,
-                            LastUpdated = DateTime.UtcNow,
+                            LastUpdated = DateTime.Now,
                             IsActive = true
                         };
                         await _context.AppointmentTypePractitioners.AddAsync(practitionerType);
@@ -333,7 +337,7 @@ namespace Clinic.Api.Infrastructure.Services
                 {
                     UserName = Username,
                     Ip = ip,
-                    LoginDateTime = DateTime.UtcNow,
+                    LoginDateTime = DateTime.Now,
                     HostName = ip
                 };
 
@@ -372,7 +376,7 @@ namespace Clinic.Api.Infrastructure.Services
                 {
                     var userBusiness = _mapper.Map<UserBusinessesContext>(model);
                     userBusiness.CreatorId = userId;
-                    userBusiness.CreatedOn = DateTime.UtcNow;
+                    userBusiness.CreatedOn = DateTime.Now;
                     userBusiness.PractitionerId = 0;
                     userBusiness.IsActive = true;
                     userBusiness.User_Id = model.UserId;
@@ -392,7 +396,7 @@ namespace Clinic.Api.Infrastructure.Services
 
                     _mapper.Map(model, existingBusiness);
                     existingBusiness.ModifierId = userId;
-                    existingBusiness.LastUpdated = DateTime.UtcNow;
+                    existingBusiness.LastUpdated = DateTime.Now;
                     _context.UserBusinesses.Update(existingBusiness);
                     await _context.SaveChangesAsync();
                     result.Message = "User Business Updated Successfully";
