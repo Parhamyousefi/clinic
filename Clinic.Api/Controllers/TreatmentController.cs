@@ -17,7 +17,7 @@ namespace Clinic.Api.Controllers
         }
 
         [HttpPost("createAppointment")]
-        [Authorize("Admin", "Doctor", "Secretary-Reception")]
+        [Authorize]
         public async Task<IActionResult> Create(CreateAppointmentDto model)
         {
             var result = await _treatmentsService.CreateAppointmentAsync(model);
@@ -25,7 +25,7 @@ namespace Clinic.Api.Controllers
         }
 
         [HttpGet("deleteAppointment/{id}")]
-        [Authorize("Admin", "Doctor")]
+        [Authorize]
         public async Task<IActionResult> DeleteAppointment(int id)
         {
             var result = await _treatmentsService.DeleteAppointment(id);
@@ -33,7 +33,7 @@ namespace Clinic.Api.Controllers
         }
 
         [HttpPost("getAppointments")]
-        [Authorize("Admin", "Doctor", "Secretary-Reception")]
+        [Authorize]
         public async Task<IActionResult> GetAppointments(GetAppointmentsDto model)
         {
             var result = await _treatmentsService.GetAppointments(model);
@@ -41,7 +41,7 @@ namespace Clinic.Api.Controllers
         }
 
         [HttpGet("getTreatments/{appointmentId}")]
-        [Authorize("Admin", "Doctor", "Secretary-Reception")]
+        [Authorize]
         public async Task<IActionResult> GetTreatments(int appointmentId)
         {
             var result = await _treatmentsService.GetTreatments(appointmentId);
@@ -50,7 +50,7 @@ namespace Clinic.Api.Controllers
         }
 
         [HttpGet("deleteTreatment/{id}")]
-        [Authorize("Admin", "Doctor")]
+        [Authorize]
         public async Task<IActionResult> DeleteTreatment(int id)
         {
             var result = await _treatmentsService.DeleteTreatment(id);
@@ -58,7 +58,7 @@ namespace Clinic.Api.Controllers
         }
 
         [HttpPost("getTodayAppointments")]
-        [Authorize("Admin", "Doctor", "Secretary-Reception")]
+        [Authorize]
         public async Task<IActionResult> GetTodayAppointments(GetTodayAppointmentsDto model)
         {
             var result = await _treatmentsService.GetTodayAppointments(model);
@@ -66,7 +66,7 @@ namespace Clinic.Api.Controllers
         }
 
         [HttpGet("getAppointmentTypes")]
-        [Authorize("Admin", "Doctor", "Secretary-Reception")]
+        [Authorize]
         public async Task<IActionResult> GetAppointmentTypes()
         {
             var result = await _treatmentsService.GetAppointmentTypes();
@@ -75,7 +75,7 @@ namespace Clinic.Api.Controllers
         }
 
         [HttpGet("getWeeklyAppointments")]
-        [Authorize("Admin", "Doctor", "Secretary-Reception")]
+        [Authorize]
         public async Task<IActionResult> GetWeekAppointments()
         {
             var result = await _treatmentsService.GetWeekAppointments();
@@ -83,7 +83,7 @@ namespace Clinic.Api.Controllers
         }
 
         [HttpGet("getBillableItems")]
-        [Authorize("Admin", "Doctor", "Secretary-Reception")]
+        [Authorize]
         public async Task<IActionResult> GetBillableItems()
         {
             var result = await _treatmentsService.GetBillableItems();
@@ -91,7 +91,7 @@ namespace Clinic.Api.Controllers
         }
 
         [HttpPost("saveBillableItem")]
-        [Authorize("Admin", "Doctor", "Secretary-Reception")]
+        [Authorize]
         public async Task<IActionResult> SaveBillableItem(SaveBillableItemsDto model)
         {
             var result = await _treatmentsService.SaveBillableItem(model);
@@ -99,7 +99,7 @@ namespace Clinic.Api.Controllers
         }
 
         [HttpGet("deleteBillableItem/{id}")]
-        [Authorize("Admin", "Doctor")]
+        [Authorize]
         public async Task<IActionResult> DeleteBillableItem(int id)
         {
             var result = await _treatmentsService.DeleteBillableItem(id);
@@ -107,7 +107,7 @@ namespace Clinic.Api.Controllers
         }
 
         [HttpGet("getSectionPerService/{serviceId}")]
-        [Authorize("Admin", "Doctor", "Secretary-Reception")]
+        [Authorize]
         public async Task<IActionResult> GetSectionPerService(int serviceId)
         {
             var result = await _treatmentsService.GetSectionPerService(serviceId);
@@ -115,7 +115,7 @@ namespace Clinic.Api.Controllers
         }
 
         [HttpGet("getQuestionsPerSection/{sectionId}")]
-        [Authorize("Admin", "Doctor", "Secretary-Reception")]
+        [Authorize]
         public async Task<IActionResult> GetQuestionsPerSection(int sectionId)
         {
             var result = await _treatmentsService.GetQuestionsPerSection(sectionId);
@@ -123,7 +123,7 @@ namespace Clinic.Api.Controllers
         }
 
         [HttpGet("getAnswersPerQuestion/{questionId}")]
-        [Authorize("Admin", "Doctor", "Secretary-Reception")]
+        [Authorize]
         public async Task<IActionResult> GetAnswersPerQuestion(int questionId)
         {
             var result = await _treatmentsService.GetAnswersPerQuestion(questionId);
@@ -131,7 +131,7 @@ namespace Clinic.Api.Controllers
         }
 
         [HttpGet("getPatientServices/{patientId}")]
-        [Authorize("Admin", "Doctor", "Secretary-Reception")]
+        [Authorize]
         public async Task<IActionResult> GetPatientServices(int patientId)
         {
             var result = await _treatmentsService.GetPatientServices(patientId);
@@ -139,11 +139,20 @@ namespace Clinic.Api.Controllers
         }
 
         [HttpGet("getPatientTreatments/{patientId}")]
-        [Authorize("Admin", "Doctor", "Secretary-Reception")]
+        [Authorize]
         public async Task<IActionResult> GetPatientTreatments(int patientId)
         {
             var result = await _treatmentsService.GetPatientTreatments(patientId);
             return Ok(result);
         }
+
+        [HttpGet("getItemCategory")]
+        [Authorize]
+        public async Task<IActionResult> GetItemCategory()
+        {
+            var result = await _treatmentsService.GetItemCategory();
+            return Ok(result);
+        }
+
     }
 }

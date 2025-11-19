@@ -22,5 +22,7 @@ namespace Clinic.Api.Application.Interfaces
         Task<IEnumerable<AnswersContext>> GetAnswersPerQuestion(int questionId);
         Task<IEnumerable<GetServicesPerPatientResponse>> GetPatientServices(int patinetId);
         Task<IEnumerable<GetPatientTreatmentsResponse>> GetPatientTreatments(int patientId);
+        Task<IEnumerable<ItemCategoriesContext>> GetItemCategory();
+
     }
 }

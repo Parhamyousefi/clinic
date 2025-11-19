@@ -479,6 +479,7 @@ namespace Clinic.Api.Infrastructure.Services
             }
         }
 
+        #region Services
         public async Task<IEnumerable<BillableItemsContext>> GetBillableItems()
         {
             try
@@ -534,6 +535,25 @@ namespace Clinic.Api.Infrastructure.Services
             }
         }
 
+        //public async Task<GlobalResponse> SaveItemCategory(SaveItemCategoryDto model)
+        //{
+
+        //}
+
+        public async Task<IEnumerable<ItemCategoriesContext>> GetItemCategory()
+        {
+            try
+            {
+                var result = await _context.ItemCategories.ToListAsync();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        #endregion
         public async Task<GlobalResponse> DeleteBillableItem(int id)
         {
             var result = new GlobalResponse();

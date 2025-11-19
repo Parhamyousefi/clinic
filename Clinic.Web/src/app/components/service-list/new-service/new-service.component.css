@@ -1,0 +1,20 @@
+.form-check-input {
+  position: absolute;
+  margin-top: .2rem;
+  margin-right: -1.50rem;
+  margin-left: 0 !important;
+}
+
+input[type=checkbox] {
+  width: 18px;
+  height: 18px;
+}
+
+.form-check input[type="checkbox"]:checked+.form-check-label {
+  color: #72d9c5;
+  font-weight: 500;
+}
+
+input[type="checkbox"]:checked {
+  accent-color: #72d9c5;
+}

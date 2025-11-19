@@ -125,9 +125,63 @@ export class MainService {
     return this.http.get(uri, httpOptions);
   }
 
+<<<<<<< HEAD
   saveDoctorSchedule(data) {
     const token: any = localStorage.getItem("token");
     const uri = this.url + `api/Main/saveDoctorSchedule`;
+=======
+  getDoctorSchedules(userId) {
+    const token: any = localStorage.getItem("token");
+    const uri = this.url + `api/main/getDoctorSchedules/` + userId;
+>>>>>>> AmirHayati/main
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+<<<<<<< HEAD
+        responseType: 'text'
+      }),
+    };
+    return this.http.post(uri, data, httpOptions);
+  }
+
+  getDoctorSchedules(id) {
+    const token: any = localStorage.getItem("token");
+    const uri = this.url + `api/main/getDoctorSchedules/` + id;
+=======
+      }),
+    };
+    return this.http.get(uri, httpOptions);
+  }
+
+  getDoctorSchedulesForDoctor() {
+    const token: any = localStorage.getItem("token");
+    const uri = this.url + `api/main/getDoctorSchedules`;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      }),
+    };
+    return this.http.get(uri, httpOptions);
+  }
+
+  getUserAppointmentsSettings(model) {
+    const token: any = localStorage.getItem("token");
+    const uri = this.url + `api/main/getUserAppointmentsSettings`;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      }),
+    };
+    return this.http.post(uri, model, httpOptions);
+  }
+
+
+  saveUserAppointmentsSettings(data) {
+    const token: any = localStorage.getItem("token");
+    const uri = this.url + `api/Main/saveUserAppointmentsSettings`;
     const httpOptions = {
       headers: new HttpHeaders({
         "Content-Type": "application/json",
@@ -138,9 +192,35 @@ export class MainService {
     return this.http.post(uri, data, httpOptions);
   }
 
-  getDoctorSchedules(id) {
+  saveBusiness(data) {
     const token: any = localStorage.getItem("token");
-    const uri = this.url + `api/main/getDoctorSchedules/` + id;
+    const uri = this.url + `api/Main/saveBusiness`;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+        responseType: 'text'
+      }),
+    };
+    return this.http.post(uri, data, httpOptions);
+  }
+
+  getBusinesses() {
+    const token: any = localStorage.getItem("token");
+    const uri = this.url + `api/main/getBusinesses`;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      }),
+    };
+    return this.http.get(uri, httpOptions);
+  }
+
+  deleteBusiness(businessId) {
+    const token: any = localStorage.getItem("token");
+    const uri = this.url + `api/main/deleteBusiness/${businessId}`;
+>>>>>>> AmirHayati/main
     const httpOptions = {
       headers: new HttpHeaders({
         "Content-Type": "application/json",

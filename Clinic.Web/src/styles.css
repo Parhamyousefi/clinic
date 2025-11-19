@@ -42,7 +42,7 @@ body {
 }
 
 .navbar {
-  z-index: 90;
+  z-index: 10000;
   direction: rtl;
   width: calc(100% - 250px);
   height: 80px;
@@ -184,13 +184,13 @@ mat-label {
 
 /* calender */
 #appointment .day-col {
-  padding: 0.8rem !important;
+  padding: 0.5rem !important;
 }
 
 #appointment .datepicker-outer-container .datepicker-inner-container .dp-btn {
   border-radius: 50% !important;
-  width: 30px;
-  height: 30px;
+  width: 20px;
+  height: 20px;
   margin: auto;
 }
 
@@ -290,6 +290,26 @@ p-dropdown.p-element {
   text-align: right;
 }
 
+.holiday-day {
+  background-color: #ffe5e5;
+  color: #d60000;
+  font-weight: bold;
+  border-radius: 50%;
+  box-shadow: 0 0 4px rgba(214, 0, 0, 0.4);
+}
+
+.doctor-days {
+  background-color: #00c203;
+  color: white;
+  font-weight: bold;
+  border-radius: 50%;
+  box-shadow: 0 0 4px rgba(141, 255, 1, 0.4);
+}
+
+.other-month {
+  display: none !important;
+}
+
 .p-ripple.p-element.p-button.p-component.p-highlight {
   background-color: #72d9c5;
   box-shadow: none;
@@ -298,6 +318,10 @@ p-dropdown.p-element {
 
 .text-72d9c5 {
   color: #72d9c5;
+}
+
+.p-multiselect {
+  width: 100% !important;
 }
 
 @media (max-width: 768px) {

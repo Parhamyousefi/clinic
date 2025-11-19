@@ -1,5 +1,4 @@
 import { Routes } from '@angular/router';
-import { LoginComponent } from './login/login.component';
 import { AppointmentComponent } from './components/appointment/appointment.component';
 import { AuthGuard } from './auth.guard';
 import { TodayAppointmentsComponent } from './components/today-appointments/today-appointments.component';
@@ -21,12 +20,25 @@ import { ExpensesComponent } from './components/expenses/expenses.component';
 import { BusinessReportComponent } from './components/reports/business-report/business-report.component';
 import { PatientReceiptsComponent } from './components/patient-receipts/patient-receipts.component';
 import { PatientPaymentComponent } from './components/patient-payment/patient-payment.component';
+import { LoginComponent } from './user-registration/login/login.component';
+import { ChangePasswordComponent } from './user-registration/change-password/change-password.component';
 import { OutinvoiceReportComponent } from './components/outinvoice-report/outinvoice-report.component';
 import { NewUsersComponent } from './components/new-users/new-users.component';
 import { UserListComponent } from './components/user-list/user-list.component';
+import { UserAppointmentSettingComponent } from './components/user-list/user-appointment-setting/user-appointment-setting.component';
+import { BusinessListComponent } from './components/business-list/business-list.component';
+import { NewBusinessComponent } from './components/business-list/new-business/new-business.component';
+import { NewServiceComponent } from './components/service-list/new-service/new-service.component';
+import { ServiceListComponent } from './components/service-list/service-list.component';
 
 export const routes: Routes = [
     { path: '', component: LoginComponent },
+
+    {
+        path: 'change-password', component: ChangePasswordComponent,
+        canActivate: [AuthGuard]
+    },
+
     {
         path: 'appointment', component: AppointmentComponent,
         canActivate: [AuthGuard]
@@ -141,4 +153,35 @@ export const routes: Routes = [
         path: 'userlist', component: UserListComponent,
         canActivate: [AuthGuard]
     },
+    {
+        path: 'userlist/user-appointment-setting/:uid', component: UserAppointmentSettingComponent,
+        canActivate: [AuthGuard]
+    },
+    {
+        path: 'business-List',
+        component: BusinessListComponent,
+        canActivate: [AuthGuard]
+    },
+    {
+        path: 'new-business', component: NewBusinessComponent,
+        canActivate: [AuthGuard]
+    },
+    {
+        path: 'new-business/:id', component: NewBusinessComponent,
+        canActivate: [AuthGuard]
+    },
+    {
+        path: 'service-list',
+        component: ServiceListComponent,
+        canActivate: [AuthGuard]
+    },
+    {
+        path: 'new-service', component: NewServiceComponent,
+        canActivate: [AuthGuard]
+    },
+    {
+        path: 'new-service/:id', component: NewServiceComponent,
+        canActivate: [AuthGuard]
+    }
+
 ];
