@@ -59,7 +59,7 @@ namespace Clinic.Api.Infrastructure.Services
                     model.ByInvoice = true;
                     var appointment = _mapper.Map<AppointmentsContext>(model);
                     appointment.CreatorId = userId;
-                    appointment.CreatedOn = DateTime.UtcNow;
+                    appointment.CreatedOn = DateTime.Now;
                     _context.Appointments.Add(appointment);
                     await _context.SaveChangesAsync();
                     result.Data = appointment.Id;
@@ -77,7 +77,7 @@ namespace Clinic.Api.Infrastructure.Services
 
                     _mapper.Map(model, existingAppointment);
                     existingAppointment.ModifierId = userId;
-                    existingAppointment.LastUpdated = DateTime.UtcNow;
+                    existingAppointment.LastUpdated = DateTime.Now;
                     _context.Appointments.Update(existingAppointment);
                     await _context.SaveChangesAsync();
                     result.Data = existingAppointment.Id;
@@ -231,15 +231,15 @@ namespace Clinic.Api.Infrastructure.Services
                            join ii in _context.InvoiceItems on i.Id equals ii.InvoiceId
                            where a.PractitionerId == userId
                            from ph in phoneGroup.OrderByDescending(x => x.CreatedOn).Take(1).DefaultIfEmpty()
-                                  select new
-                                  {
-                                     Appointment = a,
-                                     Patient = p,
-                                     Practitioner = u,
-                                     AppointmentType = at,
-                                     PhoneNumber = ph != null ? ph.Number : null,
-                                     InvoiceItems = ii
-                                  }
+                           select new
+                           {
+                               Appointment = a,
+                               Patient = p,
+                               Practitioner = u,
+                               AppointmentType = at,
+                               PhoneNumber = ph != null ? ph.Number : null,
+                               InvoiceItems = ii
+                           }
                                 ).ToListAsync();
                     var appointmentIds = result.Select(r => r.Appointment.Id).ToList();
                     var invoiceItemsbillIds = result.Select(r => r.InvoiceItems.ItemId).ToList();
@@ -314,12 +314,12 @@ namespace Clinic.Api.Infrastructure.Services
                                   from ph in phoneGroup.OrderByDescending(x => x.CreatedOn).Take(1).DefaultIfEmpty()
                                   select new
                                   {
-                                     Appointment = a,
-                                     Patient = p,
-                                     Practitioner = u,
-                                     AppointmentType = at,
-                                     PhoneNumber = ph != null ? ph.Number : null,
-                                     InvoiceItems = ii
+                                      Appointment = a,
+                                      Patient = p,
+                                      Practitioner = u,
+                                      AppointmentType = at,
+                                      PhoneNumber = ph != null ? ph.Number : null,
+                                      InvoiceItems = ii
                                   }
                                  ).ToListAsync();
 
@@ -413,7 +413,7 @@ namespace Clinic.Api.Infrastructure.Services
             try
             {
                 var iranTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Iran Standard Time");
-                var iranNow = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, iranTimeZone);
+                var iranNow = TimeZoneInfo.ConvertTimeFromUtc(DateTime.Now, iranTimeZone);
                 var today = iranNow.Date;
 
                 var weekEnd = today.AddDays(6);
@@ -505,7 +505,7 @@ namespace Clinic.Api.Infrastructure.Services
                 {
                     var billableItems = _mapper.Map<BillableItemsContext>(model);
                     billableItems.CreatorId = userId;
-                    billableItems.CreatedOn = DateTime.UtcNow;
+                    billableItems.CreatedOn = DateTime.Now;
                     _context.BillableItems.Add(billableItems);
                     await _context.SaveChangesAsync();
                     result.Message = "BillableItem Saved Successfully";
@@ -522,7 +522,7 @@ namespace Clinic.Api.Infrastructure.Services
 
                     _mapper.Map(model, existingBillable);
                     existingBillable.ModifierId = userId;
-                    existingBillable.LastUpdated = DateTime.UtcNow;
+                    existingBillable.LastUpdated = DateTime.Now;
                     _context.BillableItems.Update(existingBillable);
                     await _context.SaveChangesAsync();
                     result.Message = "BillableItem Updated Successfully";
@@ -535,25 +535,6 @@ namespace Clinic.Api.Infrastructure.Services
             }
         }
 
-        //public async Task<GlobalResponse> SaveItemCategory(SaveItemCategoryDto model)
-        //{
-
-        //}
-
-        public async Task<IEnumerable<ItemCategoriesContext>> GetItemCategory()
-        {
-            try
-            {
-                var result = await _context.ItemCategories.ToListAsync();
-                return result;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
-
-        #endregion
         public async Task<GlobalResponse> DeleteBillableItem(int id)
         {
             var result = new GlobalResponse();
@@ -577,6 +558,86 @@ namespace Clinic.Api.Infrastructure.Services
                 throw new Exception(ex.Message);
             }
         }
+
+        public async Task<GlobalResponse> SaveItemCategory(SaveItemCategoryDto model)
+        {
+            var result = new GlobalResponse();
+
+            try
+            {
+                var userId = _token.GetUserId();
+
+                if (model.EditOrNew == -1)
+                {
+                    var itemCategory = _mapper.Map<ItemCategoriesContext>(model);
+                    itemCategory.CreatorId = userId;
+                    itemCategory.CreatedOn = DateTime.Now;
+                    _context.ItemCategories.Add(itemCategory);
+                    await _context.SaveChangesAsync();
+                    result.Message = "ItemCategory Saved Successfully";
+                    return result;
+                }
+                else
+                {
+                    var eItemCategory = await _context.ItemCategories.FirstOrDefaultAsync(i => i.Id == model.EditOrNew);
+                    if (eItemCategory == null)
+                    {
+                        throw new Exception("ItemCategory Not Found");
+                    }
+
+                    _mapper.Map(model, eItemCategory);
+                    eItemCategory.ModifierId = userId;
+                    eItemCategory.LastUpdated = DateTime.Now;
+                    _context.ItemCategories.Update(eItemCategory);
+                    await _context.SaveChangesAsync();
+                    result.Message = "ItemCategory Updated Successfully";
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<IEnumerable<ItemCategoriesContext>> GetItemCategory()
+        {
+            try
+            {
+                var result = await _context.ItemCategories.ToListAsync();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<GlobalResponse> DeleteItemCategory(int id)
+        {
+            var result = new GlobalResponse();
+
+            try
+            {
+                var item = await _context.ItemCategories.FindAsync(id);
+
+                if (item == null)
+                {
+                    throw new Exception("ItemCategory Not Found");
+                }
+
+                _context.ItemCategories.Remove(item);
+                await _context.SaveChangesAsync();
+                result.Message = "ItemCategory Deleted Successfully";
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        #endregion
 
         public async Task<IEnumerable<SectionsContext>> GetSectionPerService(int serviceId)
         {

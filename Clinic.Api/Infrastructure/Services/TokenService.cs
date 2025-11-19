@@ -27,8 +27,8 @@ namespace Clinic.Api.Infrastructure.Services
           new Claim("username", user.Email ?? ""),
           new Claim("userRole", roleName)
                 }),
-                IssuedAt = DateTime.UtcNow,
-                Expires = DateTime.UtcNow.AddDays(7),
+                IssuedAt = DateTime.Now,
+                Expires = DateTime.Now.AddDays(7),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256),
             };
 
