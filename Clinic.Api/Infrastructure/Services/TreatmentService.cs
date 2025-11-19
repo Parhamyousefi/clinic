@@ -857,5 +857,26 @@ namespace Clinic.Api.Infrastructure.Services
 
             return result;
         }
+
+        public async Task<IEnumerable<TreatmentTemplatesContext>> GetTreatmentTemplates(GetTreatmentTemplateDto model)
+        {
+            try
+            {
+                if (model.Id == null)
+                {
+                    var result = await _context.TreatmentTemplates.ToListAsync();
+                    return result;
+                }
+                else
+                {
+                    var result = await _context.TreatmentTemplates.Where(t => t.Id == model.Id).ToListAsync();
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }

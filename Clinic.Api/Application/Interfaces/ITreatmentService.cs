@@ -25,5 +25,6 @@ namespace Clinic.Api.Application.Interfaces
         Task<IEnumerable<ItemCategoriesContext>> GetItemCategory();
         Task<GlobalResponse> SaveItemCategory(SaveItemCategoryDto model);
         Task<GlobalResponse> DeleteItemCategory(int id);
+        Task<IEnumerable<TreatmentTemplatesContext>> GetTreatmentTemplates(GetTreatmentTemplateDto model);
     }
 }

@@ -162,5 +162,12 @@ namespace Clinic.Api.Controllers
             return Ok(result);
         }
 
+        [HttpPost("getTreatmentTemplates")]
+        [Authorize]
+        public async Task<IActionResult> GetTreatmentTemplates(GetTreatmentTemplateDto model)
+        {
+            var result = await _treatmentsService.GetTreatmentTemplates(model);
+            return Ok(result);
+        }
     }
 }
