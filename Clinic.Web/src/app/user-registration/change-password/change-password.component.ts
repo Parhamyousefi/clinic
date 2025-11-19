@@ -23,7 +23,7 @@ export class ChangePasswordComponent {
     private toastR: ToastrService
   ) { }
 
-  async forgotPassword() {
+  async changePassword() {
     try {
       if (!this.model.userName) {
         this.toastR.error('خطا', ' نام کاربری را وارد نمایید');
@@ -34,7 +34,7 @@ export class ChangePasswordComponent {
         oldPassword: this.model.oldPassword,
         newPassword: this.model.newPassword
       }
-      await this.userService.forgotPassword(data).toPromise();
+      await this.userService.changePassword(data).toPromise();
       localStorage.setItem("userName", this.model.userName);
       this.toastR.success('رمز عبور جدید ثبت شد');
       this.router.navigate(["/appointment"]);
