@@ -2,3 +2,8 @@
     min-width: 700px;
     min-height: 500px;
 }
+
+.break-card {
+    background: rgba(114, 217, 197, .5);
+    border-radius: 15px;
+}

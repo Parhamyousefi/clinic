@@ -4,9 +4,9 @@
         <p-dropdown [options]="clinicsList" [(ngModel)]="newSchedule.clinic" optionLabel="name" dataKey="id"
             class="full-width text-right" />
         <hr>
-        <div *ngFor="let day of scheduleRows;" class="d-flex flex-column align-items-between justify-content-center">
+        <div *ngFor="let day of scheduleRows" class="d-flex flex-column align-items-between justify-content-center">
             <div class="d-flex align-items-center justify-content-between">
-                <input class="col-1" type="checkbox" [(ngModel)]="day.isActive">
+                <input class="col-1" type="checkbox" [(ngModel)]="day.active">
                 <p class="col-2 text-right m-0">{{day.day.name}}</p>
                 <p-dropdown class="col-4" [options]="hours" [(ngModel)]="day.fromTime" optionLabel="name"
                     class="full-width text-right" />
@@ -23,6 +23,18 @@
                 <p-dropdown class="col-4" [options]="hours" [(ngModel)]="day.breakToTime" optionLabel="name"
                     class="full-width text-right" />
                 <button class="btn btn-secondary h-100" (click)="day.isBreak = false">حذف</button>
+            </div>
+            <div *ngIf="day.hasBreak" class="d-flex align-items-center px-5 mt-2">
+                <div class="ml-2">وقفه ها : </div>
+                <div *ngFor="let break of day.breaks"
+                    class="d-flex align-items-center justify-content-between p-2 break-card mx-2">
+                    <div class="d-flex">
+                        <span>از</span>
+                        <span>{{break.fromTime.name}}</span>
+                        <span>تا</span>
+                        <span>{{break.toTime.name}}</span>
+                    </div>
+                </div>
             </div>
             <hr>
         </div>

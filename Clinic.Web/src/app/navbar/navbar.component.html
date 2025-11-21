@@ -15,7 +15,8 @@
       <!-- <div class="navbar-item mx-2 d-flex justify-content-center align-items-center pointer">
         <i class="fa fa-bell-o text-white" aria-hidden="true"></i>
       </div> -->
-      <div routerLink="/change-password" class="profile-avatar pointer d-flex justify-content-center align-items-center">
+      <div routerLink="/change-password"
+        class="profile-avatar pointer d-flex justify-content-center align-items-center">
         <i class="fa fa-2 fa-user text-white" aria-hidden="true"></i>
       </div>
     </div>
@@ -43,6 +44,70 @@
         </div>
         <p class="m-0">{{item.text}}</p>
       </div>
+    </div>
+    <div>
+      <!-- setting Menu -->
+      <div class="d-flex sidebar-item align-items-center pointer mt-3 p-2 text-white"
+        [ngClass]="{'text-dark selected-sidebar-menu' : openSettingMenu}">
+        <i *ngIf="!openSettingMenu" class="fa fa-angle-down mx-2"></i>
+        <i *ngIf="openSettingMenu" class="fa fa-angle-up mx-2"></i>
+        <p class="m-0" (click)="openSettingMenu = !openSettingMenu">تنظیمات</p>
+      </div>
+      <div [ngClass]="{'open-menu d-none': !openSettingMenu}" class="mr-3">
+        <div *ngFor="let item of settingMenu"
+          [ngClass]="{'selected-sidebar-menu text-dark': selectedPatientSideBarItem == item.id}"
+          class="sidebar-item d-flex align-items-center pointer mt-3 p-2 text-white" [routerLink]="item.link"
+          (click)="selectedPatientSideBarItem = item.id;mobileSideBarClose()">
+          <div class=" sidebar-item-icon-containter d-flex justify-content-center align-items-center ml-2">
+            <i class="{{item.icon}} sidebar-item-icon"
+              [ngClass]="{'text-dark': selectedSideBarItem == item.id, 'text-white': selectedSideBarItem != item.id}"
+              aria-hidden="true"></i>
+          </div>
+          <p class="m-0">{{item.text}}</p>
+        </div>
+      </div>
+      <!-- financial menu -->
+      <div class="d-flex sidebar-item align-items-center pointer mt-3 p-2 text-white"
+        [ngClass]="{'text-dark selected-sidebar-menu' : openFinancialMenu}">
+        <i *ngIf="!openFinancialMenu" class="fa fa-angle-down mx-2"></i>
+        <i *ngIf="openFinancialMenu" class="fa fa-angle-up mx-2"></i>
+        <p class="m-0" (click)="openFinancialMenu = !openFinancialMenu">مالی</p>
+      </div>
+      <div [ngClass]="{'open-menu d-none': !openFinancialMenu}" class="mr-3">
+        <div *ngFor="let item of financialMenu"
+          [ngClass]="{'selected-sidebar-menu text-dark': selectedPatientSideBarItem == item.id}"
+          class="sidebar-item d-flex align-items-center pointer mt-3 p-2 text-white" [routerLink]="item.link"
+          (click)="selectedPatientSideBarItem = item.id;mobileSideBarClose()">
+          <div class=" sidebar-item-icon-containter d-flex justify-content-center align-items-center ml-2">
+            <i class="{{item.icon}} sidebar-item-icon"
+              [ngClass]="{'text-dark': selectedSideBarItem == item.id, 'text-white': selectedSideBarItem != item.id}"
+              aria-hidden="true"></i>
+          </div>
+          <p class="m-0">{{item.text}}</p>
+        </div>
+      </div>
+      <!-- appointment Menu -->
+      <div class="d-flex sidebar-item align-items-center pointer mt-3 p-2 text-white"
+        [ngClass]="{'text-dark selected-sidebar-menu' : openAppointmentMenu}">
+        <i *ngIf="!openAppointmentMenu" class="fa fa-angle-down mx-2"></i>
+        <i *ngIf="openAppointmentMenu" class="fa fa-angle-up mx-2"></i>
+        <p class="m-0" (click)="openAppointmentMenu = !openAppointmentMenu">وقت دهی</p>
+      </div>
+      <div [ngClass]="{'open-menu d-none': !openAppointmentMenu}" class="mr-3">
+        <div *ngFor="let item of appointmentMenu"
+          [ngClass]="{'selected-sidebar-menu text-dark': selectedPatientSideBarItem == item.id}"
+          class="sidebar-item d-flex align-items-center pointer mt-3 p-2 text-white" [routerLink]="item.link"
+          (click)="selectedPatientSideBarItem = item.id;mobileSideBarClose()">
+          <div class=" sidebar-item-icon-containter d-flex justify-content-center align-items-center ml-2">
+            <i class="{{item.icon}} sidebar-item-icon"
+              [ngClass]="{'text-dark': selectedSideBarItem == item.id, 'text-white': selectedSideBarItem != item.id}"
+              aria-hidden="true"></i>
+          </div>
+          <p class="m-0">{{item.text}}</p>
+        </div>
+      </div>
+
+
     </div>
     <div class="sidebar-item d-flex align-items-center pointer mt-3 p-2 text-white" (click)="logOut()">
       <i class="fa fa-sign-out ml-2 sidebar-item-icon" aria-hidden="true"></i>

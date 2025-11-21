@@ -27,6 +27,24 @@ export const Menu: imenu[] = [
   { id: 9, text: "گزارشات", link: '/report/business-report', roleAccess: [], icon: 'fa fa-bar-chart' },
 ];
 
+export const settingMenu: imenu[] = [
+  { id: 0, text: "کلینیک", link: '', roleAccess: [], icon: 'fa fa-caret-left' },
+  { id: 1, text: "تنظیمات عمومی", link: '', roleAccess: [], icon: 'fa fa-caret-left' },
+  { id: 2, text: "مکان ها", link: '', roleAccess: [], icon: 'fa fa-caret-left' },
+  { id: 3, text: "کاربران", link: '/userlist', roleAccess: [], icon: 'fa fa-caret-left' },
+  { id: 4, text: "نقش ها و دسترسی ها", link: '/user-list', roleAccess: [], icon: 'fa fa-caret-left' },
+];
+export const financialMenu: imenu[] = [
+  { id: 0, text: "خدمات", link: '', roleAccess: [], icon: 'fa fa-caret-left' },
+  { id: 1, text: "گروه خدمات", link: '', roleAccess: [], icon: 'fa fa-caret-left' },
+];
+export const appointmentMenu: imenu[] = [
+  { id: 0, text: "انواع وقت دهی", link: '', roleAccess: [], icon: 'fa fa-caret-left' },
+  { id: 1, text: "تعطیلات", link: '', roleAccess: [], icon: 'fa fa-caret-left' },
+  { id: 2, text: "استثنائات اوقات پزشکان", link: '', roleAccess: [], icon: 'fa fa-caret-left' },
+  { id: 3, text: "استثنائات خارج از نوبت", link: '', roleAccess: [], icon: 'fa fa-caret-left' },
+];
+
 @Component({
   selector: 'app-navbar',
   standalone: true,
@@ -36,6 +54,9 @@ export const Menu: imenu[] = [
 })
 export class NavbarComponent {
   sidebarMenu: any[] = [];
+  settingMenu: any[] = [];
+  financialMenu: any[] = [];
+  appointmentMenu: any[] = [];
   selectedSideBarItem: any;
   selectedPatientSideBarItem: any
   isMobileSize: boolean
@@ -54,7 +75,9 @@ export class NavbarComponent {
     { id: 6, text: " گزارش بیماران مراجعه نکرده", link: '/', roleAccess: [], icon: 'fa fa-bar-chart' },
   ];
   selectedSideBarreportMenuItem: any;
-
+  openSettingMenu: boolean = false;
+  openFinancialMenu: boolean = false;
+  openAppointmentMenu: boolean = false;
 
   constructor(
     private authService: AuthService,
@@ -96,6 +119,9 @@ export class NavbarComponent {
       this.openSidebar = true;
     }
     this.sidebarMenu = Menu;
+    this.settingMenu = settingMenu;
+    this.financialMenu = financialMenu;
+    this.appointmentMenu = appointmentMenu
     if ((url.startsWith('/patient/'))) {
       this.hasPatientMenu = true;
       this.patientId = url.split('/').pop();

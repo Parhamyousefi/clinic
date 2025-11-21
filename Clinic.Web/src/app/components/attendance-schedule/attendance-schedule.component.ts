@@ -28,13 +28,13 @@ export class AttendanceScheduleComponent {
   selectedTimeTo: any = '23:00';
   scheduleRows: any = [];
   weekDays: any = [
-    { code: 6, name: "شنبه" },
     { code: 0, name: "یکشنبه" },
     { code: 1, name: "دوشنبه" },
     { code: 2, name: "سه‌شنبه" },
     { code: 3, name: "چهارشنبه" },
-    { cpde: 4, name: "پنج‌شنبه" },
+    { code: 4, name: "پنج‌شنبه" },
     { code: 5, name: "جمعه" },
+    { code: 6, name: "شنبه" },
   ]
 
 
@@ -70,8 +70,10 @@ export class AttendanceScheduleComponent {
       fromTime: this.hours[0],
       toTime: this.hours[47],
       isBreak: false,
-      code: d.code
+      code: d.code,
+      breaks: []
     }));
+
   }
 
   ngOnChanges() {
@@ -135,7 +137,7 @@ export class AttendanceScheduleComponent {
   }
 
   saveAll() {
-    const activeDays = this.scheduleRows.filter(r => r.isActive);
+    const activeDays = this.scheduleRows.filter(r => r.active);
     if (activeDays.length === 0) {
       this.toastR.error("هیچ روزی انتخاب نشده!");
       return;
@@ -155,18 +157,59 @@ export class AttendanceScheduleComponent {
       let res: any = this.mainService.saveDoctorSchedule(model).toPromise();
       if (res.status == 0) {
         this.toastR.success("با موفقیت ذخیره شد!")
+        this.getDoctorSchedules(this.userId)
       }
     }
     catch { }
   }
 
+
+
   async getDoctorSchedules(userId) {
     try {
-      let res: any = this.mainService.getDoctorSchedules(userId).toPromise();
+
+      let res: any = await this.mainService.getDoctorSchedules(userId).toPromise();
       if (res.length > 0) {
-        this.doctorSchedule = res;
+        this.scheduleRows = this.weekDays.map(d => ({
+          day: d,
+          active: false,
+          fromTime: this.hours[0],
+          toTime: this.hours[47],
+          isBreak: false,
+          code: d.code,
+          breaks: [],
+          hasBreak: false
+        }));
+
+        res.forEach(item => {
+
+          let dayData = {
+            active: item.isActive ?? false,
+            code: item.id ?? 0,
+            day: this.weekDays.filter(day => day.code == item.day)[0],
+            fromTime: this.hours.filter(hour => hour.name == item.fromTime.substring(0, 5))[0],
+            toTime: this.hours.filter(hour => hour.name == item.toTime.substring(0, 5))[0],
+            isBreak: item.isBreak ?? false
+          };
+
+          if (item.isBreak) {
+            this.scheduleRows[item.day].breaks.push(dayData);
+            this.scheduleRows[item.day].hasBreak = true;
+          } else {
+            this.scheduleRows[item.day].active = item.isActive;
+            this.scheduleRows[item.day].code = item.id;
+            this.scheduleRows[item.day].day = this.weekDays.filter(day => day.code == item.day)[0];
+            this.scheduleRows[item.day].fromTime = this.hours.filter(hour => hour.name == item.fromTime.substring(0, 5))[0];
+            this.scheduleRows[item.day].toTime = this.hours.filter(hour => hour.name == item.toTime.substring(0, 5))[0];
+            this.scheduleRows[item.day].isBreak = false;
+          }
+
+        });
       }
-    }
-    catch { }
+
+
+    } catch { }
   }
+
+
 }

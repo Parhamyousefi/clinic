@@ -125,30 +125,25 @@ export class MainService {
     return this.http.get(uri, httpOptions);
   }
 
-<<<<<<< HEAD
   saveDoctorSchedule(data) {
     const token: any = localStorage.getItem("token");
     const uri = this.url + `api/Main/saveDoctorSchedule`;
-=======
-  getDoctorSchedules(userId) {
-    const token: any = localStorage.getItem("token");
-    const uri = this.url + `api/main/getDoctorSchedules/` + userId;
->>>>>>> AmirHayati/main
     const httpOptions = {
       headers: new HttpHeaders({
         "Content-Type": "application/json",
         Authorization: "Bearer " + token,
-<<<<<<< HEAD
-        responseType: 'text'
       }),
     };
     return this.http.post(uri, data, httpOptions);
   }
 
-  getDoctorSchedules(id) {
+  getDoctorSchedules(userId) {
     const token: any = localStorage.getItem("token");
-    const uri = this.url + `api/main/getDoctorSchedules/` + id;
-=======
+    const uri = this.url + `api/main/getDoctorSchedules/` + userId;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
       }),
     };
     return this.http.get(uri, httpOptions);
@@ -220,7 +215,6 @@ export class MainService {
   deleteBusiness(businessId) {
     const token: any = localStorage.getItem("token");
     const uri = this.url + `api/main/deleteBusiness/${businessId}`;
->>>>>>> AmirHayati/main
     const httpOptions = {
       headers: new HttpHeaders({
         "Content-Type": "application/json",
