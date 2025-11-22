@@ -480,11 +480,39 @@ namespace Clinic.Api.Infrastructure.Services
         }
 
         #region Services
-        public async Task<IEnumerable<BillableItemsContext>> GetBillableItems()
+        public async Task<IEnumerable<GetBillableItemsResponse>> GetBillableItems()
         {
             try
             {
-                var result = await _context.BillableItems.ToListAsync();
+                var result = await (from b in _context.BillableItems
+                                   join t in _context.TreatmentTemplates on b.TreatmentTemplateId equals t.Id
+                                   select new GetBillableItemsResponse
+                                   {
+                                       Id = b.Id,
+                                       Code = b.Code,
+                                       Name = b.Name,
+                                       Price = b.Price,
+                                       IsOther = b.IsOther,
+                                       ItemTypeId = b.ItemTypeId,
+                                       ModifierId = b.ModifierId,
+                                       CreatedOn = b.CreatedOn,
+                                       LastUpdated = b.LastUpdated,
+                                       Duration = b.Duration,
+                                       AllowEditPrice = b.AllowEditPrice,
+                                       CreatorId = b.CreatorId,
+                                       TreatmentTemplateId = b.TreatmentTemplateId,
+                                       ForceOneInvoice = b.ForceOneInvoice,
+                                       IsTreatmentDataRequired = b.IsTreatmentDataRequired,
+                                       Group = b.Group,
+                                       ParentId = b.ParentId,
+                                       ItemCategoryId = b.ItemCategoryId,
+                                       OrderInItemCategory = b.OrderInItemCategory,
+                                       AutoCopyTreatment = b.AutoCopyTreatment,
+                                       DiscountPercent = b.DiscountPercent,
+                                       NeedAccept = b.NeedAccept,
+                                       LastTimeColor = b.LastTimeColor,
+                                       TemplateName = t.Name
+                                   }).ToListAsync();
                 return result;
             }
             catch (Exception ex)

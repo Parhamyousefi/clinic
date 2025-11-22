@@ -14,7 +14,7 @@ namespace Clinic.Api.Application.Interfaces
         Task<IEnumerable<GetTodayAppointmentsInfoDto>> GetTodayAppointments(GetTodayAppointmentsDto model);
         Task<IEnumerable<GetAppointmentTypesDto>> GetAppointmentTypes();
         Task<List<GetTodayAppointmentsInfoDto>> GetWeekAppointments();
-        Task<IEnumerable<BillableItemsContext>> GetBillableItems();
+        Task<IEnumerable<GetBillableItemsResponse>> GetBillableItems();
         Task<GlobalResponse> SaveBillableItem(SaveBillableItemsDto model);
         Task<GlobalResponse> DeleteBillableItem(int id);
         Task<IEnumerable<SectionsContext>> GetSectionPerService(int serviceId);
