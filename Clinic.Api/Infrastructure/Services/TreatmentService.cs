@@ -913,6 +913,7 @@ namespace Clinic.Api.Infrastructure.Services
 
             try
             {
+                var userId = _token.GetUserId();
                 var res = await _context.Appointments.FirstOrDefaultAsync(a => a.Id == appointmentId);
                 if (res == null)
                 {
@@ -920,6 +921,8 @@ namespace Clinic.Api.Infrastructure.Services
                 }
 
                 res.Arrived = 1;
+                res.ModifierId = userId;
+                res.LastUpdated = DateTime.Now;
                 _context.Appointments.Update(res);
                 await _context.SaveChangesAsync();
                 result.Message = "Appointment Updated Successfully";
