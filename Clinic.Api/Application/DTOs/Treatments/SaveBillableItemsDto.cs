@@ -15,6 +15,8 @@
         public int? OrderInItemCategory { get; set; }
         public bool AutoCopyTreatment { get; set; }
         public bool NeedAccept { get; set; }
+        public string? LastTimeColor { get; set; }
+        public int? ParentId { get; set; }
         public int EditOrNew { get; set; }
     }
 }
