@@ -28,34 +28,29 @@ export class NewServiceComponent implements AfterViewInit {
   editOrNew: number;
   treatmentList: any = [];
   itemCategory: any = [];
-
+  billableItems: any = [];
   async ngAfterViewInit(): Promise<void> {
     this.editOrNew = +this.activeRoute.snapshot.paramMap.get('id') || -1;
-    this.getItemCategory();
-    if (this.editOrNew != -1) {
-      await this.getBillableItems();
-    }
+    await this.getItemCategory();
+    await this.getTreatmentTemplates();
+    await this.getBillableItems();
   }
 
   async saveBillableItem() {
-    let model =
-    {
+    let model = {
       code: this.model.code,
       name: this.model.name,
       price: +this.model.price,
-      isOther: null,
-      itemTypeId: 0,
+      isOther: false,
       duration: this.model.duration,
       allowEditPrice: this.model.allowEditPrice,
-      treatmentTemplateId: this.model.treatmentTemplateId,
+      treatmentTemplateId: this.model.treatmentTemplateId?.id,
       forceOneInvoice: this.model.forceOneInvoice,
       isTreatmentDataRequired: this.model.isTreatmentDataRequired,
-      "group": "string",
-      parentId: this.model.parentId,
-      itemCategoryId: this.model.itemCategoryId,
+      parentId: this.model.parentId?.id,
+      itemCategoryId: this.model.itemCategoryId?.id,
       orderInItemCategory: this.model.orderInItemCategory,
       autoCopyTreatment: this.model.autoCopyTreatment,
-      discountPercent: null,
       needAccept: this.model.needAccept,
       lastTimeColor: this.model.lastTimeColor,
       editOrNew: this.editOrNew
@@ -64,7 +59,7 @@ export class NewServiceComponent implements AfterViewInit {
       let res: any = await firstValueFrom(this.treatmentsService.saveBillableItem(model));
       if (res.status == 0) {
         this.toastR.success('با موفقیت ثبت شد!');
-        this.router.navigate(['/business-List']);
+        this.router.navigate(['/service-list']);
       } else {
         this.toastR.error('خطا');
       }
@@ -76,20 +71,24 @@ export class NewServiceComponent implements AfterViewInit {
   async getBillableItems() {
     try {
       let res: any = await this.treatmentsService.getBillableItems().toPromise();
-      let item = res.filter(x => x.id == this.editOrNew);
-      this.model.name = item[0]['name'];
-      this.model.code = item[0]['name'];
-      this.model.price = item[0]['name'];
-      this.model.duration = item[0]['name'];
-      this.model.allowEditPrice = item[0]['name'];
-      this.model.forceOneInvoice = item[0]['name'];
-      this.model.treatmentTemplateId = item[0]['name'];
-      this.model.isTreatmentDataRequired = item[0]['name'];
-      this.model.parentId = item[0]['name'];
-      this.model.itemCategoryId = item[0]['name'];
-      this.model.orderInItemCategory = item[0]['name'];
-      this.model.autoCopyTreatment = item[0]['name'];
-      this.model.needAccept = item[0]['name'];
+      this.billableItems = res;
+      if (this.editOrNew != -1) {
+        let item = res.filter(x => x.id == this.editOrNew);
+        this.model.name = item[0]['name'];
+        this.model.code = item[0]['code'];
+        this.model.price = item[0]['price'];
+        this.model.duration = item[0]['duration'];
+        this.model.allowEditPrice = item[0]['allowEditPrice'];
+        this.model.forceOneInvoice = item[0]['forceOneInvoice'];
+        this.model.treatmentTemplateId = this.treatmentList.filter(a => a.id === item[0]['treatmentTemplateId'])[0];
+        this.model.isTreatmentDataRequired = item[0]['isTreatmentDataRequired'];
+        this.model.parentId = this.billableItems.filter(a => a.id === item[0]['parentId'])[0];
+        this.model.itemCategoryId = this.itemCategory.filter(a => a.id === item[0]['itemCategoryId'])[0];
+        this.model.orderInItemCategory = item[0]['orderInItemCategory'];
+        this.model.autoCopyTreatment = item[0]['autoCopyTreatment'];
+        this.model.needAccept = item[0]['needAccept'];
+        this.model.lastTimeColor = item[0]['lastTimeColor'];
+      }
     }
     catch { }
   }
@@ -99,5 +98,15 @@ export class NewServiceComponent implements AfterViewInit {
     let res: any = await this.treatmentsService.getItemCategory().toPromise();
     this.itemCategory = res;
   }
+
+  async getTreatmentTemplates() {
+    let model = {
+      id: null
+    }
+    let res: any = await this.treatmentsService.getTreatmentTemplates(model).toPromise();
+    this.treatmentList = res;
+  }
+
+
 
 }

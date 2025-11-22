@@ -181,4 +181,15 @@ export class TreatmentsService {
     };
     return this.http.get(uri, httpOptions);
   }
+
+  getTreatmentTemplates(data: any) {
+    const uri = this.url + `api/Treatment/getTreatmentTemplates`;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + this.token,
+      }),
+    };
+    return this.http.post(uri, data, httpOptions);
+  }
 }
