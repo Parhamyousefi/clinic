@@ -154,5 +154,20 @@ namespace Clinic.Api.Controllers
             return Ok(result);
         }
 
+        [HttpGet("deleteItemCategory/{id}")]
+        [Authorize]
+        public async Task<IActionResult> DeleteItemCategory(int id)
+        {
+            var result = await _treatmentsService.DeleteItemCategory(id);
+            return Ok(result);
+        }
+
+        [HttpPost("getTreatmentTemplates")]
+        [Authorize]
+        public async Task<IActionResult> GetTreatmentTemplates(GetTreatmentTemplateDto model)
+        {
+            var result = await _treatmentsService.GetTreatmentTemplates(model);
+            return Ok(result);
+        }
     }
 }
