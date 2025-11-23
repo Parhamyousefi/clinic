@@ -146,6 +146,14 @@ namespace Clinic.Api.Controllers
             return Ok(result);
         }
 
+        [HttpPost("saveItemCategory")]
+        [Authorize]
+        public async Task<IActionResult> SaveItemCategory(SaveItemCategoryDto model)
+        {
+            var result = await _treatmentsService.SaveItemCategory(model);
+            return Ok(result);
+        }
+
         [HttpGet("getItemCategory")]
         [Authorize]
         public async Task<IActionResult> GetItemCategory()

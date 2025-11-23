@@ -121,7 +121,7 @@ namespace Clinic.Api.Controllers
         }
 
         [HttpGet("getDoctorSchedules/{userId?}")]
-        [Authorize("Admin","Doctor", "Secretary-Reception")]
+        [Authorize("Admin", "Doctor", "Secretary-Reception")]
         public async Task<IActionResult> GetDoctorSchedules(int? userId)
         {
             var result = await _mainService.GetDoctorSchedules(userId);
@@ -137,7 +137,7 @@ namespace Clinic.Api.Controllers
         }
 
         [HttpPost("saveUserAppointmentsSettings")]
-        [Authorize("Admin","Doctor", "Secretary-Reception")]
+        [Authorize("Admin", "Doctor", "Secretary-Reception")]
         public async Task<IActionResult> SaveUserAppointmentsSettings(SaveUserAppointmentsSettingsDto model)
         {
             var result = await _mainService.SaveUserAppointmentsSettings(model);
@@ -145,7 +145,7 @@ namespace Clinic.Api.Controllers
         }
 
         [HttpPost("getUserAppointmentsSettings")]
-        [Authorize("Admin","Doctor", "Secretary-Reception")]
+        [Authorize("Admin", "Doctor", "Secretary-Reception")]
         public async Task<IActionResult> GetUserAppointmentsSettings(GetUserAppointmentsSettingsDto model)
         {
             var result = await _mainService.GetUserAppointmentsSettings(model);
