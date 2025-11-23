@@ -2,7 +2,6 @@
 {
     public class SaveItemCategoryDto
     {
-        public int Id { get; set; }
         public string? Name { get; set; }
         public int OrderNo { get; set; }
         public bool DefaultClosed { get; set; }
