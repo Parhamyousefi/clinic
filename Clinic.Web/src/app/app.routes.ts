@@ -30,6 +30,7 @@ import { BusinessListComponent } from './components/business-list/business-list.
 import { NewBusinessComponent } from './components/business-list/new-business/new-business.component';
 import { NewServiceComponent } from './components/service-list/new-service/new-service.component';
 import { ServiceListComponent } from './components/service-list/service-list.component';
+import { UserRolesComponent } from './components/user-roles/user-roles.component';
 
 export const routes: Routes = [
     { path: '', component: LoginComponent },
@@ -178,6 +179,12 @@ export const routes: Routes = [
     {
         path: 'new-service/:id', component: NewServiceComponent,
         canActivate: [AuthGuard]
+    },
+    {
+        path: 'user-roles', component: UserRolesComponent,
+        canActivate: [AuthGuard]
     }
+
+    
 
 ];
