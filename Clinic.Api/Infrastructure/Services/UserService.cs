@@ -435,5 +435,48 @@ namespace Clinic.Api.Infrastructure.Services
                 throw new Exception(ex.Message);
             }
         }
+
+        public async Task<GlobalResponse> SaveUserRole(SaveUserRoleDto model)
+        {
+            var result = new GlobalResponse();
+
+            try
+            {
+                var userId = _claims.GetUserId();
+
+                if (model.EditOrNew == -1)
+                {
+                    var userRole = _mapper.Map<RolesContext>(model);
+                    userRole.CreatorId = userId;
+                    userRole.CreatedOn = DateTime.Now;
+                    _context.Roles.Add(userRole);
+                    await _context.SaveChangesAsync();
+                    result.Message = "User Role Saved Successfully";
+                    result.Status = 0;
+                    return result;
+                }
+                else
+                {
+                    var existingUserRole = await _context.Roles.FirstOrDefaultAsync(j => j.Id == model.EditOrNew);
+                    if (existingUserRole == null)
+                    {
+                        throw new Exception("User Role Not Found");
+                    }
+
+                    _mapper.Map(model, existingUserRole);
+                    existingUserRole.ModifierId = userId;
+                    existingUserRole.LastUpdated = DateTime.Now;
+                    _context.Roles.Update(existingUserRole);
+                    await _context.SaveChangesAsync();
+                    result.Message = "User Role Updated Successfully";
+                    result.Status = 0;
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }

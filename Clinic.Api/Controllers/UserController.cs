@@ -108,4 +108,12 @@ public class UserController : ControllerBase
         var result = await _svc.GetRoles();
         return Ok(result);
     }
+
+    [HttpPost("saveUserRole")]
+    [Authorize]
+    public async Task<IActionResult> SaveUserRole(SaveUserRoleDto model)
+    {
+        var result = await _svc.SaveUserRole(model);
+        return Ok(result);
+    }
 }
