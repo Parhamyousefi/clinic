@@ -134,7 +134,7 @@ namespace Clinic.Api.Infrastructure.Services
                      u.Start.Date <= selectedDate &&
                      u.End.Date >= selectedDate)
                  .ToListAsync();
-                }
+            }
             catch (Exception ex)
             {
                 throw new Exception(ex.Message);
@@ -168,6 +168,7 @@ namespace Clinic.Api.Infrastructure.Services
                 await _context.SaveChangesAsync();
                 result.Message = "Treatment Deleted Successfully";
                 return result;
+            }
             catch (Exception ex)
             {
                 throw new Exception(ex.Message);
