@@ -19,33 +19,16 @@
         public bool BillableItemCreateAndUpdate { get; set; }
         public bool BillableItemDelete { get; set; }
         public bool BillableItemView { get; set; }
-        public bool BusinessCreateAndUpdate { get; set; }
-        public bool BusinessDelete { get; set; }
-        public bool BusinessView { get; set; }
         public bool CanAcceptItem { get; set; }
-        public bool CashierByCashAndETFPosReport { get; set; }
         public bool ChangeInvoiceAfterRecieve { get; set; }
         public bool ChangePatientRecordStatus { get; set; }
-        public bool ContactCreateAndUpdate { get; set; }
-        public bool ContactDelete { get; set; }
-        public bool ContactView { get; set; }
-        public bool DiscountReport { get; set; }
-        public bool ExpenseCreateAndUpdate { get; set; }
-        public bool ExpenseDelete { get; set; }
-        public bool ExpenseReport { get; set; }
-        public bool ExpenseView { get; set; }
-        public bool FirstEncounterReport { get; set; }
-        public bool GeneralSettingCreateAndUpdate { get; set; }
-        public bool GeneralSettingView { get; set; }
         public bool HolidayCreateAndUpdate { get; set; }
         public bool HolidayDelete { get; set; }
         public bool HolidayView { get; set; }
-        public bool InInvoiceReport { get; set; }
         public bool InvoiceCancel { get; set; }
         public bool InvoiceCreateAndUpdate { get; set; }
         public bool InvoiceDelete { get; set; }
         public bool InvoiceDiscount { get; set; }
-        public bool InvoiceItemChangeReport { get; set; }
         public bool InvoiceView { get; set; }
         public bool ItemCategoryCreateAndUpdate { get; set; }
         public bool ItemCategoryDelete { get; set; }
@@ -55,18 +38,11 @@
         public bool JobView { get; set; }
         public bool LetterCreateAndUpdate { get; set; }
         public bool LetterDelete { get; set; }
-        public bool LetterTemplateCreateAndUpdate { get; set; }
-        public bool LetterTemplateDelete { get; set; }
-        public bool LetterTemplateView { get; set; }
         public bool LetterView { get; set; }
         public bool MedicalAlertCreateAndUpdate { get; set; }
         public bool MedicalAlertDelete { get; set; }
         public bool MedicalAlertUpdate { get; set; }
-        public bool MedicalRecordSend { get; set; }
-        public bool MedicalRecordView { get; set; }
         public bool MergePatients { get; set; }
-        public bool NotArraivedPatientsReport { get; set; }
-        public bool OutInvoiceReport { get; set; }
         public bool OutOfTurnExceptionCreateAndUpdate { get; set; }
         public bool OutOfTurnExceptionDelete { get; set; }
         public bool OutOfTurnExceptionView { get; set; }
@@ -78,28 +54,12 @@
         public bool PaymentAllowEdit { get; set; }
         public bool PaymentCreateAndUpdate { get; set; }
         public bool PaymentDelete { get; set; }
-        public bool PaymentReport { get; set; }
         public bool PaymentView { get; set; }
-        public bool PractitionerReport { get; set; }
-        public bool ProductCardexCreateAndUpdate { get; set; }
-        public bool ProductCreateAndUpdate { get; set; }
-        public bool ProductDelete { get; set; }
-        public bool ProductView { get; set; }
         public bool ReceiptAllowEdit { get; set; }
         public bool ReceiptCreateAndUpdate { get; set; }
         public bool ReceiptDelete { get; set; }
-        public bool ReceiptPaymentReport { get; set; }
-        public bool ReceiptReport { get; set; }
         public bool ReceiptView { get; set; }
-        public bool Report { get; set; }
-        public bool RoleCreateAndUpdate { get; set; }
-        public bool RoleDelete { get; set; }
-        public bool RoleView { get; set; }
-        public bool SMSSettingCreateAndUpdate { get; set; }
-        public bool SMSSettingView { get; set; }
         public bool SetAppointmentPermission { get; set; }
-        public bool Setting { get; set; }
-        public bool SummaryReport { get; set; }
         public bool TimeExceptionCreateAndUpdate { get; set; }
         public bool TimeExceptionDelete { get; set; }
         public bool TimeExceptionView { get; set; }
@@ -110,12 +70,9 @@
         public bool TreatmentTemplateDelete { get; set; }
         public bool TreatmentTemplateView { get; set; }
         public bool TreatmentView { get; set; }
-        public bool UnChangeInvoiceReport { get; set; }
         public bool UserCreateAndUpdate { get; set; }
         public bool UserDelete { get; set; }
         public bool UserView { get; set; }
-        public bool VisitReport { get; set; }
-        public bool WaitingReport { get; set; }
         public int EditOrNew { get; set; }
     }
 }
