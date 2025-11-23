@@ -478,5 +478,28 @@ namespace Clinic.Api.Infrastructure.Services
                 throw new Exception(ex.Message);
             }
         }
+
+        public async Task<GlobalResponse> DeleteRole(int id)
+        {
+            var result = new GlobalResponse();
+
+            try
+            {
+                var role = await _context.Roles.FindAsync(id);
+
+                if (role == null)
+                    throw new Exception("Role Not Found");
+
+                _context.Roles.Remove(role);
+                await _context.SaveChangesAsync();
+                result.Message = "Role Deleted Successfully";
+                result.Status = 0;
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }
