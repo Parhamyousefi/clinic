@@ -147,7 +147,7 @@ export class AppointmentComponent {
     await this.getClinics();
     await this.getAppointment(this.today);
     this.today = this.today._d;
-    this.getCurrentWeek();
+    this.getCurrentWeek(1);
     this.getWeeklyAppointments();
     const jalaliYear = moment().format('jYYYY');
     this.utilService.getIranianHolidaysWithFridays(jalaliYear).subscribe(days => {
@@ -261,7 +261,7 @@ export class AppointmentComponent {
         break;
     }
     this.isBeforeNow = moment(this.appointmentDate).isBefore(moment().startOf('day'));
-
+    this.getUserAppointmentsSettings();
   }
 
 
@@ -341,6 +341,10 @@ export class AppointmentComponent {
   setNewAppointment(time: any) {
     if (this.isBeforeNow || this.timeIsBeforeNow(this.appointmentDate, time.time)) {
       this.toastR.error('ثبت وقت برای ساعت های پیشین ممکن نیست! ')
+      return
+    }
+    if (time.isInSchedule == false) {
+      this.toastR.error('ثبت وقت برای این ساعت ممکن نیست! ')
       return
     }
     else {
@@ -440,19 +444,21 @@ export class AppointmentComponent {
     this.newAppointmentModel = [];
   }
 
-  getCurrentWeek() {
+  async getCurrentWeek(time) {
     let currentDate = moment(this.appointmentDate);
     let weekStart: any = currentDate.clone().locale('fa').startOf('week');
     let daysOfWeek = [];
 
     for (let i = 0; i < 6; i++) {
+      let isInSchedule = await this.setWeeklyScheduleForDay(weekStart.day(), time);
       daysOfWeek.push({
         dayName: weekStart.locale('fa').format('dddd'),
         dayNumber: weekStart.format('jDD'),
         fullDate: weekStart.toDate(),
         isToday: weekStart.isSame(moment(), 'day'),
         isPast: weekStart.isBefore(moment(), 'day'),
-        dayAppointments: []
+        dayAppointments: [],
+        isInSchedule: isInSchedule
       });
       weekStart.add(1, 'day');
     }
@@ -460,6 +466,51 @@ export class AppointmentComponent {
     this.weekDays = daysOfWeek;
     return this.weekDays;
   }
+
+  // async setWeeklyScheduleForDay(dayOfWeek: number, time) {
+  //   try {
+  //     let res: any = await this.mainService.getDoctorSchedules(this.selectedDoctor.code).toPromise();
+  //     if (res) {
+  //       let daySchedules = res;
+  //       daySchedules = daySchedules.filter((x: any) => x.day == dayOfWeek);
+  //       const [hourStr, minuteStr] = time.split(':');
+  //       const hourNum = parseInt(hourStr, 10);
+  //       const minuteNum = parseInt(minuteStr, 10);
+  //       const decimalTime = hourNum + (minuteNum === 30 ? 0.5 : 0);
+  //       const isAvailable = daySchedules.some((sched: any) =>
+  //         decimalTime >= sched.calendarTimeFrom && decimalTime < sched.calendarTimeTo
+  //       );
+  //       return isAvailable;
+  //     }
+  //   }
+  //   catch {
+  //     return false;
+  //   }
+  // }
+
+
+  async setWeeklyScheduleForDay(dayOfWeek: number, time: string) {
+    try {
+      let res: any = await this.mainService.getDoctorSchedules(this.selectedDoctor.code).toPromise();
+      if (!res) return false;
+      let daySchedules = res.filter((x: any) => x.day == dayOfWeek);
+      if (daySchedules.length == 0) return false;
+
+      const [hourStr, minuteStr] = time.split(':');
+      const hourNum = parseInt(hourStr, 10);
+      const minuteNum = parseInt(minuteStr, 10);
+      const decimalTime = hourNum + (minuteNum === 30 ? 0.5 : 0);
+
+      const isAvailable = daySchedules.some((sched: any) =>
+        decimalTime >= sched.fromTime &&
+        decimalTime < sched.toTime
+      );
+      return isAvailable;
+    } catch {
+      return false;
+    }
+  }
+
 
   setWeeklyNewAppointment(date: any, time: any, isPast: any) {
     if (isPast || this.timeIsBeforeNow(date, time)) {
@@ -480,7 +531,7 @@ export class AppointmentComponent {
 
   async getWeeklyAppointments() {
     const shamsiTimePipe = new ShamsiUTCPipe()
-    this.hours.forEach(hour => this.weeklyTimetable[hour.time] = this.getCurrentWeek());
+    this.hours.forEach(async hour => this.weeklyTimetable[hour.time] = await this.getCurrentWeek(hour.time));
     let res: any = await this.treatmentService.getWeeklyAppointments().toPromise();
     this.weeklyAppointments = this.transformAppointments(res);
     this.weeklyAppointments.forEach(appointment => {
@@ -490,7 +541,7 @@ export class AppointmentComponent {
 
       this.weeklyTimetable[this.hours[startIndex].time][appointment.dayOfWeek].dayAppointments.push(appointment);
     });
-    // console.log(this.weeklyTimetable);
+    console.log(this.weeklyTimetable);
 
   }
 
@@ -580,6 +631,9 @@ export class AppointmentComponent {
       this.isTimeInRange(this.newAppointmentModel.time);
     }
     this.getAppointment(this.appointmentDate);
+    if (this.weekMode) {
+      this.getWeeklyAppointments();
+    }
   }
 
   async getDoctorSchedules(type) {
@@ -667,10 +721,40 @@ export class AppointmentComponent {
           decimalTime < config.calendarTimeTo
         );
       });
+      this.setDoctorScheduleBasedHours(this.filteredHours, this.appointmentDate);
     }
     catch { }
   }
 
+  async setDoctorScheduleBasedHours(filteredHours: any, selectedDate: any) {
+    try {
+      let res: any = await this.mainService.getDoctorSchedules(this.selectedDoctor.code).toPromise();
+      if (res.length > 0) {
+        let selectedDay = moment(selectedDate).day();
+        let daySchedules = res.filter(x => x.day == selectedDay);
+        filteredHours.forEach(hour => {
+          const [hourStr, minuteStr] = hour.time.split(':');
+          const hourNum = parseInt(hourStr, 10);
+          const minuteNum = parseInt(minuteStr, 10);
+          const decimalTime = hourNum + (minuteNum === 30 ? 0.5 : 0);
+
+          hour.isInSchedule = daySchedules.some(cfg =>
+            decimalTime >= this.toDecimal(cfg.fromTime) &&
+            decimalTime < this.toDecimal(cfg.toTime)
+          );
+        });
+      }
+      console.log(filteredHours);
+
+    }
+    catch { }
+  }
+
+
+  toDecimal(time: string) {
+    const [h, m] = time.split(':').map(Number);
+    return h + (m === 30 ? 0.5 : 0);
+  }
 
   isTimeInRange(time: string) {
     const [hourStr, minuteStr] = time.split(':');
@@ -716,4 +800,7 @@ export class AppointmentComponent {
     }
     catch { }
   }
+
+
+
 }

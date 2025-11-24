@@ -413,7 +413,7 @@ namespace Clinic.Api.Infrastructure.Services
             try
             {
                 var iranTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Iran Standard Time");
-                var iranNow = TimeZoneInfo.ConvertTimeFromUtc(DateTime.Now, iranTimeZone);
+                var iranNow = TimeZoneInfo.ConvertTime(DateTime.Now, iranTimeZone);
                 var today = iranNow.Date;
 
                 var weekEnd = today.AddDays(6);

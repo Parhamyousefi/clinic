@@ -243,4 +243,8 @@ export class TodayAppointmentsComponent implements OnInit {
     catch { }
   }
 
+  patientArrived() {
+
+  }
+
 }

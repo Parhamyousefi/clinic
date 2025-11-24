@@ -171,3 +171,7 @@ ul.dropdown-list li:hover {
   color: #00796b;
   cursor: pointer;
 }
+
+.bg-not-in-schedule {
+  background-color: #b8b6b6 !important;
+}

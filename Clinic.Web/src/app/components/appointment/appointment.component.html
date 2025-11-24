@@ -66,7 +66,7 @@
                   <td class="col-2 d-flex justify-content-center align-items-center">{{time.time}}
                   </td>
                   <td class="col-10 p-2 d-flex appointments-container"
-                    [ngClass]="{'bg-muted text-secondary': isBeforeNow || (!isBeforeNow && timeIsBeforeNow(appointmentDate, time.time))}"
+                    [ngClass]="{'bg-muted text-secondary': isBeforeNow || (!isBeforeNow && timeIsBeforeNow(appointmentDate, time.time)), 'bg-not-in-schedule' : !time.isInSchedule}"
                     (click)="setNewAppointment(time)">
                     <div *ngFor="let appointment of timeSheetData[time.time]" class="appointment text-right p-2 pointer"
                       (click)="editAppointment(appointment)">
@@ -99,7 +99,7 @@
                   <td class="col-2 d-flex justify-content-center align-items-center">{{time.time}}
                   </td>
                   <td *ngFor="let day of weeklyTimetable[time.time] " class="text-center col-2"
-                    [ngClass]="{'today-bg': day.isToday, 'text-muted bg-muted': day.isPast ||(day.isToday && timeIsBeforeNow(day.fullDate, time.time))}"
+                    [ngClass]="{'today-bg': day.isToday, 'text-muted bg-muted': day.isPast ||(day.isToday && timeIsBeforeNow(day.fullDate, time.time)), 'bg-not-in-schedule' : !day.isInSchedule }"
                     (click)="setWeeklyNewAppointment(day.fullDate,time.time,day.isPast)">
                     <div *ngFor="let appointment of day.dayAppointments">
                       <div class="mt-2">
@@ -165,7 +165,8 @@
 
           <ul class="dropdown-list" *ngIf="patientsList.length > 0">
             <li [ngClass]="{'dropdown-selected': newAppointmentModel.selectedPatient == item.patientCode}"
-              *ngFor="let item of patientsList" (click)="newAppointmentModel.selectedPatient =item.patientCode">{{ item.name }}
+              *ngFor="let item of patientsList" (click)="newAppointmentModel.selectedPatient =item.patientCode">{{
+              item.name }}
               (ID: {{ item.patientCode }})</li>
           </ul>
           <!-- <p *ngIf="searchControl && patientsList.length === 0">نتیجه‌ای یافت نشد</p> -->
