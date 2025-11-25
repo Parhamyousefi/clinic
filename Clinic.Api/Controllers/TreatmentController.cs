@@ -162,5 +162,20 @@ namespace Clinic.Api.Controllers
             return Ok(result);
         }
 
+        [HttpPost("getTreatmentTemplates")]
+        [Authorize]
+        public async Task<IActionResult> GetTreatmentTemplates(GetTreatmentTemplateDto model)
+        {
+            var result = await _treatmentsService.GetTreatmentTemplates(model);
+            return Ok(result);
+        }
+
+        [HttpGet("savePatientArrived/{appointmentId}")]
+        [Authorize]
+        public async Task<IActionResult> SavePatientArrived(int appointmentId)
+        {
+            var result = await _treatmentsService.SavePatientArrived(appointmentId);
+            return Ok(result);
+        }
     }
 }

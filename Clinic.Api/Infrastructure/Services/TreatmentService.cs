@@ -480,11 +480,39 @@ namespace Clinic.Api.Infrastructure.Services
         }
 
         #region Services
-        public async Task<IEnumerable<BillableItemsContext>> GetBillableItems()
+        public async Task<IEnumerable<GetBillableItemsResponse>> GetBillableItems()
         {
             try
             {
-                var result = await _context.BillableItems.ToListAsync();
+                var result = await (from b in _context.BillableItems
+                                    join t in _context.TreatmentTemplates on b.TreatmentTemplateId equals t.Id
+                                    select new GetBillableItemsResponse
+                                    {
+                                        Id = b.Id,
+                                        Code = b.Code,
+                                        Name = b.Name,
+                                        Price = b.Price,
+                                        IsOther = b.IsOther,
+                                        ItemTypeId = b.ItemTypeId,
+                                        ModifierId = b.ModifierId,
+                                        CreatedOn = b.CreatedOn,
+                                        LastUpdated = b.LastUpdated,
+                                        Duration = b.Duration,
+                                        AllowEditPrice = b.AllowEditPrice,
+                                        CreatorId = b.CreatorId,
+                                        TreatmentTemplateId = b.TreatmentTemplateId,
+                                        ForceOneInvoice = b.ForceOneInvoice,
+                                        IsTreatmentDataRequired = b.IsTreatmentDataRequired,
+                                        Group = b.Group,
+                                        ParentId = b.ParentId,
+                                        ItemCategoryId = b.ItemCategoryId,
+                                        OrderInItemCategory = b.OrderInItemCategory,
+                                        AutoCopyTreatment = b.AutoCopyTreatment,
+                                        DiscountPercent = b.DiscountPercent,
+                                        NeedAccept = b.NeedAccept,
+                                        LastTimeColor = b.LastTimeColor,
+                                        TemplateName = t.Name
+                                    }).ToListAsync();
                 return result;
             }
             catch (Exception ex)
@@ -856,6 +884,54 @@ namespace Clinic.Api.Infrastructure.Services
             }).ToList();
 
             return result;
+        }
+
+        public async Task<IEnumerable<TreatmentTemplatesContext>> GetTreatmentTemplates(GetTreatmentTemplateDto model)
+        {
+            try
+            {
+                if (model.Id == null)
+                {
+                    var result = await _context.TreatmentTemplates.ToListAsync();
+                    return result;
+                }
+                else
+                {
+                    var result = await _context.TreatmentTemplates.Where(t => t.Id == model.Id).ToListAsync();
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<GlobalResponse> SavePatientArrived(int appointmentId)
+        {
+            var result = new GlobalResponse();
+
+            try
+            {
+                var userId = _token.GetUserId();
+                var res = await _context.Appointments.FirstOrDefaultAsync(a => a.Id == appointmentId);
+                if (res == null)
+                {
+                    throw new Exception("Appointment Not Found");
+                }
+
+                res.Arrived = 1;
+                res.ModifierId = userId;
+                res.LastUpdated = DateTime.Now;
+                _context.Appointments.Update(res);
+                await _context.SaveChangesAsync();
+                result.Message = "Appointment Updated Successfully";
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
     }
 }

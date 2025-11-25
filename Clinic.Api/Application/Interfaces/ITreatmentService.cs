@@ -14,7 +14,7 @@ namespace Clinic.Api.Application.Interfaces
         Task<IEnumerable<GetTodayAppointmentsInfoDto>> GetTodayAppointments(GetTodayAppointmentsDto model);
         Task<IEnumerable<GetAppointmentTypesDto>> GetAppointmentTypes();
         Task<List<GetTodayAppointmentsInfoDto>> GetWeekAppointments();
-        Task<IEnumerable<BillableItemsContext>> GetBillableItems();
+        Task<IEnumerable<GetBillableItemsResponse>> GetBillableItems();
         Task<GlobalResponse> SaveBillableItem(SaveBillableItemsDto model);
         Task<GlobalResponse> DeleteBillableItem(int id);
         Task<IEnumerable<SectionsContext>> GetSectionPerService(int serviceId);
@@ -25,5 +25,7 @@ namespace Clinic.Api.Application.Interfaces
         Task<IEnumerable<ItemCategoriesContext>> GetItemCategory();
         Task<GlobalResponse> SaveItemCategory(SaveItemCategoryDto model);
         Task<GlobalResponse> DeleteItemCategory(int id);
+        Task<IEnumerable<TreatmentTemplatesContext>> GetTreatmentTemplates(GetTreatmentTemplateDto model);
+        Task<GlobalResponse> SavePatientArrived(int appointmentId);
     }
 }
