@@ -243,8 +243,15 @@ export class TodayAppointmentsComponent implements OnInit {
     catch { }
   }
 
-  patientArrived() {
-
+  async patientArrived(event, item) {
+    event.stopPropagation();
+    try {
+      let res: any = await this.treatmentsService.savePatientArrived(item.id).toPromise();
+      if (res.status == 0) {
+        this.toastR.success('وضعیت بیمار به حضور در مطب تغییر کرد!');
+        this.getAppointment();
+      }
+    }
+    catch { }
   }
-
 }

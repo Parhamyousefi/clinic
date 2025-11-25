@@ -175,3 +175,29 @@ ul.dropdown-list li:hover {
 .bg-not-in-schedule {
   background-color: #b8b6b6 !important;
 }
+
+.date-navigator {
+  border: 1px solid #b8b6b6;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.date-navigator div {
+  padding: 8px;
+  text-align: center;
+  transition: background-color 0.3s ease;
+}
+
+.date-navigator div:first-child {
+  border-left: 1px solid #b8b6b6;
+}
+
+.date-navigator div:last-child {
+  border-right: 1px solid #b8b6b6;
+}
+
+.date-navigator div:hover {
+  background-color: #e0f7fa;
+  cursor: pointer;
+
+}
