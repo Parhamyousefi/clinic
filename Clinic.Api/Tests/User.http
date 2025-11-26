@@ -4,7 +4,7 @@
 POST {{Clinic_Api_Host}}/api/user/login
 Content-Type: application/json
 {
-  "Username": "John",
+  "Username": "nima",
   "password": "123456"
 }
 
