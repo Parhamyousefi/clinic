@@ -181,7 +181,6 @@ export class TreatmentsService {
     };
     return this.http.get(uri, httpOptions);
   }
-<<<<<<< HEAD
   savePatientArrived(appointmentId) {
     const token: any = localStorage.getItem("token");
     const uri = this.url + `api/treatment/savePatientArrived/` + appointmentId;
@@ -195,10 +194,6 @@ export class TreatmentsService {
   }
 
   getTreatmentTemplates(data) {
-=======
-
-  getTreatmentTemplates(data: any) {
->>>>>>> AmirHayati/main
     const uri = this.url + `api/Treatment/getTreatmentTemplates`;
     const httpOptions = {
       headers: new HttpHeaders({
@@ -208,8 +203,6 @@ export class TreatmentsService {
     };
     return this.http.post(uri, data, httpOptions);
   }
-<<<<<<< HEAD
-=======
 
   deleteItemCategory(id) {
     const token: any = localStorage.getItem("token");
@@ -234,5 +227,4 @@ export class TreatmentsService {
     };
     return this.http.post(uri, data, httpOptions);
   }
->>>>>>> AmirHayati/main
 }

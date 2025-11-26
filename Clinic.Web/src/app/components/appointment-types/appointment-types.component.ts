@@ -4,11 +4,12 @@ import { TreatmentsService } from '../../_services/treatments.service';
 import { DropdownModule } from "primeng/dropdown";
 import { CommonModule } from '@angular/common';
 import { SharedModule } from '../../share/shared.module';
+import { ColorPickerModule } from 'primeng/colorpicker';
 
 @Component({
   selector: 'app-appointment-types',
   standalone: true,
-  imports: [DropdownModule, CommonModule, SharedModule],
+  imports: [DropdownModule, CommonModule, SharedModule, ColorPickerModule],
   templateUrl: './appointment-types.component.html',
   styleUrl: './appointment-types.component.css'
 })
@@ -46,7 +47,7 @@ export class AppointmentTypesComponent {
   async getTreatmentTemplate() {
     try {
       let model = {
-        id: 0
+        id: null
       }
       let res: any = await this.treatmentService.getTreatmentTemplates(model).toPromise();
       if (res.length > 0) {
