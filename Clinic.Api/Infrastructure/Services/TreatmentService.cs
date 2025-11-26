@@ -368,6 +368,7 @@ namespace Clinic.Api.Infrastructure.Services
                                      hasInvoice && !hasTreatment ? 2 :
                                      hasInvoice && hasTreatment ? 3 : 0,
                             PatientPhone = r.PhoneNumber,
+                            Arrived = r.Appointment.Arrived,
                             TotalDiscount = invoices
                 .Where(i => i.AppointmentId == appointmentId && (i.IsCanceled == false || i.IsCanceled == null))
                 .Select(i => i.TotalDiscount)
