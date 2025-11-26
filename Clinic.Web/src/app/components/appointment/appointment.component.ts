@@ -575,7 +575,6 @@ export class AppointmentComponent {
       appointment.patientName = this.patientsList.filter((patient: any) => patient.patientCode == appointment.patientId)[0].name;
       // let startIndex = this.hours.indexOf(appointment.time);
       let startIndex = this.hours.findIndex(h => h.time === appointment.time);
-
       this.weeklyTimetable[this.hours[startIndex].time][appointment.dayOfWeek].dayAppointments.push(appointment);
     });
     console.log(this.weeklyTimetable);

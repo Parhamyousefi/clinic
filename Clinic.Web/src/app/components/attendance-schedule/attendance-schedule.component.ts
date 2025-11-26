@@ -7,7 +7,7 @@ import { ToastrService } from 'ngx-toastr';
 import { SharedModule } from '../../share/shared.module';
 import moment from 'moment-jalaali';
 import { Subject, Subscription } from 'rxjs';
-
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'attendance-schedule',
@@ -56,7 +56,7 @@ export class AttendanceScheduleComponent {
     };
   });
   doctorSchedule: any;
-
+  hoveredBreak: any = '';
   constructor(
     private mainService: MainService,
     private toastR: ToastrService
@@ -184,6 +184,7 @@ export class AttendanceScheduleComponent {
         res.forEach(item => {
 
           let dayData = {
+            id: item.id,
             active: item.isActive ?? false,
             code: item.id ?? 0,
             day: this.weekDays.filter(day => day.code == item.day)[0],
@@ -212,4 +213,27 @@ export class AttendanceScheduleComponent {
   }
 
 
+  async deleteSchedule(scheduleId) {
+    Swal.fire({
+      title: "آیا از حذف این مکان مطمئن هستید ؟",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "بله انجام بده",
+      cancelButtonText: "منصرف شدم",
+      reverseButtons: false,
+    }).then(async (result) => {
+      try {
+        if (result.value) {
+          let res: any = await this.mainService.deleteDoctorSchedule(scheduleId).toPromise();
+          if (res.status == 0) {
+            this.toastR.success("با موفقیت حذف شد!")
+            this.getDoctorSchedules(this.userId)
+          }
+        }
+      }
+      catch {
+        this.toastR.error('خطایی رخ داد', 'خطا!')
+      }
+    })
+  }
 }
