@@ -392,6 +392,48 @@ namespace Clinic.Api.Infrastructure.Services
             }
         }
 
+        public async Task<GlobalResponse> SaveAppointmentType(SaveAppointmentTypeDto model)
+        {
+            var result = new GlobalResponse();
+
+            try
+            {
+                var userId = _token.GetUserId();
+
+                if (model.EditOrNew == -1)
+                {
+                    var appointmentType = _mapper.Map<AppointmentTypesContext>(model);
+                    appointmentType.CreatorId = userId;
+                    appointmentType.CreatedOn = DateTime.Now;
+                    _context.AppointmentTypes.Add(appointmentType);
+                    await _context.SaveChangesAsync();
+                    result.Message = "Appointment Type Saved Successfully";
+                    return result;
+                }
+                else
+                {
+                    var existingAppointmentType = await _context.AppointmentTypes.FirstOrDefaultAsync(b => b.Id == model.EditOrNew);
+
+                    if (existingAppointmentType == null)
+                    {
+                        throw new Exception("Appointment Type Not Found");
+                    }
+
+                    _mapper.Map(model, existingAppointmentType);
+                    existingAppointmentType.ModifierId = userId;
+                    existingAppointmentType.LastUpdated = DateTime.Now;
+                    _context.AppointmentTypes.Update(existingAppointmentType);
+                    await _context.SaveChangesAsync();
+                    result.Message = "Appointment Type Updated Successfully";
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
         public async Task<IEnumerable<GetAppointmentTypesDto>> GetAppointmentTypes()
         {
             try
@@ -403,6 +445,27 @@ namespace Clinic.Api.Infrastructure.Services
                 }).ToListAsync();
 
                 return appointmentTypes;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<GlobalResponse> DeleteAppointmentType(int id)
+        {
+            var result = new GlobalResponse();
+
+            try
+            {
+                var appointmentType = await _context.AppointmentTypes.FindAsync(id);
+                if (appointmentType == null)
+                    throw new Exception("Appointment Type Not Found");
+
+                _context.AppointmentTypes.Remove(appointmentType);
+                await _context.SaveChangesAsync();
+                result.Message = "Appointment Type Deleted Successfully";
+                return result;
             }
             catch (Exception ex)
             {

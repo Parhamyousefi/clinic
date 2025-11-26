@@ -139,3 +139,13 @@ Content-Type: application/json
 GET {{Clinic_Api_Host}}/api/invoice/getInvoiceDetails/1
 Authorization: Bearer
 Content-Type: application/json
+
+### Cancel Invoice
+GET {{Clinic_Api_Host}}/api/invoice/cancelInvoice/2
+Authorization: Bearer
+Content-Type: application/json
+
+### Approve Discount
+GET {{Clinic_Api_Host}}/api/invoice/approveDiscount/2
+Authorization: Bearer
+Content-Type: application/json
