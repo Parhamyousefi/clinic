@@ -16,7 +16,7 @@
       <div class="form-group col-lg-6 col-12  mb-3">
         <label for="price">قیمت</label>
         <input type="text" class="form-control" id="price" [(ngModel)]="model.price"
-          [ngModelOptions]="{standalone: true}" OnlyNumber="true">
+          [ngModelOptions]="{standalone: true}" OnlyNumber>
       </div>
       <div class="form-group col-lg-6 col-12  mb-3">
         <label for="duration">مدت زمان</label>
@@ -56,7 +56,7 @@
 
       <div class="form-group col-lg-6 col-12  mb-3">
         <label for="address2">خدمت والد</label>
-        <p-dropdown optionLabel="name" dataKey="id" [options]="treatmentList" [(ngModel)]="model.parentId"
+        <p-dropdown optionLabel="name" dataKey="id" [options]="billableItems" [(ngModel)]="model.parentId"
           class=" text-right" [ngModelOptions]="{ standalone: true }" />
       </div>
 
@@ -90,7 +90,7 @@
 
       <div class="col-lg-6 col-12">
         <p> رنگ در وقت دهی بعدی</p>
-        <p-colorPicker [(ngModel)]="model.lastTimeColor" [inline]="true" />
+        <p-colorPicker [(ngModel)]="model.lastTimeColor" [ngModelOptions]="{standalone: true}" [inline]="true" />
       </div>
 
     </div>
