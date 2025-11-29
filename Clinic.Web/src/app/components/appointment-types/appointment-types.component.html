@@ -1,16 +1,20 @@
 <div class="appContainer">
+    <div class="col-12 text-right">
+        <h4>نوع وقت دهی</h4>
+    </div>
+    <hr>
     <div class="col-12 d-flex flex-wrap">
         <div class="col-md-4 col-12 mt-2 text-right">
             <label for="name">نام</label>
-            <input name="name" type="text" class="form-control">
+            <input name="name" type="text" [(ngModel)]="newType.name" class="form-control">
         </div>
         <div class="col-md-4 col-12 mt-2 text-right">
             <label for="description">توضیحات</label>
-            <input name="description" type="text" class="form-control">
+            <input name="description" type="text" [(ngModel)]="newType.description" class="form-control">
         </div>
         <div class="col-md-4 col-12 mt-2 text-right">
             <label for="duration" class="mr-2">مدت زمان</label>
-            <input name="duration" type="text" class="form-control">
+            <input name="duration" type="text" [(ngModel)]="newType.duration" class="form-control">
         </div>
         <div class="col-md-4 col-12 mt-2 text-right">
             <label for="firstService" class="mr-2">خدمت مرتبط اول</label>
@@ -48,12 +52,52 @@
                 class="full-width text-right" />
         </div>
         <div class="col-md-4 col-12 mt-2 text-right">
+            <input type="checkbox" name="showInAppoinment" class="ml-1" [(ngModel)]="newType.showInAppoinment">
             <label for="showInAppoinment" class="mr-2">نمایش در وقت دهی آنلاین</label>
-            <input type="checkbox" name="showInAppoinment">
         </div>
         <div class="col-md-4 col-12 mt-2 text-right d-flex flex-column align-items-center">
             <label for="thirdProduct" class="mr-2 w-100">رنگ</label>
             <p-colorPicker [(ngModel)]="newType.typeColor" [ngModelOptions]="{standalone: true}" [inline]="true" />
         </div>
+    </div>
+    <div class="text-center"><button class="btn btn-success" (click)="saveAppointmentType()">ذخیره</button></div>
+    <hr>
+    <div class="col-12">
+        <p-table #dt styleClass="p-datatable-gridlines" [value]="appointmentTypes" [autoLayout]="true"
+            [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
+            currentPageReportTemplate="نمایش {first} تا {last} " [rowsPerPageOptions]="[10,25,50]">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>#</th>
+                    <th>عنوان</th>
+                    <th>عملیات</th>
+                </tr>
+                <tr>
+                    <th></th>
+                    <th>
+                        <input type="text" (input)="dt.filter($event.target?.value, 'name', 'contains')"
+                            class="form-control">
+                    </th>
+                    <th></th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-item let-rowIndex="rowIndex">
+                <tr>
+                    <td class="px-2">
+                        <div class="py-2 widthClassPrime">
+                            <span>{{rowIndex + 1}}</span>
+                        </div>
+                    </td>
+                    <td class="px-2">
+                        <div class="py-2 widthClassPrime">
+                            <span>{{item.name}}</span>
+                        </div>
+                    </td>
+                    <td class="px-2">
+                        <button class="btn btn-outline-danger mx-2" (click)="deleteType(item.id)">حذف</button>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
     </div>
 </div>

@@ -227,4 +227,28 @@ export class TreatmentsService {
     };
     return this.http.post(uri, data, httpOptions);
   }
+
+  saveAppointmentType(data) {
+    const uri = this.url + `api/Treatment/saveAppointmentType`;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + this.token,
+      }),
+    };
+    return this.http.post(uri, data, httpOptions);
+  }
+
+  deleteAppointmentType(id) {
+    const token: any = localStorage.getItem("token");
+    const uri = this.url + `api/treatment/deleteAppointmentType/${id}`;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      }),
+    };
+    return this.http.get(uri, httpOptions);
+  }
+
 }
