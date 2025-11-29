@@ -434,15 +434,11 @@ namespace Clinic.Api.Infrastructure.Services
             }
         }
 
-        public async Task<IEnumerable<GetAppointmentTypesDto>> GetAppointmentTypes()
+        public async Task<IEnumerable<AppointmentTypesContext>> GetAppointmentTypes()
         {
             try
             {
-                var appointmentTypes = await _context.AppointmentTypes.Select(a => new GetAppointmentTypesDto
-                {
-                    Id = a.Id,
-                    Name = a.Name
-                }).ToListAsync();
+                var appointmentTypes = await _context.AppointmentTypes.ToListAsync();
 
                 return appointmentTypes;
             }
