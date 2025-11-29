@@ -80,3 +80,92 @@ Content-Type: application/json
 GET {{Clinic_Api_Host}}/api/main/deleteNote/1
 Authorization: Bearer
 Content-Type: application/json
+
+### Save Doctor Schedule
+POST {{Clinic_Api_Host}}/api/main/saveDoctorSchedule
+Authorization: Bearer
+Content-Type: application/json
+{
+  "businessId": 2,
+  "practitionerId": 3,
+  "day": 2,
+  "fromTime": 00:00:0000T,
+  "toTime": 00:00:0000T,
+  "isBreak": true,
+  "isActive": true,
+  "duration": null,
+  "editOrNew": -1
+}
+
+### Get Doctor Schedules
+GET {{Clinic_Api_Host}}/api/main/getDoctorSchedules
+Authorization: Bearer
+Content-Type: application/json
+
+### Delete Doctor Schedule
+GET {{Clinic_Api_Host}}/api/main/deleteDoctorSchedule/2
+Authorization: Bearer
+Content-Type: application/json
+
+### Save User Appointment Setting 
+POST {{Clinic_Api_Host}}/api/main/saveUserAppointmentsSettings
+Authorization: Bearer
+Content-Type: application/json
+{
+  "practitionerId": 2,
+  "businessId": 2,
+  "defaultAppointmentTypeId": null,
+  "newPatientAppointmentTypeId": null,
+  "outOfTurn": 5,
+  "timeSlotSize": 6,
+  "calendarTimeFrom": 10,
+  "calendarTimeTo": 15,
+  "multipleAppointment": true,
+  "editOrNew": -1
+}
+
+### Get User Appointment Settings
+POST {{Clinic_Api_Host}}/api/main/getUserAppointmentsSettings
+Authorization: Bearer
+Content-Type: application/json
+{
+  "userId": null,
+  "businessId": null
+}
+
+### Save Business
+POST {{Clinic_Api_Host}}/api/main/saveBusiness
+Authorization: Bearer
+Content-Type: application/json
+{
+  "name": null,
+  "address": null,
+  "address2": null,
+  "city": null,
+  "state": null,
+  "postCode": null,
+  "countryId": null,
+  "contactInformation": null,
+  "displayInOnlineBooking": true,
+  "location": null,
+  "zoom": null,
+  "infoEmail": null,
+  "isServiceBase": true,
+  "showInvoiceInRecord": true,
+  "checkScheduleOnInvoice": true,
+  "isInPatient": true,
+  "SMSEnabled": true,
+  "appointmentByOutOfRange": null,
+  "serviceId": 2,
+  "editOrNew": -1
+}
+
+### Get Businesses
+GET {{Clinic_Api_Host}}/api/main/getBusinesses
+Authorization: Bearer
+Content-Type: application/json
+
+### Delete Business
+GET {{Clinic_Api_Host}}/api/main/deleteBusiness/1
+Authorization: Bearer
+Content-Type: application/json
