@@ -27,5 +27,8 @@ namespace Clinic.Api.Application.Interfaces
         Task<GlobalResponse> SaveBusiness(SaveBusinessDto model);
         Task<IEnumerable<GetBusinessResponse>> GetBusinesses();
         Task<GlobalResponse> DeleteBusiness(int businesseId);
+        Task<GlobalResponse> SaveTimeException(SaveTimeExceptionModel model);
+        Task<IEnumerable<TimeExceptionsContext>> GetTimeExceptions();
+        Task<GlobalResponse> DeleteTimeException(int id);
     }
 }
