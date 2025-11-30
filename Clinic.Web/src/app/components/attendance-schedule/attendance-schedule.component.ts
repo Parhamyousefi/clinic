@@ -7,7 +7,7 @@ import { ToastrService } from 'ngx-toastr';
 import { SharedModule } from '../../share/shared.module';
 import moment from 'moment-jalaali';
 import { Subject, Subscription } from 'rxjs';
-
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'attendance-schedule',
@@ -17,7 +17,7 @@ import { Subject, Subscription } from 'rxjs';
   styleUrl: './attendance-schedule.component.css'
 })
 export class AttendanceScheduleComponent {
-  @Input() userId$!: Subject<number>;
+  @Input() userId!: number;
   private sub!: Subscription;
   currentUserId!: number;
 
@@ -26,15 +26,18 @@ export class AttendanceScheduleComponent {
   newSchedule: any = [];
   selectedTimefrom: any = '00:00';
   selectedTimeTo: any = '23:00';
+  scheduleRows: any = [];
   weekDays: any = [
-    { code: 0, name: "شنبه" },
-    { code: 1, name: "یکشنبه" },
-    { code: 2, name: "دوشنبه" },
-    { code: 3, name: "سه‌شنبه" },
-    { code: 4, name: "چهارشنبه" },
-    { cpde: 5, name: "پنج‌شنبه" },
-    { code: 6, name: "جمعه" },
+    { code: 0, name: "یکشنبه" },
+    { code: 1, name: "دوشنبه" },
+    { code: 2, name: "سه‌شنبه" },
+    { code: 3, name: "چهارشنبه" },
+    { code: 4, name: "پنج‌شنبه" },
+    { code: 5, name: "جمعه" },
+    { code: 6, name: "شنبه" },
   ]
+
+
   hours = Array.from({ length: 48 }, (_, i) => {
     const hour = Math.floor(i / 2);
     const minute = i % 2 === 0 ? '00' : '30';
@@ -52,7 +55,8 @@ export class AttendanceScheduleComponent {
       code: i
     };
   });
-
+  doctorSchedule: any;
+  hoveredBreak: any = '';
   constructor(
     private mainService: MainService,
     private toastR: ToastrService
@@ -60,12 +64,20 @@ export class AttendanceScheduleComponent {
 
   ngOnInit() {
     this.getClinics();
-    this.sub = this.userId$.subscribe((id) => {
-      this.currentUserId = id;
-      console.log('User ID changed:', id);
-      // می‌تونی اینجا مثلا API کال بزنی یا لیست ساعت‌ها رو فیلتر کنی
-    });
+    this.scheduleRows = this.weekDays.map(d => ({
+      day: d,
+      active: false,
+      fromTime: this.hours[0],
+      toTime: this.hours[47],
+      isBreak: false,
+      code: d.code,
+      breaks: []
+    }));
 
+  }
+
+  ngOnChanges() {
+    this.getDoctorSchedules(this.userId);
   }
 
   async getClinics() {
@@ -82,21 +94,146 @@ export class AttendanceScheduleComponent {
     }
   }
 
+  validateRows(rows: any[]) {
+    for (let row of rows) {
+      if (this.timeToNumber(row.fromTime.name) > this.timeToNumber(row.toTime.name)) {
+        this.toastR.error('زمان شروع روز ' + row.day.name + ' بعد از زمان پایان است')
+        return false;
+      }
+    }
+    return true;
+  }
 
-  ngOnDestroy(): void {
-    this.sub?.unsubscribe(); // ✅ جلوگیری از memory leak
+  timeToNumber(t) {
+    const [h, m] = t.split(':').map(Number);
+    return h * 60 + m;
+  }
+
+  buildPayload(row: any, isBreak) {
+    if (isBreak) {
+      return {
+        businessId: this.newSchedule.clinic.code,
+        practitionerId: this.userId,
+        day: row.day.code,
+        fromTime: row.breakFromTime['name'],
+        toTime: row.breakToTime['name'],
+        isBreak: row.isBreak,
+        isActive: row.active,
+        duration: 0,
+        editOrNew: -1
+      };
+    }
+    return {
+      businessId: this.newSchedule.clinic.code,
+      practitionerId: this.userId,
+      day: row.day.code,
+      fromTime: row.fromTime['name'],
+      toTime: row.toTime['name'],
+      isBreak: row.isBreak,
+      isActive: row.active,
+      duration: 0,
+      editOrNew: -1
+    };
+  }
+
+  saveAll() {
+    const activeDays = this.scheduleRows.filter(r => r.active);
+    if (activeDays.length === 0) {
+      this.toastR.error("هیچ روزی انتخاب نشده!");
+      return;
+    }
+    let validation = this.validateRows(activeDays);
+    if (validation) {
+      activeDays.forEach(day => {
+        let dayModel = this.buildPayload(day, day.isBreak);
+        this.saveDoctorSchedule(dayModel);
+
+      });
+    }
+  }
+
+  async saveDoctorSchedule(model) {
+    try {
+      let res: any = this.mainService.saveDoctorSchedule(model).toPromise();
+      if (res.status == 0) {
+        this.toastR.success("با موفقیت ذخیره شد!")
+        this.getDoctorSchedules(this.userId)
+      }
+    }
+    catch { }
   }
 
 
-  //   {
-  //   "businessId": 0,
-  //   "practitionerId": 0,
-  //   "day": 0,
-  //   "fromTime": "string",
-  //   "toTime": "string",
-  //   "isBreak": true,
-  //   "isActive": true,
-  //   "duration": 0,
-  //   "editOrNew": 0
-  // }
+
+  async getDoctorSchedules(userId) {
+    try {
+
+      let res: any = await this.mainService.getDoctorSchedules(userId).toPromise();
+      if (res.length > 0) {
+        this.scheduleRows = this.weekDays.map(d => ({
+          day: d,
+          active: false,
+          fromTime: this.hours[0],
+          toTime: this.hours[47],
+          isBreak: false,
+          code: d.code,
+          breaks: [],
+          hasBreak: false
+        }));
+
+        res.forEach(item => {
+
+          let dayData = {
+            id: item.id,
+            active: item.isActive ?? false,
+            code: item.id ?? 0,
+            day: this.weekDays.filter(day => day.code == item.day)[0],
+            fromTime: this.hours.filter(hour => hour.name == item.fromTime.substring(0, 5))[0],
+            toTime: this.hours.filter(hour => hour.name == item.toTime.substring(0, 5))[0],
+            isBreak: item.isBreak ?? false
+          };
+
+          if (item.isBreak) {
+            this.scheduleRows[item.day].breaks.push(dayData);
+            this.scheduleRows[item.day].hasBreak = true;
+          } else {
+            this.scheduleRows[item.day].active = item.isActive;
+            this.scheduleRows[item.day].code = item.id;
+            this.scheduleRows[item.day].day = this.weekDays.filter(day => day.code == item.day)[0];
+            this.scheduleRows[item.day].fromTime = this.hours.filter(hour => hour.name == item.fromTime.substring(0, 5))[0];
+            this.scheduleRows[item.day].toTime = this.hours.filter(hour => hour.name == item.toTime.substring(0, 5))[0];
+            this.scheduleRows[item.day].isBreak = false;
+          }
+
+        });
+      }
+
+
+    } catch { }
+  }
+
+
+  async deleteSchedule(scheduleId) {
+    Swal.fire({
+      title: "آیا از حذف این مکان مطمئن هستید ؟",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "بله انجام بده",
+      cancelButtonText: "منصرف شدم",
+      reverseButtons: false,
+    }).then(async (result) => {
+      try {
+        if (result.value) {
+          let res: any = await this.mainService.deleteDoctorSchedule(scheduleId).toPromise();
+          if (res.status == 0) {
+            this.toastR.success("با موفقیت حذف شد!")
+            this.getDoctorSchedules(this.userId)
+          }
+        }
+      }
+      catch {
+        this.toastR.error('خطایی رخ داد', 'خطا!')
+      }
+    })
+  }
 }

@@ -181,4 +181,74 @@ export class TreatmentsService {
     };
     return this.http.get(uri, httpOptions);
   }
+  savePatientArrived(appointmentId) {
+    const token: any = localStorage.getItem("token");
+    const uri = this.url + `api/treatment/savePatientArrived/` + appointmentId;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      }),
+    };
+    return this.http.get(uri, httpOptions);
+  }
+
+  getTreatmentTemplates(data) {
+    const uri = this.url + `api/Treatment/getTreatmentTemplates`;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + this.token,
+      }),
+    };
+    return this.http.post(uri, data, httpOptions);
+  }
+
+  deleteItemCategory(id) {
+    const token: any = localStorage.getItem("token");
+    const uri = this.url + `api/treatment/deleteItemCategory/${id}`;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      }),
+    };
+    return this.http.get(uri, httpOptions);
+  }
+
+
+  saveItemCategory(data: any) {
+    const uri = this.url + `api/Treatment/saveItemCategory`;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + this.token,
+      }),
+    };
+    return this.http.post(uri, data, httpOptions);
+  }
+
+  saveAppointmentType(data) {
+    const uri = this.url + `api/Treatment/saveAppointmentType`;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + this.token,
+      }),
+    };
+    return this.http.post(uri, data, httpOptions);
+  }
+
+  deleteAppointmentType(id) {
+    const token: any = localStorage.getItem("token");
+    const uri = this.url + `api/treatment/deleteAppointmentType/${id}`;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      }),
+    };
+    return this.http.get(uri, httpOptions);
+  }
+
 }

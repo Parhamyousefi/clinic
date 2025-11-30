@@ -30,6 +30,10 @@ import { BusinessListComponent } from './components/business-list/business-list.
 import { NewBusinessComponent } from './components/business-list/new-business/new-business.component';
 import { NewServiceComponent } from './components/service-list/new-service/new-service.component';
 import { ServiceListComponent } from './components/service-list/service-list.component';
+import { AppointmentTypesComponent } from './components/appointment-types/appointment-types.component';
+import { UserRolesComponent } from './components/user-roles/user-roles.component';
+import { ServiceGrouplistComponent } from './components/service-grouplist/service-group-list.component';
+import { NewServiceGroupComponent } from './components/service-grouplist/new-service-group/new-service-group.component';
 
 export const routes: Routes = [
     { path: '', component: LoginComponent },
@@ -146,6 +150,10 @@ export const routes: Routes = [
         canActivate: [AuthGuard]
     },
     {
+        path: 'user/new/:id', component: NewUsersComponent,
+        canActivate: [AuthGuard]
+    },
+    {
         path: 'userlist', component: UserListComponent,
         canActivate: [AuthGuard]
     },
@@ -178,6 +186,29 @@ export const routes: Routes = [
     {
         path: 'new-service/:id', component: NewServiceComponent,
         canActivate: [AuthGuard]
-    }
+    },
+    {
+        path: 'appointment-types', component: AppointmentTypesComponent,
+        canActivate: [AuthGuard]
+    },
+    {
+        path: 'user-roles', component: UserRolesComponent,
+        canActivate: [AuthGuard]
+    },
+    {
+        path: 'service-group-list',
+        component: ServiceGrouplistComponent,
+        canActivate: [AuthGuard]
+    },
+    {
+        path: 'new-service-group', component: NewServiceGroupComponent,
+        canActivate: [AuthGuard]
+    },
+    {
+        path: 'new-service-group/:id', component: NewServiceGroupComponent,
+        canActivate: [AuthGuard]
+    },
+
+
 
 ];

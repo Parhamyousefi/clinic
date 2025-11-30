@@ -2,3 +2,20 @@
     min-width: 700px;
     min-height: 500px;
 }
+
+.break-card {
+    background: rgba(114, 217, 197, .5);
+    border-radius: 15px;
+    position: relative;
+}
+
+.delete-schedule {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    width: 15px;
+    height: 15px;
+    font-size: 10px;
+    background: red;
+    border-radius: 50%;
+}

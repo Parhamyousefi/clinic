@@ -48,13 +48,13 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwid
 
 ### Get Today Appointments
 POST {{Clinic_Api_Host}}/api/treatment/getTodayAppointments
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NjI1OTQ1NzcsImlhdCI6MTc2MTk4OTc3NywidXNlcklkIjoiNiIsInVzZXJuYW1lIjoiZG9jdG9yIiwidXNlclJvbGUiOiJEb2N0b3IiLCJuYmYiOjE3NjE5ODk3Nzd9.rAoDTADiCF2toegBwXXTiNssKXz-vNQTo5-dDtpnb8s
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NjQ3NTQyODgsImlhdCI6MTc2NDE0OTQ4OCwidXNlcklkIjoiMiIsInVzZXJuYW1lIjoibmltYSIsInVzZXJSb2xlIjoiQWRtaW4iLCJuYmYiOjE3NjQxNDk0ODh9.r1Ekto_olA0bYPa9abnV5frPQ66OGBu9PE2IhdsgXxA
 Content-Type: application/json
 
 {
-  "fromDate": "2025-09-02",  
-  "toDate": "2025-09-23",         
-  "clinic": null,                  
+  "fromDate": "2025-02-19",  
+  "toDate": "2025-11-26",         
+  "clinic": 7795,                  
   "service": null,            
   "from": null,                       
   "to": null     
@@ -138,5 +138,40 @@ Content-Type: application/json
 
 ### Get Billable Items
 GET {{Clinic_Api_Host}}/api/treatment/getBillableItems
+Authorization: Bearer
+Content-Type: application/json
+
+### Save Patient Arrived 
+GET {{Clinic_Api_Host}}/api/treatment/savePatientArrived/1001467
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NjQ3NTQyODgsImlhdCI6MTc2NDE0OTQ4OCwidXNlcklkIjoiMiIsInVzZXJuYW1lIjoibmltYSIsInVzZXJSb2xlIjoiQWRtaW4iLCJuYmYiOjE3NjQxNDk0ODh9.r1Ekto_olA0bYPa9abnV5frPQ66OGBu9PE2IhdsgXxA
+Content-Type: application/json
+
+### Save Appointment Type
+POST {{Clinic_Api_Host}}/api/treatment/saveAppointmentType
+Authorization: Bearer 
+Content-Type: application/json
+{
+  "name": null,
+  "description": null,
+  "category": null,
+  "duration": 20,
+  "maximumNumberOfPatients": 5,
+  "relatedBillableItemId": null,
+  "relatedBillableItem2Id": null,
+  "relatedBillableItem3Id": null,
+  "defaultTreatmentNoteTemplate": null,
+  "relatedProductId": null,
+  "relatedProduct2Id": null,
+  "relatedProduct3Id": null,
+  "color": null,
+  "sendBookingConfirmationEmail": true,
+  "sendReminderEmail": true,
+  "showInOnlineBookings": true,
+  "isFirstEncounter": true,
+  "editOrNew": -1
+}
+
+### Delete Appointment Type
+GET {{Clinic_Api_Host}}/api/treatment/deleteAppointmentType/13
 Authorization: Bearer
 Content-Type: application/json

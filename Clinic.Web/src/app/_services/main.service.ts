@@ -125,6 +125,18 @@ export class MainService {
     return this.http.get(uri, httpOptions);
   }
 
+  saveDoctorSchedule(data) {
+    const token: any = localStorage.getItem("token");
+    const uri = this.url + `api/Main/saveDoctorSchedule`;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      }),
+    };
+    return this.http.post(uri, data, httpOptions);
+  }
+
   getDoctorSchedules(userId) {
     const token: any = localStorage.getItem("token");
     const uri = this.url + `api/main/getDoctorSchedules/` + userId;
@@ -203,6 +215,18 @@ export class MainService {
   deleteBusiness(businessId) {
     const token: any = localStorage.getItem("token");
     const uri = this.url + `api/main/deleteBusiness/${businessId}`;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      }),
+    };
+    return this.http.get(uri, httpOptions);
+  }
+
+  deleteDoctorSchedule(scheduleId) {
+    const token: any = localStorage.getItem("token");
+    const uri = this.url + `api/main/deleteDoctorSchedule/${scheduleId}`;
     const httpOptions = {
       headers: new HttpHeaders({
         "Content-Type": "application/json",

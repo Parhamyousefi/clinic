@@ -47,7 +47,7 @@
         </div>
     </div>
     <hr>
-    <div class="col-12 d-flex flex-column ">
+    <div class="col-12 d-flex flex-column">
         <h5 class="text-right">
             اطلاعات پزشک
         </h5>
@@ -124,6 +124,7 @@
         </div>
     </div>
     <div class="col-12 text-center">
-        <button class="btn main-btn mt-3 mb-4" (click)="createUser()">ذخیره</button>
+        <button *ngIf="!editMode" class="btn main-btn mt-3 mb-4" (click)="createUser()">ذخیره</button>
+        <button *ngIf="editMode" class="btn main-btn mt-3 mb-4" (click)="updateUser()">ویرایش</button>
     </div>
 </div>

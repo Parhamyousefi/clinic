@@ -123,3 +123,10 @@ GET {{Clinic_Api_Host}}/api/patient/deleteAttachment/1
 Authorization: Bearer
 Content-Type: application/json
 
+### Get Filtered Patients
+Post {{Clinic_Api_Host}}/api/patient/getFilteredPatient
+Authorization: Bearer
+Content-Type: application/json
+{
+  "value": null
+}

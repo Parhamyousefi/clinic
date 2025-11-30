@@ -65,12 +65,28 @@ namespace Clinic.Api.Controllers
             return Ok(result);
         }
 
+        [HttpPost("saveAppointmentType")]
+        [Authorize]
+        public async Task<IActionResult> SaveAppointmentType(SaveAppointmentTypeDto model)
+        {
+            var result = await _treatmentsService.SaveAppointmentType(model);
+            return Ok(result);
+        }
+
         [HttpGet("getAppointmentTypes")]
         [Authorize]
         public async Task<IActionResult> GetAppointmentTypes()
         {
             var result = await _treatmentsService.GetAppointmentTypes();
 
+            return Ok(result);
+        }
+
+        [HttpGet("deleteAppointmentType/{id}")]
+        [Authorize]
+        public async Task<IActionResult> DeleteAppointmentType(int id)
+        {
+            var result = await _treatmentsService.DeleteAppointmentType(id);
             return Ok(result);
         }
 
@@ -170,5 +186,20 @@ namespace Clinic.Api.Controllers
             return Ok(result);
         }
 
+        [HttpPost("getTreatmentTemplates")]
+        [Authorize]
+        public async Task<IActionResult> GetTreatmentTemplates(GetTreatmentTemplateDto model)
+        {
+            var result = await _treatmentsService.GetTreatmentTemplates(model);
+            return Ok(result);
+        }
+
+        [HttpGet("savePatientArrived/{appointmentId}")]
+        [Authorize]
+        public async Task<IActionResult> SavePatientArrived(int appointmentId)
+        {
+            var result = await _treatmentsService.SavePatientArrived(appointmentId);
+            return Ok(result);
+        }
     }
 }

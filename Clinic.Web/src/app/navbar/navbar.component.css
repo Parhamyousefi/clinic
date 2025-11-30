@@ -115,6 +115,11 @@
   border-radius: 10px;
 }
 
+.open-menu {
+  height: 0;
+  transition: .2s all ease;
+}
+
 
 @media (max-width: 768px) {
   .patient-menu {
