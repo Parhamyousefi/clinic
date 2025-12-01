@@ -175,5 +175,29 @@ namespace Clinic.Api.Controllers
             var result = await _mainService.DeleteBusiness(businessId);
             return Ok(result);
         }
+
+        [HttpPost("saveTimeException")]
+        [Authorize]
+        public async Task<IActionResult> SaveTimeException(SaveTimeExceptionModel model)
+        {
+            var result = await _mainService.SaveTimeException(model);
+            return Ok(result);
+        }
+
+        [HttpGet("getTimeExceptions")]
+        [Authorize]
+        public async Task<IActionResult> GetTimeExceptions()
+        {
+            var result = await _mainService.GetTimeExceptions();
+            return Ok(result);
+        }
+
+        [HttpGet("deleteTimeException/{id}")]
+        [Authorize]
+        public async Task<IActionResult> DeleteTimeException(int id)
+        {
+            var result = await _mainService.DeleteTimeException(id);
+            return Ok(result);
+        }
     }
 }

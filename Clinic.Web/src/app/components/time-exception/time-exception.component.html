@@ -1,0 +1,14 @@
+<div class="appContainer">
+    <h4 class="text-right">استثنائات زمانی</h4>
+    <hr>
+    <div class="col-12 d-flex flex-wrap">
+        <div class="col-md-4 col-12 mt-2 text-right">
+            <label for="exceptionDate">پزشک</label>
+            <p-dropdown id="doctor" [options]="doctorsList" [(ngModel)]="newException.doctor" optionLabel="name"
+                class="full-width text-right" />
+        </div>
+        <label for="exceptionDate">مکان</label>
+        <p-dropdown id="clinic" [options]="clinicsList" [(ngModel)]="newException.selectedClinic" optionLabel="name"
+            class="full-width text-right" />
+    </div>
+</div>

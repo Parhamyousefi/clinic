@@ -651,5 +651,83 @@ namespace Clinic.Api.Infrastructure.Services
                 throw new Exception(ex.Message);
             }
         }
+
+        public async Task<GlobalResponse> SaveTimeException(SaveTimeExceptionModel model)
+        {
+            var result = new GlobalResponse();
+
+            try
+            {
+                var userId = _token.GetUserId();
+
+                if (model.EditOrNew == -1)
+                {
+                    var timeException = _mapper.Map<TimeExceptionsContext>(model);
+                    timeException.CreatorId = userId;
+                    timeException.CreatedOn = DateTime.Now;
+                    _context.TimeExceptions.Add(timeException);
+                    await _context.SaveChangesAsync();
+                    result.Message = "Time Exception Saved Successfully";
+                    result.Status = 0;
+                    return result;
+                }
+                else
+                {
+                    var existingTimeException = await _context.TimeExceptions.FirstOrDefaultAsync(j => j.Id == model.EditOrNew);
+                    if (existingTimeException == null)
+                    {
+                        throw new Exception("Product Not Found");
+                    }
+
+                    _mapper.Map(model, existingTimeException);
+                    existingTimeException.ModifierId = userId;
+                    existingTimeException.LastUpdated = DateTime.Now;
+                    _context.TimeExceptions.Update(existingTimeException);
+                    await _context.SaveChangesAsync();
+                    result.Message = "Product Updated Successfully";
+                    result.Status = 0;
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<IEnumerable<TimeExceptionsContext>> GetTimeExceptions()
+        {
+            try
+            {
+                var timeExceptions = await _context.TimeExceptions.ToListAsync();
+                return timeExceptions;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<GlobalResponse> DeleteTimeException(int id)
+        {
+            var result = new GlobalResponse();
+            try
+            {
+                var timeException = await _context.TimeExceptions.FindAsync(id);
+
+                if (timeException == null)
+                    throw new Exception("Time Exception Not Found");
+
+                _context.TimeExceptions.Remove(timeException);
+                await _context.SaveChangesAsync();
+                result.Message = "Time Exception Deleted Successfully";
+                result.Status = 0;
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }
