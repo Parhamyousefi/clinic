@@ -34,6 +34,7 @@ import { AppointmentTypesComponent } from './components/appointment-types/appoin
 import { UserRolesComponent } from './components/user-roles/user-roles.component';
 import { ServiceGrouplistComponent } from './components/service-grouplist/service-group-list.component';
 import { NewServiceGroupComponent } from './components/service-grouplist/new-service-group/new-service-group.component';
+import { TimeExceptionComponent } from './components/time-exception/time-exception.component';
 
 export const routes: Routes = [
     { path: '', component: LoginComponent },
@@ -206,6 +207,10 @@ export const routes: Routes = [
     },
     {
         path: 'new-service-group/:id', component: NewServiceGroupComponent,
+        canActivate: [AuthGuard]
+    },
+    {
+        path: 'exception-time', component: TimeExceptionComponent,
         canActivate: [AuthGuard]
     },
 

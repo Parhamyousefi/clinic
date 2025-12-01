@@ -235,4 +235,29 @@ export class MainService {
     };
     return this.http.get(uri, httpOptions);
   }
+
+  saveTimeException(data) {
+    const token: any = localStorage.getItem("token");
+    const uri = this.url + `api/Main/saveTimeException`;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+        responseType: 'text'
+      }),
+    };
+    return this.http.post(uri, data, httpOptions);
+  }
+
+  getTimeException(scheduleId) {
+    const token: any = localStorage.getItem("token");
+    const uri = this.url + `api/main/getTimeException`;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      }),
+    };
+    return this.http.get(uri, httpOptions);
+  }
 }
