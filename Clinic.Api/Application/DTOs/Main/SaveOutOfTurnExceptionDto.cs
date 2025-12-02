@@ -2,7 +2,6 @@
 {
     public class SaveOutOfTurnExceptionDto
     {
-        public DateTime GrigoryDate { get; set; }
         public string? StartDate { get; set; }
         public int PractitionerId { get; set; }
         public int BusinessId { get; set; }
