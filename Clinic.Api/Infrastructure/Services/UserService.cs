@@ -501,5 +501,20 @@ namespace Clinic.Api.Infrastructure.Services
                 throw new Exception(ex.Message);
             }
         }
+
+        public async Task<IEnumerable<RolesContext>> GetUserRole()
+        {
+            try
+            {
+                var userRole = _claims.GetUserRole();
+
+                var role = await _context.Roles.Where(r => r.Name == userRole).ToListAsync();
+                return role;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }

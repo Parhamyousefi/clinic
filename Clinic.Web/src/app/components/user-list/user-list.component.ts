@@ -82,7 +82,6 @@ export class UserListComponent {
     catch { }
   }
 
-
   deleteUser(userId) {
     swal.fire({
       title: "آیا از حذف این شخص مطمئن هستید ؟",

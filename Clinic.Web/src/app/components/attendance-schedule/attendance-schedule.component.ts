@@ -20,8 +20,6 @@ export class AttendanceScheduleComponent {
   @Input() userId!: number;
   private sub!: Subscription;
   currentUserId!: number;
-
-
   clinicsList: any = [];
   newSchedule: any = [];
   selectedTimefrom: any = '00:00';
@@ -34,9 +32,8 @@ export class AttendanceScheduleComponent {
     { code: 3, name: "چهارشنبه" },
     { code: 4, name: "پنج‌شنبه" },
     { code: 5, name: "جمعه" },
-    { code: 6, name: "شنبه" },
+    { code: 6, name: "شنبه" }
   ]
-
 
   hours = Array.from({ length: 48 }, (_, i) => {
     const hour = Math.floor(i / 2);
@@ -73,7 +70,6 @@ export class AttendanceScheduleComponent {
       code: d.code,
       breaks: []
     }));
-
   }
 
   ngOnChanges() {
@@ -121,7 +117,7 @@ export class AttendanceScheduleComponent {
         isActive: row.active,
         duration: 0,
         editOrNew: -1
-      };
+      }
     }
     return {
       businessId: this.newSchedule.clinic.code,
@@ -133,7 +129,7 @@ export class AttendanceScheduleComponent {
       isActive: row.active,
       duration: 0,
       editOrNew: -1
-    };
+    }
   }
 
   saveAll() {
@@ -147,7 +143,6 @@ export class AttendanceScheduleComponent {
       activeDays.forEach(day => {
         let dayModel = this.buildPayload(day, day.isBreak);
         this.saveDoctorSchedule(dayModel);
-
       });
     }
   }
@@ -156,18 +151,15 @@ export class AttendanceScheduleComponent {
     try {
       let res: any = this.mainService.saveDoctorSchedule(model).toPromise();
       if (res.status == 0) {
-        this.toastR.success("با موفقیت ذخیره شد!")
-        this.getDoctorSchedules(this.userId)
+        this.toastR.success("با موفقیت ذخیره شد!");
+        this.getDoctorSchedules(this.userId);
       }
     }
     catch { }
   }
 
-
-
   async getDoctorSchedules(userId) {
     try {
-
       let res: any = await this.mainService.getDoctorSchedules(userId).toPromise();
       if (res.length > 0) {
         this.scheduleRows = this.weekDays.map(d => ({
@@ -182,7 +174,6 @@ export class AttendanceScheduleComponent {
         }));
 
         res.forEach(item => {
-
           let dayData = {
             id: item.id,
             active: item.isActive ?? false,
@@ -191,7 +182,7 @@ export class AttendanceScheduleComponent {
             fromTime: this.hours.filter(hour => hour.name == item.fromTime.substring(0, 5))[0],
             toTime: this.hours.filter(hour => hour.name == item.toTime.substring(0, 5))[0],
             isBreak: item.isBreak ?? false
-          };
+          }
 
           if (item.isBreak) {
             this.scheduleRows[item.day].breaks.push(dayData);
@@ -204,14 +195,10 @@ export class AttendanceScheduleComponent {
             this.scheduleRows[item.day].toTime = this.hours.filter(hour => hour.name == item.toTime.substring(0, 5))[0];
             this.scheduleRows[item.day].isBreak = false;
           }
-
         });
       }
-
-
     } catch { }
   }
-
 
   async deleteSchedule(scheduleId) {
     Swal.fire({

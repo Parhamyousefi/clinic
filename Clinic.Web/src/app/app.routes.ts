@@ -223,5 +223,5 @@ export const routes: Routes = [
         loadComponent: () => import('./components/out-of-turn-exceptions/out-of-turn-exceptions.component').then(m => m.OutOfTurnExceptionsComponent),
         canActivate: [AuthGuard]
     }
-    
+
 ];

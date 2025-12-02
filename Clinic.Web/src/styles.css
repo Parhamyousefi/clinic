@@ -148,7 +148,6 @@ mat-label {
   text-align: center;
 }
 
-
 .mobile-sidebar {
   transition: .2s all ease;
   display: none;
@@ -216,7 +215,6 @@ mat-label {
   padding: 0.4rem;
 
 }
-
 
 .mobile-sidebar {
   transition: .2s all ease;
@@ -328,6 +326,10 @@ mat-label {
 
 .p-multiselect {
   width: 100% !important;
+}
+
+.btn {
+  font-size: .8rem !important;
 }
 
 @media (max-width: 768px) {

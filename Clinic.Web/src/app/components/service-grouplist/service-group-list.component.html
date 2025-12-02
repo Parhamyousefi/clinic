@@ -17,13 +17,11 @@
           <th> عملیات</th>
         </tr>
         <tr>
-
           <th>
             <input type="text" (input)="dt.filter($event.target?.value, 'name', 'contains')" class="form-control">
           </th>
           <th></th>
           <th></th>
-
         </tr>
       </ng-template>
       <ng-template pTemplate="body" let-item>

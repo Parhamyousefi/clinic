@@ -2,12 +2,12 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { SelectButtonModule } from "primeng/selectbutton";
 import { DropdownModule } from 'primeng/dropdown';
-import { UserService } from '../../_services/user.service';
+import { UserService } from '../../../_services/user.service';
 import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MultiSelectModule } from 'primeng/multiselect';
-import { MainService } from '../../_services/main.service';
-import { TreatmentsService } from '../../_services/treatments.service';
+import { MainService } from '../../../_services/main.service';
+import { TreatmentsService } from '../../../_services/treatments.service';
 import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-new-users',
@@ -28,8 +28,8 @@ export class NewUsersComponent {
     { name: "آقا", code: "3" },
     { name: "خانم", code: "4" },
     { name: "پروفسور", code: "5" },
-    { name: "مهندس", code: "6" },
-  ];
+    { name: "مهندس", code: "6" }
+  ]
   accesses: any = [];
   appointmentTypes: any = [];
   selectedEditUserId: any;
@@ -151,7 +151,6 @@ export class NewUsersComponent {
           type.code = type.id;
         });
       }
-
     }
     catch {
       this.toastR.error('خطا!', 'خطا در دریافت اطلاعات')
@@ -180,7 +179,6 @@ export class NewUsersComponent {
     catch { }
   }
 
-
   async setFromsFields(id) {
     try {
       let res: any = await this.userService.getUserById(id).toPromise();
@@ -206,10 +204,8 @@ export class NewUsersComponent {
         this.newUser.changeStatus = userData.canConfirmInvoice;
         this.newUser.access = this.accesses.filter((access: any) => userData.businessIds == access.id);
         this.newUser.appointmentType = this.appointmentTypes.filter((type: any) => userData.appointmentTypesIds == type.id);
-
       }
     }
     catch { }
   }
-
 }

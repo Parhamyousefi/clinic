@@ -8,7 +8,6 @@ import { DropdownModule } from 'primeng/dropdown';
 import { InvoiceService } from '../../_services/invoice.service';
 import { ActivatedRoute } from '@angular/router';
 import { PaymentService } from '../../_services/payment.service';
-import { filter } from 'rxjs';
 
 @Component({
   selector: 'app-receipt',
@@ -43,7 +42,7 @@ export class ReceiptComponent {
     this.petientId = +this.activeRoute.snapshot.paramMap.get('id') || null;
     this.isPayment = this.checkRout === "payment" ? true : false;
     await this.getPatients();
-        this.newReceiptModel.selectedPatient = this.patientsList.filter(patient => patient.id == this.patientId)[0];
+    this.newReceiptModel.selectedPatient = this.patientsList.filter(patient => patient.id == this.patientId)[0];
 
     if (this.petientId != null) {
       this.isPatientReceipt = true;
@@ -66,6 +65,7 @@ export class ReceiptComponent {
       this.toastR.error('خطا!', 'خطا در دریافت اطلاعات')
     }
   }
+  
   async savereceipt() {
     if (this.newReceiptModel.selectedPatient == null) {
       this.toastR.error('خطا', 'بیمار مورد نظر را انتخاب کنید');
@@ -123,13 +123,15 @@ export class ReceiptComponent {
           this.receiptType = 0;
         }
       } catch {
-        this.toastR.error('خطا', 'خطا در انجام عملیات')
+        this.toastR.error('خطا', 'خطا در انجام عملیات');
       }
     }
   }
+
   sumNumber() {
     this.newReceiptModel.sum = (this.newReceiptModel.eftPos | 0) + (this.newReceiptModel.cash | 0);
   }
+
   patientSelect() {
     this.newReceiptModel.selectedPatient = this.patientsList.filter(x => x.id == this.petientId)[0];
     console.log(this.patientSelected);

@@ -53,9 +53,7 @@ export class UserAppointmentSettingComponent implements OnInit {
     await this.getClinics();
     await this.getAppointmentTypes();
     this.getUserAppointmentsSettings();
-
   }
-
 
   async getClinics() {
     try {
@@ -148,7 +146,4 @@ export class UserAppointmentSettingComponent implements OnInit {
     this.defaultType = item.defaultAppointmentTypeId;
     this.selectedClinic = item.selectedClinics;
   }
-
-
-
 }
