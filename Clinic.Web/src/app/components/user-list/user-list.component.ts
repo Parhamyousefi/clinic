@@ -10,6 +10,7 @@ import { MainService } from '../../_services/main.service';
 import { DropdownModule } from 'primeng/dropdown';
 import { AttendanceScheduleComponent } from "../attendance-schedule/attendance-schedule.component";
 import { Subject } from 'rxjs';
+import swal from 'sweetalert2';
 
 @Component({
   selector: 'app-user-list',
@@ -33,7 +34,7 @@ export class UserListComponent {
   constructor(
     private userService: UserService,
     private toastR: ToastrService,
-    private mainService: MainService
+    private mainService: MainService,
   ) { }
   ngOnInit() {
     this.getRoles();
@@ -79,5 +80,28 @@ export class UserListComponent {
 
     }
     catch { }
+  }
+
+
+  deleteUser(userId) {
+    swal.fire({
+      title: "آیا از حذف این شخص مطمئن هستید ؟",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "بله انجام بده",
+      cancelButtonText: "منصرف شدم",
+      reverseButtons: false,
+    }).then(async (result) => {
+      try {
+        let res: any = this.userService.deleteUser(userId).toPromise();
+        if (res.status == 0) {
+          this.toastR.success("با موفقیت حذف شد!");
+          this.getUsers();
+        }
+      }
+      catch {
+        this.toastR.error('خطایی رخ داد', 'خطا!');
+      }
+    })
   }
 }

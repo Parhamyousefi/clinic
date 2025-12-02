@@ -116,4 +116,12 @@ public class UserController : ControllerBase
         var result = await _svc.SaveUserRole(model);
         return Ok(result);
     }
+
+    [HttpGet("deleteRole/{id}")]
+    [Authorize]
+    public async Task<IActionResult> DeleteRole(int id)
+    {
+        var result = await _svc.DeleteRole(id);
+        return Ok(result);
+    }
 }

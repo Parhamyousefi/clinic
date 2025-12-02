@@ -79,6 +79,17 @@ export class UserService {
     return this.http.get(uri, httpOptions);
   }
 
+  deleteUser(id) {
+    const token: any = localStorage.getItem("token");
+    const uri = this.url + `api/User/deleteUser/` + id;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      }),
+    };
+    return this.http.get(uri, httpOptions);
+  }
 
   saveUserRole(data) {
     const token: any = localStorage.getItem("token");
@@ -89,6 +100,30 @@ export class UserService {
         Authorization: "Bearer " + token,
       }),
     };
-    return this.http.post(uri, data, httpOptions);
+    return this.http.get(uri, httpOptions);
+  }
+
+  getUserById(id) {
+    const token: any = localStorage.getItem("token");
+    const uri = this.url + `api/User/getUserById/` + id;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      }),
+    };
+    return this.http.get(uri, httpOptions);
+  }
+
+  updateUser(data) {
+    const token: any = localStorage.getItem("token");
+    const uri = this.url + "api/user/updateUser";
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      }),
+    };
+    return this.http.put(uri, data, httpOptions);
   }
 }

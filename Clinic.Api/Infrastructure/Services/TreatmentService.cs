@@ -285,6 +285,7 @@ namespace Clinic.Api.Infrastructure.Services
                                      hasInvoice && !hasTreatment ? 2 :
                                      hasInvoice && hasTreatment ? 3 : 0,
                             PatientPhone = r.PhoneNumber,
+                            Arrived = r.Appointment.Arrived,
                             TotalDiscount = invoices
                 .Where(i => i.AppointmentId == appointmentId && (i.IsCanceled == false || i.IsCanceled == null))
                 .Select(i => i.TotalDiscount)
@@ -367,6 +368,7 @@ namespace Clinic.Api.Infrastructure.Services
                                      hasInvoice && !hasTreatment ? 2 :
                                      hasInvoice && hasTreatment ? 3 : 0,
                             PatientPhone = r.PhoneNumber,
+                            Arrived = r.Appointment.Arrived,
                             TotalDiscount = invoices
                 .Where(i => i.AppointmentId == appointmentId && (i.IsCanceled == false || i.IsCanceled == null))
                 .Select(i => i.TotalDiscount)
@@ -390,17 +392,76 @@ namespace Clinic.Api.Infrastructure.Services
             }
         }
 
-        public async Task<IEnumerable<GetAppointmentTypesDto>> GetAppointmentTypes()
+        public async Task<GlobalResponse> SaveAppointmentType(SaveAppointmentTypeDto model)
+        {
+            var result = new GlobalResponse();
+
+            try
+            {
+                var userId = _token.GetUserId();
+
+                if (model.EditOrNew == -1)
+                {
+                    var appointmentType = _mapper.Map<AppointmentTypesContext>(model);
+                    appointmentType.CreatorId = userId;
+                    appointmentType.CreatedOn = DateTime.Now;
+                    _context.AppointmentTypes.Add(appointmentType);
+                    await _context.SaveChangesAsync();
+                    result.Message = "Appointment Type Saved Successfully";
+                    return result;
+                }
+                else
+                {
+                    var existingAppointmentType = await _context.AppointmentTypes.FirstOrDefaultAsync(b => b.Id == model.EditOrNew);
+
+                    if (existingAppointmentType == null)
+                    {
+                        throw new Exception("Appointment Type Not Found");
+                    }
+
+                    _mapper.Map(model, existingAppointmentType);
+                    existingAppointmentType.ModifierId = userId;
+                    existingAppointmentType.LastUpdated = DateTime.Now;
+                    _context.AppointmentTypes.Update(existingAppointmentType);
+                    await _context.SaveChangesAsync();
+                    result.Message = "Appointment Type Updated Successfully";
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<IEnumerable<AppointmentTypesContext>> GetAppointmentTypes()
         {
             try
             {
-                var appointmentTypes = await _context.AppointmentTypes.Select(a => new GetAppointmentTypesDto
-                {
-                    Id = a.Id,
-                    Name = a.Name
-                }).ToListAsync();
+                var appointmentTypes = await _context.AppointmentTypes.ToListAsync();
 
                 return appointmentTypes;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<GlobalResponse> DeleteAppointmentType(int id)
+        {
+            var result = new GlobalResponse();
+
+            try
+            {
+                var appointmentType = await _context.AppointmentTypes.FindAsync(id);
+                if (appointmentType == null)
+                    throw new Exception("Appointment Type Not Found");
+
+                _context.AppointmentTypes.Remove(appointmentType);
+                await _context.SaveChangesAsync();
+                result.Message = "Appointment Type Deleted Successfully";
+                return result;
             }
             catch (Exception ex)
             {
@@ -413,7 +474,7 @@ namespace Clinic.Api.Infrastructure.Services
             try
             {
                 var iranTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Iran Standard Time");
-                var iranNow = TimeZoneInfo.ConvertTimeFromUtc(DateTime.Now, iranTimeZone);
+                var iranNow = TimeZoneInfo.ConvertTime(DateTime.Now, iranTimeZone);
                 var today = iranNow.Date;
 
                 var weekEnd = today.AddDays(6);

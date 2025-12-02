@@ -137,6 +137,9 @@
                         <button *ngIf="item.hasDiscount && isAdminOrDoctor"
                             class="btn main-btn-outline mt-2 btn-sm mr-2" (click)="approveDiscount($event,item)">تایید
                             تخفیف</button>
+                        <button *ngIf="!item.arrived" class="btn btn-success mt-2 btn-sm mr-2"
+                            (click)="patientArrived($event,item)">اعلام
+                            ورود</button>
 
 
                     </td>

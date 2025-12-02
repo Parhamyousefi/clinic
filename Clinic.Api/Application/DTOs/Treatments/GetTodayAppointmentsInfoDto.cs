@@ -17,5 +17,6 @@
         public decimal? TotalDiscount { get; set; }
         public int? InvoiceId { get; set; }
         public decimal Receipt { get; set; }
+        public int? Arrived { get; set; }
     }
 }

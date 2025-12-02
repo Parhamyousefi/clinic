@@ -8,10 +8,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { MainService } from '../../_services/main.service';
 import { TreatmentsService } from '../../_services/treatments.service';
+import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-new-users',
   standalone: true,
-  imports: [SelectButtonModule, FormsModule, DropdownModule, MultiSelectModule],
+  imports: [SelectButtonModule, FormsModule, DropdownModule, MultiSelectModule, CommonModule],
   templateUrl: './new-users.component.html',
   styleUrl: './new-users.component.css'
 })
@@ -35,6 +36,8 @@ export class NewUsersComponent {
   usersList: any;
   selectedEditUser: any;
   roles: any = [];
+  userId: any;
+  editMode: any;
   constructor(
     private userService: UserService,
     private toastR: ToastrService,
@@ -45,9 +48,16 @@ export class NewUsersComponent {
   ) { }
 
   ngOnInit() {
+    this.userId = this.activeRoute.snapshot.paramMap.get('id');
     this.getClinics();
     this.getAppointmentTypes();
     this.getRoles();
+    setTimeout(() => {
+      if (this.userId) {
+        this.editMode = true;
+        this.setFromsFields(this.userId);
+      }
+    }, 500);
   }
 
   async createUser() {
@@ -76,6 +86,41 @@ export class NewUsersComponent {
     }
     try {
       let res: any = await this.userService.createUser(model).toPromise();
+      if (res['status'] == 0) {
+        this.toastR.success("با موفقیت ذخیره شد!");
+        this.router.navigate(['/userlist']);
+      }
+    }
+    catch { }
+  }
+
+  async updateUser() {
+    let model = {
+      'id': this.userId,
+      "username": this.newUser.userName,
+      "password": this.newUser.password,
+      "isDoctor": this.newUser.isDoctor,
+      "showTreatmentOnClick": this.newUser.ShowTreatment,
+      "canChangeOldTreatment": this.newUser.showOldTreatments,
+      "suspendReservationDays": this.newUser.talighDays,
+      "outOfRangePatients": this.newUser.outOfRange,
+      "doctorSkill": this.newUser.expertise,
+      "description": this.newUser.describe,
+      "titleId": this.fieldConvert(this.newUser.title.code),
+      "email": this.newUser.email,
+      "firstName": this.newUser.firstName,
+      "lastName": this.newUser.lastName,
+      "roleId": this.fieldConvert(this.newUser.role.code),
+      "isActive": this.newUser.isActive,
+      "showInOnlineBookings": this.newUser.ShowDocInReserve,
+      "loadLastDataOnNewTreatment": this.newUser.copyPatientData,
+      "smsEnabled": this.newUser.sendSms,
+      "canConfirmInvoice": this.newUser.changeStatus,
+      "businessIds": this.fieldConvert(this.newUser.access),
+      "appointmentTypesIds": this.fieldConvert(this.newUser.appointmentType)
+    }
+    try {
+      let res: any = await this.userService.updateUser(model).toPromise();
       if (res['status'] == 0) {
         this.toastR.success("با موفقیت ذخیره شد!");
         this.router.navigate(['/userlist']);
@@ -131,7 +176,38 @@ export class NewUsersComponent {
           type.code = type.id;
         });
       }
+    }
+    catch { }
+  }
 
+
+  async setFromsFields(id) {
+    try {
+      let res: any = await this.userService.getUserById(id).toPromise();
+      if (res.length > 0) {
+        let userData = res[0];
+        this.newUser.firstName = userData.firstName;
+        this.newUser.lastName = userData.lastName;
+        this.newUser.userName = userData.email;
+        this.newUser.isActive = userData.isActive;
+        this.newUser.role = this.roles.filter(role => role.id == userData.roleId)[0];
+        this.newUser.title = this.titleList.filter(title => title.code == userData.titleId)[0];
+        this.newUser.userName = userData.email;
+        this.newUser.isDoctor = userData.isPractitioner;
+        this.newUser.ShowTreatment = userData.showTreatmentOnClickPatientName;
+        this.newUser.showOldTreatments = userData.canChangeOldTreatment;
+        this.newUser.talighDays = userData.suspendReservationDays;
+        this.newUser.outOfRange = userData.outOfRange;
+        this.newUser.expertise = userData.doctorSkill;
+        this.newUser.describe = userData.description;
+        this.newUser.ShowDocInReserve = userData.showInOnlineBookings;
+        this.newUser.copyPatientData = userData.loadLastDataOnNewTreatment;
+        this.newUser.sendSms = userData.smsEnabled;
+        this.newUser.changeStatus = userData.canConfirmInvoice;
+        this.newUser.access = this.accesses.filter((access: any) => userData.businessIds == access.id);
+        this.newUser.appointmentType = this.appointmentTypes.filter((type: any) => userData.appointmentTypesIds == type.id);
+
+      }
     }
     catch { }
   }
