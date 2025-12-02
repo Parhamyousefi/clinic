@@ -61,10 +61,10 @@ export class NewServiceComponent implements AfterViewInit {
         this.toastR.success('با موفقیت ثبت شد!');
         this.router.navigate(['/service-list']);
       } else {
-        this.toastR.error('خطا');
+        this.toastR.error('خطایی رخ داده است');
       }
     } catch (error) {
-      this.toastR.error('خطا');
+      this.toastR.error('خطایی رخ داده است');
     }
   }
 

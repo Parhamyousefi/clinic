@@ -124,10 +124,10 @@ export class NewBusinessComponent implements AfterViewInit {
         this.toastR.success('با موفقیت ثبت شد!');
         this.router.navigate(['/business-List']);
       } else {
-        this.toastR.error('خطا');
+        this.toastR.error('خطایی رخ داده است');
       }
     } catch (error) {
-      this.toastR.error('خطا');
+      this.toastR.error('خطایی رخ داده است');
     }
   }
 

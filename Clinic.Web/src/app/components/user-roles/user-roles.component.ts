@@ -251,10 +251,10 @@ export class UserRolesComponent implements OnInit {
       if (res.status == 0) {
         this.toastR.success('با موفقیت ثبت شد!');
       } else {
-        this.toastR.error('خطا');
+        this.toastR.error('خطایی رخ داده است');
       }
     } catch (error) {
-      this.toastR.error('خطا');
+      this.toastR.error('خطایی رخ داده است');
     }
   }
 }
