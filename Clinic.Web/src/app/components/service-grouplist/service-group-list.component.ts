@@ -8,7 +8,7 @@ import { SharedModule } from '../../share/shared.module';
 @Component({
   selector: 'app-service-grouplist',
   standalone: true,
-  imports: [SharedModule,RouterLink],
+  imports: [SharedModule, RouterLink],
   templateUrl: './service-group-list.component.html',
   styleUrl: './service-group-list.component.css'
 })
@@ -30,7 +30,6 @@ export class ServiceGrouplistComponent implements OnInit {
     let res: any = await this.treatmentsService.getItemCategory().toPromise();
     this.itemCategory = res;
   }
-
 
   goToNewService(id) {
     this.router.navigate(['/new-service-group', id]);

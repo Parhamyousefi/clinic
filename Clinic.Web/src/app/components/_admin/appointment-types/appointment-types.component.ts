@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { MainService } from '../../_services/main.service';
-import { TreatmentsService } from '../../_services/treatments.service';
+import { MainService } from '../../../_services/main.service';
+import { TreatmentsService } from '../../../_services/treatments.service';
 import { DropdownModule } from "primeng/dropdown";
 import { CommonModule } from '@angular/common';
-import { SharedModule } from '../../share/shared.module';
+import { SharedModule } from '../../../share/shared.module';
 import { ColorPickerModule } from 'primeng/colorpicker';
 import { ToastrService } from 'ngx-toastr';
 

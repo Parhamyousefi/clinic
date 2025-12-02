@@ -29,6 +29,7 @@ export class NewServiceComponent implements AfterViewInit {
   treatmentList: any = [];
   itemCategory: any = [];
   billableItems: any = [];
+  
   async ngAfterViewInit(): Promise<void> {
     this.editOrNew = +this.activeRoute.snapshot.paramMap.get('id') || -1;
     await this.getItemCategory();
@@ -93,7 +94,6 @@ export class NewServiceComponent implements AfterViewInit {
     catch { }
   }
 
-
   async getItemCategory() {
     let res: any = await this.treatmentsService.getItemCategory().toPromise();
     this.itemCategory = res;
@@ -106,7 +106,4 @@ export class NewServiceComponent implements AfterViewInit {
     let res: any = await this.treatmentsService.getTreatmentTemplates(model).toPromise();
     this.treatmentList = res;
   }
-
-
-
 }

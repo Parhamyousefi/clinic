@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { MainService } from '../../_services/main.service';
-import { UserService } from '../../_services/user.service';
+import { MainService } from '../../../_services/main.service';
+import { UserService } from '../../../_services/user.service';
 import { ToastrService } from 'ngx-toastr';
 import { DropdownModule } from 'primeng/dropdown';
 
@@ -27,7 +27,6 @@ export class TimeExceptionComponent {
     private mainService: MainService
   ) { }
 
-
   ngOnInit() {
     this.getDoctors();
     this.getClinics();
@@ -41,7 +40,7 @@ export class TimeExceptionComponent {
         this.doctorsList.forEach(doctor => {
           doctor.code = doctor.id;
           doctor.name = doctor.firstName + ' ' + doctor.lastName;
-        });;
+        });
       }
     }
     catch { }
@@ -57,7 +56,7 @@ export class TimeExceptionComponent {
       this.newException.selectedClinic = this.clinicsList[0];
     }
     catch {
-      this.toastR.error('خطا!', 'خطا در دریافت اطلاعات')
+      this.toastR.error('خطا!', 'خطا در دریافت اطلاعات');
     }
   }
 
@@ -91,6 +90,6 @@ export class TimeExceptionComponent {
     }
     catch { }
   }
-
+  
   getExceptions() { }
 }

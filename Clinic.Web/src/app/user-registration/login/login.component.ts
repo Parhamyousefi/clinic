@@ -53,7 +53,12 @@ export class LoginComponent {
         this.toastR.error('خطا', 'نام کاربری و رمز عبور را وارد نمایید')
       }
     }
-    catch { }
+    catch(ex) {
+      let msg = ex.error.exceptionMessage;
+      if (msg == 'Invalid username or password.') {
+        this.toastR.error('خطا', 'نام کاربری یا رمز عبور اشتباه است ');
+      }
+     }
   }
 
 

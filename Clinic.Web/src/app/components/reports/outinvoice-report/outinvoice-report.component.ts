@@ -1,16 +1,16 @@
 import { Component } from '@angular/core';
 import { NgxMaterialTimepickerModule } from "ngx-material-timepicker";
-import { SharedModule } from "../../share/shared.module";
+import { SharedModule } from "../../../share/shared.module";
 import { FormControl } from '@angular/forms';
 import moment from 'moment-jalaali';
 import { DropdownModule } from 'primeng/dropdown';
-import { ContactService } from '../../_services/contact.service';
-import { TreatmentsService } from '../../_services/treatments.service';
+import { ContactService } from '../../../_services/contact.service';
+import { TreatmentsService } from '../../../_services/treatments.service';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { TableModule } from 'primeng/table';
-import { ReportService } from '../../_services/report.service';
-import { UserService } from '../../_services/user.service';
-import { MainService } from '../../_services/main.service';
+import { ReportService } from '../../../_services/report.service';
+import { UserService } from '../../../_services/user.service';
+import { MainService } from '../../../_services/main.service';
 @Component({
   selector: 'app-outinvoice-report',
   standalone: true,

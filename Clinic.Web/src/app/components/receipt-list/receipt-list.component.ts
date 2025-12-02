@@ -33,7 +33,7 @@ export class ReceiptListComponent {
   receiptType: any = 0;
   checkRout: any;
   isPayment: boolean = false;
-  tableData:any=[];
+  tableData: any = [];
 
   ngOnInit() {
     this.checkRout = this.activeRoute.snapshot.routeConfig.path;
@@ -55,7 +55,7 @@ export class ReceiptListComponent {
         element.sumPrice = element.eftPos + element.cash;
       });
     }
-     this.tableData =this.receiptsList;
+    this.tableData = this.receiptsList;
   }
 
   async getAllPayments() {
@@ -66,8 +66,9 @@ export class ReceiptListComponent {
         element.sumPrice = element.eftPos + element.cash;
       });
     }
-    this.tableData =this.paymentList;
+    this.tableData = this.paymentList;
   }
+
   async deleteReceipt(id) {
     Swal.fire({
       title: "آیا از حذف مطمئن هستید ؟",
@@ -123,7 +124,7 @@ export class ReceiptListComponent {
         notes: this.editReceiptsModel.note,
         allowEdit: true,
         receiptTypeId: this.receiptType ? 1 : 0,
-        editOrNew: this.editReceiptsModel.id,
+        editOrNew: this.editReceiptsModel.id
       }
       try {
         let data = await this.paymentService.savePayment(model).toPromise();
@@ -138,15 +139,15 @@ export class ReceiptListComponent {
     }
     else {
       let model = {
-      receiptNo: null,
-      patientId: this.editReceiptsModel.patientId,
-      cash: +this.editReceiptsModel.cash,
-      eftPos: this.editReceiptsModel.eftPos,
-      other: null,
-      notes: this.editReceiptsModel.note,
-      allowEdit: true,
-      receiptTypeId: this.receiptType ? 1 : 0
-    }
+        receiptNo: null,
+        patientId: this.editReceiptsModel.patientId,
+        cash: +this.editReceiptsModel.cash,
+        eftPos: this.editReceiptsModel.eftPos,
+        other: null,
+        notes: this.editReceiptsModel.note,
+        allowEdit: true,
+        receiptTypeId: this.receiptType ? 1 : 0
+      }
       try {
         let data = await this.invoiceService.saveReceipt(model).toPromise();
         if (data['status'] == 0) {

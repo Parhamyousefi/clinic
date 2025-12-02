@@ -57,44 +57,43 @@
 <p-dialog id="edit-receipt-modal" header="اختصاص وقت به بیمار" [(visible)]="showReceiptsModal" [closable]="true"
     [ngClass]="{'modalShadow' : showReceiptsModal}" class="p-2">
     <div class="col-12 edit-receipt-modal">
-            <div class="col-12 mb-3 text-right">
-                <label for="patienType" class="text-right">نوع مراجعه</label>
-                <div id="patienType" class="d-flex mode-selector p-0 my-2">
-                    <div class="ml-1 p-2 pointer text-center" [ngClass]="{  'selected-mode' :!receiptType}"
-                        (click)="receiptType = false">
-                        سر پایی</div>
-                    <div class="mr-1 p-2 pointer text-center" [ngClass]="{  'selected-mode' :receiptType}"
-                        (click)="receiptType = true">
-                        بستری</div>
-                </div>
+        <div class="col-12 mb-3 text-right">
+            <label for="patienType" class="text-right">نوع مراجعه</label>
+            <div id="patienType" class="d-flex mode-selector p-0 my-2">
+                <div class="ml-1 p-2 pointer text-center" [ngClass]="{  'selected-mode' :!receiptType}"
+                    (click)="receiptType = false">
+                    سر پایی</div>
+                <div class="mr-1 p-2 pointer text-center" [ngClass]="{  'selected-mode' :receiptType}"
+                    (click)="receiptType = true">
+                    بستری</div>
             </div>
-            <div class="col-8 d-flex flex-column justify-content-center my-3">
-                <label for="patient" class="text-right">بیمار</label>
-               <input class="form-control" [disabled]="true" type="text" id="supplier"
-                    [(ngModel)]="editReceiptsModel.name">
-            </div>
-            <div class="col-12 text-right my-3">
-                <h5 class="mt-3">محل و میزان دریافت</h5>
-            </div>
-            <div class="col-8 d-flex flex-column justify-content-center my-3">
-                <label for="name" class="text-right">نقد</label>
-                <input (input)="sumNumber()" class="form-control" type="text" id="name" [(ngModel)]="editReceiptsModel.cash">
-            </div>
-            <div class="col-8 d-flex flex-column justify-content-center my-3">
-                <label for="serialnumber" class="text-right">کارت بانکی</label>
-                <input (input)="sumNumber()" class="form-control" OnlyNumber="true" type="text" id="serialnumber"
-                    [(ngModel)]="editReceiptsModel.eftPos">
-            </div>
-            <div class="col-8 d-flex flex-column justify-content-center my-3">
-                <label for="supplier" class="text-right">جمع کل دریافتی</label>
-                <input class="form-control" [disabled]="true" type="text" id="supplier"
-                    [(ngModel)]="editReceiptsModel.sum">
-            </div>
-            <div class="col-8 d-flex flex-column justify-content-center my-3">
-                <label for="note" class="text-right">یادداشت</label>
-                <textarea name="note" id="note" [(ngModel)]="editReceiptsModel.note"></textarea>
-            </div>
-        
+        </div>
+        <div class="col-8 d-flex flex-column justify-content-center my-3">
+            <label for="patient" class="text-right">بیمار</label>
+            <input class="form-control" [disabled]="true" type="text" id="supplier"
+                [(ngModel)]="editReceiptsModel.name">
+        </div>
+        <div class="col-12 text-right my-3">
+            <h5 class="mt-3">محل و میزان دریافت</h5>
+        </div>
+        <div class="col-8 d-flex flex-column justify-content-center my-3">
+            <label for="name" class="text-right">نقد</label>
+            <input (input)="sumNumber()" class="form-control" type="text" id="name"
+                [(ngModel)]="editReceiptsModel.cash">
+        </div>
+        <div class="col-8 d-flex flex-column justify-content-center my-3">
+            <label for="serialnumber" class="text-right">کارت بانکی</label>
+            <input (input)="sumNumber()" class="form-control" OnlyNumber="true" type="text" id="serialnumber"
+                [(ngModel)]="editReceiptsModel.eftPos">
+        </div>
+        <div class="col-8 d-flex flex-column justify-content-center my-3">
+            <label for="supplier" class="text-right">جمع کل دریافتی</label>
+            <input class="form-control" [disabled]="true" type="text" id="supplier" [(ngModel)]="editReceiptsModel.sum">
+        </div>
+        <div class="col-8 d-flex flex-column justify-content-center my-3">
+            <label for="note" class="text-right">یادداشت</label>
+            <textarea name="note" id="note" [(ngModel)]="editReceiptsModel.note"></textarea>
+        </div>
 
         <div class="col-12 d-flex justify-content-between my-3">
             <button class="btn btn-outline-success col-5" (click)="editreceipt()">ثبت</button>
