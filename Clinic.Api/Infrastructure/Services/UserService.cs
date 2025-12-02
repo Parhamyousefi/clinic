@@ -98,7 +98,8 @@ namespace Clinic.Api.Infrastructure.Services
                 {
                     Token = token,
                     SecretCode = secret,
-                    Role = role
+                    Role = role,
+                    UserName = user.FirstName + " " + user.LastName,
                 };
             }
             catch (Exception ex)
