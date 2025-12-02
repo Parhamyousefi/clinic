@@ -65,7 +65,7 @@ export const routes: Routes = [
     },
     {
         path: 'product',
-        loadComponent: () => import('./components/product/product.component').then(m => m.ProductComponent),
+        loadComponent: () => import('./components/_admin/product/product.component').then(m => m.ProductComponent),
         canActivate: [AuthGuard],
     },
     {
@@ -135,17 +135,17 @@ export const routes: Routes = [
     },
     {
         path: 'outinvoice-report',
-        loadComponent: () => import('./components/outinvoice-report/outinvoice-report.component').then(m => m.OutinvoiceReportComponent),
+        loadComponent: () => import('./components/reports/outinvoice-report/outinvoice-report.component').then(m => m.OutinvoiceReportComponent),
         canActivate: [AuthGuard]
     },
     {
         path: 'user/new',
-        loadComponent: () => import('./components/new-users/new-users.component').then(m => m.NewUsersComponent),
+        loadComponent: () => import('./components/_admin/new-users/new-users.component').then(m => m.NewUsersComponent),
         canActivate: [AuthGuard]
     },
     {
         path: 'user/new/:id',
-        loadComponent: () => import('./components/new-users/new-users.component').then(m => m.NewUsersComponent),
+        loadComponent: () => import('./components/_admin/new-users/new-users.component').then(m => m.NewUsersComponent),
         canActivate: [AuthGuard]
     },
     {
@@ -190,7 +190,7 @@ export const routes: Routes = [
     },
     {
         path: 'appointment-types',
-        loadComponent: () => import('./components/appointment-types/appointment-types.component').then(m => m.AppointmentTypesComponent),
+        loadComponent: () => import('./components/_admin/appointment-types/appointment-types.component').then(m => m.AppointmentTypesComponent),
         canActivate: [AuthGuard]
     },
     {
@@ -215,7 +215,7 @@ export const routes: Routes = [
     },
     {
         path: 'exception-time',
-        loadComponent: () => import('./components/time-exception/time-exception.component').then(m => m.TimeExceptionComponent),
+        loadComponent: () => import('./components/_admin/time-exception/time-exception.component').then(m => m.TimeExceptionComponent),
         canActivate: [AuthGuard]
     },
     {
