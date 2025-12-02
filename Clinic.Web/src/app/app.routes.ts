@@ -210,7 +210,11 @@ export const routes: Routes = [
         canActivate: [AuthGuard]
     },
     {
-        path: 'exception-time', component: TimeExceptionComponent,
+        path: 'time-exception', component: TimeExceptionComponent,
+        canActivate: [AuthGuard]
+    },
+    {
+        path: 'expenses', component: ExpensesComponent,
         canActivate: [AuthGuard]
     },
 
