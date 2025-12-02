@@ -150,42 +150,42 @@ export const routes: Routes = [
     },
     {
         path: 'userlist',
-        loadComponent: () => import('./components/user-list/user-list.component').then(m => m.UserListComponent),
+        loadComponent: () => import('./components/_admin/user-list/user-list.component').then(m => m.UserListComponent),
         canActivate: [AuthGuard]
     },
     {
         path: 'userlist/user-appointment-setting/:uid',
-        loadComponent: () => import('./components/user-list/user-appointment-setting/user-appointment-setting.component').then(m => m.UserAppointmentSettingComponent),
+        loadComponent: () => import('./components/_admin/user-list/user-appointment-setting/user-appointment-setting.component').then(m => m.UserAppointmentSettingComponent),
         canActivate: [AuthGuard]
     },
     {
         path: 'business-List',
-        loadComponent: () => import('./components/business-list/business-list.component').then(m => m.BusinessListComponent),
+        loadComponent: () => import('./components/_admin/business-list/business-list.component').then(m => m.BusinessListComponent),
         canActivate: [AuthGuard]
     },
     {
         path: 'new-business',
-        loadComponent: () => import('./components/business-list/new-business/new-business.component').then(m => m.NewBusinessComponent),
+        loadComponent: () => import('./components/_admin/business-list/new-business/new-business.component').then(m => m.NewBusinessComponent),
         canActivate: [AuthGuard]
     },
     {
         path: 'new-business/:id',
-        loadComponent: () => import('./components/business-list/new-business/new-business.component').then(m => m.NewBusinessComponent),
+        loadComponent: () => import('./components/_admin/business-list/new-business/new-business.component').then(m => m.NewBusinessComponent),
         canActivate: [AuthGuard]
     },
     {
         path: 'service-list',
-        loadComponent: () => import('./components/service-list/service-list.component').then(m => m.ServiceListComponent),
+        loadComponent: () => import('./components/_admin/service-list/service-list.component').then(m => m.ServiceListComponent),
         canActivate: [AuthGuard]
     },
     {
         path: 'new-service',
-        loadComponent: () => import('./components/service-list/new-service/new-service.component').then(m => m.NewServiceComponent),
+        loadComponent: () => import('./components/_admin/service-list/new-service/new-service.component').then(m => m.NewServiceComponent),
         canActivate: [AuthGuard]
     },
     {
         path: 'new-service/:id',
-        loadComponent: () => import('./components/service-list/new-service/new-service.component').then(m => m.NewServiceComponent),
+        loadComponent: () => import('./components/_admin/service-list/new-service/new-service.component').then(m => m.NewServiceComponent),
         canActivate: [AuthGuard]
     },
     {
@@ -195,7 +195,7 @@ export const routes: Routes = [
     },
     {
         path: 'user-roles',
-        loadComponent: () => import('./components/user-roles/user-roles.component').then(m => m.UserRolesComponent),
+        loadComponent: () => import('./components/_admin/user-roles/user-roles.component').then(m => m.UserRolesComponent),
         canActivate: [AuthGuard]
     },
     {
@@ -220,7 +220,7 @@ export const routes: Routes = [
     },
     {
         path: 'outOfturnexceptions',
-        loadComponent: () => import('./components/out-of-turn-exceptions/out-of-turn-exceptions.component').then(m => m.OutOfTurnExceptionsComponent),
+        loadComponent: () => import('./components/_admin/out-of-turn-exceptions/out-of-turn-exceptions.component').then(m => m.OutOfTurnExceptionsComponent),
         canActivate: [AuthGuard]
     }
 

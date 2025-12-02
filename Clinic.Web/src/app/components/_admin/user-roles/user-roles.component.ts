@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { SharedModule } from '../../share/shared.module';
 import { firstValueFrom } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
-import { UserService } from './../../_services/user.service';
+import { SharedModule } from '../../../share/shared.module';
+import { UserService } from '../../../_services/user.service';
 
 @Component({
   selector: 'app-user-roles',

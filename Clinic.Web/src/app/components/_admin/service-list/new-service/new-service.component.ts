@@ -1,10 +1,10 @@
 import { AfterViewInit, Component } from '@angular/core';
-import { TreatmentsService } from '../../../_services/treatments.service';
-import { SharedModule } from '../../../share/shared.module';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { firstValueFrom } from 'rxjs';
 import { ColorPickerModule } from 'primeng/colorpicker';
+import { SharedModule } from '../../../../share/shared.module';
+import { TreatmentsService } from '../../../../_services/treatments.service';
 
 @Component({
   selector: 'app-new-service',
