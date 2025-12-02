@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { TreatmentsService } from './../../_services/treatments.service';
-import { UserService } from '../../_services/user.service';
 import { SharedModule } from '../../share/shared.module';
 import { MainService } from './../../_services/main.service';
 import moment from 'moment-jalaali';
@@ -23,7 +22,6 @@ export class TodayAppointmentsComponent implements OnInit {
 
   constructor(
     private treatmentsService: TreatmentsService,
-    private userService: UserService,
     private mainService: MainService,
     private invoiceService: InvoiceService,
     private toastR: ToastrService,
@@ -90,27 +88,22 @@ export class TodayAppointmentsComponent implements OnInit {
       if (this.selectedStatus && this.selectedStatus.length > 0) {
         this.selectedStatus.forEach(status => {
           let filtered = [];
-
           switch (status.code) {
             case 4:
               filtered = this.todayAppointmentsList.filter(a => a.receipt == 0);
               break;
-
             case 5:
               filtered = this.todayAppointmentsList.filter(a => a.totalDiscount > 0);
               break;
-
             default:
               filtered = this.todayAppointmentsList.filter(a => a.status === status.code);
               break;
           }
-
           this.filteredAppointments.push(...filtered);
         });
       } else {
         this.filteredAppointments = [...this.todayAppointmentsList];
       }
-
     } catch { }
   }
 
@@ -139,9 +132,6 @@ export class TodayAppointmentsComponent implements OnInit {
         name: 'همه',
         id: -1,
       });
-      // setTimeout(() => {
-      //   this.selectedservice = this.servicesList[0];
-      // }, 1000);
     }
     catch { }
   }
@@ -195,9 +185,7 @@ export class TodayAppointmentsComponent implements OnInit {
       this.filteredAppointments = this.todayAppointmentsList;
       return;
     }
-
     const text = searchText.toLowerCase();
-
     this.filteredAppointments = this.todayAppointmentsList.filter(item => {
       return (
         item.patientPhone?.toLowerCase().includes(text) ||

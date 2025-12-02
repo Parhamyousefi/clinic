@@ -21,7 +21,6 @@ export class ProductListComponent {
   constructor(
     private mainService: MainService,
     private toastR: ToastrService
-
   ) { }
   productsList: any = [];
   editProductModel: any = [];
@@ -29,7 +28,6 @@ export class ProductListComponent {
   ngOnInit() {
     this.getProducts();
   }
-
 
   async getProducts() {
     let data = await this.mainService.getProducts().toPromise();
@@ -70,8 +68,8 @@ export class ProductListComponent {
     this.editProductModel.note = item.notes;
     this.editProductModel.isActive = item.isActive;
     this.editProductModel.id = item.id;
-
   }
+
   async editProduct() {
     try {
       let model = {
@@ -83,7 +81,7 @@ export class ProductListComponent {
         stockLevel: +this.editProductModel.inventory,
         notes: this.editProductModel.note,
         isActive: this.editProductModel.isActive,
-        editOrNew: this.editProductModel.id,
+        editOrNew: this.editProductModel.id
       }
       let data = await this.mainService.saveProduct(model).toPromise();
       if (data['status'] == 0) {
@@ -103,6 +101,7 @@ export class ProductListComponent {
       this.toastR.error('خطا', 'خطا در انجام عملیات')
     }
   }
+
   closeEditProductModal() {
     this.editProductModal = false;
   }

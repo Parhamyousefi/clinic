@@ -23,14 +23,14 @@ export class UserRolesComponent implements OnInit {
       id: 1, title: 'وقت دهی', itmes: [
         { id: 1, text: 'مشاهده', clicked: false },
         { id: 2, text: 'ثبت', clicked: false },
-        { id: 3, text: 'حذف', clicked: false },
+        { id: 3, text: 'حذف', clicked: false }
       ]
     },
     {
       id: 2, title: ' اوقات امروز', itmes: [
         { id: 1, text: 'مشاهده', clicked: false },
         { id: 2, text: 'تایید تخفیف', clicked: false },
-        { id: 3, text: 'تایید انجام خدمت', clicked: false },
+        { id: 3, text: 'تایید انجام خدمت', clicked: false }
       ]
     },
     {
@@ -43,28 +43,28 @@ export class UserRolesComponent implements OnInit {
         { id: 6, text: 'ادغام بیماران', clicked: false },
         { id: 7, text: 'ثبت یادداشت', clicked: false },
         { id: 8, text: 'ویرایش یادداشت', clicked: false },
-        { id: 9, text: 'حذف یادداشت', clicked: false },
+        { id: 9, text: 'حذف یادداشت', clicked: false }
       ]
     },
     {
       id: 4, title: ' پرونده بالینی', itmes: [
         { id: 1, text: 'مشاهده', clicked: false },
         { id: 2, text: 'ثبت', clicked: false },
-        { id: 3, text: 'حذف', clicked: false },
+        { id: 3, text: 'حذف', clicked: false }
       ]
     },
     {
       id: 5, title: 'پیوست', itmes: [
         { id: 1, text: 'مشاهده', clicked: false },
         { id: 2, text: 'ثبت', clicked: false },
-        { id: 3, text: 'حذف', clicked: false },
+        { id: 3, text: 'حذف', clicked: false }
       ]
     },
     {
       id: 6, title: 'نامه ها', itmes: [
         { id: 1, text: 'مشاهده', clicked: false },
         { id: 2, text: 'ثبت', clicked: false },
-        { id: 3, text: 'حذف', clicked: false },
+        { id: 3, text: 'حذف', clicked: false }
       ]
     },
     {
@@ -75,7 +75,7 @@ export class UserRolesComponent implements OnInit {
         { id: 4, text: 'ابطال', clicked: false },
         { id: 5, text: 'مجوز بدهی', clicked: false },
         { id: 6, text: 'امکان تغییر یا حذف صورتحساب بعد از دریافت', clicked: false },
-        { id: 7, text: 'اعمال تخفیف', clicked: false },
+        { id: 7, text: 'اعمال تخفیف', clicked: false }
       ]
     },
     {
@@ -84,7 +84,7 @@ export class UserRolesComponent implements OnInit {
         { id: 2, text: 'ثبت', clicked: false },
         { id: 3, text: 'حذف', clicked: false },
         { id: 4, text: 'مجوز ویرایش', clicked: false },
-        { id: 5, text: 'مجوز دریافت بیشتر از بدهی بیمار', clicked: false },
+        { id: 5, text: 'مجوز دریافت بیشتر از بدهی بیمار', clicked: false }
       ]
     },
     {
@@ -100,77 +100,76 @@ export class UserRolesComponent implements OnInit {
       id: 10, title: 'هزینه ها', itmes: [
         { id: 1, text: 'مشاهده', clicked: false },
         { id: 2, text: 'ثبت', clicked: false },
-        { id: 3, text: 'حذف', clicked: false },
+        { id: 3, text: 'حذف', clicked: false }
       ]
     }, {
       id: 11, title: ' کاربران و پزشکان', itmes: [
         { id: 1, text: 'مشاهده', clicked: false },
         { id: 2, text: 'ثبت', clicked: false },
-        { id: 3, text: 'حذف', clicked: false },
+        { id: 3, text: 'حذف', clicked: false }
       ]
     }, {
       id: 12, title: 'نقش ها ', itmes: [
         { id: 1, text: 'مشاهده', clicked: false },
         { id: 2, text: 'ثبت', clicked: false },
-        { id: 3, text: 'حذف', clicked: false },
+        { id: 3, text: 'حذف', clicked: false }
       ]
     }, {
       id: 13, title: 'انواع وقت دهی ', itmes: [
         { id: 1, text: 'مشاهده', clicked: false },
         { id: 2, text: 'ثبت', clicked: false },
-        { id: 3, text: 'حذف', clicked: false },
+        { id: 3, text: 'حذف', clicked: false }
       ]
     }, {
       id: 13, title: 'تعطیلات  ', itmes: [
         { id: 1, text: 'مشاهده', clicked: false },
         { id: 2, text: 'ثبت', clicked: false },
-        { id: 3, text: 'حذف', clicked: false },
+        { id: 3, text: 'حذف', clicked: false }
       ]
     }, {
       id: 14, title: ' مشاغل ', itmes: [
         { id: 1, text: 'مشاهده', clicked: false },
         { id: 2, text: 'ثبت', clicked: false },
-        { id: 3, text: 'حذف', clicked: false },
+        { id: 3, text: 'حذف', clicked: false }
       ]
     }, {
       id: 15, title: 'استثنائات اوقات پزشکان', itmes: [
         { id: 1, text: 'مشاهده', clicked: false },
         { id: 2, text: 'ثبت', clicked: false },
-        { id: 3, text: 'حذف', clicked: false },
+        { id: 3, text: 'حذف', clicked: false }
       ]
     }, {
       id: 16, title: ' استثنائات خارج از نوبت ', itmes: [
         { id: 1, text: 'مشاهده', clicked: false },
         { id: 2, text: 'ثبت', clicked: false },
-        { id: 3, text: 'حذف', clicked: false },
+        { id: 3, text: 'حذف', clicked: false }
       ]
     },
     {
       id: 17, title: ' خدمات ', itmes: [
         { id: 1, text: 'مشاهده', clicked: false },
         { id: 2, text: 'ثبت', clicked: false },
-        { id: 3, text: 'حذف', clicked: false },
+        { id: 3, text: 'حذف', clicked: false }
       ]
     },
     {
       id: 18, title: ' گروه خدمات ', itmes: [
         { id: 1, text: 'مشاهده', clicked: false },
         { id: 2, text: 'ثبت', clicked: false },
-        { id: 3, text: 'حذف', clicked: false },
+        { id: 3, text: 'حذف', clicked: false }
       ]
     },
     {
       id: 19, title: 'تعریف پرونده بالینی ', itmes: [
         { id: 1, text: 'مشاهده', clicked: false },
         { id: 2, text: 'ثبت', clicked: false },
-        { id: 3, text: 'حذف', clicked: false },
+        { id: 3, text: 'حذف', clicked: false }
       ]
-    },
-  ];
+    }
+  ]
 
   roleName: any;
   ngOnInit(): void {
-
   }
 
   async saveUserRole() {
