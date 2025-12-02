@@ -31,7 +31,7 @@ namespace Clinic.Api.Application.Interfaces
         Task<IEnumerable<TimeExceptionsContext>> GetTimeExceptions();
         Task<GlobalResponse> DeleteTimeException(int id);
         Task<GlobalResponse> SaveOutOfTurnException(SaveOutOfTurnExceptionDto model);
-        Task<IEnumerable<OutOfTurnExceptionsContext>> GetOutOfTurnExceptions();
+        Task<IEnumerable<GetOutOfTurnExceptionResponse>> GetOutOfTurnExceptions();
         Task<GlobalResponse> DeleteOutOfTurnException(int id);
     }
 }

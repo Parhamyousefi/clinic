@@ -773,12 +773,32 @@ namespace Clinic.Api.Infrastructure.Services
             }
         }
 
-        public async Task<IEnumerable<OutOfTurnExceptionsContext>> GetOutOfTurnExceptions()
+        public async Task<IEnumerable<GetOutOfTurnExceptionResponse>> GetOutOfTurnExceptions()
         {
             try
             {
-                var outOfTurnExceptions = await _context.OutOfTurnExceptions.ToListAsync();
-                return outOfTurnExceptions;
+                var query = _context.OutOfTurnExceptions.AsQueryable();
+                var result = await (
+                    from o in query
+                    join d in _context.Users on o.PractitionerId equals d.Id
+                    join b in _context.Businesses on o.BusinessId equals b.Id
+                    select new GetOutOfTurnExceptionResponse
+                    {
+                        Id = o.Id,
+                        GrigoryDate = o.GrigoryDate,
+                        StartDate = o.StartDate,
+                        PractitionerId = o.PractitionerId,
+                        BusinessId = o.BusinessId,
+                        OutOfTurn = o.OutOfTurn,
+                        CreatorId = o.CreatorId,
+                        ModifierId = o.ModifierId,
+                        CreatedOn = o.CreatedOn,
+                        LastUpdated = o.LastUpdated,
+                        DoctorName = d.FirstName + " " + d.LastName,
+                        BusinessName = b.Name
+                    }
+                    ).ToListAsync();
+                return result;
             }
             catch (Exception ex)
             {
