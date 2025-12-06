@@ -13,6 +13,7 @@ import { PdfMakerComponent } from '../../share/pdf-maker/pdf-maker.component';
 import { UtilService } from '../../_services/util.service';
 export const ValidFormat = ['pdf', 'jpg', 'jpeg', 'png'];
 import { environment } from './../../../environments/environment';
+import { ObjectService } from '../../_services/store.service';
 @Component({
   selector: 'app-patient-treatment',
   standalone: true,
@@ -43,7 +44,8 @@ export class PatientTreatmentComponent {
     private activeRoute: ActivatedRoute,
     private treatmentService: TreatmentsService,
     private questionService: QuestionService,
-    private utilService: UtilService
+    private utilService: UtilService,
+   
 
   ) { }
   titleList: any[] = [
@@ -379,4 +381,5 @@ export class PatientTreatmentComponent {
       }
     })
   }
+  
 }

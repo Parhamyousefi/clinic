@@ -1,7 +1,7 @@
 <div class="appContainer">
     <h4 class="text-right">استثنائات زمانی</h4>
     <hr>
-    <div class="col-12 d-flex flex-wrap">
+    <div *ngIf="checkAccess(2)" class="col-12 d-flex flex-wrap">
         <div class="col-md-4 col-12 mt-2 text-right">
             <label for="exceptionDate">پزشک</label>
             <p-dropdown id="doctor" [options]="doctorsList" [(ngModel)]="newException.doctor" optionLabel="name"
@@ -58,12 +58,12 @@
             <label for="date">timeSlotSize</label>
             <input type="text" class="form-control" [(ngModel)]="newException.timeSlotSize" />
         </div>
+        <div class="d-flex justify-content-center align-items-center col-12 my-3">
+            <button class="btn btn-success " (click)="saveException()">ذخیره</button>
+        </div>
+        <hr>
     </div>
-    <div class="d-flex justify-content-center align-items-center mt-3">
-        <button class="btn btn-success" (click)="saveException()">ذخیره</button>
-    </div>
-    <hr>
-    <div class="col-12">
+    <div *ngIf="checkAccess(1)" class="col-12">
         <p-table #dt styleClass="p-datatable-gridlines" [value]="timeExceptions" [autoLayout]="true" [paginator]="true"
             [rows]="10" [showCurrentPageReport]="true" currentPageReportTemplate="نمایش {first} تا {last} "
             [rowsPerPageOptions]="[10,25,50]">
@@ -81,7 +81,7 @@
                     <th>مکان</th>
                     <th>خارج از نوبت</th>
                     <th>time slot</th>
-                    <th>عملیات</th>
+                    <th *ngIf="checkAccess(3) || checkAccess(2)">عملیات</th>
                 </tr>
                 <tr>
                     <th></th>
@@ -96,7 +96,7 @@
                     <th></th>
                     <th></th>
                     <th></th>
-                    <th></th>
+                    <th *ngIf="checkAccess(3) || checkAccess(2)"></th>
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-item let-rowIndex="rowIndex">
@@ -162,7 +162,7 @@
                         </div>
                     </td>
                     <td class="px-2">
-                        <button class="btn btn-outline-secondary" (click)="editException(item)">ویرایش</button>
+                        <button *ngIf="checkAccess(2)" class="btn btn-outline-secondary" (click)="editException(item)">ویرایش</button>
                     </td>
                 </tr>
             </ng-template>

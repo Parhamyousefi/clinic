@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { SharedModule } from '../../../share/shared.module';
 import { ColorPickerModule } from 'primeng/colorpicker';
 import { ToastrService } from 'ngx-toastr';
+import { ObjectService } from '../../../_services/store.service';
 
 @Component({
   selector: 'app-appointment-types',
@@ -25,7 +26,8 @@ export class AppointmentTypesComponent {
   constructor(
     private treatmentService: TreatmentsService,
     private mainService: MainService,
-    private toastR: ToastrService
+    private toastR: ToastrService,
+    private objectService: ObjectService
   ) { }
 
   ngOnInit() {
@@ -138,6 +140,10 @@ export class AppointmentTypesComponent {
     this.newType.thirdProduct = this.productList.filter((item: any) => item.id == type.relatedProduct3Id)[0];
     this.newType.typeColor = type.color;
     this.newType.showInAppoinment = type.showInOnlineBookings;
+  }
+  
+  checkAccess(id) {
+    return this.objectService.checkAccess(id);
   }
 
 }

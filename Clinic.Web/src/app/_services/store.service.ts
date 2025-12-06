@@ -26,21 +26,21 @@ export class ObjectService {
     roleData: any;
     itemList: any = [
         {
-            id: 0, title: 'وقت دهی', itmes: [
+            id: 0, title: 'وقت دهی', url: '/appointment', itmes: [
                 { id: 1, text: 'مشاهده', clicked: false, fieldName: 'appointmentView' },
                 { id: 2, text: 'ثبت', clicked: false, fieldName: 'appointmentCreateAndUpdate' },
                 { id: 3, text: 'حذف', clicked: false, fieldName: 'appointmentDelete' }
             ]
         },
         {
-            id: 1, title: ' اوقات امروز', itmes: [
+            id: 1, title: ' اوقات امروز', url: '/today-appointment', itmes: [
                 { id: 1, text: 'مشاهده', clicked: false, fieldName: 'totdayAppointmentView' },
                 { id: 2, text: 'تایید تخفیف', clicked: false, fieldName: 'acceptDiscount' },
                 { id: 3, text: 'تایید انجام خدمت', clicked: false, fieldName: 'canAcceptItem' }
             ]
         },
         {
-            id: 2, title: 'بیماران', itmes: [
+            id: 2, title: 'بیماران', url: '/patients', itmes: [
                 { id: 1, text: 'مشاهده', clicked: false, fieldName: 'patientView' },
                 { id: 2, text: 'ثبت', clicked: false, fieldName: 'patientCreateANdUpdate' },
                 { id: 3, text: 'حذف', clicked: false, fieldName: 'patientDelete' },
@@ -103,7 +103,7 @@ export class ObjectService {
             ]
         },
         {
-            id: 9, title: 'هزینه ها', itmes: [
+            id: 9, title: 'هزینه ها', url: '/expenses', itmes: [
                 { id: 1, text: 'مشاهده', clicked: false, fieldName: 'expenseView' },
                 { id: 2, text: 'ثبت', clicked: false, fieldName: 'expenseCreateAndUpdate' },
                 { id: 3, text: 'حذف', clicked: false, fieldName: 'expenseDelete' }
@@ -121,7 +121,7 @@ export class ObjectService {
                 { id: 3, text: 'حذف', clicked: false, fieldName: 'roleDelete' }
             ]
         }, {
-            id: 12, title: 'انواع وقت دهی ', itmes: [
+            id: 12, title: 'انواع وقت دهی ', url: '/appointment-types', itmes: [
                 { id: 1, text: 'مشاهده', clicked: false, fieldName: 'appointmentTypeView' },
                 { id: 2, text: 'ثبت', clicked: false, fieldName: 'appointmentTypeCreateAndUpdate' },
                 { id: 3, text: 'حذف', clicked: false, fieldName: 'appointmentTypeDelete' }
@@ -133,27 +133,27 @@ export class ObjectService {
                 { id: 3, text: 'حذف', clicked: false, fieldName: 'holidayDelete' }
             ]
         }, {
-            id: 14, title: 'استثنائات اوقات پزشکان', itmes: [
+            id: 14, title: 'استثنائات اوقات پزشکان', url: '/time-exception', itmes: [
                 { id: 1, text: 'مشاهده', clicked: false, fieldName: 'timeExceptionView' },
                 { id: 2, text: 'ثبت', clicked: false, fieldName: 'timeExceptionCreateAndUpdate' },
                 { id: 3, text: 'حذف', clicked: false, fieldName: 'timeExceptionDelete' }
             ]
         }, {
-            id: 15, title: ' استثنائات خارج از نوبت ', url: 'outOfturnexceptions', itmes: [
+            id: 15, title: ' استثنائات خارج از نوبت ', url: '/outOfturnexceptions', itmes: [
                 { id: 1, text: 'مشاهده', clicked: false, fieldName: 'outOfTurnExceptionView' },
                 { id: 2, text: 'ثبت', clicked: false, fieldName: 'outOfTurnExceptionCreateAndUpdate' },
                 { id: 3, text: 'حذف', clicked: false, fieldName: 'outOfTurnExceptionDelete' }
             ]
         },
         {
-            id: 16, title: ' خدمات ', itmes: [
+            id: 16, title: ' خدمات ', url: '/service-list', itmes: [
                 { id: 1, text: 'مشاهده', clicked: false, fieldName: 'billableItemView' },
                 { id: 2, text: 'ثبت', clicked: false, fieldName: 'billableItemCreateAndUpdate' },
                 { id: 3, text: 'حذف', clicked: false, fieldName: 'billableItemDelete' }
             ]
         },
         {
-            id: 17, title: ' گروه خدمات ', itmes: [
+            id: 17, title: ' گروه خدمات ', url: '/service-group-list', itmes: [
                 { id: 1, text: 'مشاهده', clicked: false, fieldName: 'itemCategoryView' },
                 { id: 2, text: 'ثبت', clicked: false, fieldName: 'itemCategoryCreateAndUpdate' },
                 { id: 3, text: 'حذف', clicked: false, fieldName: 'itemCategoryDelete' }
@@ -175,7 +175,35 @@ export class ObjectService {
         }
     ]
 
+    navbarAccess: any = [
+        { id: 1, link: '/appointment', clicked: false, fieldName: 'appointmentView' },
+        { id: 2, link: '/today-appointment', clicked: false, fieldName: 'totdayAppointmentView' },
+        { id: 3, link: '/patients', clicked: false, fieldName: 'patientView' },
+        { id: 4, text: 'مشاهده', clicked: false, fieldName: 'treatmentView' },
+        { id: 5, text: 'مشاهده', clicked: false, fieldName: 'attachmentView' },
+        { id: 6, text: 'مشاهده', clicked: false, fieldName: 'letterView' },
+        { id: 7, link: '/invoice-list', clicked: false, fieldName: 'invoiceView' },
+        { id: 8, link: '/receipt-list', clicked: false, fieldName: 'receiptView' },
+        { id: 9, link: '/payment-list', clicked: false, fieldName: 'paymentView' },
+        { id: 10, link: '/expenses', clicked: false, fieldName: 'expenseView' },
+        { id: 11, link: '/userlist', clicked: false, fieldName: 'userView' },
+        { id: 12, text: 'مشاهده', clicked: false, fieldName: 'roleView' },
+        { id: 13, link: '/appointment-types', clicked: false, fieldName: 'appointmentTypeView' },
+        { id: 14, text: 'مشاهده', clicked: false, fieldName: 'holidayView' },
+        { id: 15, link: '/time-exception', clicked: false, fieldName: 'timeExceptionView' },
+        { id: 16, link: '/outOfturnexceptions', clicked: false, fieldName: 'outOfTurnExceptionView' },
+        { id: 17, link: '/service-list', clicked: false, fieldName: 'billableItemView' },
+        { id: 18, link: '/service-group-list', clicked: false, fieldName: 'itemCategoryView' },
+        { id: 19, text: 'مشاهده', clicked: false, fieldName: 'treatmentTemplateView' },
+        { id: 20, text: 'مشاهده', clicked: false, fieldName: 'jobView' },
+    ]
+
     setData(obj: any): void {
+        this.store.dispatch(setObject({ obj: obj }));
+        this.convertData(obj);
+    }
+
+    convertData(obj) {
         this.itemList.forEach(section => {
             section.itmes.forEach(item => {
                 if (item.fieldName && obj.hasOwnProperty(item.fieldName)) {
@@ -183,13 +211,17 @@ export class ObjectService {
                 }
             });
         })
-        let role = this.itemList;
-        this.store.dispatch(setObject({ obj: role }));
+        this.navbarAccess.forEach(element => {
+            if (element.fieldName && obj.hasOwnProperty(element.fieldName)) {
+                element.clicked = obj[element.fieldName];
+            }
+        })
     }
 
     getData(): Observable<any> {
         return this.store.select(selectObject)
     }
+
 
     async convertDataWithUrl() {
         const currentPath = this.router.url;
@@ -199,23 +231,29 @@ export class ObjectService {
                     if (!data) {
                         this.getUserRole();
                         setTimeout(() => {
-                            data = this.roleData;
+                            this.convertData(data);
+                            data = this.itemList;
                             return data.filter(section =>
-                                (section.url && currentPath.includes(section.url))
+                                // (section.url && currentPath.includes(section.url))
+                                (section.url && currentPath == (section.url))
                             );
                         }, 1000);
+                    } else {
+                        this.convertData(data);
+                        data = this.itemList;
                     }
                     return data.filter(section =>
-                        section.url && currentPath.includes(section.url)
+                        // section.url && currentPath.includes(section.url)
+                        (section.url && currentPath == (section.url))
+
                     );
                 })
             )
         );
-        if (result) {
+        if (result.length > 0) {
             this.accessData = result[0]['itmes'];
         }
     }
-
 
     async getUserRole() {
         // let res: any = await this.userService.getUserRole().toPromise();
@@ -224,7 +262,7 @@ export class ObjectService {
             "name": "Admin",
             "generalSettingView": true,
             "appointmentView": true,
-            "appointmentCreateAndUpdate": true,
+            "appointmentCreateAndUpdate": false,
             "appointmentDelete": true,
             "patientView": true,
             "patientCreateAndUpdate": true,
@@ -253,8 +291,8 @@ export class ObjectService {
             "roleView": true,
             "roleCreateAndUpdate": true,
             "roleDelete": true,
-            "appointmentTypeView": true,
-            "appointmentTypeCreateAndUpdate": true,
+            "appointmentTypeView": false,
+            "appointmentTypeCreateAndUpdate": false,
             "appointmentTypeDelete": true,
             "holidayView": true,
             "holidayCreateAndUpdate": true,
@@ -283,11 +321,11 @@ export class ObjectService {
             "letterView": true,
             "letterCreateAndUpdate": true,
             "letterDelete": true,
-            "treatmentView": true,
+            "treatmentView": false,
             "treatmentCreateAndUpdate": true,
             "treatmentDelete": true,
             "attachmentView": true,
-            "attachmentCreateAndUpdate": true,
+            "attachmentCreateAndUpdate": false,
             "attachmentDelete": true,
             "smsSettingView": true,
             "smsSettingCreateAndUpdate": true,
@@ -315,24 +353,24 @@ export class ObjectService {
             "jobDelete": true,
             "outInvoiceReport": true,
             "inInvoiceReport": true,
-            "outOfTurnExceptionView": true,
-            "outOfTurnExceptionCreateAndUpdate": true,
-            "outOfTurnExceptionDelete": false,
+            "outOfTurnExceptionView": false,
+            "outOfTurnExceptionCreateAndUpdate": false,
+            "outOfTurnExceptionDelete": true,
             "unChangeInvoiceReport": true,
             "setAppointmentPermission": true,
             "itemCategoryView": true,
-            "itemCategoryCreateAndUpdate": true,
+            "itemCategoryCreateAndUpdate": false,
             "itemCategoryDelete": true,
             "receiptPaymentReport": true,
             "allowReceiptOverBalance": true,
             "allowPayOverBalance": true,
-            "acceptDiscount": true,
+            "acceptDiscount": false,
             "cashierByCashAndETFPosReport": true,
             "practitionerReport": true,
             "watingReport": true,
             "firstEncounterReport": true,
             "medicalAlertCreateAndUpdate": true,
-            "medicalAlertDelete": true,
+            "medicalAlertDelete": false,
             "changePatientRecordStatus": true,
             "canAcceptItem": true,
             "visitReport": true,
@@ -342,13 +380,24 @@ export class ObjectService {
         }
         // await this.setData(res[0]);
         await this.setData(res);
-        this.roleData = this.itemList;
+        // this.roleData = this.itemList;
     }
 
     checkAccess(id: number) {
         const item = this.accessData.find(x => x.id === id);
         return item ? item.clicked : false;
     }
+
+
+    getNavbarAccess() {
+        return this.navbarAccess;
+    }
+
+    getItemAccess() {
+        return this.itemList;
+    }
+
+
 
 
 }

@@ -10,6 +10,7 @@ import { InvoiceService } from '../../_services/invoice.service';
 import { ToastrService } from 'ngx-toastr';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { UtilService } from '../../_services/util.service';
+import { ObjectService } from '../../_services/store.service';
 @Component({
   selector: 'app-today-appointments',
   standalone: true,
@@ -26,7 +27,8 @@ export class TodayAppointmentsComponent implements OnInit {
     private invoiceService: InvoiceService,
     private toastR: ToastrService,
     private router: Router,
-    private utilService: UtilService
+    private utilService: UtilService,
+    private objectService: ObjectService
   ) { }
 
   clinicsList: any = [];
@@ -57,15 +59,17 @@ export class TodayAppointmentsComponent implements OnInit {
   isAdminOrDoctor: boolean;
 
   async ngOnInit() {
-    this.userType = this.utilService.checkUserType();
-    this.isAdminOrDoctor = this.userType == 3 ? false : true;
-    this.selectedDatefrom = new FormControl(moment().format('jYYYY/jMM/jDD'));
-    this.selectedDateTo = new FormControl(moment().format('jYYYY/jMM/jDD'));
-    await this.getClinics();
-    await this.getBillableItems();
-    setTimeout(() => {
-      this.getAppointment();
-    }, 1000);
+    if (this.checkAccess(1)) {
+      this.userType = this.utilService.checkUserType();
+      this.isAdminOrDoctor = this.userType == 3 ? false : true;
+      this.selectedDatefrom = new FormControl(moment().format('jYYYY/jMM/jDD'));
+      this.selectedDateTo = new FormControl(moment().format('jYYYY/jMM/jDD'));
+      await this.getClinics();
+      await this.getBillableItems();
+      setTimeout(() => {
+        this.getAppointment();
+      }, 1000);
+    }
   }
 
   async getAppointment() {
@@ -82,6 +86,16 @@ export class TodayAppointmentsComponent implements OnInit {
       this.todayAppointmentsList = res;
       this.todayAppointmentsList.forEach(appointment => {
         appointment.hasDiscount = appointment.totalDiscount > 0 ? true : false;
+        if (appointment.billableItemNames) {
+          appointment.billableItem = [];
+          appointment.billableItemNames.forEach(element => {
+            appointment.billableItem.push({
+              name: element,
+              done: false
+            })
+          });
+
+        }
       });
       this.filteredAppointments = [];
 
@@ -241,5 +255,13 @@ export class TodayAppointmentsComponent implements OnInit {
       }
     }
     catch { }
+  }
+
+  checkAccess(id) {
+    return this.objectService.checkAccess(id);
+  }
+
+  doneBillableItem(item) {
+    item.done = true;
   }
 }

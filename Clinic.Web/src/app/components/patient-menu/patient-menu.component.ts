@@ -7,6 +7,7 @@ import { PatientService } from '../../_services/patient.service';
 import { Router, RouterLink } from '@angular/router';
 import { MainService } from '../../_services/main.service';
 import { FormsModule } from '@angular/forms';
+import { ObjectService } from '../../_services/store.service';
 
 export interface imenu {
   id: number;
@@ -47,11 +48,14 @@ export class PatientMenuComponent {
   noteEdit: boolean;
   noteId: any;
   hoveredNote: any;
+  noteAccess: any = [];
+
   constructor(
     private toastR: ToastrService,
     private patientService: PatientService,
     private router: Router,
     private mainService: MainService,
+    private objectService: ObjectService
   ) { }
 
   ngOnInit() {
@@ -63,7 +67,8 @@ export class PatientMenuComponent {
       this.hasPatientMenu = true;
       this.patientId = url.split('/').pop();
       this.getPatientById(this.patientId);
-      this.getNotes();
+      this.getNoteAccess();
+      this.getNavbarAccess();
     }
   }
 
@@ -137,6 +142,9 @@ export class PatientMenuComponent {
   }
 
   editNote(note) {
+    if (!this.checkNoteAccess(8)) {
+      return
+    }
     this.openNoteInput = true;
     this.patientNote = note.note;
     this.noteId = note.noteId;
@@ -164,4 +172,34 @@ export class PatientMenuComponent {
       catch { }
     })
   }
+
+  getNavbarAccess() {
+    let accessList = this.objectService.getNavbarAccess();
+    let treatmentView = accessList.filter(x => x.fieldName == 'treatmentView')[0];
+    let attachmentView = accessList.filter(x => x.fieldName == 'attachmentView')[0];
+    this.patientMenu
+    if (treatmentView && !treatmentView.clicked) {
+      this.patientMenu = this.patientMenu.filter(item => item.id !== 1);
+    }
+
+    if (attachmentView && !attachmentView.clicked) {
+      this.patientMenu = this.patientMenu.filter(item => item.id !== 2);
+    }
+  }
+
+  getNoteAccess() {
+    let accessList = this.objectService.getItemAccess();
+    let item = accessList.filter(x => x.id == 2);
+    if (item[0]['itmes'][6]['clicked']) {
+      this.getNotes();
+    }
+    this.noteAccess = item[0]['itmes'];
+  }
+
+  checkNoteAccess(id) {
+    const item = this.noteAccess.find(x => x.id === id);
+    return item ? item.clicked : false;
+  }
+
+
 }

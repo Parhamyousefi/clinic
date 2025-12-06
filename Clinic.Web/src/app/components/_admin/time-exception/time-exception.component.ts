@@ -9,6 +9,7 @@ import { TableModule } from 'primeng/table';
 import { UserService } from '../../../_services/user.service';
 import { MainService } from '../../../_services/main.service';
 import { SharedModule } from '../../../share/shared.module';
+import { ObjectService } from '../../../_services/store.service';
 
 @Component({
   selector: 'app-time-exception',
@@ -30,7 +31,8 @@ export class TimeExceptionComponent {
   constructor(
     private toastR: ToastrService,
     private userService: UserService,
-    private mainService: MainService 
+    private mainService: MainService,
+    private objectService: ObjectService
   ) { }
 
   ngOnInit() {
@@ -141,6 +143,9 @@ export class TimeExceptionComponent {
     this.newException.timeSlotSize = exception.timeSlotSize;
     this.newException.selectedClinic = this.clinicsList.filter((clinic: any) => clinic.id == exception.businessId)[0];
     this.newException.id = exception.id;
+  }
+  checkAccess(id) {
+    return this.objectService.checkAccess(id);
   }
 
 }
