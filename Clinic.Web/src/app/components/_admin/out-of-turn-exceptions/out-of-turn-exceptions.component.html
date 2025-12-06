@@ -4,7 +4,7 @@
     <hr>
   </div>
   <div class="py-2 px-3">
-    <div class="col-12">
+    <div *ngIf="checkAccess(2)" class="col-12">
       <div class="d-flex flex-wrap">
         <div class="col-lg-6 col-12 form-group mb-3">
           <p-dropdown [options]="doctorList" placeholder="پزشک" [(ngModel)]="form.selectedDoctor" optionLabel="name"
@@ -28,8 +28,8 @@
         </div>
       </div>
     </div>
-    <hr>
-    <div class="col-12">
+    <hr *ngIf="checkAccess(2)">
+    <div *ngIf="checkAccess(1)" class="col-12">
       <div class="table-responsive">
         <p-table #dt [paginator]='true' [rows]="10" [value]='itemList' [resizableColumns]="true"
           styleClass="p-datatable-gridlines">
@@ -38,7 +38,7 @@
               <th class="min-width"> پزشک</th>
               <th class="min-width">مکان </th>
               <th class="min-width">تاریخ</th>
-              <th class="min-width">تغییرات</th>
+              <th *ngIf="checkAccess(3) || checkAccess(2)" class="min-width">تغییرات</th>
             </tr>
             <tr>
               <th>
@@ -50,7 +50,7 @@
                   (input)="dt.filter($event.target.value, 'fldOverload', 'startsWith')">
               </th>
               <th></th>
-              <th></th>
+              <th *ngIf="checkAccess(3) || checkAccess(2)"></th>
             </tr>
           </ng-template>
           <ng-template pTemplate="body" let-item>
@@ -58,11 +58,12 @@
               <td>{{item.doctorName}}</td>
               <td>{{item.businessName}}</td>
               <td>{{item.startDate| JustDateZone}}</td>
-              <td>
-                <button class="btn btn-outline-primary" (click)="edit(item)">
+              <td *ngIf="checkAccess(3) || checkAccess(2)">
+                <button *ngIf="checkAccess(2)" class="btn btn-outline-primary" (click)="edit(item)">
                   تغییر
                 </button>
-                <button class="btn btn-outline-danger mx-1" (click)="deleteOutOfTurnException(item.id)">
+                <button *ngIf="checkAccess(3)" class="btn btn-outline-danger mx-1"
+                  (click)="deleteOutOfTurnException(item.id)">
                   حذف
                 </button>
               </td>

@@ -6,6 +6,7 @@ import { MainService } from '../../../_services/main.service';
 import moment from 'moment-jalaali';
 import { FormControl } from '@angular/forms';
 import { UserService } from '../../../_services/user.service';
+import { ObjectService } from '../../../_services/store.service';
 
 @Component({
   selector: 'app-out-of-turn-exceptions',
@@ -20,7 +21,8 @@ export class OutOfTurnExceptionsComponent implements OnInit {
   constructor(
     private mainService: MainService,
     private toastR: ToastrService,
-    private userService: UserService
+    private userService: UserService,
+    private objectService: ObjectService
   ) { }
 
   form: any = [];
@@ -34,7 +36,6 @@ export class OutOfTurnExceptionsComponent implements OnInit {
     this.getClinics();
     this.form.selectedDate = new FormControl(moment().format('jYYYY/jMM/jDD'));
     this.form.editOrNew = -1;
-
   }
 
   async getOutOfTurnExceptions() {
@@ -120,5 +121,8 @@ export class OutOfTurnExceptionsComponent implements OnInit {
     // this.form.selectedDoctor = this.doctorList[0];
   }
 
+  checkAccess(id) {
+    return this.objectService.checkAccess(id);
+  }
 
 }

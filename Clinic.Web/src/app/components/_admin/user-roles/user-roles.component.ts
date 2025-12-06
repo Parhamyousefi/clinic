@@ -20,150 +20,151 @@ export class UserRolesComponent implements OnInit {
 
   itemList: any = [
     {
-      id: 1, title: 'وقت دهی', itmes: [
-        { id: 1, text: 'مشاهده', clicked: false },
-        { id: 2, text: 'ثبت', clicked: false },
-        { id: 3, text: 'حذف', clicked: false }
+      id: 0, title: 'وقت دهی', itmes: [
+        { id: 1, text: 'مشاهده', clicked: false, fieldName: 'appointmentView' },
+        { id: 2, text: 'ثبت', clicked: false, fieldName: 'appointmentCreateAndUpdate' },
+        { id: 3, text: 'حذف', clicked: false, fieldName: 'appointmentDelete' }
       ]
     },
     {
-      id: 2, title: ' اوقات امروز', itmes: [
-        { id: 1, text: 'مشاهده', clicked: false },
-        { id: 2, text: 'تایید تخفیف', clicked: false },
-        { id: 3, text: 'تایید انجام خدمت', clicked: false }
+      id: 1, title: ' اوقات امروز', itmes: [
+        { id: 1, text: 'مشاهده', clicked: false, fieldName: 'totdayAppointmentView' },
+        { id: 2, text: 'تایید تخفیف', clicked: false, fieldName: 'acceptDiscount' },
+        { id: 3, text: 'تایید انجام خدمت', clicked: false, fieldName: 'canAcceptItem' }
       ]
     },
     {
-      id: 3, title: 'بیماران', itmes: [
-        { id: 1, text: 'مشاهده', clicked: false },
-        { id: 2, text: 'ثبت', clicked: false },
-        { id: 3, text: 'حذف', clicked: false },
-        { id: 4, text: 'مجوز وقت دهی', clicked: false },
-        { id: 5, text: 'تغییر وضعیت پرونده بیمار به کاغذی یا سیستمی', clicked: false },
-        { id: 6, text: 'ادغام بیماران', clicked: false },
-        { id: 7, text: 'ثبت یادداشت', clicked: false },
-        { id: 8, text: 'ویرایش یادداشت', clicked: false },
-        { id: 9, text: 'حذف یادداشت', clicked: false }
+      id: 2, title: 'بیماران', itmes: [
+        { id: 1, text: 'مشاهده', clicked: false, fieldName: 'patientView' },
+        { id: 2, text: 'ثبت', clicked: false, fieldName: 'patientCreateANdUpdate' },
+        { id: 3, text: 'حذف', clicked: false, fieldName: 'patientDelete' },
+        { id: 4, text: 'مجوز وقت دهی', clicked: false, fieldName: 'setAppointmentPermission' },
+        { id: 5, text: 'تغییر وضعیت پرونده بیمار به کاغذی یا سیستمی', clicked: false, fieldName: 'changePatientRecordStatus' },
+        { id: 6, text: 'ادغام بیماران', clicked: false, fieldName: 'mergePatients' },
+        { id: 7, text: 'ثبت یادداشت', clicked: false, fieldName: 'medicalAlertCreateAndUpdate' },
+        { id: 8, text: 'ویرایش یادداشت', clicked: false, fieldName: 'medicalAlertUpdate' },
+        { id: 9, text: 'حذف یادداشت', clicked: false, fieldName: 'medicalAlertDelete' }
       ]
     },
     {
-      id: 4, title: ' پرونده بالینی', itmes: [
-        { id: 1, text: 'مشاهده', clicked: false },
-        { id: 2, text: 'ثبت', clicked: false },
-        { id: 3, text: 'حذف', clicked: false }
+      id: 3, title: ' پرونده بالینی', itmes: [
+        { id: 1, text: 'مشاهده', clicked: false, fieldName: 'treatmentView' },
+        { id: 2, text: 'ثبت', clicked: false, fieldName: 'treatmentCreateAndUpdate' },
+        { id: 3, text: 'حذف', clicked: false, fieldName: 'treatmentDelete' }
       ]
     },
     {
-      id: 5, title: 'پیوست', itmes: [
-        { id: 1, text: 'مشاهده', clicked: false },
-        { id: 2, text: 'ثبت', clicked: false },
-        { id: 3, text: 'حذف', clicked: false }
+      id: 4, title: 'پیوست', itmes: [
+        { id: 1, text: 'مشاهده', clicked: false, fieldName: 'attachmentView' },
+        { id: 2, text: 'ثبت', clicked: false, fieldName: 'attachmentCreateAndUpdate' },
+        { id: 3, text: 'حذف', clicked: false, fieldName: 'attachmentDelete' }
       ]
     },
     {
-      id: 6, title: 'نامه ها', itmes: [
-        { id: 1, text: 'مشاهده', clicked: false },
-        { id: 2, text: 'ثبت', clicked: false },
-        { id: 3, text: 'حذف', clicked: false }
+      id: 5, title: 'نامه ها', itmes: [
+        { id: 1, text: 'مشاهده', clicked: false, fieldName: 'letterView' },
+        { id: 2, text: 'ثبت', clicked: false, fieldName: 'letterCreateAndUpdate' },
+        { id: 3, text: 'حذف', clicked: false, fieldName: 'letterDelete' }
       ]
     },
     {
-      id: 7, title: 'صورتحساب ها ', itmes: [
-        { id: 1, text: 'مشاهده', clicked: false },
-        { id: 2, text: 'ثبت', clicked: false },
-        { id: 3, text: 'حذف', clicked: false },
-        { id: 4, text: 'ابطال', clicked: false },
-        { id: 5, text: 'مجوز بدهی', clicked: false },
-        { id: 6, text: 'امکان تغییر یا حذف صورتحساب بعد از دریافت', clicked: false },
-        { id: 7, text: 'اعمال تخفیف', clicked: false }
+      id: 6, title: 'صورتحساب ها ', itmes: [
+        { id: 1, text: 'مشاهده', clicked: false, fieldName: 'invoiceView' },
+        { id: 2, text: 'ثبت', clicked: false, fieldName: 'invoiceCreateAndUpdate' },
+        { id: 3, text: 'حذف', clicked: false, fieldName: 'invoiceDelete' },
+        { id: 4, text: 'ابطال', clicked: false, fieldName: 'invoiceCancel' },
+        { id: 5, text: 'مجوز بدهی', clicked: false, fieldName: 'allowPayLater' },
+        { id: 6, text: 'امکان تغییر یا حذف صورتحساب بعد از دریافت', clicked: false, fieldName: 'changeInvoiceAfterRecieve' },
+        { id: 7, text: 'اعمال تخفیف', clicked: false, fieldName: 'invoiceDiscount' }
       ]
     },
     {
-      id: 8, title: ' دریافت ها', itmes: [
-        { id: 1, text: 'مشاهده', clicked: false },
-        { id: 2, text: 'ثبت', clicked: false },
-        { id: 3, text: 'حذف', clicked: false },
-        { id: 4, text: 'مجوز ویرایش', clicked: false },
-        { id: 5, text: 'مجوز دریافت بیشتر از بدهی بیمار', clicked: false }
+      id: 7, title: ' دریافت ها', itmes: [
+        { id: 1, text: 'مشاهده', clicked: false, fieldName: 'receiptView' },
+        { id: 2, text: 'ثبت', clicked: false, fieldName: 'receiptCreateAndUpdate' },
+        { id: 3, text: 'حذف', clicked: false, fieldName: 'receiptDelete' },
+        { id: 4, text: 'مجوز ویرایش', clicked: false, fieldName: 'receiptAllowEdit' },
+        { id: 5, text: 'مجوز دریافت بیشتر از بدهی بیمار', clicked: false, fieldName: 'allowReceiptOverBalance' }
       ]
     },
     {
-      id: 9, title: ' پرداخت ها', itmes: [
-        { id: 1, text: 'مشاهده', clicked: false },
-        { id: 2, text: 'ثبت', clicked: false },
-        { id: 3, text: 'حذف', clicked: false },
-        { id: 4, text: 'مجوز ویرایش', clicked: false },
-        { id: 5, text: 'مجوز پرداخت بیشتر از طلب بیمار', clicked: false },
+      id: 8, title: ' پرداخت ها', itmes: [
+        { id: 1, text: 'مشاهده', clicked: false, fieldName: 'paymentView' },
+        { id: 2, text: 'ثبت', clicked: false, fieldName: 'paymentCreateAndUpdate' },
+        { id: 3, text: 'حذف', clicked: false, fieldName: 'paymentDelete' },
+        { id: 4, text: 'مجوز ویرایش', clicked: false, fieldName: 'paymentAllowEdit' },
+        { id: 5, text: 'مجوز پرداخت بیشتر از طلب بیمار', clicked: false, fieldName: 'allowPayOverBalance' },
       ]
     },
     {
-      id: 10, title: 'هزینه ها', itmes: [
-        { id: 1, text: 'مشاهده', clicked: false },
-        { id: 2, text: 'ثبت', clicked: false },
-        { id: 3, text: 'حذف', clicked: false }
+      id: 9, title: 'هزینه ها', itmes: [
+        { id: 1, text: 'مشاهده', clicked: false, fieldName: '' },
+        { id: 2, text: 'ثبت', clicked: false, fieldName: '' },
+        { id: 3, text: 'حذف', clicked: false, fieldName: '' }
       ]
     }, {
-      id: 11, title: ' کاربران و پزشکان', itmes: [
-        { id: 1, text: 'مشاهده', clicked: false },
-        { id: 2, text: 'ثبت', clicked: false },
-        { id: 3, text: 'حذف', clicked: false }
+      id: 10, title: ' کاربران و پزشکان', itmes: [
+        { id: 1, text: 'مشاهده', clicked: false, fieldName: 'userView' },
+        { id: 2, text: 'ثبت', clicked: false, fieldName: 'userCreateAndUpdate' },
+        { id: 3, text: 'حذف', clicked: false, fieldName: 'userDelete' }
       ]
     }, {
-      id: 12, title: 'نقش ها ', itmes: [
-        { id: 1, text: 'مشاهده', clicked: false },
-        { id: 2, text: 'ثبت', clicked: false },
-        { id: 3, text: 'حذف', clicked: false }
+      id: 11, title: 'نقش ها ', itmes: [
+        { id: 1, text: 'مشاهده', clicked: false, fieldName: '' },
+        { id: 2, text: 'ثبت', clicked: false, fieldName: '' },
+        { id: 3, text: 'حذف', clicked: false, fieldName: '' }
       ]
     }, {
-      id: 13, title: 'انواع وقت دهی ', itmes: [
-        { id: 1, text: 'مشاهده', clicked: false },
-        { id: 2, text: 'ثبت', clicked: false },
-        { id: 3, text: 'حذف', clicked: false }
+      id: 12, title: 'انواع وقت دهی ', itmes: [
+        { id: 1, text: 'مشاهده', clicked: false, fieldName: 'appointmentTypeView' },
+        { id: 2, text: 'ثبت', clicked: false, fieldName: 'appointmentTypeCreateAndUpdate' },
+        { id: 3, text: 'حذف', clicked: false, fieldName: 'appointmentTypeDelete' }
       ]
     }, {
       id: 13, title: 'تعطیلات  ', itmes: [
-        { id: 1, text: 'مشاهده', clicked: false },
-        { id: 2, text: 'ثبت', clicked: false },
-        { id: 3, text: 'حذف', clicked: false }
+        { id: 1, text: 'مشاهده', clicked: false, fieldName: 'holidayView' },
+        { id: 2, text: 'ثبت', clicked: false, fieldName: 'holidayCreateAndUpdate' },
+        { id: 3, text: 'حذف', clicked: false, fieldName: 'holidayDelete' }
       ]
     }, {
-      id: 14, title: ' مشاغل ', itmes: [
-        { id: 1, text: 'مشاهده', clicked: false },
-        { id: 2, text: 'ثبت', clicked: false },
-        { id: 3, text: 'حذف', clicked: false }
+      id: 14, title: 'استثنائات اوقات پزشکان', itmes: [
+        { id: 1, text: 'مشاهده', clicked: false, fieldName: 'timeExceptionView' },
+        { id: 2, text: 'ثبت', clicked: false, fieldName: 'timeExceptionCreateAndUpdate' },
+        { id: 3, text: 'حذف', clicked: false, fieldName: 'timeExceptionDelete' }
       ]
     }, {
-      id: 15, title: 'استثنائات اوقات پزشکان', itmes: [
-        { id: 1, text: 'مشاهده', clicked: false },
-        { id: 2, text: 'ثبت', clicked: false },
-        { id: 3, text: 'حذف', clicked: false }
-      ]
-    }, {
-      id: 16, title: ' استثنائات خارج از نوبت ', itmes: [
-        { id: 1, text: 'مشاهده', clicked: false },
-        { id: 2, text: 'ثبت', clicked: false },
-        { id: 3, text: 'حذف', clicked: false }
+      id: 15, title: ' استثنائات خارج از نوبت ', itmes: [
+        { id: 1, text: 'مشاهده', clicked: false, fieldName: 'outOfTurnExceptionView' },
+        { id: 2, text: 'ثبت', clicked: false, fieldName: 'outOfTurnExceptionCreateAndUpdate' },
+        { id: 3, text: 'حذف', clicked: false, fieldName: 'outOfTurnExceptionCreateAndUpdate' }
       ]
     },
     {
-      id: 17, title: ' خدمات ', itmes: [
-        { id: 1, text: 'مشاهده', clicked: false },
-        { id: 2, text: 'ثبت', clicked: false },
-        { id: 3, text: 'حذف', clicked: false }
+      id: 16, title: ' خدمات ', itmes: [
+        { id: 1, text: 'مشاهده', clicked: false, fieldName: 'billableItemView' },
+        { id: 2, text: 'ثبت', clicked: false, fieldName: 'billableItemCreateAndUpdate' },
+        { id: 3, text: 'حذف', clicked: false, fieldName: 'billableItemDelete' }
       ]
     },
     {
-      id: 18, title: ' گروه خدمات ', itmes: [
-        { id: 1, text: 'مشاهده', clicked: false },
-        { id: 2, text: 'ثبت', clicked: false },
-        { id: 3, text: 'حذف', clicked: false }
+      id: 17, title: ' گروه خدمات ', itmes: [
+        { id: 1, text: 'مشاهده', clicked: false, fieldName: 'itemCategoryView' },
+        { id: 2, text: 'ثبت', clicked: false, fieldName: 'itemCategoryCreateAndUpdate' },
+        { id: 3, text: 'حذف', clicked: false, fieldName: 'itemCategoryDelete' }
       ]
     },
     {
-      id: 19, title: 'تعریف پرونده بالینی ', itmes: [
-        { id: 1, text: 'مشاهده', clicked: false },
-        { id: 2, text: 'ثبت', clicked: false },
-        { id: 3, text: 'حذف', clicked: false }
+      id: 18, title: 'تعریف پرونده بالینی ', itmes: [
+        { id: 1, text: 'مشاهده', clicked: false, fieldName: 'treatmentTemplateView' },
+        { id: 2, text: 'ثبت', clicked: false, fieldName: 'treatmentTemplateCreateAndUpdate' },
+        { id: 3, text: 'حذف', clicked: false, fieldName: 'treatmentTemplateDelete' }
+      ]
+    },
+    {
+      id: 19, title: ' مشاغل ', itmes: [
+        { id: 1, text: 'مشاهده', clicked: false, fieldName: 'jobView' },
+        { id: 2, text: 'ثبت', clicked: false, fieldName: 'jobCreateAndUpdate' },
+        { id: 3, text: 'حذف', clicked: false, fieldName: 'jobDelete' }
       ]
     }
   ]
@@ -194,9 +195,9 @@ export class UserRolesComponent implements OnInit {
       canAcceptItem: this.itemList[1]['itmes'][2]['clicked'],
       changeInvoiceAfterRecieve: this.itemList[6]['itmes'][5]['clicked'],
       changePatientRecordStatus: this.itemList[2]['itmes'][4]['clicked'],
-      holidayCreateAndUpdate: this.itemList[12]['itmes'][1]['clicked'],
-      holidayDelete: this.itemList[12]['itmes'][2]['clicked'],
-      holidayView: this.itemList[12]['itmes'][0]['clicked'],
+      holidayCreateAndUpdate: this.itemList[13]['itmes'][1]['clicked'],
+      holidayDelete: this.itemList[13]['itmes'][2]['clicked'],
+      holidayView: this.itemList[13]['itmes'][0]['clicked'],
       invoiceCancel: this.itemList[6]['itmes'][3]['clicked'],
       invoiceCreateAndUpdate: this.itemList[6]['itmes'][1]['clicked'],
       invoiceDelete: this.itemList[6]['itmes'][2]['clicked'],
@@ -205,9 +206,9 @@ export class UserRolesComponent implements OnInit {
       itemCategoryCreateAndUpdate: this.itemList[17]['itmes'][1]['clicked'],
       itemCategoryDelete: this.itemList[17]['itmes'][2]['clicked'],
       itemCategoryView: this.itemList[17]['itmes'][0]['clicked'],
-      jobCreateAndUpdate: this.itemList[11]['itmes'][1]['clicked'],
-      jobDelete: this.itemList[11]['itmes'][2]['clicked'],
-      jobView: this.itemList[11]['itmes'][0]['clicked'],
+      jobCreateAndUpdate: this.itemList[19]['itmes'][1]['clicked'],
+      jobDelete: this.itemList[19]['itmes'][2]['clicked'],
+      jobView: this.itemList[19]['itmes'][0]['clicked'],
       letterCreateAndUpdate: this.itemList[5]['itmes'][1]['clicked'],
       letterDelete: this.itemList[5]['itmes'][2]['clicked'],
       letterView: this.itemList[5]['itmes'][0]['clicked'],
@@ -243,6 +244,12 @@ export class UserRolesComponent implements OnInit {
       userCreateAndUpdate: this.itemList[10]['itmes'][1]['clicked'],
       userDelete: this.itemList[10]['itmes'][2]['clicked'],
       userView: this.itemList[10]['itmes'][0]['clicked'],
+      expenseCreateAndUpdate: this.itemList[9]['itmes'][1]['clicked'],
+      expenseDelete: this.itemList[9]['itmes'][2]['clicked'],
+      expenseView: this.itemList[9]['itmes'][0]['clicked'],
+      roleCreateAndUpdate: this.itemList[10]['itmes'][1]['clicked'],
+      roleDelete: this.itemList[10]['itmes'][2]['clicked'],
+      roleView: this.itemList[10]['itmes'][0]['clicked'],
       editOrNew: -1
     }
     try {
