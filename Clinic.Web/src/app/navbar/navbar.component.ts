@@ -78,6 +78,7 @@ export class NavbarComponent {
   openSettingMenu: boolean = false;
   openFinancialMenu: boolean = false;
   openAppointmentMenu: boolean = false;
+  userName: string;
 
   constructor(
     private authService: AuthService,
@@ -130,6 +131,7 @@ export class NavbarComponent {
     this.showReportMenu = (url.startsWith('/report/')) == true ? true : false;
     const matchedItem = this.reportMenu.find(item => item.link === url);
     this.selectedSideBarreportMenuItem = matchedItem?.id ?? null;
+    this.userName = localStorage.getItem('fullName');
   }
 
   logOut() {

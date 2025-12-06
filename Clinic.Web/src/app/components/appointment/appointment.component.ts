@@ -100,7 +100,7 @@ export class AppointmentComponent {
   isCalendarVisible = true;
   newPateint: any = [];
   doctorList: any = [];
-  selectedDoctor: any;
+  selectedDoctor: any = [];
   filteredHours: any = [];
 
   constructor(
@@ -129,6 +129,9 @@ export class AppointmentComponent {
   searchControl = '';
   async ngOnInit() {
     this.userType = this.utilService.checkUserType();
+    if (this.userType == 9) {
+      this.selectedDoctor.code = this.userType;
+    }
     this.getWeeklyAppointments();
     this.dateNew = new FormControl(moment().format('jYYYY/jMM/jDD'));
     this.dateNew.valueChanges.subscribe(date => {

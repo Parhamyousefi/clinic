@@ -80,7 +80,7 @@ export class AppointmentTypesComponent {
     let model = {
       "name": this.newType.name,
       "description": this.newType.description,
-      "duration": this.newType.duration,
+      "duration": Number(this.newType.duration),
       "relatedBillableItemId": this.newType.firstService.code,
       "relatedBillableItem2Id": this.newType.secondService.code,
       "relatedBillableItem3Id": this.newType.thirdService.code,
@@ -90,7 +90,7 @@ export class AppointmentTypesComponent {
       "relatedProduct3Id": this.newType.thirdProduct.code,
       "color": this.newType.typeColor,
       "showInOnlineBookings": this.newType.showInAppoinment,
-      "editOrNew": -1
+      "editOrNew": this.newType.id || -1
     }
 
     try {
@@ -107,8 +107,15 @@ export class AppointmentTypesComponent {
       let res: any = await this.treatmentService.getAppointmentTypes().toPromise();
       if (res.length > 0) {
         this.appointmentTypes = res;
-        console.log(this.appointmentTypes);
-
+        this.appointmentTypes.forEach((type: any) => {
+          type.relatedService1Name = this.billableItems.filter((item: any) => item.id == type.relatedBillableItemId)[0];
+          type.relatedService2Name = this.billableItems.filter((item: any) => item.id == type.relatedBillableItem2Id)[0];
+          type.relatedService3Name = this.billableItems.filter((item: any) => item.id == type.relatedBillableItem3Id)[0];
+          type.relatedProduct1Name = this.productList.filter((item: any) => item.id == type.relatedProductId)[0];
+          type.relatedProduct2Name = this.productList.filter((item: any) => item.id == type.relatedProduct2Id)[0];
+          type.relatedProduct3Name = this.productList.filter((item: any) => item.id == type.relatedProduct3Id)[0];
+          type.defaultTreatmentNoteTemplateName = this.treatmentTypes.filter((item: any) => item.id == type.defaultTreatmentNoteTemplate)[0];
+        });
       }
     }
     catch {
@@ -116,5 +123,21 @@ export class AppointmentTypesComponent {
     }
   }
 
+
+  editType(type) {
+    this.newType.id = type.id;
+    this.newType.name = type.name;
+    this.newType.description = type.description;
+    this.newType.duration = type.duration;
+    this.newType.firstService = this.billableItems.filter((item: any) => item.id == type.relatedBillableItemId)[0];
+    this.newType.secondService = this.billableItems.filter((item: any) => item.id == type.relatedBillableItem2Id)[0];
+    this.newType.thirdService = this.billableItems.filter((item: any) => item.id == type.relatedBillableItem3Id)[0];
+    this.newType.treatmentType = this.treatmentTypes.filter((item: any) => item.id == type.defaultTreatmentNoteTemplate)[0];
+    this.newType.firstProduct = this.productList.filter((item: any) => item.id == type.relatedProductId)[0];
+    this.newType.secondProduct = this.productList.filter((item: any) => item.id == type.relatedProduct2Id)[0];
+    this.newType.thirdProduct = this.productList.filter((item: any) => item.id == type.relatedProduct3Id)[0];
+    this.newType.typeColor = type.color;
+    this.newType.showInAppoinment = type.showInOnlineBookings;
+  }
 
 }

@@ -214,8 +214,13 @@ export const routes: Routes = [
         canActivate: [AuthGuard]
     },
     {
-        path: 'exception-time',
+        path: 'time-exception',
         loadComponent: () => import('./components/_admin/time-exception/time-exception.component').then(m => m.TimeExceptionComponent),
+        canActivate: [AuthGuard]
+    },
+    {
+        path: 'expenses', 
+        loadComponent: () => import('./components/_admin/expenses/expenses.component').then(m => m.ExpensesComponent),
         canActivate: [AuthGuard]
     },
     {

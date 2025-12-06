@@ -46,6 +46,7 @@ export class LoginComponent {
           localStorage.setItem("userName", this.model.userName);
           localStorage.setItem('xP98_g#d94H0w', res.secretCode);
           this.getUserRole();
+          localStorage.setItem('fullName', res.userName);
           this.router.navigate(["/appointment"]);
         }
       }
