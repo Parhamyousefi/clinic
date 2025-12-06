@@ -88,18 +88,20 @@ namespace Clinic.Api.Infrastructure.Services
                       .Select(r => r.Name)
                       .FirstOrDefaultAsync() ?? string.Empty;
 
+                var secret = await _context.Roles.Where(r => r.Id == user.RoleId)
+                    .Select(r => r.Secret)
+                    .FirstOrDefaultAsync() ?? string.Empty;
+
                 var token = _token.CreateToken(user, roleName);
-                var roleHandler = UserMapper.MapRole(user.RoleId.ToString());
-                string secret = roleHandler[1];
-                string role = roleHandler[0];
 
                 await SaveLoginHistory(model.Username);
                 return new LoginResponseDto
                 {
                     Token = token,
                     SecretCode = secret,
-                    Role = role,
+                    Role = roleName,
                     UserName = user.FirstName + " " + user.LastName,
+                    Secret = secret
                 };
             }
             catch (Exception ex)
