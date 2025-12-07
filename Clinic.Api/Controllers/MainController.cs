@@ -223,5 +223,13 @@ namespace Clinic.Api.Controllers
             var result = await _mainService.DeleteOutOfTurnException(id);
             return Ok(result);
         }
+
+        [HttpPost("updateSmsSettings")]
+        [Authorize]
+        public async Task<IActionResult> UpdateSmsSettings(UpdateSmsSettingsDto model)
+        {
+            var result = await _mainService.UpdateSmsSettings(model);
+            return Ok(result);
+        }
     }
 }
