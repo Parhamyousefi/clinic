@@ -265,11 +265,20 @@ namespace Clinic.Api.Infrastructure.Services
                         var relatedTreatments = treatments.Where(t => t.AppointmentId == appointmentId).ToList();
                         var hasTreatment = relatedTreatments.Any();
 
-                        var relatedBillableNames = billableItems
-                            .Where(b => b.Id != null && invoiceItemsbillIdsNullable.Contains(b.Id))
-                            .Select(b => b.Name)
-                            .Distinct()
-                            .ToList();
+                        var relatedInvoiceItems = result
+     .Where(x => x.Appointment.Id == appointmentId)
+     .Select(x => x.InvoiceItems)
+     .ToList();
+
+                        var relatedBillable = (
+                            from ii in relatedInvoiceItems
+                            join b in billableItems on ii.ItemId equals b.Id
+                            select new BillableItemDoneDto
+                            {
+                                Name = b.Name,
+                                Done = ii.Done
+                            }
+                        ).Distinct().ToList();
 
                         return new GetTodayAppointmentsInfoDto
                         {
@@ -280,7 +289,7 @@ namespace Clinic.Api.Infrastructure.Services
                             PatientId = r.Patient.Id,
                             PractitionerName = (r.Practitioner.FirstName + " " + r.Practitioner.LastName).Trim(),
                             AppointmentTypeName = r.AppointmentType.Name,
-                            BillableItemNames = relatedBillableNames,
+                            BillableItems = relatedBillable,
                             Status = !hasInvoice && !hasTreatment ? 1 :
                                      hasInvoice && !hasTreatment ? 2 :
                                      hasInvoice && hasTreatment ? 3 : 0,
@@ -348,11 +357,20 @@ namespace Clinic.Api.Infrastructure.Services
                         var relatedTreatments = treatments.Where(t => t.AppointmentId == appointmentId).ToList();
                         var hasTreatment = relatedTreatments.Any();
 
-                        var relatedBillableNames = billableItems
-                            .Where(b => b.Id != null && invoiceItemsbillIdsNullable.Contains(b.Id))
-                            .Select(b => b.Name)
-                            .Distinct()
-                            .ToList();
+                        var relatedInvoiceItems = result
+    .Where(x => x.Appointment.Id == appointmentId)
+    .Select(x => x.InvoiceItems)
+    .ToList();
+
+                        var relatedBillable = (
+         from ii in relatedInvoiceItems
+         join b in billableItems on ii.ItemId equals b.Id
+         select new BillableItemDoneDto
+         {
+             Name = b.Name,
+             Done = ii.Done
+         }
+     ).Distinct().ToList();
 
                         return new GetTodayAppointmentsInfoDto
                         {
@@ -363,7 +381,7 @@ namespace Clinic.Api.Infrastructure.Services
                             PatientId = r.Patient.Id,
                             PractitionerName = (r.Practitioner.FirstName + " " + r.Practitioner.LastName).Trim(),
                             AppointmentTypeName = r.AppointmentType.Name,
-                            BillableItemNames = relatedBillableNames,
+                            BillableItems = relatedBillable,
                             Status = !hasInvoice && !hasTreatment ? 1 :
                                      hasInvoice && !hasTreatment ? 2 :
                                      hasInvoice && hasTreatment ? 3 : 0,
@@ -380,7 +398,8 @@ namespace Clinic.Api.Infrastructure.Services
                             Receipt = invoices
                             .Where(i => i.AppointmentId == appointmentId && (i.IsCanceled == false || i.IsCanceled == null))
                             .Select(i => i.Receipt)
-                            .FirstOrDefault()
+                            .FirstOrDefault(),
+                            Done = r.InvoiceItems.Done
                         };
                     }).ToList();
                     return final;
