@@ -44,6 +44,7 @@ namespace Clinic.Api.Mappings
             CreateMap<SaveTimeExceptionModel, TimeExceptionsContext>().ReverseMap();
             CreateMap<SaveOutOfTurnExceptionDto, OutOfTurnExceptionsContext>().ReverseMap();
             CreateMap<SavePatientFieldDto, PatientFieldsContext>().ReverseMap();
+            CreateMap<UpdateSmsSettingsDto, SMSSettingsContext>().ReverseMap();
         }
     }
 }
