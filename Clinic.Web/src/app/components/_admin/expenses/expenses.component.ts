@@ -39,8 +39,10 @@ export class ExpensesComponent {
 
   async ngOnInit() {
     this.selectedDatefrom = new FormControl(moment().format('jYYYY/jMM/jDD'));
-    await this.getClinics();
-    this.getExpenses();
+    if(this.checkAccess(1)){
+      await this.getClinics();
+      this.getExpenses();
+    }
   }
 
 

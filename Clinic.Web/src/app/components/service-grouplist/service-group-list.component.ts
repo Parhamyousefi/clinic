@@ -19,13 +19,15 @@ export class ServiceGrouplistComponent implements OnInit {
     private router: Router,
     private treatmentsService: TreatmentsService,
     private toastR: ToastrService,
-    private objectService : ObjectService,
+    private objectService: ObjectService,
   ) { }
 
   itemCategory: any = [];
 
   ngOnInit(): void {
-    this.getItemCategory();
+    if (this.checkAccess(1)) {
+      this.getItemCategory();
+    }
   }
 
   async getItemCategory() {
@@ -60,8 +62,8 @@ export class ServiceGrouplistComponent implements OnInit {
       }
     })
   }
-  
+
   checkAccess(id) {
-   return this.objectService.checkAccess(id);
+    return this.objectService.checkAccess(id);
   }
 }

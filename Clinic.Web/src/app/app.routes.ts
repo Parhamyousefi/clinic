@@ -199,6 +199,11 @@ export const routes: Routes = [
         canActivate: [AuthGuard]
     },
     {
+        path: 'user-roles/:id',
+        loadComponent: () => import('./components/_admin/user-roles/user-roles.component').then(m => m.UserRolesComponent),
+        canActivate: [AuthGuard]
+    },
+    {
         path: 'service-group-list',
         loadComponent: () => import('./components/service-grouplist/service-group-list.component').then(m => m.ServiceGrouplistComponent),
         canActivate: [AuthGuard]
@@ -219,7 +224,7 @@ export const routes: Routes = [
         canActivate: [AuthGuard]
     },
     {
-        path: 'expenses', 
+        path: 'expenses',
         loadComponent: () => import('./components/_admin/expenses/expenses.component').then(m => m.ExpensesComponent),
         canActivate: [AuthGuard]
     },
@@ -227,6 +232,11 @@ export const routes: Routes = [
         path: 'outOfturnexceptions',
         loadComponent: () => import('./components/_admin/out-of-turn-exceptions/out-of-turn-exceptions.component').then(m => m.OutOfTurnExceptionsComponent),
         canActivate: [AuthGuard]
-    }
+    },
+    {
+        path: 'user-role-list',
+        loadComponent: () => import('./components/_admin/user-roles/user-role-list/user-role-list.component').then(m => m.UserRoleListComponent),
+        canActivate: [AuthGuard]
+    },
 
 ];

@@ -11,6 +11,7 @@ import { DropdownModule } from 'primeng/dropdown';
 import { AttendanceScheduleComponent } from "../../attendance-schedule/attendance-schedule.component";
 import { Subject } from 'rxjs';
 import swal from 'sweetalert2';
+import { ObjectService } from '../../../_services/store.service';
 
 @Component({
   selector: 'app-user-list',
@@ -35,10 +36,14 @@ export class UserListComponent {
     private userService: UserService,
     private toastR: ToastrService,
     private mainService: MainService,
+    private objectService: ObjectService
   ) { }
+  
   ngOnInit() {
-    this.getRoles();
-    this.getUsers();
+    if (this.checkAccess(1)) {
+      this.getRoles();
+      this.getUsers();
+    }
   }
 
   async getUsers() {
@@ -102,5 +107,9 @@ export class UserListComponent {
         this.toastR.error('خطایی رخ داد', 'خطا!');
       }
     })
+  }
+
+  checkAccess(id) {
+    return this.objectService.checkAccess(id);
   }
 }

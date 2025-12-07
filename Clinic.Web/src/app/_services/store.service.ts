@@ -74,7 +74,7 @@ export class ObjectService {
             ]
         },
         {
-            id: 6, title: 'صورتحساب ها ', itmes: [
+            id: 6, title: 'صورتحساب ها ', url: '/invoice-list', itmes: [
                 { id: 1, text: 'مشاهده', clicked: false, fieldName: 'invoiceView' },
                 { id: 2, text: 'ثبت', clicked: false, fieldName: 'invoiceCreateAndUpdate' },
                 { id: 3, text: 'حذف', clicked: false, fieldName: 'invoiceDelete' },
@@ -85,7 +85,7 @@ export class ObjectService {
             ]
         },
         {
-            id: 7, title: ' دریافت ها', itmes: [
+            id: 7, title: ' دریافت ها', url: '/receipt-list', itmes: [
                 { id: 1, text: 'مشاهده', clicked: false, fieldName: 'receiptView' },
                 { id: 2, text: 'ثبت', clicked: false, fieldName: 'receiptCreateAndUpdate' },
                 { id: 3, text: 'حذف', clicked: false, fieldName: 'receiptDelete' },
@@ -94,7 +94,7 @@ export class ObjectService {
             ]
         },
         {
-            id: 8, title: ' پرداخت ها', itmes: [
+            id: 8, title: ' پرداخت ها', url: '/payment-list', itmes: [
                 { id: 1, text: 'مشاهده', clicked: false, fieldName: 'paymentView' },
                 { id: 2, text: 'ثبت', clicked: false, fieldName: 'paymentCreateAndUpdate' },
                 { id: 3, text: 'حذف', clicked: false, fieldName: 'paymentDelete' },
@@ -109,13 +109,13 @@ export class ObjectService {
                 { id: 3, text: 'حذف', clicked: false, fieldName: 'expenseDelete' }
             ]
         }, {
-            id: 10, title: ' کاربران و پزشکان', itmes: [
+            id: 10, title: ' کاربران و پزشکان', url: 'userlist', itmes: [
                 { id: 1, text: 'مشاهده', clicked: false, fieldName: 'userView' },
                 { id: 2, text: 'ثبت', clicked: false, fieldName: 'userCreateAndUpdate' },
                 { id: 3, text: 'حذف', clicked: false, fieldName: 'userDelete' }
             ]
         }, {
-            id: 11, title: 'نقش ها ', itmes: [
+            id: 11, title: 'نقش ها ', url: '/user-role-list', itmes: [
                 { id: 1, text: 'مشاهده', clicked: false, fieldName: 'roleView' },
                 { id: 2, text: 'ثبت', clicked: false, fieldName: 'roleCreateAndUpdate' },
                 { id: 3, text: 'حذف', clicked: false, fieldName: 'roleDelete' }
@@ -196,6 +196,10 @@ export class ObjectService {
         { id: 18, link: '/service-group-list', clicked: false, fieldName: 'itemCategoryView' },
         { id: 19, text: 'مشاهده', clicked: false, fieldName: 'treatmentTemplateView' },
         { id: 20, text: 'مشاهده', clicked: false, fieldName: 'jobView' },
+        { id: 21, text: 'ثبت', clicked: false, fieldName: 'paymentCreateAndUpdate' },
+        { id: 22, text: 'ثبت', clicked: false, fieldName: 'receiptCreateAndUpdate' },
+
+
     ]
 
     setData(obj: any): void {
@@ -270,9 +274,9 @@ export class ObjectService {
             "invoiceView": true,
             "invoiceCreateAndUpdate": true,
             "invoiceDelete": true,
-            "paymentView": true,
+            "paymentView": false,
             "paymentCreateAndUpdate": true,
-            "paymentDelete": true,
+            "paymentDelete": false,
             "expenseView": true,
             "expenseCreateAndUpdate": true,
             "expenseDelete": true,
@@ -332,17 +336,17 @@ export class ObjectService {
             "generalSettingCreateAndUpdate": true,
             "productCardexCreateAndUpdate": true,
             "receiptView": true,
-            "receiptCreateAndUpdate": true,
+            "receiptCreateAndUpdate": false,
             "receiptDelete": true,
             "receiptReport": true,
             "totdayAppointmentView": true,
             "changeInvoiceAfterReceive": true,
             "discountReport": true,
             "notArraivedPatientsReport": true,
-            "invoiceCancel": true,
+            "invoiceCancel": false,
             "receiptAllowEdit": true,
             "invoiceDiscount": true,
-            "paymentAllowEdit": true,
+            "paymentAllowEdit": false,
             "creatorId": null,
             "medicalRecordView": true,
             "medicalRecordSend": true,

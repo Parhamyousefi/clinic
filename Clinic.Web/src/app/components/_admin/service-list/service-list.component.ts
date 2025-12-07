@@ -25,7 +25,9 @@ export class ServiceListComponent implements OnInit {
   serviceList: any = [];
 
   ngOnInit(): void {
-    this.getBillableItems();
+    if (this.checkAccess(1)) {
+      this.getBillableItems();
+    }
   }
 
   async getBillableItems() {
@@ -64,8 +66,8 @@ export class ServiceListComponent implements OnInit {
       }
     })
   }
-  
+
   checkAccess(id) {
-   return this.objectService.checkAccess(id);
+    return this.objectService.checkAccess(id);
   }
 }

@@ -39,9 +39,11 @@ export class TimeExceptionComponent {
     this.newException.startDate = new FormControl(moment().format('jYYYY/jMM/jDD'));
     this.newException.startTime = '00:00';
     this.newException.endTime = '23:00';
-    this.getDoctors();
-    this.getClinics();
-    this.getExceptions();
+    if (this.checkAccess(1)) {
+      this.getDoctors();
+      this.getClinics();
+      this.getExceptions();
+    }
   }
 
   async getDoctors() {

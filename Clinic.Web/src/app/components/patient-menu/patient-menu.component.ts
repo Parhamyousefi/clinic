@@ -177,13 +177,24 @@ export class PatientMenuComponent {
     let accessList = this.objectService.getNavbarAccess();
     let treatmentView = accessList.filter(x => x.fieldName == 'treatmentView')[0];
     let attachmentView = accessList.filter(x => x.fieldName == 'attachmentView')[0];
+    let invoiceView = accessList.filter(x => x.fieldName == 'invoiceView')[0];
+    let receiptView = accessList.filter(x => x.fieldName == 'receiptCreateAndUpdate')[0];
+    let paymentView = accessList.filter(x => x.fieldName == 'paymentCreateAndUpdate')[0];
     this.patientMenu
     if (treatmentView && !treatmentView.clicked) {
       this.patientMenu = this.patientMenu.filter(item => item.id !== 1);
     }
-
     if (attachmentView && !attachmentView.clicked) {
       this.patientMenu = this.patientMenu.filter(item => item.id !== 2);
+    }
+    if (invoiceView && !invoiceView.clicked) {
+      this.patientMenu = this.patientMenu.filter(item => item.id !== 4);
+    }
+    if (receiptView && !receiptView.clicked) {
+      this.patientMenu = this.patientMenu.filter(item => item.id !== 5);
+    }
+    if (paymentView && !paymentView.clicked) {
+      this.patientMenu = this.patientMenu.filter(item => item.id !== 6);
     }
   }
 

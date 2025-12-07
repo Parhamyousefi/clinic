@@ -31,10 +31,12 @@ export class AppointmentTypesComponent {
   ) { }
 
   ngOnInit() {
-    this.getBillableItems();
-    this.getTreatmentTemplate();
-    this.getProducts();
-    this.getAppointmentTypes();
+    if (this.checkAccess(1)) {
+      this.getBillableItems();
+      this.getTreatmentTemplate();
+      this.getProducts();
+      this.getAppointmentTypes();
+    }
   }
   async getBillableItems() {
     try {
@@ -141,7 +143,7 @@ export class AppointmentTypesComponent {
     this.newType.typeColor = type.color;
     this.newType.showInAppoinment = type.showInOnlineBookings;
   }
-  
+
   checkAccess(id) {
     return this.objectService.checkAccess(id);
   }
