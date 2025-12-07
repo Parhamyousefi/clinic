@@ -137,5 +137,29 @@ namespace Clinic.Api.Controllers
             var result = await _patientService.GetFilteredPatients(model);
             return Ok(result);
         }
+
+        [HttpPost("savePatientField")]
+        [Authorize]
+        public async Task<IActionResult> SavePatientField(SavePatientFieldDto model)
+        {
+            var result = await _patientService.SavePatientField(model);
+            return Ok(result);
+        }
+
+        [HttpGet("getPatientField/{patientId}")]
+        [Authorize]
+        public async Task<IActionResult> GetPatientField(int patientId)
+        {
+            var result = await _patientService.GetPatientField(patientId);
+            return Ok(result);
+        }
+
+        [HttpGet("getPatientFields")]
+        [Authorize]
+        public async Task<IActionResult> GetPatientFields()
+        {
+            var result = await _patientService.GetPatientFields();
+            return Ok(result);
+        }
     }
 }
