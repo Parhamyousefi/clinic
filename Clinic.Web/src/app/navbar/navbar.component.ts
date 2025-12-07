@@ -112,7 +112,7 @@ export class NavbarComponent {
     })
 
   }
-  ngOnInit() {
+  async ngOnInit() {
     let url = location.pathname;
     this.isMobileSize = window.innerWidth <= 768 && window.innerHeight <= 1024;
     if (this.isMobileSize) {
@@ -121,7 +121,7 @@ export class NavbarComponent {
     else {
       this.openSidebar = true;
     }
-    let allowedLinks = this.ObjectService.getNavbarAccess();
+    let allowedLinks = await this.ObjectService.getNavbarAccess();
     this.sidebarMenu = this.filterMenu(Menu, allowedLinks);
     this.settingMenu = this.filterMenu(settingMenu, allowedLinks);;
     this.financialMenu = this.filterMenu(financialMenu, allowedLinks);;

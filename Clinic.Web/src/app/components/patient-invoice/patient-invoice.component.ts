@@ -32,7 +32,7 @@ export class PatientInvoiceComponent {
 
   ngOnInit() {
     this.patientId = this.activeRoute.snapshot.paramMap.get('id');
-    let accessList = this.objectService.getItemAccess();
+    let accessList: any  = this.objectService.getItemAccess();
     let item = accessList.filter(x => x.id == 6);
     this.invoiceAccess = item[0]['itmes'];
     if (item[0]['itmes'][0]['clicked']) {

@@ -136,7 +136,7 @@ export class PatientAttachmentComponent {
   }
 
   getAttachmentAccess() {
-    let accessList = this.objectService.getItemAccess();
+    let accessList: any = this.objectService.getItemAccess();
     let item = accessList.filter(x => x.id == 4);
     this.attachmentAccess = item[0]['itmes'];
     if (item[0]['itmes'][0]['clicked']) {

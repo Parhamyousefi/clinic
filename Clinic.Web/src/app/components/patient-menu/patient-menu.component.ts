@@ -174,7 +174,7 @@ export class PatientMenuComponent {
   }
 
   getNavbarAccess() {
-    let accessList = this.objectService.getNavbarAccess();
+    let accessList: any = this.objectService.getNavbarAccess();
     let treatmentView = accessList.filter(x => x.fieldName == 'treatmentView')[0];
     let attachmentView = accessList.filter(x => x.fieldName == 'attachmentView')[0];
     let invoiceView = accessList.filter(x => x.fieldName == 'invoiceView')[0];
@@ -199,7 +199,7 @@ export class PatientMenuComponent {
   }
 
   getNoteAccess() {
-    let accessList = this.objectService.getItemAccess();
+    let accessList: any  = this.objectService.getItemAccess();
     let item = accessList.filter(x => x.id == 2);
     if (item[0]['itmes'][6]['clicked']) {
       this.getNotes();

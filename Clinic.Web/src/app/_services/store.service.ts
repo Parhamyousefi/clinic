@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { firstValueFrom, Observable } from 'rxjs';
+import { firstValueFrom, Observable, of } from 'rxjs';
 import { setObject, clearObject } from '../store/actions';
 import { selectObject } from '../store/selectors';
 import { NavigationEnd, Router } from '@angular/router';
-import { filter, map } from 'rxjs/operators';
+import { delay, filter, map, switchMap } from 'rxjs/operators';
 import { UserService } from './user.service';
 
 @Injectable({ providedIn: 'root' })
@@ -109,7 +109,7 @@ export class ObjectService {
                 { id: 3, text: 'حذف', clicked: false, fieldName: 'expenseDelete' }
             ]
         }, {
-            id: 10, title: ' کاربران و پزشکان', url: 'userlist', itmes: [
+            id: 10, title: ' کاربران و پزشکان', url: '/userlist', itmes: [
                 { id: 1, text: 'مشاهده', clicked: false, fieldName: 'userView' },
                 { id: 2, text: 'ثبت', clicked: false, fieldName: 'userCreateAndUpdate' },
                 { id: 3, text: 'حذف', clicked: false, fieldName: 'userDelete' }
@@ -231,174 +231,190 @@ export class ObjectService {
         const currentPath = this.router.url;
         const result = await firstValueFrom(
             this.getData().pipe(
-                map((data: any[]) => {
+                switchMap((data) => {
                     if (!data) {
                         this.getUserRole();
-                        setTimeout(() => {
-                            this.convertData(data);
-                            data = this.itemList;
-                            return data.filter(section =>
-                                // (section.url && currentPath.includes(section.url))
-                                (section.url && currentPath == (section.url))
-                            );
-                        }, 1000);
+                        return of(this.itemList).pipe(
+                            delay(1000),
+                            map((list) =>
+                                list.filter((section) => section.url && section.url === currentPath)
+                            )
+                        );
                     } else {
                         this.convertData(data);
-                        data = this.itemList;
+                        return of(this.itemList).pipe(
+                            map((list) =>
+                                list.filter((section) => section.url && section.url === currentPath)
+                            )
+                        );
                     }
-                    return data.filter(section =>
-                        // section.url && currentPath.includes(section.url)
-                        (section.url && currentPath == (section.url))
-
-                    );
                 })
             )
         );
-        if (result.length > 0) {
+
+        if (result?.length > 0) {
             this.accessData = result[0]['itmes'];
         }
     }
 
     async getUserRole() {
-        // let res: any = await this.userService.getUserRole().toPromise();
-        let res = {
-            "id": 6,
-            "name": "Admin",
-            "generalSettingView": true,
-            "appointmentView": true,
-            "appointmentCreateAndUpdate": false,
-            "appointmentDelete": true,
-            "patientView": true,
-            "patientCreateAndUpdate": true,
-            "patientDelete": true,
-            "invoiceView": true,
-            "invoiceCreateAndUpdate": true,
-            "invoiceDelete": true,
-            "paymentView": false,
-            "paymentCreateAndUpdate": true,
-            "paymentDelete": false,
-            "expenseView": true,
-            "expenseCreateAndUpdate": true,
-            "expenseDelete": true,
-            "productView": true,
-            "productCreateAndUpdate": true,
-            "productDelete": true,
-            "contactView": true,
-            "contactCreateAndUpdate": true,
-            "contactDelete": true,
-            "businessView": true,
-            "businessCreateAndUpdate": true,
-            "businessDelete": true,
-            "userView": true,
-            "userCreateAndUpdate": true,
-            "userDelete": true,
-            "roleView": true,
-            "roleCreateAndUpdate": true,
-            "roleDelete": true,
-            "appointmentTypeView": false,
-            "appointmentTypeCreateAndUpdate": false,
-            "appointmentTypeDelete": true,
-            "holidayView": true,
-            "holidayCreateAndUpdate": true,
-            "holidayDelete": true,
-            "timeExceptionView": true,
-            "timeExceptionCreateAndUpdate": true,
-            "timeExceptionDelete": true,
-            "billableItemView": true,
-            "billableItemCreateAndUpdate": true,
-            "billableItemDelete": true,
-            "treatmentTemplateView": true,
-            "treatmentTemplateCreateAndUpdate": true,
-            "treatmentTemplateDelete": true,
-            "summaryReport": true,
-            "paymentReport": true,
-            "expenseReport": true,
-            "report": true,
-            "setting": true,
-            "modifierId": 3,
-            "createdOn": "1900-01-01T00:00:00",
-            "lastUpdated": "2021-11-19T20:52:14.3066667",
-            "allowPayLater": true,
-            "letterTemplateView": true,
-            "letterTemplateCreateAndUpdate": true,
-            "letterTemplateDelete": true,
-            "letterView": true,
-            "letterCreateAndUpdate": true,
-            "letterDelete": true,
-            "treatmentView": false,
-            "treatmentCreateAndUpdate": true,
-            "treatmentDelete": true,
-            "attachmentView": true,
-            "attachmentCreateAndUpdate": false,
-            "attachmentDelete": true,
-            "smsSettingView": true,
-            "smsSettingCreateAndUpdate": true,
-            "generalSettingCreateAndUpdate": true,
-            "productCardexCreateAndUpdate": true,
-            "receiptView": true,
-            "receiptCreateAndUpdate": false,
-            "receiptDelete": true,
-            "receiptReport": true,
-            "totdayAppointmentView": true,
-            "changeInvoiceAfterReceive": true,
-            "discountReport": true,
-            "notArraivedPatientsReport": true,
-            "invoiceCancel": false,
-            "receiptAllowEdit": true,
-            "invoiceDiscount": true,
-            "paymentAllowEdit": false,
-            "creatorId": null,
-            "medicalRecordView": true,
-            "medicalRecordSend": true,
-            "patientFieldView": true,
-            "patientFieldCreateAndUpdate": true,
-            "jobView": true,
-            "jobCreateAndUpdate": true,
-            "jobDelete": true,
-            "outInvoiceReport": true,
-            "inInvoiceReport": true,
-            "outOfTurnExceptionView": false,
-            "outOfTurnExceptionCreateAndUpdate": false,
-            "outOfTurnExceptionDelete": true,
-            "unChangeInvoiceReport": true,
-            "setAppointmentPermission": true,
-            "itemCategoryView": true,
-            "itemCategoryCreateAndUpdate": false,
-            "itemCategoryDelete": true,
-            "receiptPaymentReport": true,
-            "allowReceiptOverBalance": true,
-            "allowPayOverBalance": true,
-            "acceptDiscount": false,
-            "cashierByCashAndETFPosReport": true,
-            "practitionerReport": true,
-            "watingReport": true,
-            "firstEncounterReport": true,
-            "medicalAlertCreateAndUpdate": true,
-            "medicalAlertDelete": false,
-            "changePatientRecordStatus": true,
-            "canAcceptItem": true,
-            "visitReport": true,
-            "invoiceItemChangeReport": true,
-            "medicalAlertUpdate": true,
-            "mergePatients": true
-        }
-        // await this.setData(res[0]);
-        await this.setData(res);
+        let res: any = await this.userService.getUserRole().toPromise();
+        // let res = {
+        //     "id": 6,
+        //     "name": "Admin",
+        //     "generalSettingView": true,
+        //     "appointmentView": true,
+        //     "appointmentCreateAndUpdate": false,
+        //     "appointmentDelete": true,
+        //     "patientView": true,
+        //     "patientCreateAndUpdate": true,
+        //     "patientDelete": true,
+        //     "invoiceView": true,
+        //     "invoiceCreateAndUpdate": true,
+        //     "invoiceDelete": true,
+        //     "paymentView": false,
+        //     "paymentCreateAndUpdate": true,
+        //     "paymentDelete": false,
+        //     "expenseView": true,
+        //     "expenseCreateAndUpdate": true,
+        //     "expenseDelete": true,
+        //     "productView": true,
+        //     "productCreateAndUpdate": true,
+        //     "productDelete": true,
+        //     "contactView": true,
+        //     "contactCreateAndUpdate": true,
+        //     "contactDelete": true,
+        //     "businessView": true,
+        //     "businessCreateAndUpdate": true,
+        //     "businessDelete": true,
+        //     "userView": true,
+        //     "userCreateAndUpdate": true,
+        //     "userDelete": true,
+        //     "roleView": true,
+        //     "roleCreateAndUpdate": true,
+        //     "roleDelete": true,
+        //     "appointmentTypeView": false,
+        //     "appointmentTypeCreateAndUpdate": false,
+        //     "appointmentTypeDelete": true,
+        //     "holidayView": true,
+        //     "holidayCreateAndUpdate": true,
+        //     "holidayDelete": true,
+        //     "timeExceptionView": true,
+        //     "timeExceptionCreateAndUpdate": true,
+        //     "timeExceptionDelete": true,
+        //     "billableItemView": true,
+        //     "billableItemCreateAndUpdate": true,
+        //     "billableItemDelete": true,
+        //     "treatmentTemplateView": true,
+        //     "treatmentTemplateCreateAndUpdate": true,
+        //     "treatmentTemplateDelete": true,
+        //     "summaryReport": true,
+        //     "paymentReport": true,
+        //     "expenseReport": true,
+        //     "report": true,
+        //     "setting": true,
+        //     "modifierId": 3,
+        //     "createdOn": "1900-01-01T00:00:00",
+        //     "lastUpdated": "2021-11-19T20:52:14.3066667",
+        //     "allowPayLater": true,
+        //     "letterTemplateView": true,
+        //     "letterTemplateCreateAndUpdate": true,
+        //     "letterTemplateDelete": true,
+        //     "letterView": true,
+        //     "letterCreateAndUpdate": true,
+        //     "letterDelete": true,
+        //     "treatmentView": false,
+        //     "treatmentCreateAndUpdate": true,
+        //     "treatmentDelete": true,
+        //     "attachmentView": true,
+        //     "attachmentCreateAndUpdate": false,
+        //     "attachmentDelete": true,
+        //     "smsSettingView": true,
+        //     "smsSettingCreateAndUpdate": true,
+        //     "generalSettingCreateAndUpdate": true,
+        //     "productCardexCreateAndUpdate": true,
+        //     "receiptView": true,
+        //     "receiptCreateAndUpdate": false,
+        //     "receiptDelete": true,
+        //     "receiptReport": true,
+        //     "totdayAppointmentView": true,
+        //     "changeInvoiceAfterReceive": true,
+        //     "discountReport": true,
+        //     "notArraivedPatientsReport": true,
+        //     "invoiceCancel": false,
+        //     "receiptAllowEdit": true,
+        //     "invoiceDiscount": true,
+        //     "paymentAllowEdit": false,
+        //     "creatorId": null,
+        //     "medicalRecordView": true,
+        //     "medicalRecordSend": true,
+        //     "patientFieldView": true,
+        //     "patientFieldCreateAndUpdate": true,
+        //     "jobView": true,
+        //     "jobCreateAndUpdate": true,
+        //     "jobDelete": true,
+        //     "outInvoiceReport": true,
+        //     "inInvoiceReport": true,
+        //     "outOfTurnExceptionView": false,
+        //     "outOfTurnExceptionCreateAndUpdate": false,
+        //     "outOfTurnExceptionDelete": true,
+        //     "unChangeInvoiceReport": true,
+        //     "setAppointmentPermission": true,
+        //     "itemCategoryView": true,
+        //     "itemCategoryCreateAndUpdate": false,
+        //     "itemCategoryDelete": true,
+        //     "receiptPaymentReport": true,
+        //     "allowReceiptOverBalance": true,
+        //     "allowPayOverBalance": true,
+        //     "acceptDiscount": false,
+        //     "cashierByCashAndETFPosReport": true,
+        //     "practitionerReport": true,
+        //     "watingReport": true,
+        //     "firstEncounterReport": true,
+        //     "medicalAlertCreateAndUpdate": true,
+        //     "medicalAlertDelete": false,
+        //     "changePatientRecordStatus": true,
+        //     "canAcceptItem": true,
+        //     "visitReport": true,
+        //     "invoiceItemChangeReport": true,
+        //     "medicalAlertUpdate": true,
+        //     "mergePatients": true
+        // }
+        await this.setData(res[0]);
+        // await this.setData(res);
         // this.roleData = this.itemList;
     }
 
-    checkAccess(id: number) {
+    async checkAccess(id: number): Promise<boolean> {
+        // await new Promise<void>((resolve) => {
+        //     const interval = setInterval(() => {
+        //         if (this.accessData && this.accessData.length > 0) {
+        //             clearInterval(interval);
+        //             resolve();
+        //         }
+        //     }, 100);
+        // });
+
         const item = this.accessData.find(x => x.id === id);
         return item ? item.clicked : false;
     }
 
 
+
     getNavbarAccess() {
-        return this.navbarAccess;
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                resolve(this.navbarAccess || []);
+            }, 1000);
+        });
     }
 
     getItemAccess() {
-        return this.itemList;
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                resolve(this.itemList || []);
+            }, 1000);
+        });
     }
 
 
