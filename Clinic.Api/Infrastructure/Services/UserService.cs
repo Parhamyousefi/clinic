@@ -319,6 +319,7 @@ namespace Clinic.Api.Infrastructure.Services
                     _context.Entry(user).Property(x => x.Email).IsModified = false;
                 }
 
+                user.Password = _passwordHasher.HashPassword(user, model.Password);
                 _context.Users.Update(user);
                 await _uow.SaveAsync();
 

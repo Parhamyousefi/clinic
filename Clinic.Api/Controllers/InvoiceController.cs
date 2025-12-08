@@ -112,6 +112,14 @@ namespace Clinic.Api.Controllers
             return Ok(result);
         }
 
+        [HttpGet("deleteExpense/{id}")]
+        [Authorize]
+        public async Task<IActionResult> DeleteExpense(int id)
+        {
+            var result = await _invoicesService.DeleteExpense(id);
+            return Ok(result);
+        }
+
         [HttpPost("saveInvoiceDiscount")]
         [Authorize]
         public async Task<IActionResult> SaveInvoiceDiscount(SaveInvoiceDiscountDto model)
@@ -141,6 +149,14 @@ namespace Clinic.Api.Controllers
         public async Task<IActionResult> ApproveDiscount(int invoiceId)
         {
             var result = await _invoicesService.ApproveDiscount(invoiceId);
+            return Ok(result);
+        }
+
+        [HttpGet("invoiceItemIsDone/{invoiceItemId}/{isDone}")]
+        [Authorize]
+        public async Task<IActionResult> InvoiceItemIsDone(int invoiceItemId, bool isDone)
+        {
+            var result = await _invoicesService.InvoiceItemIsDone(invoiceItemId, isDone);
             return Ok(result);
         }
     }
