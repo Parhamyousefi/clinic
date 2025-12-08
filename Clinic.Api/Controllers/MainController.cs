@@ -121,11 +121,7 @@ namespace Clinic.Api.Controllers
         }
 
         [HttpGet("getDoctorSchedules/{userId?}")]
-<<<<<<< HEAD
-        [Authorize("Admin", "Doctor", "Secretary-Reception")]
-=======
         [Authorize]
->>>>>>> MNTNima/main
         public async Task<IActionResult> GetDoctorSchedules(int? userId)
         {
             var result = await _mainService.GetDoctorSchedules(userId);
@@ -141,11 +137,7 @@ namespace Clinic.Api.Controllers
         }
 
         [HttpPost("saveUserAppointmentsSettings")]
-<<<<<<< HEAD
-        [Authorize("Admin", "Doctor", "Secretary-Reception")]
-=======
         [Authorize]
->>>>>>> MNTNima/main
         public async Task<IActionResult> SaveUserAppointmentsSettings(SaveUserAppointmentsSettingsDto model)
         {
             var result = await _mainService.SaveUserAppointmentsSettings(model);
@@ -153,11 +145,7 @@ namespace Clinic.Api.Controllers
         }
 
         [HttpPost("getUserAppointmentsSettings")]
-<<<<<<< HEAD
-        [Authorize("Admin", "Doctor", "Secretary-Reception")]
-=======
         [Authorize]
->>>>>>> MNTNima/main
         public async Task<IActionResult> GetUserAppointmentsSettings(GetUserAppointmentsSettingsDto model)
         {
             var result = await _mainService.GetUserAppointmentsSettings(model);

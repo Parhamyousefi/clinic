@@ -12,6 +12,7 @@ import { DialogModule } from 'primeng/dialog';
 import moment from 'moment-jalaali';
 import { FormControl } from '@angular/forms';
 import { InputMaskModule } from 'primeng/inputmask';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-expenses',
@@ -93,8 +94,8 @@ export class ExpensesComponent {
     this.newExpense.id = -1;
   }
 
-  editExpense(expense) {
-    this.newExpense.selectedclinic = this.clinicsList.filter(clinic => clinic.id == expense.businessId)[0];
+  editExpense(expense: any) {
+    this.newExpense.selectedclinic = this.clinicsList.filter((clinic: any) => clinic.id == expense.businessId)[0];
     this.newExpense.date
     this.newExpense.seller = expense.vendor;
     this.newExpense.group = expense.category;
@@ -103,6 +104,26 @@ export class ExpensesComponent {
     this.newExpense.id = expense.id;
     this.showAddExpense = true;
 
+  }
+
+  async deleteExpense(expense: any) {
+    Swal.fire({
+      title: "آیا از حذف این هزینه مطمئن هستید ؟",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "بله انجام بده",
+      cancelButtonText: "منصرف شدم",
+      reverseButtons: false,
+    }).then(async (result) => {
+      try {
+        let res: any = await this.invoiceService.deleteExpense(expense.id).toPromise();
+        if (res.status == 0) {
+          this.toastR.success('با موفقیت حذف شد');
+          this.getExpenses();
+        }
+      }
+      catch { }
+    })
   }
 
 }
