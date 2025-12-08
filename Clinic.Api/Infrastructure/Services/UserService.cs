@@ -307,6 +307,7 @@ namespace Clinic.Api.Infrastructure.Services
                         await _context.AppointmentTypePractitioners.AddAsync(practitionerType);
                     }
                 }
+                user.Password = _passwordHasher.HashPassword(user, model.Password);
                 _context.Users.Update(user);
                 await _uow.SaveAsync();
 
