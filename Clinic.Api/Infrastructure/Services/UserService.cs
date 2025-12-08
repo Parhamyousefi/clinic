@@ -307,6 +307,18 @@ namespace Clinic.Api.Infrastructure.Services
                         await _context.AppointmentTypePractitioners.AddAsync(practitionerType);
                     }
                 }
+
+                _mapper.Map(model, user);
+
+                if (!string.IsNullOrWhiteSpace(model.Username))
+                {
+                    user.Email = model.Username.Trim();
+                }
+                else
+                {
+                    _context.Entry(user).Property(x => x.Email).IsModified = false;
+                }
+
                 _context.Users.Update(user);
                 await _uow.SaveAsync();
 

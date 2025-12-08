@@ -75,6 +75,5 @@ export class LoginComponent {
   async getUserRole() {
     let res: any = await this.userService.getUserRole().toPromise();
     this.objectService.setData(res[0]);
-
   }
 }

@@ -98,11 +98,11 @@ export const routes: Routes = [
         loadComponent: () => import('./components/patient-treatment/patient-treatment.component').then(m => m.PatientTreatmentComponent),
         canActivate: [AuthGuard]
     },
-    {
-        path: 'patient-treatment/:id',
-        loadComponent: () => import('./components/patient-treatment/patient-treatment.component').then(m => m.PatientTreatmentComponent),
-        canActivate: [AuthGuard]
-    },
+    // {
+    //     path: 'patient-treatment/:id',
+    //     loadComponent: () => import('./components/patient-treatment/patient-treatment.component').then(m => m.PatientTreatmentComponent),
+    //     canActivate: [AuthGuard]
+    // },
     {
         path: 'payment',
         loadComponent: () => import('./components/receipt/receipt.component').then(m => m.ReceiptComponent),
