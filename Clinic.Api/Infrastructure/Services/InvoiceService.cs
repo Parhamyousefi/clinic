@@ -626,5 +626,27 @@ namespace Clinic.Api.Infrastructure.Services
                 throw new Exception(ex.Message);
             }
         }
+
+        public async Task<GlobalResponse> DeleteExpense(int id)
+        {
+            var result = new GlobalResponse();
+
+            try
+            {
+                var expense = await _context.Expenses.FirstOrDefaultAsync(r => r.Id == id);
+                if (expense == null)
+                    throw new Exception("Expense Not Found");
+
+                _context.Expenses.Remove(expense);
+                await _context.SaveChangesAsync();
+                result.Message = "Expense Deleted Successfully";
+                result.Status = 0;
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }
