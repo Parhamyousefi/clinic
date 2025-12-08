@@ -597,5 +597,34 @@ namespace Clinic.Api.Infrastructure.Services
                 throw new Exception(ex.Message);
             }
         }
+
+        public async Task<GlobalResponse> InvoiceItemIsDone(int invoiceItemId, bool isDone)
+        {
+            var result = new GlobalResponse();
+
+            try
+            {
+                var userId = _token.GetUserId();
+
+                var existingInvoiceItem = await _context.InvoiceItems.FirstOrDefaultAsync(i => i.Id == invoiceItemId);
+                if (existingInvoiceItem == null)
+                {
+                    throw new Exception("Invoice Item Not Found");
+                }
+
+                existingInvoiceItem.ModifierId = userId;
+                existingInvoiceItem.LastUpdated = DateTime.Now;
+                existingInvoiceItem.Done = isDone;
+                _context.InvoiceItems.Update(existingInvoiceItem);
+                await _context.SaveChangesAsync();
+                result.Message = "Done Field Updated Successfully";
+                result.Status = 0;
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }
