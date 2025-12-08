@@ -23,5 +23,6 @@ namespace Clinic.Api.Application.Interfaces
         Task<GlobalResponse> CancelInvoice(int invoiceId);
         Task<GlobalResponse> ApproveDiscount(int invoiceId);
         Task<GlobalResponse> InvoiceItemIsDone(int invoiceItemId,bool isDone);
+        Task<GlobalResponse> DeleteExpense(int id);
     }
 }
