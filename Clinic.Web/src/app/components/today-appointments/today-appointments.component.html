@@ -100,11 +100,11 @@
           </td>
           <td class="px-2">
             <div class="py-2 widthClassPrime">
-              <span *ngFor="let billable of item.billableItem ,let index=index" (click)="doneBillableItem(billable)"
+              <span *ngFor="let billable of item.billableItems ,let index=index" (click)="invoiceItemIsDone(billable)"
                 [ngClass]="{'text-00c4b4': billable.done}" class=" pointer">
                 <i *ngIf="billable.done" class="fa fa-check" aria-hidden="true"></i>
                 {{billable.name}}
-                <span *ngIf="index!=item.billableItemNames.length">-</span>
+                <span *ngIf="index!=item.billableItems.length">-</span>
               </span>
             </div>
           </td>

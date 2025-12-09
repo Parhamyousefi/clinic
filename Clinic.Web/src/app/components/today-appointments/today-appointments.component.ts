@@ -11,6 +11,7 @@ import { ToastrService } from 'ngx-toastr';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { UtilService } from '../../_services/util.service';
 import { ObjectService } from '../../_services/store.service';
+import Swal from 'sweetalert2';
 @Component({
   selector: 'app-today-appointments',
   standalone: true,
@@ -86,16 +87,6 @@ export class TodayAppointmentsComponent implements OnInit {
       this.todayAppointmentsList = res;
       this.todayAppointmentsList.forEach(appointment => {
         appointment.hasDiscount = appointment.totalDiscount > 0 ? true : false;
-        if (appointment.billableItemNames) {
-          appointment.billableItem = [];
-          appointment.billableItemNames.forEach(element => {
-            appointment.billableItem.push({
-              name: element,
-              done: false
-            })
-          });
-
-        }
       });
       this.filteredAppointments = [];
 
@@ -261,7 +252,31 @@ export class TodayAppointmentsComponent implements OnInit {
     return this.objectService.checkAccess(id);
   }
 
-  doneBillableItem(item) {
-    item.done = true;
+
+  async invoiceItemIsDone(item) {
+    if (!this.checkAccess(3)) {
+      return
+    }
+    Swal.fire({
+      title: `آیا از انجام این ${item.name} مطمئن هستید ؟`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "بله انجام بده",
+      cancelButtonText: "منصرف شدم",
+      reverseButtons: false,
+    }).then(async (result) => {
+      try {
+        if (result.value) {
+          item.done = !item.done;
+          let res: any = await this.invoiceService.invoiceItemIsDone(item.invoiceItemId, item.done).toPromise();
+          if (res['status'] == 0) {
+            this.toastR.success('با موفقیت انجام گردید');
+          }
+        }
+      }
+      catch {
+        this.toastR.error('خطایی رخ داد', 'خطا!')
+      }
+    })
   }
 }
