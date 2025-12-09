@@ -279,9 +279,13 @@ namespace Clinic.Api.Infrastructure.Services
                         .Where(i => i.AppointmentId == appointmentId && (i.IsCanceled == false || i.IsCanceled == null))
                         .ToList();
 
-                    var relatedInvoiceItems = _context.InvoiceItems
-    .Where(ii => invoiceIds.Contains(ii.InvoiceId))
-    .ToList();
+                    var relatedInvoiceItems = (
+        from ii in _context.InvoiceItems
+        join inv in _context.Invoices
+            on ii.InvoiceId equals inv.Id
+        where inv.AppointmentId == appointmentId
+        select ii
+    ).ToList();
 
                     var relatedBillableItems =
                         (from bi in billableItems
