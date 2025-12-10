@@ -43,6 +43,7 @@
                     <td class="text-center">
                         <button *ngIf="checkAccess(2)" class="btn main-outline-btn mx-1 main-btn-outline"
                             (click)="editExpense(expense)">ویرایش</button>
+                        <button class="btn btn-outline-danger mx-1 " (click)="deleteExpense(expense)">حذف</button>
                     </td>
                 </tr>
             </ng-template>
