@@ -222,7 +222,4 @@ export const routes: Routes = [
         path: 'patient-fields', component: PatientFieldsComponent,
         canActivate: [AuthGuard]
     },
-
-
-
 ];
