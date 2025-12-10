@@ -35,6 +35,7 @@ import { UserRolesComponent } from './components/user-roles/user-roles.component
 import { ServiceGrouplistComponent } from './components/service-grouplist/service-group-list.component';
 import { NewServiceGroupComponent } from './components/service-grouplist/new-service-group/new-service-group.component';
 import { TimeExceptionComponent } from './components/time-exception/time-exception.component';
+import { PatientFieldsComponent } from './components/patient-fields/patient-fields.component';
 
 export const routes: Routes = [
     { path: '', component: LoginComponent },
@@ -215,6 +216,10 @@ export const routes: Routes = [
     },
     {
         path: 'expenses', component: ExpensesComponent,
+        canActivate: [AuthGuard]
+    },
+    {
+        path: 'patient-fields', component: PatientFieldsComponent,
         canActivate: [AuthGuard]
     },
 
