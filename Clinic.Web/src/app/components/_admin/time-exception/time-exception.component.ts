@@ -48,14 +48,11 @@ export class TimeExceptionComponent {
 
   async getDoctors() {
     try {
-      let res: any = await this.userService.getDoctors().toPromise();
-      if (res.length > 0) {
-        this.doctorsList = res;
-        this.doctorsList.forEach(doctor => {
-          doctor.code = doctor.id;
-          doctor.name = doctor.firstName + ' ' + doctor.lastName;
-        });
-      }
+      let res: any = await this.userService.getAllUsers().toPromise();
+      this.doctorList = res.filter(x => x.roleId == 9);
+      this.doctorList.forEach(user => {
+        user.name = user.firstName + ' ' + user.lastName;
+      });
     }
     catch { }
   }
@@ -75,19 +72,18 @@ export class TimeExceptionComponent {
   }
 
   async saveException() {
-    console.log(this.newException);
 
     let model =
     {
       "startDate": moment(this.newException.startDate.value, 'jYYYY/jMM/jDD').add(3.5, 'hours').toDate(),
       "startTime": this.convertTimeToUTC(this.newException.startTime),
       "endTime": this.convertTimeToUTC(this.newException.endTime),
-      // "practitionerId": this.newException.selectedDoctor['code'] || 0,
+      "practitionerId": this.newException.selectedDoctor?.code || 0,
       "timeExceptionTypeId": 0,
       "repeatEvery": this.newException.repeatEvery,
       "endsAfter": this.newException.endsAfter,
       "duration": this.newException.duration,
-      "businessId": this.newException.selectedClinic.code || null,
+      "businessId": this.newException.selectedClinic?.code || null,
       "practitionerTimeExceptionId": this.newException.practitionerTimeExceptionId,
       "outOfTurn": this.newException.outOfTurn,
       "defaultAppointmentTypeId": this.newException.defaultAppointmentTypeId,
@@ -118,7 +114,7 @@ export class TimeExceptionComponent {
       0
     ));
     const timePart = date.toISOString().split("T")[1];
-    return timePart.replace("Z", "");
+    return timePart.split(".")[0];
   }
 
   async getExceptions() {

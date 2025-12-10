@@ -535,6 +535,9 @@ export class AppointmentComponent {
 
 
   async setWeeklyScheduleForDay(dayOfWeek: number, time: string) {
+    if (!this.selectedDoctor.code) {
+      return
+    }
     try {
       let res: any = await this.mainService.getDoctorSchedules(this.selectedDoctor.code).toPromise();
       if (!res) return false;
@@ -585,7 +588,7 @@ export class AppointmentComponent {
       let startIndex = this.hours.findIndex(h => h.time === appointment.time);
       this.weeklyTimetable[this.hours[startIndex].time][appointment.dayOfWeek].dayAppointments.push(appointment);
     });
-    console.log(this.weeklyTimetable);
+    // console.log(this.weeklyTimetable);
 
   }
 
@@ -771,6 +774,9 @@ export class AppointmentComponent {
   }
 
   async setDoctorScheduleBasedHours(filteredHours: any, selectedDate: any) {
+    if (!this.selectedDoctor.code) {
+      return
+    }
     try {
       let res: any = await this.mainService.getDoctorSchedules(this.selectedDoctor.code).toPromise();
       if (res.length > 0) {
@@ -788,8 +794,7 @@ export class AppointmentComponent {
           );
         });
       }
-      console.log(filteredHours);
-
+      // console.log(filteredHours);
     }
     catch { }
   }

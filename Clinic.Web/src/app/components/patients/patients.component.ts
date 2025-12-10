@@ -125,15 +125,20 @@ export class PatientsComponent {
       editOrNew: this.editpatientMode ? this.newPatient.id : -1,
       mobile: this.newPatient.mobile
     }
-    let res: any = await firstValueFrom(this.patientService.savePatient(model));
-    if (res) {
-      this.toastR.success('با موفقیت ثبت شد!');
-      this.getPatients();
-      if (invoiceStatus) {
-        this.router.navigate(['patient/invoice/' + this.newPatient.id])
+    try {
+      let res: any = await firstValueFrom(this.patientService.savePatient(model));
+      if (res) {
+        this.toastR.success('با موفقیت ثبت شد!');
+        this.getPatients();
+        if (invoiceStatus) {
+          this.router.navigate(['patient/invoice/' + this.newPatient.id])
+        }
+        this.closeCreatePatientModal();
       }
-      this.closeCreatePatientModal();
+    } catch (error) {
+      this.toastR.error('خطایی رخ داد', 'خطا!')
     }
+
   }
 
   async getJobs() {
