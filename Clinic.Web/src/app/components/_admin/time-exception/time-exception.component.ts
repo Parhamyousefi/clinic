@@ -27,6 +27,7 @@ export class TimeExceptionComponent {
   selectedClinic: any = [];
   doctorList: any = [];
   selectedDoctor: any = [];
+  allowedLinks: any = [];
 
   constructor(
     private toastR: ToastrService,
@@ -35,14 +36,17 @@ export class TimeExceptionComponent {
     private objectService: ObjectService
   ) { }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.newException.startDate = new FormControl(moment().format('jYYYY/jMM/jDD'));
     this.newException.startTime = '00:00';
     this.newException.endTime = '23:00';
+    this.allowedLinks = await this.objectService.getDataAccess();
     if (this.checkAccess(1)) {
       this.getDoctors();
       this.getClinics();
       this.getExceptions();
+    } else {
+      this.toastR.error("شما دسترسی به این صفحه ندارید");
     }
   }
 
@@ -142,8 +146,14 @@ export class TimeExceptionComponent {
     this.newException.selectedClinic = this.clinicsList.filter((clinic: any) => clinic.id == exception.businessId)[0];
     this.newException.id = exception.id;
   }
+
   checkAccess(id) {
-    return this.objectService.checkAccess(id);
+    if (this.allowedLinks?.length > 0) {
+      const item = this.allowedLinks.find(x => x.id === id);
+      return item.clicked;
+    } else {
+      return false
+    }
   }
 
 }

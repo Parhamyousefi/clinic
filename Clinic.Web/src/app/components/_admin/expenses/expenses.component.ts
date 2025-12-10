@@ -19,7 +19,7 @@ import Swal from 'sweetalert2';
   selector: 'app-expenses',
   standalone: true,
   imports: [TableModule, CommonModule, DropdownModule, FormsModule, SelectButtonModule, SharedModule, DialogModule, InputMaskModule],
-templateUrl: './expenses.component.html',
+  templateUrl: './expenses.component.html',
   styleUrl: './expenses.component.css'
 })
 export class ExpensesComponent {
@@ -30,6 +30,7 @@ export class ExpensesComponent {
   newExpense: any = [];
   expenseStatus: any[] = [{ label: 'بله', value: '1' }, { label: 'خیر', value: '0' }];
   selectedDatefrom: any;
+  allowedLinks: any = [];
 
   constructor(
     private invoiceService: InvoiceService,
@@ -40,9 +41,12 @@ export class ExpensesComponent {
 
   async ngOnInit() {
     this.selectedDatefrom = new FormControl(moment().format('jYYYY/jMM/jDD'));
-    if(this.checkAccess(1)){
+    this.allowedLinks = await this.objectService.getDataAccess();
+    if (this.checkAccess(1)) {
       await this.getClinics();
       this.getExpenses();
+    } else {
+      this.toastR.error("شما دسترسی به این صفحه ندارید");
     }
   }
 
@@ -109,9 +113,14 @@ export class ExpensesComponent {
     this.showAddExpense = true;
 
   }
-  
+
   checkAccess(id) {
-   return this.objectService.checkAccess(id);
+    if (this.allowedLinks?.length > 0) {
+      const item = this.allowedLinks.find(x => x.id === id);
+      return item.clicked;
+    } else {
+      return false
+    }
   }
 
   async deleteExpense(expense: any) {

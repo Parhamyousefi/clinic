@@ -129,7 +129,10 @@ export class AppointmentComponent {
   userType: number;
   userAppointmentsSettings: any = [];
   searchControl = '';
+  allowedLinks: any = [];
+  
   async ngOnInit() {
+    this.allowedLinks = await this.objectService.getDataAccess();
     if (this.checkAccess(1)) {
       this.userType = this.utilService.checkUserType();
       if (this.userType == 9) {
@@ -160,6 +163,8 @@ export class AppointmentComponent {
         this.holidays = days
         this.addHoliday();
       });
+    } else {
+      this.toastR.error("شما دسترسی به این صفحه ندارید");
     }
   }
 
@@ -850,7 +855,12 @@ export class AppointmentComponent {
   }
 
   checkAccess(id) {
-    return this.objectService.checkAccess(id);
+    if (this.allowedLinks?.length > 0) {
+      const item = this.allowedLinks.find(x => x.id === id);
+      return item.clicked;
+    } else {
+      return false
+    }
   }
 
 }
