@@ -114,7 +114,7 @@ namespace Clinic.Api.Infrastructure.Services
             }
         }
 
-        public async Task<IEnumerable<AppointmentsContext>> GetAppointments(GetAppointmentsDto model)
+        public async Task<IEnumerable<GetAppointmentsResponse>> GetAppointments(GetAppointmentsDto model)
         {
             try
             {
@@ -127,13 +127,43 @@ namespace Clinic.Api.Infrastructure.Services
                 var selectedDate = model.Date?.Date ?? DateTime.Today;
                 var nextDay = selectedDate.AddDays(1);
 
-                return await _context.Appointments
-         .Where(u =>
-             u.BusinessId == model.ClinicId &&
-             u.PractitionerId == model.DoctorId &&
-             u.Start.Date <= selectedDate &&
-             u.End.Date >= selectedDate)
-         .ToListAsync();
+
+                var result = await (from a in _context.Appointments
+                                    join u in _context.Users on a.PractitionerId equals u.Id
+                                    join p in _context.Patients on a.PatientId equals p.Id
+                                    select new GetAppointmentsResponse
+                                    {
+                                        Id = a.Id,
+                                        BusinessId = a.BusinessId,
+                                        PractitionerId = a.PractitionerId,
+                                        PatientId = a.PatientId,
+                                        AppointmentTypeId = a.AppointmentTypeId,
+                                        Start = a.Start,
+                                        End = a.End,
+                                        RepeatId = a.RepeatId,
+                                        RepeatEvery = a.RepeatEvery,
+                                        EndsAfter = a.EndsAfter,
+                                        Note = a.Note,
+                                        Arrived = a.Arrived,
+                                        WaitListId = a.WaitListId,
+                                        Cancelled = a.Cancelled,
+                                        AppointmentCancelTypeId = a.AppointmentCancelTypeId,
+                                        CancelNotes = a.CancelNotes,
+                                        IsUnavailbleBlock = a.IsUnavailbleBlock,
+                                        ModifierId = a.ModifierId,
+                                        CreatedOn = a.CreatedOn,
+                                        LastUpdated = a.LastUpdated,
+                                        IsAllDay = a.IsAllDay,
+                                        SendReminder = a.SendReminder,
+                                        AppointmentSMS = a.AppointmentSMS,
+                                        IgnoreDidNotCome = a.IgnoreDidNotCome,
+                                        CreatorId = a.CreatorId,
+                                        ByInvoice = a.ByInvoice,
+                                        DoctorName = u.FirstName + " " + u.LastName,
+                                        PatientName = p.FirstName + " " + p.LastName
+                                    }).ToListAsync();
+
+                return result;
             }
             catch (Exception ex)
             {
@@ -154,6 +184,7 @@ namespace Clinic.Api.Infrastructure.Services
                 throw new Exception(ex.Message);
             }
         }
+
         public async Task<GlobalResponse> DeleteTreatment(int id)
         {
             var result = new GlobalResponse();
@@ -933,6 +964,35 @@ namespace Clinic.Api.Infrastructure.Services
                 _context.Appointments.Update(res);
                 await _context.SaveChangesAsync();
                 result.Message = "Appointment Updated Successfully";
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<GlobalResponse> CancelAppointment(int appointmentId)
+        {
+            var result = new GlobalResponse();
+
+            try
+            {
+                var userId = _token.GetUserId();
+
+                var existingAppointment = await _context.Appointments.FirstOrDefaultAsync(e => e.Id == appointmentId);
+                if (existingAppointment == null)
+                {
+                    throw new Exception("Appointment Not Found");
+                }
+
+                existingAppointment.ModifierId = userId;
+                existingAppointment.LastUpdated = DateTime.Now;
+                existingAppointment.Cancelled = true;
+                _context.Appointments.Update(existingAppointment);
+                await _context.SaveChangesAsync();
+                result.Message = "Appointment Canceled Successfully";
+                result.Status = 0;
                 return result;
             }
             catch (Exception ex)

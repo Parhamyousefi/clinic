@@ -8,7 +8,7 @@ namespace Clinic.Api.Application.Interfaces
     {
         Task<GlobalResponse> CreateAppointmentAsync(CreateAppointmentDto model);
         Task<GlobalResponse> DeleteAppointment(int id);
-        Task<IEnumerable<AppointmentsContext>> GetAppointments(GetAppointmentsDto model);
+        Task<IEnumerable<GetAppointmentsResponse>> GetAppointments(GetAppointmentsDto model);
         Task<IEnumerable<TreatmentsContext>> GetTreatments(int appointmentId);
         Task<GlobalResponse> DeleteTreatment(int id);
         Task<IEnumerable<GetTodayAppointmentsInfoDto>> GetTodayAppointments(GetTodayAppointmentsDto model);
@@ -29,5 +29,6 @@ namespace Clinic.Api.Application.Interfaces
         Task<GlobalResponse> DeleteItemCategory(int id);
         Task<IEnumerable<TreatmentTemplatesContext>> GetTreatmentTemplates(GetTreatmentTemplateDto model);
         Task<GlobalResponse> SavePatientArrived(int appointmentId);
+        Task<GlobalResponse> CancelAppointment(int appointmentId);
     }
 }
