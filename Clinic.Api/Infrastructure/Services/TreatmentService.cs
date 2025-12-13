@@ -127,11 +127,11 @@ namespace Clinic.Api.Infrastructure.Services
                 var selectedDate = model.Date?.Date ?? DateTime.Today;
                 var nextDay = selectedDate.AddDays(1);
 
-
                 var result = await (from a in _context.Appointments
                                     join u in _context.Users on a.PractitionerId equals u.Id
                                     join p in _context.Patients on a.PatientId equals p.Id
                                     join at in _context.AppointmentTypes on a.AppointmentTypeId equals at.Id
+                                    where a.BusinessId == model.ClinicId && a.PractitionerId == model.ClinicId && a.Start.Date <= selectedDate && a.End.Date >= selectedDate && a.Cancelled == false
                                     select new GetAppointmentsResponse
                                     {
                                         Id = a.Id,
@@ -418,12 +418,30 @@ namespace Clinic.Api.Infrastructure.Services
             try
             {
                 var result = await (from a in _context.AppointmentTypes
-                                    join b1 in _context.BillableItems on a.RelatedBillableItemId equals b1.Id
-                                    join b2 in _context.BillableItems on a.RelatedBillableItem2Id equals b2.Id
-                                    join b3 in _context.BillableItems on a.RelatedBillableItem3Id equals b3.Id
-                                    join p1 in _context.Products on a.RelatedProductId equals p1.Id
-                                    join p2 in _context.Products on a.RelatedProduct2Id equals p2.Id
-                                    join p3 in _context.Products on a.RelatedProduct3Id equals p3.Id
+                                    join b1 in _context.BillableItems
+        on a.RelatedBillableItemId equals b1.Id into b1g
+                                    from b1 in b1g.DefaultIfEmpty()
+
+                                    join b2 in _context.BillableItems
+                                        on a.RelatedBillableItem2Id equals b2.Id into b2g
+                                    from b2 in b2g.DefaultIfEmpty()
+
+                                    join b3 in _context.BillableItems
+                                        on a.RelatedBillableItem3Id equals b3.Id into b3g
+                                    from b3 in b3g.DefaultIfEmpty()
+
+                                    join p1 in _context.Products
+                                        on a.RelatedProductId equals p1.Id into p1g
+                                    from p1 in p1g.DefaultIfEmpty()
+
+                                    join p2 in _context.Products
+                                        on a.RelatedProduct2Id equals p2.Id into p2g
+                                    from p2 in p2g.DefaultIfEmpty()
+
+                                    join p3 in _context.Products
+                                        on a.RelatedProduct3Id equals p3.Id into p3g
+                                    from p3 in p3g.DefaultIfEmpty()
+
                                     select new GetAppointmentTypesResponse
                                     {
                                         Id = a.Id,
@@ -433,18 +451,18 @@ namespace Clinic.Api.Infrastructure.Services
                                         Duration = a.Duration,
                                         MaximumNumberOfPatients = a.MaximumNumberOfPatients,
                                         RelatedBillableItemId = a.RelatedBillableItemId,
-                                        BillableItemName = b1.Name,
+                                        BillableItemName = b1 != null ? b1.Name : null,
                                         RelatedBillableItem2Id = a.RelatedBillableItem2Id,
-                                        BillableItemName2 = b2.Name,
+                                        BillableItemName2 = b2 != null ? b2.Name : null,
                                         RelatedBillableItem3Id = a.RelatedBillableItem3Id,
-                                        BillableItemName3 = b3.Name,
+                                        BillableItemName3 = b3 != null ? b3.Name : null,
                                         DefaultTreatmentNoteTemplate = a.DefaultTreatmentNoteTemplate,
                                         RelatedProductId = a.RelatedProductId,
-                                        ProductName = p1.Name,
+                                        ProductName = p1 != null ? p1.Name : null,
                                         RelatedProduct2Id = a.RelatedProduct2Id,
-                                        ProductName2 = p2.Name,
+                                        ProductName2 = p2 != null ? p2.Name : null,
                                         RelatedProduct3Id = a.RelatedProduct3Id,
-                                        ProductName3 = p3.Name,
+                                        ProductName3 = p3 != null ? p3.Name : null,
                                         Color = a.Color,
                                         SendBookingConfirmationEmail = a.SendBookingConfirmationEmail,
                                         SendReminderEmail = a.SendReminderEmail,
