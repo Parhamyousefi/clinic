@@ -131,6 +131,7 @@ namespace Clinic.Api.Infrastructure.Services
                 var result = await (from a in _context.Appointments
                                     join u in _context.Users on a.PractitionerId equals u.Id
                                     join p in _context.Patients on a.PatientId equals p.Id
+                                    join at in _context.AppointmentTypes on a.AppointmentTypeId equals at.Id
                                     select new GetAppointmentsResponse
                                     {
                                         Id = a.Id,
@@ -160,7 +161,8 @@ namespace Clinic.Api.Infrastructure.Services
                                         CreatorId = a.CreatorId,
                                         ByInvoice = a.ByInvoice,
                                         DoctorName = u.FirstName + " " + u.LastName,
-                                        PatientName = p.FirstName + " " + p.LastName
+                                        PatientName = p.FirstName + " " + p.LastName,
+                                        Color = at.Color,
                                     }).ToListAsync();
 
                 return result;
@@ -411,13 +413,49 @@ namespace Clinic.Api.Infrastructure.Services
             }
         }
 
-        public async Task<IEnumerable<AppointmentTypesContext>> GetAppointmentTypes()
+        public async Task<IEnumerable<GetAppointmentTypesResponse>> GetAppointmentTypes()
         {
             try
             {
-                var appointmentTypes = await _context.AppointmentTypes.ToListAsync();
-
-                return appointmentTypes;
+                var result = await (from a in _context.AppointmentTypes
+                                    join b1 in _context.BillableItems on a.RelatedBillableItemId equals b1.Id
+                                    join b2 in _context.BillableItems on a.RelatedBillableItem2Id equals b2.Id
+                                    join b3 in _context.BillableItems on a.RelatedBillableItem3Id equals b3.Id
+                                    join p1 in _context.Products on a.RelatedProductId equals p1.Id
+                                    join p2 in _context.Products on a.RelatedProduct2Id equals p2.Id
+                                    join p3 in _context.Products on a.RelatedProduct3Id equals p3.Id
+                                    select new GetAppointmentTypesResponse
+                                    {
+                                        Id = a.Id,
+                                        Name = a.Name,
+                                        Description = a.Description,
+                                        Category = a.Category,
+                                        Duration = a.Duration,
+                                        MaximumNumberOfPatients = a.MaximumNumberOfPatients,
+                                        RelatedBillableItemId = a.RelatedBillableItemId,
+                                        BillableItemName = b1.Name,
+                                        RelatedBillableItem2Id = a.RelatedBillableItem2Id,
+                                        BillableItemName2 = b2.Name,
+                                        RelatedBillableItem3Id = a.RelatedBillableItem3Id,
+                                        BillableItemName3 = b3.Name,
+                                        DefaultTreatmentNoteTemplate = a.DefaultTreatmentNoteTemplate,
+                                        RelatedProductId = a.RelatedProductId,
+                                        ProductName = p1.Name,
+                                        RelatedProduct2Id = a.RelatedProduct2Id,
+                                        ProductName2 = p2.Name,
+                                        RelatedProduct3Id = a.RelatedProduct3Id,
+                                        ProductName3 = p3.Name,
+                                        Color = a.Color,
+                                        SendBookingConfirmationEmail = a.SendBookingConfirmationEmail,
+                                        SendReminderEmail = a.SendReminderEmail,
+                                        ShowInOnlineBookings = a.ShowInOnlineBookings,
+                                        ModifierId = a.ModifierId,
+                                        CreatedOn = a.CreatedOn,
+                                        LastUpdated = a.LastUpdated,
+                                        CreatorId = a.CreatorId,
+                                        IsFirstEncounter = a.IsFirstEncounter
+                                    }).ToListAsync();
+                return result;
             }
             catch (Exception ex)
             {
