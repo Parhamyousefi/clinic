@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { InvoiceService } from '../../_services/invoice.service';
 import { SharedModule } from '../../share/shared.module';
 import { Router, RouterLink } from "@angular/router";
+import { ObjectService } from '../../_services/store.service';
 
 @Component({
   selector: 'app-invoice-list',
@@ -14,19 +15,28 @@ export class InvoiceListComponent implements OnInit {
 
   constructor(
     private InvoiceService: InvoiceService,
-    private router: Router
+    private router: Router,
+    private objectService: ObjectService
   ) { }
 
   InvoiceList: any = [];
+  allowedLinks: any = [];
 
-  ngOnInit(): void {
-    this.getInvoices()
+  async ngOnInit() {
+    
+    this.allowedLinks = await this.objectService.getDataAccess();
+    if (this.checkAccess(1)) {
+      this.getInvoices()
+    }
   }
 
   async getInvoices() {
     try {
       let res: any = await this.InvoiceService.getInvoices().toPromise();
       this.InvoiceList = res;
+      this.InvoiceList.sort((a, b) =>
+        new Date(b.createdOn).getTime() - new Date(a.createdOn).getTime()
+      )
     }
     catch { }
 
@@ -34,5 +44,15 @@ export class InvoiceListComponent implements OnInit {
 
   goToEditPage(id, type) {
     this.router.navigate(['/new-invoice', id, "n", "n", "n", type]);
+  }
+
+
+  checkAccess(id) {
+    if (this.allowedLinks?.length > 0) {
+      const item = this.allowedLinks.find(x => x.id === id);
+      return item.clicked;
+    } else {
+      return false
+    }
   }
 }

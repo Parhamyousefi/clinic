@@ -13,6 +13,7 @@ import { PatientService } from '../../_services/patient.service';
 import { TreatmentsService } from '../../_services/treatments.service';
 import { firstValueFrom } from 'rxjs';
 import { UtilService } from '../../_services/util.service';
+import { ObjectService } from '../../_services/store.service';
 @Component({
   selector: 'app-appointment',
   standalone: true,
@@ -97,11 +98,13 @@ export class AppointmentComponent {
   }
 
   isBeforeNow: boolean;
-  isCalendarVisible = true;
+  isCalendarVisible: boolean = false;
   newPateint: any = [];
   doctorList: any = [];
   selectedDoctor: any = [];
   filteredHours: any = [];
+  dropdownOpen: boolean = false;
+  selectedPatientName: string = null;
 
   constructor(
     private userService: UserService,
@@ -111,7 +114,8 @@ export class AppointmentComponent {
     private mainService: MainService,
     private utilService: UtilService,
     private renderer: Renderer2,
-    private el: ElementRef
+    private el: ElementRef,
+    private objectService: ObjectService
   ) {
   }
 
@@ -127,58 +131,71 @@ export class AppointmentComponent {
   userType: number;
   userAppointmentsSettings: any = [];
   searchControl = '';
+  allowedLinks: any = [];
+
   async ngOnInit() {
-    this.userType = this.utilService.checkUserType();
-    if (this.userType == 9) {
-      this.selectedDoctor.code = this.userType;
-    }
-    this.getWeeklyAppointments();
-    this.dateNew = new FormControl(moment().format('jYYYY/jMM/jDD'));
-    this.dateNew.valueChanges.subscribe(date => {
-      this.onDateSelect(date);
-    });
+    this.allowedLinks = await this.objectService.getDataAccess();
+    if (this.checkAccess(1)) {
+      this.userType = this.utilService.checkUserType();
+      if (this.userType == 9) {
+        this.selectedDoctor.code = this.userType;
+      }
+      this.getWeeklyAppointments();
+      this.dateNew = new FormControl(moment().format('jYYYY/jMM/jDD'));
+      this.dateNew.valueChanges.subscribe(date => {
+        this.onDateSelect(date);
+      });
 
-    this.today = moment();
-    if (this.userType != 9) {
-      await this.getUsers();
+      this.today = moment();
+      if (this.userType != 9) {
+        await this.getUsers();
+      } else {
+        this.getDoctorSchedules(2);
+      }
+      // this.selectedDate = this.today;
+      await this.getPatients();
+      await this.getAppointmentTypes();
+      await this.getClinics();
+      await this.getAppointment(this.today);
+      this.today = this.today._d;
+      this.getCurrentWeek(1);
+      this.getWeeklyAppointments();
+      const jalaliYear = moment().format('jYYYY');
+      this.utilService.getIranianHolidaysWithFridays(jalaliYear).subscribe(days => {
+        this.holidays = days
+        this.addHoliday();
+      });
     } else {
-      this.getDoctorSchedules(2);
+      this.toastR.error("شما دسترسی به این صفحه ندارید");
     }
-    // this.selectedDate = this.today;
-    await this.getPatients();
-    await this.getAppointmentTypes();
-    await this.getClinics();
-    await this.getAppointment(this.today);
-    this.today = this.today._d;
-    this.getCurrentWeek(1);
-    this.getWeeklyAppointments();
-    const jalaliYear = moment().format('jYYYY');
-    this.utilService.getIranianHolidaysWithFridays(jalaliYear).subscribe(days => {
-      this.holidays = days
-      this.addHoliday();
-    });
-
   }
 
 
   ngAfterViewInit() {
+    this.isCalendarVisible = true;
     const calendarEl = this.el.nativeElement.querySelector('#appointment');
-    const observer = new MutationObserver(() => {
-      const switchViewEl = document.querySelector('.switch-view.dp-btn');
-      const text = switchViewEl.textContent?.trim();
-      const parts = text?.split(' ');
-      this.utilService.getIranianHolidaysWithFridays(parts[1]).subscribe(days => {
-        this.holidays = days
-        this.addHoliday();
-        this.getDoctorSchedules(this.userType != 9 ? 1 : 2);
+    if (calendarEl) {
+      const observer = new MutationObserver(() => {
+        const switchViewEl = document.querySelector('.switch-view.dp-btn');
+        const text = switchViewEl?.textContent?.trim();
+        const parts = text?.split(' ');
+        if (parts?.[1]) {
+          this.utilService.getIranianHolidaysWithFridays(parts[1]).subscribe(days => {
+            this.holidays = days;
+            this.addHoliday();
+            this.getDoctorSchedules(this.userType != 9 ? 1 : 2);
+          });
+        }
       });
-    });
-
-    observer.observe(calendarEl, {
-      childList: true,
-      subtree: true
-    });
+      observer.observe(calendarEl, {
+        childList: true,
+        subtree: true
+      });
+    } else {
+      console.error('#appointment element not found');
+    }
   }
+
 
 
 
@@ -320,8 +337,8 @@ export class AppointmentComponent {
       let res: any = await this.treatmentService.getAppointments(model).toPromise();
       this.appointmentsData = res;
       this.appointmentsData.forEach((appointment: any) => {
-        appointment.typeName = this.appointmentTypes.filter((type: any) => type.id == appointment.appointmentTypeId)[0].name;
-        appointment.patientName = this.patientsList.filter((patient: any) => patient.id == appointment.patientId)[0].name;
+        appointment.typeName = this.appointmentTypes.filter((type: any) => type.id == appointment.appointmentTypeId)[0]?.name;
+        appointment.patientName = this.patientsList.filter((patient: any) => patient.id == appointment.patientId)[0]?.name;
         appointment.showStartTime = shamsiTimePipe.transform(appointment.start);
         // let startIndex = this.hours.indexOf(appointment.showStartTime);
         let startIndex = this.hours.findIndex(h => h.time === appointment.showStartTime);
@@ -379,6 +396,8 @@ export class AppointmentComponent {
   }
 
   setNewAppointment(time: any) {
+    if (!this.checkAccess(2)) { return }
+
     if (this.isBeforeNow || this.timeIsBeforeNow(this.appointmentDate, time.time)) {
       this.toastR.error('ثبت وقت برای ساعت های پیشین ممکن نیست! ')
       return
@@ -488,9 +507,9 @@ export class AppointmentComponent {
     let currentDate = moment(this.appointmentDate);
     let weekStart: any = currentDate.clone().locale('fa').startOf('week');
     let daysOfWeek = [];
+    let isInSchedule = await this.setWeeklyScheduleForDay(weekStart.day(), time);
 
     for (let i = 0; i < 6; i++) {
-      let isInSchedule = await this.setWeeklyScheduleForDay(weekStart.day(), time);
       daysOfWeek.push({
         dayName: weekStart.locale('fa').format('dddd'),
         dayNumber: weekStart.format('jDD'),
@@ -530,6 +549,9 @@ export class AppointmentComponent {
 
 
   async setWeeklyScheduleForDay(dayOfWeek: number, time: string) {
+    if (!this.selectedDoctor.code) {
+      return
+    }
     try {
       let res: any = await this.mainService.getDoctorSchedules(this.selectedDoctor.code).toPromise();
       if (!res) return false;
@@ -580,7 +602,7 @@ export class AppointmentComponent {
       let startIndex = this.hours.findIndex(h => h.time === appointment.time);
       this.weeklyTimetable[this.hours[startIndex].time][appointment.dayOfWeek].dayAppointments.push(appointment);
     });
-    console.log(this.weeklyTimetable);
+    // console.log(this.weeklyTimetable);
 
   }
 
@@ -600,15 +622,21 @@ export class AppointmentComponent {
       Tuesday: 3,
       Wednesday: 4,
       Thursday: 5
-    }
-    const result = Object.entries(data)
-      .flatMap(([day, appointments]) =>
-        (appointments as any[]).map((appointment) => ({
+    };
+
+    const result = Object.entries(data).flatMap(([day, appointments]) => {
+      if (Array.isArray(appointments)) {
+        return appointments.map((appointment) => ({
           ...appointment,
           dayOfWeek: dayMap[day] ?? null,
-        }))
-      );
+        }));
+      } else {
+        return [];
+      }
+    });
+
     return result;
+
   }
 
 
@@ -766,6 +794,9 @@ export class AppointmentComponent {
   }
 
   async setDoctorScheduleBasedHours(filteredHours: any, selectedDate: any) {
+    if (!this.selectedDoctor.code) {
+      return
+    }
     try {
       let res: any = await this.mainService.getDoctorSchedules(this.selectedDoctor.code).toPromise();
       if (res.length > 0) {
@@ -783,8 +814,7 @@ export class AppointmentComponent {
           );
         });
       }
-      console.log(filteredHours);
-
+      // console.log(filteredHours);
     }
     catch { }
   }
@@ -819,10 +849,9 @@ export class AppointmentComponent {
     }
   }
 
-
   async getFilteredPatient() {
+    this.selectedPatientName = null;
     try {
-
       let model = {
         value: this.searchControl,
       }
@@ -833,6 +862,7 @@ export class AppointmentComponent {
           element.name = element.firstName + " " + element.lastName;
 
         });
+        this.dropdownOpen = true;
       } else {
         this.patientsList = [];
       }
@@ -840,6 +870,20 @@ export class AppointmentComponent {
     catch { }
   }
 
+  checkAccess(id) {
+    if (this.allowedLinks?.length > 0) {
+      const item = this.allowedLinks.find(x => x.id === id);
+      return item.clicked;
+    } else {
+      return false
+    }
+  }
+
+  selectPatient(item: any) {
+    this.newAppointmentModel.selectedPatient = item.patientCode;
+    this.selectedPatientName = item.name;
+    this.dropdownOpen = false;
+  }
 
 
 }

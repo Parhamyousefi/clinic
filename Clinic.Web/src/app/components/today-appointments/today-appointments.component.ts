@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { TreatmentsService } from './../../_services/treatments.service';
-import { UserService } from '../../_services/user.service';
 import { SharedModule } from '../../share/shared.module';
 import { MainService } from './../../_services/main.service';
 import moment from 'moment-jalaali';
@@ -11,6 +10,8 @@ import { InvoiceService } from '../../_services/invoice.service';
 import { ToastrService } from 'ngx-toastr';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { UtilService } from '../../_services/util.service';
+import { ObjectService } from '../../_services/store.service';
+import Swal from 'sweetalert2';
 @Component({
   selector: 'app-today-appointments',
   standalone: true,
@@ -23,12 +24,12 @@ export class TodayAppointmentsComponent implements OnInit {
 
   constructor(
     private treatmentsService: TreatmentsService,
-    private userService: UserService,
     private mainService: MainService,
     private invoiceService: InvoiceService,
     private toastR: ToastrService,
     private router: Router,
-    private utilService: UtilService
+    private utilService: UtilService,
+    private objectService: ObjectService
   ) { }
 
   clinicsList: any = [];
@@ -57,17 +58,23 @@ export class TodayAppointmentsComponent implements OnInit {
   appointmentInvoices: any = [];
   userType: any;
   isAdminOrDoctor: boolean;
-
+  allowedLinks: any = [];
+  
   async ngOnInit() {
-    this.userType = this.utilService.checkUserType();
-    this.isAdminOrDoctor = this.userType == 3 ? false : true;
-    this.selectedDatefrom = new FormControl(moment().format('jYYYY/jMM/jDD'));
-    this.selectedDateTo = new FormControl(moment().format('jYYYY/jMM/jDD'));
-    await this.getClinics();
-    await this.getBillableItems();
-    setTimeout(() => {
-      this.getAppointment();
-    }, 1000);
+    this.allowedLinks = await this.objectService.getDataAccess();
+    if (this.checkAccess(1)) {
+      this.userType = this.utilService.checkUserType();
+      this.isAdminOrDoctor = this.userType == 3 ? false : true;
+      this.selectedDatefrom = new FormControl(moment().format('jYYYY/jMM/jDD'));
+      this.selectedDateTo = new FormControl(moment().format('jYYYY/jMM/jDD'));
+      await this.getClinics();
+      await this.getBillableItems();
+      setTimeout(() => {
+        this.getAppointment();
+      }, 1000);
+    } else {
+      this.toastR.error("شما دسترسی به این صفحه ندارید");
+    }
   }
 
   async getAppointment() {
@@ -90,27 +97,22 @@ export class TodayAppointmentsComponent implements OnInit {
       if (this.selectedStatus && this.selectedStatus.length > 0) {
         this.selectedStatus.forEach(status => {
           let filtered = [];
-
           switch (status.code) {
             case 4:
               filtered = this.todayAppointmentsList.filter(a => a.receipt == 0);
               break;
-
             case 5:
               filtered = this.todayAppointmentsList.filter(a => a.totalDiscount > 0);
               break;
-
             default:
               filtered = this.todayAppointmentsList.filter(a => a.status === status.code);
               break;
           }
-
           this.filteredAppointments.push(...filtered);
         });
       } else {
         this.filteredAppointments = [...this.todayAppointmentsList];
       }
-
     } catch { }
   }
 
@@ -139,9 +141,6 @@ export class TodayAppointmentsComponent implements OnInit {
         name: 'همه',
         id: -1,
       });
-      // setTimeout(() => {
-      //   this.selectedservice = this.servicesList[0];
-      // }, 1000);
     }
     catch { }
   }
@@ -195,9 +194,7 @@ export class TodayAppointmentsComponent implements OnInit {
       this.filteredAppointments = this.todayAppointmentsList;
       return;
     }
-
     const text = searchText.toLowerCase();
-
     this.filteredAppointments = this.todayAppointmentsList.filter(item => {
       return (
         item.patientPhone?.toLowerCase().includes(text) ||
@@ -253,5 +250,41 @@ export class TodayAppointmentsComponent implements OnInit {
       }
     }
     catch { }
+  }
+
+  checkAccess(id) {
+    if (this.allowedLinks?.length > 0) {
+      const item = this.allowedLinks.find(x => x.id === id);
+      return item.clicked;
+    } else {
+      return false
+    }
+  }
+
+  async invoiceItemIsDone(item) {
+    if (!this.checkAccess(3)) {
+      return
+    }
+    Swal.fire({
+      title: `آیا از انجام این ${item.name} مطمئن هستید ؟`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "بله انجام بده",
+      cancelButtonText: "منصرف شدم",
+      reverseButtons: false,
+    }).then(async (result) => {
+      try {
+        if (result.value) {
+          item.done = !item.done;
+          let res: any = await this.invoiceService.invoiceItemIsDone(item.invoiceItemId, item.done).toPromise();
+          if (res['status'] == 0) {
+            this.toastR.success('با موفقیت انجام گردید');
+          }
+        }
+      }
+      catch {
+        this.toastR.error('خطایی رخ داد', 'خطا!')
+      }
+    })
   }
 }

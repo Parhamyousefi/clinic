@@ -10,6 +10,7 @@ import { ToastrService } from 'ngx-toastr';
 import { InvoiceService } from '../../_services/invoice.service';
 import { PaymentService } from '../../_services/payment.service';
 import Swal from 'sweetalert2';
+import { ObjectService } from '../../_services/store.service';
 
 @Component({
   selector: 'app-receipt-list',
@@ -24,6 +25,7 @@ export class ReceiptListComponent {
     private invoiceService: InvoiceService,
     private activeRoute: ActivatedRoute,
     private paymentService: PaymentService,
+    private objectService: ObjectService
   ) { }
   receiptsList: any = [];
   paymentList: any = [];
@@ -33,17 +35,23 @@ export class ReceiptListComponent {
   receiptType: any = 0;
   checkRout: any;
   isPayment: boolean = false;
-  tableData:any=[];
+  tableData: any = [];
+  allowedLinks: any = [];
 
-  ngOnInit() {
+  async ngOnInit() {
     this.checkRout = this.activeRoute.snapshot.routeConfig.path;
-    if (this.checkRout === "payment-list") {
-      this.isPayment = true;
-      this.getAllPayments();
-    }
-    else {
-      this.isPayment = false;
-      this.getReceipts();
+    this.allowedLinks = await this.objectService.getDataAccess();
+    if (this.checkAccess(1)) {
+      if (this.checkRout === "payment-list") {
+        this.isPayment = true;
+        this.getAllPayments();
+      }
+      else {
+        this.isPayment = false;
+        this.getReceipts();
+      }
+    } else {
+      this.toastR.error("شما دسترسی به این صفحه ندارید");
     }
   }
 
@@ -55,7 +63,7 @@ export class ReceiptListComponent {
         element.sumPrice = element.eftPos + element.cash;
       });
     }
-     this.tableData =this.receiptsList;
+    this.tableData = this.receiptsList;
   }
 
   async getAllPayments() {
@@ -66,8 +74,9 @@ export class ReceiptListComponent {
         element.sumPrice = element.eftPos + element.cash;
       });
     }
-    this.tableData =this.paymentList;
+    this.tableData = this.paymentList;
   }
+
   async deleteReceipt(id) {
     Swal.fire({
       title: "آیا از حذف مطمئن هستید ؟",
@@ -123,7 +132,7 @@ export class ReceiptListComponent {
         notes: this.editReceiptsModel.note,
         allowEdit: true,
         receiptTypeId: this.receiptType ? 1 : 0,
-        editOrNew: this.editReceiptsModel.id,
+        editOrNew: this.editReceiptsModel.id
       }
       try {
         let data = await this.paymentService.savePayment(model).toPromise();
@@ -138,15 +147,15 @@ export class ReceiptListComponent {
     }
     else {
       let model = {
-      receiptNo: null,
-      patientId: this.editReceiptsModel.patientId,
-      cash: +this.editReceiptsModel.cash,
-      eftPos: this.editReceiptsModel.eftPos,
-      other: null,
-      notes: this.editReceiptsModel.note,
-      allowEdit: true,
-      receiptTypeId: this.receiptType ? 1 : 0
-    }
+        receiptNo: null,
+        patientId: this.editReceiptsModel.patientId,
+        cash: +this.editReceiptsModel.cash,
+        eftPos: this.editReceiptsModel.eftPos,
+        other: null,
+        notes: this.editReceiptsModel.note,
+        allowEdit: true,
+        receiptTypeId: this.receiptType ? 1 : 0
+      }
       try {
         let data = await this.invoiceService.saveReceipt(model).toPromise();
         if (data['status'] == 0) {
@@ -169,7 +178,18 @@ export class ReceiptListComponent {
     this.editReceiptsModel.sum = null;
     this.showReceiptsModal = false;
   }
+
   sumNumber() {
     this.editReceiptsModel.sum = (this.editReceiptsModel.eftPos | 0) + (this.editReceiptsModel.cash | 0);
   }
+
+  checkAccess(id) {
+    if (this.allowedLinks?.length > 0) {
+      const item = this.allowedLinks.find(x => x.id === id);
+      return item.clicked;
+    } else {
+      return false
+    }
+  }
+
 }

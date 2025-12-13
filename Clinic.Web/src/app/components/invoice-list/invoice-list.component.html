@@ -4,20 +4,30 @@
   </div>
   <hr>
   <div class="col-12">
-    <button class="btn btn-danger mb-3" routerLink="/new-invoice/n/n/n/n/n">صورت حساب جدید
+    <button *ngIf="checkAccess(2)" class="btn btn-danger mb-3" routerLink="/new-invoice/n/n/n/n/n">صورت حساب جدید
       <!-- <i class="fa fa-plus" aria-hidden="true"></i> -->
     </button>
 
-    <p-table #dt styleClass="p-datatable-gridlines" [value]="InvoiceList" [autoLayout]="true" [paginator]="true"
+    <p-table *ngIf="checkAccess(1)" #dt styleClass="p-datatable-gridlines" [value]="InvoiceList" [autoLayout]="true" [paginator]="true"
       [rows]="10" [showCurrentPageReport]="true" currentPageReportTemplate="نمایش {first} تا {last} "
       [rowsPerPageOptions]="[10,25,50]">
       <ng-template pTemplate="header">
         <tr>
-          <th> شماره</th>
-          <th> بیمار</th>
-          <th> مبلغ</th>
-          <th> مکان</th>
-          <th> تاریخ</th>
+          <th pSortableColumn="id">
+            <p-sortIcon field="id"></p-sortIcon> شماره
+          </th>
+          <th pSortableColumn="patientName">
+            <p-sortIcon field="patientName"></p-sortIcon> بیمار
+          </th>
+          <th pSortableColumn="amount">
+            <p-sortIcon field="amount"></p-sortIcon> مبلغ
+          </th>
+          <th pSortableColumn="businessName">
+            <p-sortIcon field="businessName"></p-sortIcon> مکان
+          </th>
+          <th pSortableColumn="createdOn">
+            <p-sortIcon field="createdOn"></p-sortIcon> تاریخ
+          </th>
           <th> عملیات</th>
         </tr>
         <tr>
@@ -68,8 +78,8 @@
             </div>
           </td>
           <td class="px-2">
-            <button class="btn btn-danger mx-2" (click)="goToEditPage(item.id , 1)">مشاهده</button>
-            <button class="btn btn-warning" (click)="goToEditPage(item.id ,2)">ویرایش</button>
+            <button *ngIf="checkAccess(1)" class="btn btn-danger mx-2" (click)="goToEditPage(item.id , 1)">مشاهده</button>
+            <button *ngIf="checkAccess(2)" class="btn btn-warning" (click)="goToEditPage(item.id ,2)">ویرایش</button>
           </td>
         </tr>
       </ng-template>

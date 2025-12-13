@@ -6,6 +6,7 @@ import { PatientService } from '../_services/patient.service';
 import { ToastrService } from 'ngx-toastr';
 import swal from 'sweetalert2';
 import { PatientMenuComponent } from "../components/patient-menu/patient-menu.component";
+import { ObjectService } from '../_services/store.service';
 export interface imenu {
   id: number;
   text: string;
@@ -28,6 +29,7 @@ export const Menu: imenu[] = [
 ];
 
 export const settingMenu: imenu[] = [
+<<<<<<< HEAD
   { id: 0, text: "کلینیک", link: '', roleAccess: [], icon: 'fa fa-caret-left' },
   { id: 2, text: "مکان ها", link: '/business-List', roleAccess: [], icon: 'fa fa-caret-left' },
   { id: 3, text: "کاربران", link: '/userlist', roleAccess: [], icon: 'fa fa-caret-left' },
@@ -41,6 +43,23 @@ export const appointmentMenu: imenu[] = [
   { id: 0, text: "انواع وقت دهی", link: '', roleAccess: [], icon: 'fa fa-caret-left' },
   { id: 2, text: "استثنائات اوقات پزشکان", link: '/time-exception', roleAccess: [], icon: 'fa fa-caret-left' },
   { id: 3, text: "استثنائات خارج از نوبت", link: '', roleAccess: [], icon: 'fa fa-caret-left' },
+=======
+  { id: 10, text: "کلینیک", link: '', roleAccess: [], icon: 'fa fa-caret-left' },
+  { id: 11, text: "تنظیمات عمومی", link: '', roleAccess: [], icon: 'fa fa-caret-left' },
+  { id: 12, text: "مکان ها", link: '/business-List', roleAccess: [], icon: 'fa fa-caret-left' },
+  { id: 13, text: "کاربران", link: '/userlist', roleAccess: [], icon: 'fa fa-caret-left' },
+  { id: 14, text: "نقش ها و دسترسی ها", link: '/user-role-list', roleAccess: [], icon: 'fa fa-caret-left' },
+];
+export const financialMenu: imenu[] = [
+  { id: 15, text: "خدمات", link: '/service-list', roleAccess: [], icon: 'fa fa-caret-left' },
+  { id: 16, text: "گروه خدمات", link: '/service-group-list', roleAccess: [], icon: 'fa fa-caret-left' },
+];
+export const appointmentMenu: imenu[] = [
+  { id: 17, text: "انواع وقت دهی", link: '/appointment-types', roleAccess: [], icon: 'fa fa-caret-left' },
+  { id: 18, text: "تعطیلات", link: '', roleAccess: [], icon: 'fa fa-caret-left' },
+  { id: 19, text: "استثنائات اوقات پزشکان", link: '/time-exception', roleAccess: [], icon: 'fa fa-caret-left' },
+  { id: 20, text: "استثنائات خارج از نوبت", link: '/outOfturnexceptions', roleAccess: [], icon: 'fa fa-caret-left' },
+>>>>>>> AmirHayati/main
 ];
 
 @Component({
@@ -66,11 +85,11 @@ export class NavbarComponent {
   openSidebar: boolean;
   showReportMenu: boolean = false;
   reportMenu: imenu[] = [
-    { id: 1, text: "گزارش خلاصه عملکرد", link: '/report/business-report', roleAccess: [], icon: 'fa fa-bar-chart' },
-    { id: 2, text: " گزارش صورتحسابهای سرپایی ", link: '/', roleAccess: [], icon: 'fa fa-bar-chart' },
-    { id: 4, text: "گزارش صورتحسابهای تغییر کرده", link: '/', roleAccess: [], icon: 'fa fa-bar-chart' },
-    { id: 5, text: "گزارش درآمد", link: '/', roleAccess: [], icon: 'fa fa-bar-chart' },
-    { id: 6, text: " گزارش بیماران مراجعه نکرده", link: '/', roleAccess: [], icon: 'fa fa-bar-chart' },
+    { id: 21, text: "گزارش خلاصه عملکرد", link: '/report/business-report', roleAccess: [], icon: 'fa fa-bar-chart' },
+    { id: 22, text: " گزارش صورتحسابهای سرپایی ", link: '', roleAccess: [], icon: 'fa fa-bar-chart' },
+    { id: 23, text: "گزارش صورتحسابهای تغییر کرده", link: '', roleAccess: [], icon: 'fa fa-bar-chart' },
+    { id: 24, text: "گزارش درآمد", link: '', roleAccess: [], icon: 'fa fa-bar-chart' },
+    { id: 25, text: " گزارش بیماران مراجعه نکرده", link: '', roleAccess: [], icon: 'fa fa-bar-chart' },
   ];
   selectedSideBarreportMenuItem: any;
   openSettingMenu: boolean = false;
@@ -83,7 +102,8 @@ export class NavbarComponent {
     private router: Router,
     private activeRoute: ActivatedRoute,
     private patientService: PatientService,
-    private toastR: ToastrService
+    private toastR: ToastrService,
+    private ObjectService: ObjectService
   ) {
     router.events.subscribe((event: Event) => {
       let url = location.pathname.split('?')[0];
@@ -108,7 +128,7 @@ export class NavbarComponent {
     })
 
   }
-  ngOnInit() {
+  async ngOnInit() {
     let url = location.pathname;
     this.isMobileSize = window.innerWidth <= 768 && window.innerHeight <= 1024;
     if (this.isMobileSize) {
@@ -117,10 +137,11 @@ export class NavbarComponent {
     else {
       this.openSidebar = true;
     }
-    this.sidebarMenu = Menu;
-    this.settingMenu = settingMenu;
-    this.financialMenu = financialMenu;
-    this.appointmentMenu = appointmentMenu
+    let allowedLinks = await this.ObjectService.getNavbarAccess();
+    this.sidebarMenu = this.filterMenu(Menu, allowedLinks);
+    this.settingMenu = this.filterMenu(settingMenu, allowedLinks);;
+    this.financialMenu = this.filterMenu(financialMenu, allowedLinks);;
+    this.appointmentMenu = this.filterMenu(appointmentMenu, allowedLinks);
     if ((url.startsWith('/patient/'))) {
       this.hasPatientMenu = true;
       this.patientId = url.split('/').pop();
@@ -130,6 +151,7 @@ export class NavbarComponent {
     const matchedItem = this.reportMenu.find(item => item.link === url);
     this.selectedSideBarreportMenuItem = matchedItem?.id ?? null;
     this.userName = localStorage.getItem('fullName');
+
   }
 
   logOut() {
@@ -182,7 +204,19 @@ export class NavbarComponent {
     }
   }
 
-
-
+  filterMenu(menu, accessList) {
+    const result = [];
+    menu.forEach(menuItem => {
+      const found = accessList.find(acc => acc.link === menuItem.link);
+      if (found) {
+        if (found.clicked) {
+          result.push(menuItem);
+        }
+      } else {
+        result.push(menuItem);
+      }
+    });
+    return result;
+  }
 }
 
