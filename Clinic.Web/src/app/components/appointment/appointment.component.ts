@@ -105,7 +105,7 @@ export class AppointmentComponent {
   filteredHours: any = [];
   dropdownOpen: boolean = false;
   selectedPatientName: string = null;
-
+  isCalendar2Visible: boolean = false;
   constructor(
     private userService: UserService,
     private toastR: ToastrService,
@@ -116,8 +116,7 @@ export class AppointmentComponent {
     private renderer: Renderer2,
     private el: ElementRef,
     private objectService: ObjectService
-  ) {
-  }
+  ) { }
 
   config: any = {
     hideInputContainer: true,
@@ -127,6 +126,8 @@ export class AppointmentComponent {
   };
 
   dateNew: any;
+  secondCalendarDateNew: any;
+  firstCalendarDateNew: any;
   holidays: any = [];
   userType: number;
   userAppointmentsSettings: any = [];
@@ -142,7 +143,9 @@ export class AppointmentComponent {
       }
       this.getWeeklyAppointments();
       this.dateNew = new FormControl(moment().format('jYYYY/jMM/jDD'));
-      this.dateNew.valueChanges.subscribe(date => {
+      this.firstCalendarDateNew = new FormControl(moment(this.dateNew).format('jYYYY/jMM/jDD'));
+      this.secondCalendarDateNew = new FormControl(moment(this.dateNew).add(1, 'month').format('jYYYY/jMM/jDD'));
+      this.firstCalendarDateNew.valueChanges.subscribe(async (date: any) => {
         this.onDateSelect(date);
       });
 
@@ -194,7 +197,30 @@ export class AppointmentComponent {
     } else {
       console.error('#appointment element not found');
     }
+
+    const calendarEl2 = this.el.nativeElement.querySelector('#appointment2');
+    if (calendarEl2) {
+      const observer = new MutationObserver(() => {
+        const switchViewEl = document.querySelector('.switch-view.dp-btn');
+        const text = switchViewEl?.textContent?.trim();
+        const parts = text?.split(' ');
+        if (parts?.[1]) {
+          this.utilService.getIranianHolidaysWithFridays(parts[1]).subscribe(days => {
+            this.holidays = days;
+            this.addHoliday();
+            this.getDoctorSchedules(this.userType != 9 ? 1 : 2);
+          });
+        }
+      });
+      observer.observe(calendarEl, {
+        childList: true,
+        subtree: true
+      });
+    } else {
+      console.error('#appointment element not found');
+    }
   }
+
 
 
 
@@ -254,7 +280,7 @@ export class AppointmentComponent {
 
 
 
-  changeDate(status: number) {
+  changeDate(status: number, date?: any) {
     let formattedDate: any = '';
 
     switch (status) {
@@ -266,7 +292,7 @@ export class AppointmentComponent {
 
       case 0:
         // formattedDate = moment(this.selectedDate);
-        formattedDate = moment(this.dateNew.value, 'jYYYY/jMM/jDD').add(3.5, 'hours');
+        formattedDate = moment(date, 'jYYYY/jMM/jDD').add(3.5, 'hours');
         this.appointmentDate = formattedDate.clone().toDate();
         this.getAppointment(this.appointmentDate);
         break;
@@ -608,10 +634,12 @@ export class AppointmentComponent {
 
   onDateSelect(date: string) {
     this.isCalendarVisible = false;
+    this.isCalendar2Visible = false;
     setTimeout(() => {
       this.isCalendarVisible = true;
+      this.isCalendar2Visible = true;
     }, 10);
-    this.changeDate(0);
+    this.changeDate(0, date);
   }
 
   transformAppointments(data: any) {
@@ -885,5 +913,10 @@ export class AppointmentComponent {
     this.dropdownOpen = false;
   }
 
+  changeSecondDate() {
+    this.secondCalendarDateNew.valueChanges.subscribe(date => {
+      this.onDateSelect(date);
+    });
+  }
 
 }

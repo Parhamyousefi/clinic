@@ -1,43 +1,5 @@
 import { Routes } from '@angular/router';
 import { AuthGuard } from './auth.guard';
-<<<<<<< HEAD
-import { TodayAppointmentsComponent } from './components/today-appointments/today-appointments.component';
-import { InvoiceListComponent } from './components/invoice-list/invoice-list.component';
-import { NewInvoiceComponent } from './components/invoice-list/new-invoice/new-invoice.component';
-import { PatientsComponent } from './components/patients/patients.component';
-import { NewContactComponent } from './components/contacts/new-contact/new-contact.component';
-import { ContactsComponent } from './components/contacts/contacts.component';
-import { PatientAppointmentsComponent } from './components/patient-appointments/patient-appointments.component';
-import { PatientInfoComponent } from './components/patient-info/patient-info.component';
-import { PatientAttachmentComponent } from './components/patient-attachment/patient-attachment.component';
-import { ProductComponent } from './components/product/product.component';
-import { ProductListComponent } from './components/product-list/product-list.component';
-import { ReceiptComponent } from './components/receipt/receipt.component';
-import { ReceiptListComponent } from './components/receipt-list/receipt-list.component';
-import { PatientTreatmentComponent } from './components/patient-treatment/patient-treatment.component';
-import { PatientInvoiceComponent } from './components/patient-invoice/patient-invoice.component';
-import { ExpensesComponent } from './components/expenses/expenses.component';
-import { BusinessReportComponent } from './components/reports/business-report/business-report.component';
-import { PatientReceiptsComponent } from './components/patient-receipts/patient-receipts.component';
-import { PatientPaymentComponent } from './components/patient-payment/patient-payment.component';
-import { LoginComponent } from './user-registration/login/login.component';
-import { ChangePasswordComponent } from './user-registration/change-password/change-password.component';
-import { OutinvoiceReportComponent } from './components/outinvoice-report/outinvoice-report.component';
-import { NewUsersComponent } from './components/new-users/new-users.component';
-import { UserListComponent } from './components/user-list/user-list.component';
-import { UserAppointmentSettingComponent } from './components/user-list/user-appointment-setting/user-appointment-setting.component';
-import { BusinessListComponent } from './components/business-list/business-list.component';
-import { NewBusinessComponent } from './components/business-list/new-business/new-business.component';
-import { NewServiceComponent } from './components/service-list/new-service/new-service.component';
-import { ServiceListComponent } from './components/service-list/service-list.component';
-import { AppointmentTypesComponent } from './components/appointment-types/appointment-types.component';
-import { UserRolesComponent } from './components/user-roles/user-roles.component';
-import { ServiceGrouplistComponent } from './components/service-grouplist/service-group-list.component';
-import { NewServiceGroupComponent } from './components/service-grouplist/new-service-group/new-service-group.component';
-import { TimeExceptionComponent } from './components/time-exception/time-exception.component';
-import { PatientFieldsComponent } from './components/patient-fields/patient-fields.component';
-=======
->>>>>>> AmirHayati/main
 
 export const routes: Routes = [
     {
@@ -276,12 +238,9 @@ export const routes: Routes = [
         loadComponent: () => import('./components/_admin/user-roles/user-role-list/user-role-list.component').then(m => m.UserRoleListComponent),
         canActivate: [AuthGuard]
     },
-<<<<<<< HEAD
-    {
-        path: 'patient-fields', component: PatientFieldsComponent,
-        canActivate: [AuthGuard]
-    },
-=======
-
->>>>>>> AmirHayati/main
+    // {
+    //     path: 'patient-fields',
+    //     loadComponent: () => import('./components/_admin/patient-fields/patient-fields.component').then(m => m.PatientFieldsComponent),
+    //     canActivate: [AuthGuard]
+    // },
 ];
