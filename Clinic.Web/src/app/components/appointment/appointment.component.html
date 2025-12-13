@@ -84,17 +84,20 @@
                 <tr class="d-flex" *ngFor="let time of filteredHours">
                   <td class="col-2 d-flex justify-content-center align-items-center">{{time.time}}
                   </td>
-                  <td class="col-10 p-2 d-flex appointments-container"
-                    [ngClass]="{'bg-muted text-secondary': isBeforeNow || (!isBeforeNow && timeIsBeforeNow(appointmentDate, time.time)), 'bg-not-in-schedule' : !time.isInSchedule}"
-                    (click)="setNewAppointment(time)">
-                    <div *ngFor="let appointment of timeSheetData[time.time]" class="appointment text-right p-2 pointer"
-                      [ngStyle]="{'background-color': appointment.color != null ? appointment.color : '#63C7B2'}"
-                      (click)="editAppointment(appointment)">
-                      <!-- <div class="mt-2">نوع وقت : {{appointment.typeName}}</div> -->
-                      <div class="mt-2"> {{appointment.patientName}}</div>
-                      <div class="mt-2"> {{appointment.note}}</div>
-                      <!-- <div class="mt-2">کنسل <span *ngIf="appointment.cancelled">شده</span><span
-                          *ngIf="!appointment.cancelled">نشده</span></div> -->
+                  <td (click)="setNewAppointment(time)" class="col-10 p-2  d-flex appointments-container"
+                    [ngClass]="{'bg-muted text-secondary': isBeforeNow || (!isBeforeNow && timeIsBeforeNow(appointmentDate, time.time)), 'bg-not-in-schedule' : !time.isInSchedule}">
+                    <div *ngFor="let appointment of timeSheetData[time.time]" 
+                      class="appointment text-right px-2 py-3 mx-2 pointer"
+                      [ngStyle]="{'background-color': appointment.color != null ? appointment.color : '#63C7B2'}">
+                      <i class="fa fa-times" (click)="cancelAppointment(appointment.id)" aria-hidden="true"></i>
+                      <div (click)="editAppointment(appointment)">
+                        <!-- <div class="mt-2">نوع وقت : {{appointment.typeName}}</div> -->
+                        <div class="mt-2"> {{appointment.patientName}}</div>
+                        <div class="mt-2"> {{appointment.note}}</div>
+                        <!-- <div class="mt-2">کنسل <span *ngIf="appointment.cancelled">شده</span><span
+                            *ngIf="!appointment.cancelled">نشده</span></div> -->
+
+                      </div>
                     </div>
                   </td>
                 </tr>

@@ -128,10 +128,13 @@ namespace Clinic.Api.Infrastructure.Services
                 var nextDay = selectedDate.AddDays(1);
 
                 var result = await (from a in _context.Appointments
-                                    join u in _context.Users on a.PractitionerId equals u.Id
-                                    join p in _context.Patients on a.PatientId equals p.Id
-                                    join at in _context.AppointmentTypes on a.AppointmentTypeId equals at.Id
                                     where a.BusinessId == model.ClinicId && a.PractitionerId == model.ClinicId && a.Start.Date <= selectedDate && a.End.Date >= selectedDate && a.Cancelled == false
+                                    join u in _context.Users on a.PractitionerId equals u.Id into uname
+                                    from u in uname.DefaultIfEmpty()
+                                    join p in _context.Patients on a.PatientId equals p.Id into patientname
+                                    from p in patientname.DefaultIfEmpty()
+                                    join at in _context.AppointmentTypes on a.AppointmentTypeId equals at.Id into appointmenttype
+                                    from at in appointmenttype.DefaultIfEmpty()
                                     select new GetAppointmentsResponse
                                     {
                                         Id = a.Id,
