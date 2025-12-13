@@ -127,11 +127,11 @@ namespace Clinic.Api.Infrastructure.Services
                 var selectedDate = model.Date?.Date ?? DateTime.Today;
                 var nextDay = selectedDate.AddDays(1);
 
-
                 var result = await (from a in _context.Appointments
                                     join u in _context.Users on a.PractitionerId equals u.Id
                                     join p in _context.Patients on a.PatientId equals p.Id
                                     join at in _context.AppointmentTypes on a.AppointmentTypeId equals at.Id
+                                    where a.BusinessId == model.ClinicId && a.PractitionerId == model.ClinicId && a.Start.Date <= selectedDate && a.End.Date >= selectedDate
                                     select new GetAppointmentsResponse
                                     {
                                         Id = a.Id,
