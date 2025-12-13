@@ -699,13 +699,16 @@ namespace Clinic.Api.Infrastructure.Services
         {
             try
             {
-                var result = await (
-            from t in _context.TimeExceptions
-            join u in _context.Users
-                on t.PractitionerId equals u.Id
-            join b in _context.Businesses
-                on t.BusinessId equals b.Id
-            select new GetTimeExceptionsResponse
+           var result = await (
+    from t in _context.TimeExceptions
+    join u in _context.Users
+        on t.PractitionerId equals u.Id into userJoin
+    from u in userJoin.DefaultIfEmpty() 
+
+    join b in _context.Businesses
+        on t.BusinessId equals b.Id into businessJoin
+    from b in businessJoin.DefaultIfEmpty() 
+    select new GetTimeExceptionsResponse
             {
                 Id = t.Id,
                 StartDate = t.StartDate,

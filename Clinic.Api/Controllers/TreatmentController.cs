@@ -201,5 +201,13 @@ namespace Clinic.Api.Controllers
             var result = await _treatmentsService.SavePatientArrived(appointmentId);
             return Ok(result);
         }
+
+        [HttpGet("cancelAppointment/{appointmentId}")]
+        [Authorize]
+        public async Task<IActionResult> CancelAppointment(int appointmentId)
+        {
+            var result = await _treatmentsService.CancelAppointment(appointmentId);
+            return Ok(result);
+        }
     }
 }

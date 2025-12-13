@@ -303,6 +303,11 @@ namespace Clinic.Api.Infrastructure.Services
                     mappReceipt.CreatedOn = DateTime.Now;
                     mappReceipt.ReceiptNo = lastId + 1;
                     _context.Receipts.Add(mappReceipt);
+                    var mappReceiptInvoice = _mapper.Map<ReceiptInvoicesContext>(model.Invoices);
+                    mappReceiptInvoice.CreatedOn = DateTime.Now;
+                    mappReceiptInvoice.CreatorId = userId;
+                    mappReceiptInvoice.ReceiptId = mappReceipt.Id;
+                    _context.ReceiptInvoices.Add(mappReceiptInvoice);
                     await _context.SaveChangesAsync();
                     result.Message = "Receipt Saved Successfully";
                     result.Status = 0;
