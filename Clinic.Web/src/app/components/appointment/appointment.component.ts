@@ -105,6 +105,7 @@ export class AppointmentComponent {
   filteredHours: any = [];
   dropdownOpen: boolean = false;
   selectedPatientName: string = null;
+  selectedDoctorList: any = [];
 
   constructor(
     private userService: UserService,
@@ -138,7 +139,7 @@ export class AppointmentComponent {
     if (this.checkAccess(1)) {
       this.userType = this.utilService.checkUserType();
       if (this.userType == 9) {
-        this.selectedDoctor.code = this.userType;
+        this.selectedDoctor = this.userType;
       }
       this.getWeeklyAppointments();
       this.dateNew = new FormControl(moment().format('jYYYY/jMM/jDD'));
@@ -327,7 +328,7 @@ export class AppointmentComponent {
     this.hours.forEach(hour => this.timeSheetData[hour.time] = []);
     try {
       let formattedDate = moment(date).utc().toISOString();
-      let doctor = this.userType == 9 ? null : this.selectedDoctor?.code
+      let doctor = this.userType == 9 ? null : this.selectedDoctor;
       let model = {
         clinicId: this.selectedClinic.code,
         date: formattedDate,
@@ -355,7 +356,7 @@ export class AppointmentComponent {
     try {
       let model = {
         "businessId": this.selectedClinic.code,
-        "practitionerId": this.selectedDoctor ? this.selectedDoctor.code : null,
+        "practitionerId": this.selectedDoctor ? this.selectedDoctor : null,
         // "patientId": this.newAppointmentModel.selectedPatient.code,
         "patientId": this.newAppointmentModel.selectedPatient,
         "appointmentTypeId": this.newAppointmentModel.selectedType.code,
@@ -549,11 +550,11 @@ export class AppointmentComponent {
 
 
   async setWeeklyScheduleForDay(dayOfWeek: number, time: string) {
-    if (!this.selectedDoctor.code) {
+    if (this.selectedDoctor.length == 0) {
       return
     }
     try {
-      let res: any = await this.mainService.getDoctorSchedules(this.selectedDoctor.code).toPromise();
+      let res: any = await this.mainService.getDoctorSchedules(this.selectedDoctor).toPromise();
       if (!res) return false;
       let daySchedules = res.filter((x: any) => x.day == dayOfWeek);
       if (daySchedules.length == 0) return false;
@@ -686,12 +687,12 @@ export class AppointmentComponent {
       user.code = user.id;
       user.name = user.firstName + ' ' + user.lastName;
     });
-    this.selectedDoctor = this.doctorList[0];
     this.getDoctorSchedules(1);
   }
 
 
   getDetailOfDoctore() {
+    this.selectedDoctor = this.selectedDoctorList ? (this.selectedDoctorList || []).map(opt => opt.id).join(',') : [];
     this.getUserAppointmentsSettings();
     this.getDoctorSchedules(1);
     if (this.newAppointmentModel.time) {
@@ -708,10 +709,10 @@ export class AppointmentComponent {
     let res: any;
     try {
       if (type == 1) {
-        if (!this.selectedDoctor.code) {
+        if (this.selectedDoctor.length == 0) {
           return
         }
-        userId = this.selectedDoctor.code;
+        userId = this.selectedDoctor;
         res = await this.mainService.getDoctorSchedules(userId).toPromise();
 
       } else {
@@ -762,14 +763,14 @@ export class AppointmentComponent {
   }
 
   async getUserAppointmentsSettings() {
-    if (!this.selectedDoctor.code) {
+    if (this.selectedDoctor.length == 0) {
       return
     }
     let userId;
     if (this.userType == 9) {
       userId = -1;
     } else {
-      userId = this.selectedDoctor.code
+      userId = this.selectedDoctor
     }
     try {
       let model = {
@@ -794,11 +795,11 @@ export class AppointmentComponent {
   }
 
   async setDoctorScheduleBasedHours(filteredHours: any, selectedDate: any) {
-    if (!this.selectedDoctor.code) {
+    if (this.selectedDoctor.length == 0) {
       return
     }
     try {
-      let res: any = await this.mainService.getDoctorSchedules(this.selectedDoctor.code).toPromise();
+      let res: any = await this.mainService.getDoctorSchedules(this.selectedDoctor).toPromise();
       if (res.length > 0) {
         let selectedDay = moment(selectedDate).day();
         let daySchedules = res.filter(x => x.day == selectedDay);
