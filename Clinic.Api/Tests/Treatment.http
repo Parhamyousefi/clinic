@@ -37,8 +37,8 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NjYyOTk0N
 Content-Type: application/json
 {
   "clinicId": 7795,
-  "Date": "2025-12-14",
-  "doctorId": 1156
+  "Date": "2025-09-02",
+  "doctorId": "1156,1163,6"
 }
 
 
@@ -63,7 +63,7 @@ Content-Type: application/json
 
 ### Get Week Appointments
 GET {{Clinic_Api_Host}}/api/treatment/getWeeklyAppointments
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTg3MTgzMjksImlhdCI6MTc1ODExMzUyOSwidXNlcklkIjoiMiIsInVzZXJuYW1lIjoibmltYSIsInVzZXJSb2xlIjoiQWRtaW4iLCJuYmYiOjE3NTgxMTM1Mjl9.AMFg58a7xg8wMW0XzHYGvbSTlRj29g_KYVXXuU1d9I0
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NjYyOTk0NTYsImlhdCI6MTc2NTY5NDY1NiwidXNlcklkIjoiMiIsInVzZXJuYW1lIjoibmltYSIsInVzZXJSb2xlIjoiQWRtaW4iLCJuYmYiOjE3NjU2OTQ2NTZ9.jwUwNOTkWQlAY7UswKP52TbB0iO7TKKQCDkeKqHHkjY 
 Content-Type: application/json
 
 ### Save BillableItems
