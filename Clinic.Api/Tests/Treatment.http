@@ -37,7 +37,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NjYyOTk0N
 Content-Type: application/json
 {
   "clinicId": 7795,
-  "Date": "2025-02-12",
+  "Date": "2025-12-14",
   "doctorId": 1156
 }
 
