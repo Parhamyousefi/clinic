@@ -16,6 +16,6 @@
     public class SaveInvoices
     {
         public int? InvoiceId { get; set; }
-        public int? Decimal { get; set; }
+        public decimal? Amount { get; set; }
     }
 }

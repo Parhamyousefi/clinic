@@ -122,7 +122,7 @@ namespace Clinic.Api.Controllers
 
         [HttpGet("getDoctorSchedules/{userId?}")]
         [Authorize]
-        public async Task<IActionResult> GetDoctorSchedules(int? userId)
+        public async Task<IActionResult> GetDoctorSchedules(string? userId)
         {
             var result = await _mainService.GetDoctorSchedules(userId);
             return Ok(result);

@@ -579,7 +579,8 @@ namespace Clinic.Api.Infrastructure.Services
                            Date = a.Appointment.Start.Date,
                            DayNumber = dayNumber,
                            FullDate = a.Appointment.Start,
-                           Color = a.AppointmentColor
+                           Color = a.AppointmentColor,
+                           Note = a.Appointment.Note
                        })
                        .ToList();
 
