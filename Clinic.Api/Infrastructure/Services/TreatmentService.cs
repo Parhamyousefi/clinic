@@ -5,6 +5,7 @@ using Clinic.Api.Application.Interfaces;
 using Clinic.Api.Domain.Entities;
 using Clinic.Api.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace Clinic.Api.Infrastructure.Services
 {
@@ -119,16 +120,29 @@ namespace Clinic.Api.Infrastructure.Services
             try
             {
                 var userRole = _token.GetUserRole();
+
+                List<int>? doctorIds = null;
+
+                if (!string.IsNullOrWhiteSpace(model.DoctorId))
+                {
+                    doctorIds = model.DoctorId
+                        .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                        .Select(x => int.Parse(x.Trim()))
+                        .ToList();
+                }
+
                 if (userRole == "Doctor")
                 {
-                    model.DoctorId = _token.GetUserId();
+                    doctorIds = new List<int> { _token.GetUserId() };
                 }
 
                 var selectedDate = model.Date?.Date ?? DateTime.Today;
                 var nextDay = selectedDate.AddDays(1);
 
                 var result = await (from a in _context.Appointments
-                                    where a.BusinessId == model.ClinicId && a.PractitionerId == model.DoctorId && a.Start.Date <= selectedDate && a.End.Date >= selectedDate && a.Cancelled != true
+                                    where a.BusinessId == model.ClinicId && doctorIds == null
+                                        || (a.PractitionerId.HasValue && doctorIds.Contains(a.PractitionerId.Value))
+                                        && a.Start.Date <= selectedDate && a.End.Date >= selectedDate && a.Cancelled != true
                                     join u in _context.Users on a.PractitionerId equals u.Id into uname
                                     from u in uname.DefaultIfEmpty()
                                     join p in _context.Patients on a.PatientId equals p.Id into patientname
