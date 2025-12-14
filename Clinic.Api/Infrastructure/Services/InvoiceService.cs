@@ -113,7 +113,8 @@ namespace Clinic.Api.Infrastructure.Services
                                           AcceptDiscount = i.AcceptDiscount,
                                           AssistantId = i.AssistantId,
                                           PatientName = p.FirstName + " " + p.LastName,
-                                          BusinessName = b.Name
+                                          BusinessName = b.Name,
+                                          HasReceipt = _context.ReceiptInvoices.Any(ri => ri.InvoiceId == i.Id)
                                       })
                                  .ToListAsync();
 
@@ -647,6 +648,33 @@ namespace Clinic.Api.Infrastructure.Services
                 result.Message = "Expense Deleted Successfully";
                 result.Status = 0;
                 return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<List<GetInvoicesWithoutReceipt>> GetInvoicesWithoutReceipt(int doctorId)
+        {
+            try
+            {
+                return await _context.Invoices
+     .Where(i =>
+         i.PractitionerId == doctorId
+         && i.IsCanceled != true
+         && !_context.ReceiptInvoices.Any(ri => ri.InvoiceId == i.Id)
+     )
+     .Select(i => new GetInvoicesWithoutReceipt
+     {
+         Id = i.Id,
+         InvoiceNo = i.InvoiceNo,
+         IssueDate = i.IssueDate,
+         Amount = i.Amount,
+         PatientId = i.PatientId,
+         BillStatus = i.BillStatus
+     })
+     .ToListAsync();
             }
             catch (Exception ex)
             {
