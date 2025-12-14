@@ -602,12 +602,15 @@ export class AppointmentComponent {
     let res: any = await this.treatmentService.getWeeklyAppointments().toPromise();
     this.weeklyAppointments = this.transformAppointments(res);
     this.weeklyAppointments.forEach(appointment => {
-      appointment.patientName = this.patientsList.filter((patient: any) => patient.patientCode == appointment.patientId)[0].name;
+      // appointment.patientName = this.patientsList.filter((patient: any) => patient.patientCode == appointment.patientId)[0].name;
       // let startIndex = this.hours.indexOf(appointment.time);
-      let startIndex = this.hours.findIndex(h => h.time === appointment.time);
-      this.weeklyTimetable[this.hours[startIndex].time][appointment.dayOfWeek].dayAppointments.push(appointment);
+      appointment.showStartTime = shamsiTimePipe.transform(appointment.fullDate);
+      let startIndex = this.hours.findIndex(h => h.time === appointment.showStartTime);
+      // this.weeklyTimetable[this.hours[startIndex].time][appointment.dayOfWeek].dayAppointments.push(appointment);
+      this.weeklyTimetable[this.hours[startIndex].time][appointment.dayNumber].dayAppointments.push(appointment);
+
     });
-    // console.log(this.weeklyTimetable);
+    console.log(this.weeklyTimetable);
 
   }
 
@@ -630,14 +633,20 @@ export class AppointmentComponent {
     };
 
     const result = Object.entries(data).flatMap(([day, appointments]) => {
+      let intDay = Number(day);
       if (Array.isArray(appointments)) {
         return appointments.map((appointment) => ({
           ...appointment,
-          dayOfWeek: dayMap[day] ?? null,
+          dayOfWeek: dayMap[intDay] ?? null,
         }));
-      } else {
-        return [];
       }
+      if (appointments && typeof appointments === "object") {
+        return [{
+          ...appointments,
+          dayOfWeek: dayMap[intDay] ?? null,
+        }];
+      }
+      return [];
     });
 
     return result;
@@ -704,7 +713,7 @@ export class AppointmentComponent {
     }
     this.getAppointment(this.appointmentDate);
     if (this.weekMode) {
-      this.getWeeklyAppointments();
+    this.getWeeklyAppointments();
     }
   }
 
@@ -885,7 +894,7 @@ export class AppointmentComponent {
   }
 
   selectPatient(item: any) {
-    this.newAppointmentModel.selectedPatient = item.patientCode;
+    this.newAppointmentModel.selectedPatient = item.id;
     this.selectedPatientName = item.name;
     this.dropdownOpen = false;
   }
