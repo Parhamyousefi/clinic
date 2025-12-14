@@ -535,7 +535,8 @@ namespace Clinic.Api.Infrastructure.Services
                         PatientName = (p.FirstName + " " + p.LastName) ?? string.Empty,
                         AppointmentTypeName = at.Name ?? string.Empty,
                         PractitionerName = (u.FirstName + " " + u.LastName) ?? string.Empty,
-                        BillableItemName = b.Name ?? string.Empty
+                        BillableItemName = b.Name ?? string.Empty,
+                        AppointmentColor = at.Color ?? string.Empty,
                     }
                 ).ToListAsync();
 
@@ -563,7 +564,8 @@ namespace Clinic.Api.Infrastructure.Services
                            PractitionerName = a.PractitionerName,
                            Date = a.Appointment.Start.Date,
                            DayNumber = dayNumber,
-                           FullDate = a.Appointment.Start
+                           FullDate = a.Appointment.Start,
+                           Color = a.AppointmentColor
                        })
                        .ToList();
 
