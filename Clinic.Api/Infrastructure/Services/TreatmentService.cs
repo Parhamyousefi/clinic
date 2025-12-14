@@ -128,7 +128,7 @@ namespace Clinic.Api.Infrastructure.Services
                 var nextDay = selectedDate.AddDays(1);
 
                 var result = await (from a in _context.Appointments
-                                    where a.BusinessId == model.ClinicId && a.PractitionerId == model.DoctorId && a.Start.Date <= selectedDate && a.End.Date >= selectedDate && a.Cancelled == false
+                                    where a.BusinessId == model.ClinicId && a.PractitionerId == model.DoctorId && a.Start.Date <= selectedDate && a.End.Date >= selectedDate && a.Cancelled != true
                                     join u in _context.Users on a.PractitionerId equals u.Id into uname
                                     from u in uname.DefaultIfEmpty()
                                     join p in _context.Patients on a.PatientId equals p.Id into patientname
