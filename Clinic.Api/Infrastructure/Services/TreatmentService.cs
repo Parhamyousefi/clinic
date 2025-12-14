@@ -345,6 +345,7 @@ namespace Clinic.Api.Infrastructure.Services
                         Id = appointmentId,
                         Date = r.Appointment.Start.Date,
                         Time = r.Appointment.Start.ToString("HH:mm"),
+                        FullDate = r.Appointment.Start,
                         PatientName = (r.Patient.FirstName + " " + r.Patient.LastName).Trim(),
                         PatientId = r.Patient.Id,
                         PractitionerName = (r.Practitioner.FirstName + " " + r.Practitioner.LastName).Trim(),
@@ -561,7 +562,8 @@ namespace Clinic.Api.Infrastructure.Services
                            BillableItemName = a.BillableItemName,
                            PractitionerName = a.PractitionerName,
                            Date = a.Appointment.Start.Date,
-                           DayNumber = dayNumber
+                           DayNumber = dayNumber,
+                           FullDate = a.Appointment.Start
                        })
                        .ToList();
 
