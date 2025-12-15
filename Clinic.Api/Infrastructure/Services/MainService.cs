@@ -5,6 +5,7 @@ using Clinic.Api.Application.Interfaces;
 using Clinic.Api.Domain.Entities;
 using Clinic.Api.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 using System.Security.Claims;
 
 namespace Clinic.Api.Infrastructure.Services
@@ -375,17 +376,32 @@ namespace Clinic.Api.Infrastructure.Services
             }
         }
 
-        public async Task<IEnumerable<SchedulesContext>> GetDoctorSchedules(int? userId)
+        public async Task<IEnumerable<SchedulesContext>> GetDoctorSchedules(string? userId)
         {
             try
             {
                 var userRole = _token.GetUserRole();
 
+                List<int>? userIds = null;
+
                 if (userRole == "Doctor")
                 {
-                    userId = _token.GetUserId();
+                    userIds = new List<int> { _token.GetUserId() }; 
                 }
-                var result = await _context.Schedules.Where(s => s.PractitionerId == userId).ToListAsync();
+                else if (!string.IsNullOrWhiteSpace(userId))
+                {
+                    userIds = userId
+                        .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                        .Select(x => x.Trim())
+                        .Where(x => int.TryParse(x, out _))
+                        .Select(int.Parse)
+                        .ToList();
+                }
+
+                var result = await _context.Schedules
+      .Where(s => userIds == null || userIds.Contains(s.PractitionerId))
+      .ToListAsync();
+
                 return result;
             }
             catch (Exception ex)
@@ -444,21 +460,35 @@ namespace Clinic.Api.Infrastructure.Services
         {
             try
             {
-                if (model.UserId == -1)
-                {
-                    model.UserId = _token.GetUserId();
-                }
-
                 var query = _context.UserAppointment.AsQueryable();
 
-                if (model.UserId.HasValue)
-                    query = query.Where(s => s.PractitionerId == model.UserId.Value);
+                List<int>? userIds = null;
+
+                if (model.UserId == "-1")
+                {
+                    userIds = new List<int> { _token.GetUserId() };
+                }
+                else if (!string.IsNullOrWhiteSpace(model.UserId))
+                {
+                    userIds = model.UserId
+                        .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                        .Select(x => x.Trim())
+                        .Where(x => int.TryParse(x, out _))
+                        .Select(int.Parse)
+                        .ToList();
+                }
+
+                if (userIds != null)
+                {
+                    query = query.Where(s => userIds.Contains(s.PractitionerId));
+                }
 
                 if (model.BusinessId.HasValue)
+                {
                     query = query.Where(s => s.BusinessId == model.BusinessId.Value);
+                }
 
                 var result = await query.ToListAsync();
-
                 return result;
             }
             catch (Exception ex)
@@ -699,13 +729,16 @@ namespace Clinic.Api.Infrastructure.Services
         {
             try
             {
-                var result = await (
-            from t in _context.TimeExceptions
-            join u in _context.Users
-                on t.PractitionerId equals u.Id
-            join b in _context.Businesses
-                on t.BusinessId equals b.Id
-            select new GetTimeExceptionsResponse
+           var result = await (
+    from t in _context.TimeExceptions
+    join u in _context.Users
+        on t.PractitionerId equals u.Id into userJoin
+    from u in userJoin.DefaultIfEmpty() 
+
+    join b in _context.Businesses
+        on t.BusinessId equals b.Id into businessJoin
+    from b in businessJoin.DefaultIfEmpty() 
+    select new GetTimeExceptionsResponse
             {
                 Id = t.Id,
                 StartDate = t.StartDate,
