@@ -655,26 +655,26 @@ namespace Clinic.Api.Infrastructure.Services
             }
         }
 
-        public async Task<List<GetInvoicesWithoutReceipt>> GetInvoicesWithoutReceipt(int doctorId)
+        public async Task<List<GetInvoicesWithoutReceipt>> GetInvoicesWithoutReceipt(int patientId)
         {
             try
             {
                 return await _context.Invoices
-     .Where(i =>
-         i.PractitionerId == doctorId
-         && i.IsCanceled != true
-         && !_context.ReceiptInvoices.Any(ri => ri.InvoiceId == i.Id)
-     )
-     .Select(i => new GetInvoicesWithoutReceipt
-     {
-         Id = i.Id,
-         InvoiceNo = i.InvoiceNo,
-         IssueDate = i.IssueDate,
-         Amount = i.Amount,
-         PatientId = i.PatientId,
-         BillStatus = i.BillStatus
-     })
-     .ToListAsync();
+                .Where(i =>
+                    i.PatientId == patientId
+                    && i.IsCanceled != true
+                    && !_context.ReceiptInvoices.Any(ri => ri.InvoiceId == i.Id)
+                )
+                .Select(i => new GetInvoicesWithoutReceipt
+                {
+                    Id = i.Id,
+                    InvoiceNo = i.InvoiceNo,
+                    IssueDate = i.IssueDate,
+                    Amount = i.Amount,
+                    PatientId = i.PatientId,
+                    BillStatus = i.BillStatus
+                })
+                .ToListAsync();
             }
             catch (Exception ex)
             {

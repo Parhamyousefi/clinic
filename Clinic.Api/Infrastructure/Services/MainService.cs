@@ -376,7 +376,7 @@ namespace Clinic.Api.Infrastructure.Services
             }
         }
 
-        public async Task<IEnumerable<SchedulesContext>> GetDoctorSchedules(string? userId)
+        public async Task<IEnumerable<GetDoctorSchedulesResponse>> GetDoctorSchedules(string? userId)
         {
             try
             {
@@ -386,7 +386,7 @@ namespace Clinic.Api.Infrastructure.Services
 
                 if (userRole == "Doctor")
                 {
-                    userIds = new List<int> { _token.GetUserId() }; 
+                    userIds = new List<int> { _token.GetUserId() };
                 }
                 else if (!string.IsNullOrWhiteSpace(userId))
                 {
@@ -398,9 +398,32 @@ namespace Clinic.Api.Infrastructure.Services
                         .ToList();
                 }
 
-                var result = await _context.Schedules
-      .Where(s => userIds == null || userIds.Contains(s.PractitionerId))
-      .ToListAsync();
+                var result = await (
+                    from s in _context.Schedules
+                    join u in _context.Users
+                        on s.PractitionerId equals u.Id into userGroup
+                    from u in userGroup.DefaultIfEmpty()
+                    where userIds == null || userIds.Contains(s.PractitionerId)
+                    select new GetDoctorSchedulesResponse
+                    {
+                        Id = s.Id,
+                        PractitionerId = s.PractitionerId,
+                        BusinessId = s.BusinessId,
+                        Day = s.Day,
+                        IsActive = s.IsActive,
+                        FromTime = s.FromTime,
+                        ToTime = s.ToTime,
+                        IsBreak = s.IsBreak,
+                        ModifierId = s.ModifierId,
+                        CreatedOn = s.CreatedOn,
+                        LastUpdated = s.LastUpdated,
+                        Duration = s.Duration,
+                        CreatorId = s.CreatorId,
+                        DoctorName = u != null
+                            ? u.FirstName + " " + u.LastName
+                            : null
+                    }
+                ).ToListAsync();
 
                 return result;
             }
@@ -483,7 +506,7 @@ namespace Clinic.Api.Infrastructure.Services
                     query = query.Where(s => userIds.Contains(s.PractitionerId));
                 }
 
-                if (model.BusinessId.HasValue)
+                if (model.BusinessId.HasValue && model.BusinessId.Value != -1)
                 {
                     query = query.Where(s => s.BusinessId == model.BusinessId.Value);
                 }
