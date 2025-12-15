@@ -20,7 +20,7 @@ namespace Clinic.Api.Application.Interfaces
         Task<IEnumerable<GetNotesResponse>> GetNotes(int patientId);
         Task<GlobalResponse> DeleteNote(int noteId);
         Task<GlobalResponse> SaveDoctorSchedule(SaveDoctorScheduleDto model);
-        Task<IEnumerable<SchedulesContext>> GetDoctorSchedules(string? userId);
+        Task<IEnumerable<GetDoctorSchedulesResponse>> GetDoctorSchedules(string? userId);
         Task<GlobalResponse> DeleteDoctorSchedule(int scheduleId);
         Task<GlobalResponse> SaveUserAppointmentsSettings(SaveUserAppointmentsSettingsDto model);
         Task<IEnumerable<UserAppointmentsContext>> GetUserAppointmentsSettings(GetUserAppointmentsSettingsDto model);
