@@ -92,6 +92,7 @@
                       <i class="fa fa-times" (click)="cancelAppointment(appointment.id)" aria-hidden="true"></i>
                       <div (click)="editAppointment(appointment)">
                         <!-- <div class="mt-2">نوع وقت : {{appointment.typeName}}</div> -->
+                        <div class="mt-2"> {{appointment.doctorName}}</div>
                         <div class="mt-2"> {{appointment.patientName}}</div>
                         <div class="mt-2"> {{appointment.note}}</div>
                         <!-- <div class="mt-2">کنسل <span *ngIf="appointment.cancelled">شده</span><span
@@ -118,14 +119,14 @@
                 </tr>
               </thead>
               <tbody class="d-flex flex-column">
-                <tr class="d-flex" *ngFor="let time of filteredHours; let rowIndex = index">
+                <tr class="d-flex" *ngFor="let time of hours; let rowIndex = index">
                   <td class="col-2 d-flex justify-content-center align-items-center">{{time.time}}
                   </td>
                   <td *ngFor="let day of weeklyTimetable[time.time] " class="text-center col-2"
                     [ngClass]="{'today-bg': day.isToday, 'text-muted bg-muted': day.isPast ||(day.isToday && timeIsBeforeNow(day.fullDate, time.time)), 'bg-not-in-schedule' : !day.isInSchedule }"
                     (click)="setWeeklyNewAppointment(day.fullDate,time.time,day.isPast)">
-                    <div *ngFor="let appointment of day.dayAppointments" [pTooltip]="appointment.note" 
-                      class="appointment text-right px-2 py-3 mx-2 pointer"
+                    <div *ngFor="let appointment of day.dayAppointments" [pTooltip]="appointment.note"
+                      class="appointment text-right px-2 py-3 m-2 pointer"
                       [ngStyle]="{'background-color': appointment.color != null ? appointment.color : '#63C7B2'}">
                       <p> {{appointment.practitionerName}}</p>
                       <p> {{appointment.patientName}}</p>
@@ -171,8 +172,11 @@
       <div *ngIf="userType != 9" class=" col-12 d-flex justify-content-between mt-3">
         <div class="col-3 text-right"> نام دکتر</div>
         <div class="col-9">
-          <p-dropdown [options]="doctorList" [(ngModel)]="selectedDoctor" optionLabel="name"
-            class="full-width text-right" (onChange)="getDetailOfDoctore()" />
+          <!-- <p class="full-width text-right">
+            {{ newAppointmentModel.selectedDoctorNames }}
+          </p> -->
+          <p-dropdown [options]="listOfDoctorForCreateAppointment" [(ngModel)]="newAppointmentModel.selectedDoctor"
+            [ngModelOptions]="{standalone: true}" optionLabel="name" class="full-width text-right"/>
         </div>
       </div>
       <div *ngIf="!newAppointmentModel?.handelNewPateintStatus" class="col-12 d-flex justify-content-between mt-3">

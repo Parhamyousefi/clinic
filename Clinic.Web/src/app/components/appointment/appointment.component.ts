@@ -107,6 +107,7 @@ export class AppointmentComponent {
   dropdownOpen: boolean = false;
   selectedPatientName: string = null;
   selectedDoctorList: any = [];
+  listOfDoctorForCreateAppointment: any = [];
 
   constructor(
     private userService: UserService,
@@ -352,6 +353,7 @@ export class AppointmentComponent {
         }
       });
       this.timeSheetHeaderDate = date._d;
+      this.getDoctorSchedules(1);
     }
     catch { }
   }
@@ -360,7 +362,7 @@ export class AppointmentComponent {
     try {
       let model = {
         "businessId": this.selectedClinic.code,
-        "practitionerId": this.selectedDoctor ? this.selectedDoctor : null,
+        "practitionerId": this.newAppointmentModel.selectedDoctor.code,
         // "patientId": this.newAppointmentModel.selectedPatient.code,
         "patientId": this.newAppointmentModel.selectedPatient,
         "appointmentTypeId": this.newAppointmentModel.selectedType.code,
@@ -413,13 +415,22 @@ export class AppointmentComponent {
     }
     else {
       // this.newAppointmentModel = [];
+      this.newAppointmentModel.selectedDoctor = [];
+      this.selectedPatientName = null;
       this.newAppointmentModel.appointmentStartTime = this.combineDateAndTime(this.appointmentDate, time.time);
       this.newAppointmentModel.appointmentEndTime = this.combineDateAndTime(this.appointmentDate, this.getEndTime(time.time))
+      // const matchedDoctors = this.doctorList.filter(doc => time.ids.includes(doc.id));
+      // this.newAppointmentModel.selectedDoctorIds = matchedDoctors.map(doc => doc.id);
+      // this.newAppointmentModel.selectedDoctorNames = matchedDoctors.map(doc => doc.name).join(", ");
       this.showNewAppointment = true;
       this.newAppointmentModel.handelNewPateintStatus = false;
       this.newAppointmentModel.time = time['time'];
       this.patientsList = [];
       this.searchControl = null;
+      this.listOfDoctorForCreateAppointment = this.doctorList.filter(doc => time.ids.includes(doc.id));
+      if (this.listOfDoctorForCreateAppointment.length == 1) {
+        this.newAppointmentModel.selectedDoctor = this.listOfDoctorForCreateAppointment[0];
+      }
     }
     this.isTimeInRange(time['time']);
   }
@@ -610,7 +621,7 @@ export class AppointmentComponent {
       this.weeklyTimetable[this.hours[startIndex].time][appointment.dayNumber].dayAppointments.push(appointment);
 
     });
-    console.log(this.weeklyTimetable);
+    // console.log(this.weeklyTimetable);
 
   }
 
@@ -713,7 +724,7 @@ export class AppointmentComponent {
     }
     this.getAppointment(this.appointmentDate);
     if (this.weekMode) {
-    this.getWeeklyAppointments();
+      this.getWeeklyAppointments();
     }
   }
 
@@ -733,14 +744,19 @@ export class AppointmentComponent {
         res = await this.mainService.getDoctorSchedulesForDoctor().toPromise();
       }
       if (res.length > 0) {
+        res = res.filter(x => x.businessId == this.selectedClinic.code);
         let weekday: any = [];
         let year: string;
         await res.forEach(element => {
           year = moment(element.createdOn).format('jYYYY');
-          weekday.push(element.day);
+          weekday.push({
+            day: element.day,
+            doctor: element.doctorName
+          });
         });
-        const unique = [...new Set(weekday)];
-        this.getWeekdayDatesForDoctor(year, unique);
+        const unique: any = [...new Set(weekday)];
+        let margeData = this.mergeDoctors(unique);
+        this.getWeekdayDatesForDoctor(year, margeData);
       } else {
         this.addDaysForDoctor([]);
       }
@@ -748,32 +764,55 @@ export class AppointmentComponent {
     catch { }
   }
 
-  getWeekdayDatesForDoctor(jalaliYear: string, weekdays) {
-    const dates: string[] = [];
+  mergeDoctors(data) {
+    const map = new Map<number, Set<string>>();
+    data.forEach(item => {
+      if (!map.has(item.day)) {
+        map.set(item.day, new Set());
+      }
+      map.get(item.day)!.add(item.doctor);
+    });
+    return Array.from(map.entries()).map(([day, doctors]) => ({
+      day,
+      doctor: Array.from(doctors).join(", ")
+    }));
+  }
+
+
+  getWeekdayDatesForDoctor(jalaliYear: string, weekdays: { day: number, doctor: string }[]) {
+    const dates: { date: string, doctor: string }[] = [];
     let date = moment(`${jalaliYear}/01/01`, 'jYYYY/jMM/jDD');
     while (date.jYear() === parseInt(jalaliYear)) {
-      if (weekdays.includes(date.day())) {
-        dates.push(date.format('jYYYY/jMM/jDD'));
+      const match = weekdays.find(w => w.day === date.day());
+      if (match) {
+        dates.push({
+          date: date.format('jYYYY/jMM/jDD'),
+          doctor: match.doctor
+        });
       }
       date.add(1, 'day');
     }
-    this.addDaysForDoctor(dates)
+    this.addDaysForDoctor(dates);
   }
 
-  addDaysForDoctor(dates: string[]) {
+  addDaysForDoctor(dates: { date: string, doctor: string }[]) {
     setTimeout(() => {
       const cells = this.el.nativeElement.querySelectorAll('.dp-btn');
       cells.forEach((cell: HTMLElement) => {
         const label = cell.innerText.trim();
         const fullDate = this.buildFullDate(label);
-        if (dates.includes(fullDate)) {
+        const match = dates.find(d => d.date === fullDate);
+        if (match) {
           this.renderer.addClass(cell, 'doctor-days');
+          this.renderer.setAttribute(cell, 'title', match.doctor);
         } else {
           this.renderer.removeClass(cell, 'doctor-days');
+          this.renderer.removeAttribute(cell, 'title');
         }
       });
     }, 300);
   }
+
 
   async getUserAppointmentsSettings() {
     if (this.selectedDoctor.length == 0) {
@@ -781,7 +820,7 @@ export class AppointmentComponent {
     }
     let userId;
     if (this.userType == 9) {
-      userId = -1;
+      userId = String(-1);
     } else {
       userId = this.selectedDoctor
     }
@@ -792,16 +831,41 @@ export class AppointmentComponent {
       }
       let res: any = await this.mainService.getUserAppointmentsSettings(model).toPromise();
       this.userAppointmentsSettings = res;
-      this.filteredHours = this.hours.filter(({ time }) => {
-        const [hourStr, minuteStr] = time.split(':');
-        const hour = parseInt(hourStr, 10);
-        const minute = parseInt(minuteStr, 10);
-        const decimalTime = hour + (minute === 30 ? 0.5 : 0);
-        return res.some(config =>
-          decimalTime >= config.calendarTimeFrom &&
-          decimalTime < config.calendarTimeTo
-        );
-      });
+      // this.filteredHours = this.hours.filter(({ time }) => {
+      //   const [hourStr, minuteStr] = time.split(':');
+      //   const hour = parseInt(hourStr, 10);
+      //   const minute = parseInt(minuteStr, 10);
+      //   const decimalTime = hour + (minute === 30 ? 0.5 : 0);
+      //   return res.some(config =>
+      //     decimalTime >= config.calendarTimeFrom &&
+      //     decimalTime < config.calendarTimeTo
+      //   );
+      // });
+
+      this.filteredHours = this.hours
+        .map(({ time }) => {
+          const [hourStr, minuteStr] = time.split(':');
+          const hour = parseInt(hourStr, 10);
+          const minute = parseInt(minuteStr, 10);
+          const decimalTime = hour + (minute === 30 ? 0.5 : 0);
+          const matches = res.filter(config =>
+            decimalTime >= config.calendarTimeFrom &&
+            decimalTime < config.calendarTimeTo
+          );
+          if (matches.length > 0) {
+            return {
+              time,
+              ids: matches.map(m => m.practitionerId),
+              names: matches.map(m => m.doctorName).join(", ")
+            };
+          }
+          return null;
+        })
+        .filter(item => item !== null);
+
+
+      console.log(this.filteredHours);
+
       this.setDoctorScheduleBasedHours(this.filteredHours, this.appointmentDate);
     }
     catch { }
@@ -828,7 +892,6 @@ export class AppointmentComponent {
           );
         });
       }
-      // console.log(filteredHours);
     }
     catch { }
   }
