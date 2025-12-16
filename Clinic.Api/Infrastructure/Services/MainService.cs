@@ -37,11 +37,11 @@ namespace Clinic.Api.Infrastructure.Services
             }
         }
 
-        public async Task<IEnumerable<BusinessesContext>> GetClinics()
+        public async Task<IEnumerable<GetClinicsResponse>> GetClinics()
         {
             try
             {
-                var result = await _context.Businesses.Select(b => new BusinessesContext
+                var result = await _context.Businesses.Select(b => new GetClinicsResponse
                 {
                     Id = b.Id,
                     Name = b.Name
