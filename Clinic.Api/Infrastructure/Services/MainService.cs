@@ -608,42 +608,67 @@ namespace Clinic.Api.Infrastructure.Services
                     result.Status = 0;
                     return result;
                 }
-                else
-                {
-                    var existingBusiness = await _context.Businesses.FirstOrDefaultAsync(j => j.Id == model.EditOrNew);
-                    if (existingBusiness == null)
-                    {
-                        throw new Exception("Business Not Found");
-                    }
-                    if (!string.IsNullOrEmpty(model.ServiceId))
-                    {
-                        var serviceIds = model.ServiceId
-                            .Split(',', StringSplitOptions.RemoveEmptyEntries)
-                            .Select(id => int.Parse(id.Trim()))
-                            .ToList();
+                var existingBusiness = await _context.Businesses
+             .FirstOrDefaultAsync(b => b.Id == model.EditOrNew);
 
-                        foreach (var serviceId in serviceIds)
+                if (existingBusiness == null)
+                    throw new Exception("Business Not Found");
+
+                if (!string.IsNullOrEmpty(model.ServiceId))
+                {
+                    var serviceIds = model.ServiceId
+                        .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                        .Select(id => int.Parse(id.Trim()))
+                        .ToList();
+
+                    var existingServices = await _context.BusinessServices
+                        .Where(bs => bs.BusinessId == existingBusiness.Id)
+                        .ToListAsync();
+
+                    foreach (var bs in existingServices)
+                    {
+                        if (!serviceIds.Contains(bs.BillableItemId))
                         {
-                            var businessService = new BusinessServicesContext
+                            bs.IsActive = false;
+                            bs.ModifierId = userId;
+                            bs.LastUpdated = DateTime.Now;
+                        }
+                    }
+
+                    foreach (var serviceId in serviceIds)
+                    {
+                        var bs = existingServices
+                            .FirstOrDefault(x => x.BillableItemId == serviceId);
+
+                        if (bs != null)
+                        {
+                            bs.IsActive = true;
+                            bs.ModifierId = userId;
+                            bs.LastUpdated = DateTime.Now;
+                        }
+                        else
+                        {
+                            await _context.BusinessServices.AddAsync(new BusinessServicesContext
                             {
                                 BusinessId = existingBusiness.Id,
                                 BillableItemId = serviceId,
-                                ModifierId = userId,
-                                LastUpdated = DateTime.Now,
+                                CreatorId = userId,
+                                CreatedOn = DateTime.Now,
                                 IsActive = true
-                            };
-                            _context.BusinessServices.Update(businessService);
+                            });
                         }
                     }
-                    _mapper.Map(model, existingBusiness);
-                    existingBusiness.ModifierId = userId;
-                    existingBusiness.LastUpdated = DateTime.Now;
-                    _context.Businesses.Update(existingBusiness);
-                    await _context.SaveChangesAsync();
-                    result.Message = "Business Updated Successfully";
-                    result.Status = 0;
-                    return result;
                 }
+                _mapper.Map(model, existingBusiness);
+                existingBusiness.ModifierId = userId;
+                existingBusiness.LastUpdated = DateTime.Now;
+
+                _context.Businesses.Update(existingBusiness);
+                await _context.SaveChangesAsync();
+
+                result.Message = "Business Updated Successfully";
+                result.Status = 0;
+                return result;
             }
             catch (Exception ex)
             {
