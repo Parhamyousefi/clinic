@@ -298,5 +298,29 @@ export class MainService {
     return this.http.post(uri, data, httpOptions);
   }
 
+  saveJob(data) {
+    const token: any = localStorage.getItem("token");
+    const uri = this.url + `api/Main/saveJob`;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+        responseType: 'text'
+      }),
+    };
+    return this.http.post(uri, data, httpOptions);
+  }
+
+  deleteJob(id) {
+    const token: any = localStorage.getItem("token");
+    const uri = this.url + `api/main/deleteJob/${id}`;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      }),
+    };
+    return this.http.get(uri, httpOptions);
+  }
 
 }
