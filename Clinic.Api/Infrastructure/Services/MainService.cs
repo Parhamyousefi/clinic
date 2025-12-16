@@ -479,7 +479,7 @@ namespace Clinic.Api.Infrastructure.Services
             }
         }
 
-        public async Task<IEnumerable<UserAppointmentsContext>> GetUserAppointmentsSettings(GetUserAppointmentsSettingsDto model)
+        public async Task<IEnumerable<GetUserAppointmentsSettingsResponse>> GetUserAppointmentsSettings(GetUserAppointmentsSettingsDto model)
         {
             try
             {
@@ -511,7 +511,31 @@ namespace Clinic.Api.Infrastructure.Services
                     query = query.Where(s => s.BusinessId == model.BusinessId.Value);
                 }
 
-                var result = await query.ToListAsync();
+                var result = await (
+                    from ua in query
+                    join u in _context.Users
+                        on ua.PractitionerId equals u.Id into userJoin
+                    from u in userJoin.DefaultIfEmpty()
+                    select new GetUserAppointmentsSettingsResponse
+                    {
+                        Id = ua.Id,
+                        PractitionerId = ua.PractitionerId,
+                        BusinessId = ua.BusinessId,
+                        OutOfTurn = ua.OutOfTurn,
+                        DefaultAppointmentTypeId = ua.DefaultAppointmentTypeId,
+                        ModifierId = ua.ModifierId,
+                        CreatedOn = ua.CreatedOn,
+                        LastUpdated = ua.LastUpdated,
+                        TimeSlotSize = ua.TimeSlotSize,
+                        CalendarTimeFrom = ua.CalendarTimeFrom,
+                        CalendarTimeTo = ua.CalendarTimeTo,
+                        CreatorId = ua.CreatorId,
+                        NewPatientAppointmentTypeId = ua.NewPatientAppointmentTypeId,
+                        MultipleAppointment = ua.MultipleAppointment,
+                        DoctorName = (u.FirstName + " " + u.LastName) ?? string.Empty
+                    }
+                ).ToListAsync();
+
                 return result;
             }
             catch (Exception ex)
@@ -752,41 +776,41 @@ namespace Clinic.Api.Infrastructure.Services
         {
             try
             {
-           var result = await (
-    from t in _context.TimeExceptions
-    join u in _context.Users
-        on t.PractitionerId equals u.Id into userJoin
-    from u in userJoin.DefaultIfEmpty() 
+                var result = await (
+         from t in _context.TimeExceptions
+         join u in _context.Users
+             on t.PractitionerId equals u.Id into userJoin
+         from u in userJoin.DefaultIfEmpty()
 
-    join b in _context.Businesses
-        on t.BusinessId equals b.Id into businessJoin
-    from b in businessJoin.DefaultIfEmpty() 
-    select new GetTimeExceptionsResponse
-            {
-                Id = t.Id,
-                StartDate = t.StartDate,
-                StartTime = t.StartTime,
-                EndTime = t.EndTime,
-                PractitionerId = t.PractitionerId,
-                TimeExceptionTypeId = t.TimeExceptionTypeId,
-                RepeatId = t.RepeatId,
-                RepeatEvery = t.RepeatEvery,
-                EndsAfter = t.EndsAfter,
-                ModifierId = t.ModifierId,
-                CreatedOn = t.CreatedOn,
-                LastUpdated = t.LastUpdated,
-                Duration = t.Duration,
-                GrigoryDate = t.GrigoryDate,
-                BusinessId = t.BusinessId,
-                CreatorId = t.CreatorId,
-                PractitionerTimeExceptionId = t.PractitionerTimeExceptionId,
-                OutOfTurn = t.OutOfTurn,
-                DefaultAppointmentTypeId = t.DefaultAppointmentTypeId,
-                TimeSlotSize = t.TimeSlotSize,
-                DoctorName = u.FirstName + " " + u.LastName,
-                BusinessName = b.Name
-            }
-        ).ToListAsync();
+         join b in _context.Businesses
+             on t.BusinessId equals b.Id into businessJoin
+         from b in businessJoin.DefaultIfEmpty()
+         select new GetTimeExceptionsResponse
+         {
+             Id = t.Id,
+             StartDate = t.StartDate,
+             StartTime = t.StartTime,
+             EndTime = t.EndTime,
+             PractitionerId = t.PractitionerId,
+             TimeExceptionTypeId = t.TimeExceptionTypeId,
+             RepeatId = t.RepeatId,
+             RepeatEvery = t.RepeatEvery,
+             EndsAfter = t.EndsAfter,
+             ModifierId = t.ModifierId,
+             CreatedOn = t.CreatedOn,
+             LastUpdated = t.LastUpdated,
+             Duration = t.Duration,
+             GrigoryDate = t.GrigoryDate,
+             BusinessId = t.BusinessId,
+             CreatorId = t.CreatorId,
+             PractitionerTimeExceptionId = t.PractitionerTimeExceptionId,
+             OutOfTurn = t.OutOfTurn,
+             DefaultAppointmentTypeId = t.DefaultAppointmentTypeId,
+             TimeSlotSize = t.TimeSlotSize,
+             DoctorName = u.FirstName + " " + u.LastName,
+             BusinessName = b.Name
+         }
+             ).ToListAsync();
 
                 return result;
             }
