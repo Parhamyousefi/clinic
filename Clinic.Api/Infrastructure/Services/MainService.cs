@@ -632,7 +632,7 @@ namespace Clinic.Api.Infrastructure.Services
                                 LastUpdated = DateTime.Now,
                                 IsActive = true
                             };
-                            await _context.BusinessServices.AddAsync(businessService);
+                            _context.BusinessServices.Update(businessService);
                         }
                     }
                     _mapper.Map(model, existingBusiness);
