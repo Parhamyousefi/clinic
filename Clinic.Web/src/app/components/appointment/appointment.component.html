@@ -10,8 +10,8 @@
           class="full-width text-right" (onChange)="getAppointment(appointmentDate)" />
       </div>
       <div *ngIf="userType != 9" class="col-lg-8 col-12 p-2">
-        <p-multiSelect [options]="doctorList" optionLabel="name" dataKey="id" [(ngModel)]="selectedDoctorList"
-          [ngModelOptions]="{standalone: true}" defaultLabel="پزشک" (onChange)="getDetailOfDoctore()"
+        <p-multiSelect [options]="doctorList" optionLabel="name" dataKey="code" [(ngModel)]="selectedDoctorList"
+          [ngModelOptions]="{standalone: true}" defaultLabel="پزشک" (ngModelChange)="getDetailOfDoctore()"
           class="full-width text-right">
         </p-multiSelect>
       </div>
@@ -55,10 +55,10 @@
         <div class="col-12">
           <div class="d-flex mode-selector p-0 my-2">
             <div class="ml-1 p-2 pointer text-center" [ngClass]="{  'selected-mode' :!weekMode}"
-              (click)="weekMode = false">
+              (click)="weekMode = false; getDetailOfDoctore()">
               روزانه</div>
-            <div class="mr-1 p-2 pointer text-center" [ngClass]="{  'selected-mode' :weekMode}"
-              (click)="weekMode = true">
+            <div class="mr-1 p-2 pointer text-center" [ngClass]="{  'selected-mode' :weekMode}" F
+              (click)="weekMode = true; getDetailOfDoctore()">
               هفتگی</div>
           </div>
         </div>
@@ -80,11 +80,15 @@
         <div class="row">
           <!-- Daily mode -->
           <div *ngIf="!weekMode" class="table-scroll col-12">
-            <table class="table col-12 table-bordered table-responsive border-0 text-center appointment-grid">
+            <table *ngIf="filteredHours.length > 0"
+              class="table col-12 table-bordered table-responsive border-0 text-center appointment-grid">
               <thead class="d-flex">
                 <tr class="tr-sticky w-100 d-flex">
                   <th class="table-time col-2">ساعت</th>
-                  <th class="text-center currentDate-box-table col-10">
+                  <!-- <th class="text-center currentDate-box-table col-10">
+                  </th> -->
+                  <th class="text-center currentDate-box-table col" *ngFor="let doctor of doctors">
+                    {{ doctor.name }}
                   </th>
                 </tr>
               </thead>
@@ -92,15 +96,17 @@
                 <tr class="d-flex" *ngFor="let time of filteredHours">
                   <td class="col-2 d-flex justify-content-center align-items-center">{{time.time}}
                   </td>
-                  <td (click)="setNewAppointment(time)" class="col-10 p-2  d-flex appointments-container"
+                  <td *ngFor="let doctor of doctors" (click)="setNewAppointment(time,doctor.id)"
+                    class="col p-2 d-flex appointments-container"
                     [ngClass]="{'bg-muted text-secondary': isBeforeNow || (!isBeforeNow && timeIsBeforeNow(appointmentDate, time.time)), 'bg-not-in-schedule' : !time.isInSchedule}">
                     <div *ngFor="let appointment of timeSheetData[time.time]"
                       class="appointment text-right px-2 py-3 mx-2 pointer"
+                      [ngClass]="{'d-none': appointment.practitionerId !=doctor.id}"
                       [ngStyle]="{'background-color': appointment.color != null ? appointment.color : '#63C7B2'}">
                       <i class="fa fa-times" (click)="cancelAppointment(appointment.id)" aria-hidden="true"></i>
                       <div (click)="editAppointment(appointment)">
                         <!-- <div class="mt-2">نوع وقت : {{appointment.typeName}}</div> -->
-                        <div class="mt-2"> {{appointment.doctorName}}</div>
+                        <!-- <div class="mt-2"> {{appointment.doctorName}}</div> -->
                         <div class="mt-2"> {{appointment.patientName}}</div>
                         <div class="mt-2"> {{appointment.note}}</div>
                         <!-- <div class="mt-2">کنسل <span *ngIf="appointment.cancelled">شده</span><span
@@ -180,11 +186,11 @@
       <div *ngIf="userType != 9" class=" col-12 d-flex justify-content-between mt-3">
         <div class="col-3 text-right"> نام دکتر</div>
         <div class="col-9">
-          <!-- <p class="full-width text-right">
-            {{ newAppointmentModel.selectedDoctorNames }}
-          </p> -->
-          <p-dropdown [options]="listOfDoctorForCreateAppointment" [(ngModel)]="newAppointmentModel.selectedDoctor"
-            [ngModelOptions]="{standalone: true}" optionLabel="name" class="full-width text-right" />
+          <p class="full-width text-right">
+            {{ newAppointmentModel.selectedDoctorName }}
+          </p>
+          <!-- <p-dropdown [options]="listOfDoctorForCreateAppointment" [(ngModel)]="newAppointmentModel.selectedDoctor"
+            [ngModelOptions]="{standalone: true}" optionLabel="name" class="full-width text-right" /> -->
         </div>
       </div>
       <div *ngIf="!newAppointmentModel?.handelNewPateintStatus" class="col-12 d-flex justify-content-between mt-3">
