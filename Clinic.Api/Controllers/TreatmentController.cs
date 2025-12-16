@@ -90,11 +90,11 @@ namespace Clinic.Api.Controllers
             return Ok(result);
         }
 
-        [HttpGet("getWeeklyAppointments")]
+        [HttpPost("getWeeklyAppointments")]
         [Authorize]
-        public async Task<IActionResult> GetWeekAppointments()
+        public async Task<IActionResult> GetWeekAppointments(GetAppointmentsDto model)
         {
-            var result = await _treatmentsService.GetWeekAppointments();
+            var result = await _treatmentsService.GetWeekAppointments(model);
             return Ok(result);
         }
 
