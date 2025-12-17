@@ -1,14 +1,13 @@
 ﻿using Clinic.Api.Application.DTOs;
 using Clinic.Api.Application.DTOs.Main;
 using Clinic.Api.Domain.Entities;
-using Microsoft.AspNetCore.Mvc;
 
 namespace Clinic.Api.Application.Interfaces
 {
     public interface IMainService
     {
         Task<IEnumerable<SectionsContext>> GetSections();
-        Task<IEnumerable<BusinessesContext>> GetClinics();
+        Task<IEnumerable<GetClinicsResponse>> GetClinics();
         Task<GlobalResponse> SaveJob(SaveJobDto model);
         Task<IEnumerable<JobsContext>> GetJobs();
         Task<GlobalResponse> DeleteJob(int id);
