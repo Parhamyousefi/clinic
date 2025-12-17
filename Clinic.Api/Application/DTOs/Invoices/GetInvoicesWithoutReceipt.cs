@@ -8,5 +8,6 @@
         public decimal Amount { get; set; }
         public int PatientId { get; set; }
         public int BillStatus { get; set; }
+        public string? DoctorName { get; set; }
     }
 }

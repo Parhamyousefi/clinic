@@ -137,50 +137,92 @@ namespace Clinic.Api.Infrastructure.Services
                 }
 
                 var selectedDate = model.Date?.Date ?? DateTime.Today;
-                var nextDay = selectedDate.AddDays(1);
 
-                var result = await (from a in _context.Appointments
-                                    where a.BusinessId == model.ClinicId && doctorIds == null
-                                        || (a.PractitionerId.HasValue && doctorIds.Contains(a.PractitionerId.Value))
-                                        && a.Start.Date <= selectedDate && a.End.Date >= selectedDate && a.Cancelled != true
-                                    join u in _context.Users on a.PractitionerId equals u.Id into uname
-                                    from u in uname.DefaultIfEmpty()
-                                    join p in _context.Patients on a.PatientId equals p.Id into patientname
-                                    from p in patientname.DefaultIfEmpty()
-                                    join at in _context.AppointmentTypes on a.AppointmentTypeId equals at.Id into appointmenttype
-                                    from at in appointmenttype.DefaultIfEmpty()
-                                    select new GetAppointmentsResponse
-                                    {
-                                        Id = a.Id,
-                                        BusinessId = a.BusinessId,
-                                        PractitionerId = a.PractitionerId,
-                                        PatientId = a.PatientId,
-                                        AppointmentTypeId = a.AppointmentTypeId,
-                                        Start = a.Start,
-                                        End = a.End,
-                                        RepeatId = a.RepeatId,
-                                        RepeatEvery = a.RepeatEvery,
-                                        EndsAfter = a.EndsAfter,
-                                        Note = a.Note,
-                                        Arrived = a.Arrived,
-                                        WaitListId = a.WaitListId,
-                                        Cancelled = a.Cancelled,
-                                        AppointmentCancelTypeId = a.AppointmentCancelTypeId,
-                                        CancelNotes = a.CancelNotes,
-                                        IsUnavailbleBlock = a.IsUnavailbleBlock,
-                                        ModifierId = a.ModifierId,
-                                        CreatedOn = a.CreatedOn,
-                                        LastUpdated = a.LastUpdated,
-                                        IsAllDay = a.IsAllDay,
-                                        SendReminder = a.SendReminder,
-                                        AppointmentSMS = a.AppointmentSMS,
-                                        IgnoreDidNotCome = a.IgnoreDidNotCome,
-                                        CreatorId = a.CreatorId,
-                                        ByInvoice = a.ByInvoice,
-                                        DoctorName = u.FirstName + " " + u.LastName,
-                                        PatientName = p.FirstName + " " + p.LastName,
-                                        Color = at.Color,
-                                    }).ToListAsync();
+                var baseAppointments = await (
+                    from a in _context.Appointments
+                    where
+                        (a.BusinessId == model.ClinicId)
+                        && (doctorIds == null || (a.PractitionerId.HasValue && doctorIds.Contains(a.PractitionerId.Value)))
+                        && a.Start.Date <= selectedDate
+                        && a.End.Date >= selectedDate
+                        && a.Cancelled != true
+                    join u in _context.Users on a.PractitionerId equals u.Id into uname
+                    from u in uname.DefaultIfEmpty()
+                    join p in _context.Patients on a.PatientId equals p.Id into patientname
+                    from p in patientname.DefaultIfEmpty()
+                    join at in _context.AppointmentTypes on a.AppointmentTypeId equals at.Id into appointmenttype
+                    from at in appointmenttype.DefaultIfEmpty()
+                    select new
+                    {
+                        Appointment = a,
+                        DoctorName = u.FirstName + " " + u.LastName,
+                        PatientName = p.FirstName + " " + p.LastName,
+                        Color = at.Color
+                    }
+                ).ToListAsync();
+
+                var appointmentIds = baseAppointments.Select(x => x.Appointment.Id).ToList();
+
+                var invoices = await _context.Invoices
+                    .Where(i =>
+                        i.AppointmentId.HasValue &&
+                        appointmentIds.Contains(i.AppointmentId.Value) &&
+                        (i.IsCanceled == false || i.IsCanceled == null))
+                    .ToListAsync();
+
+                var treatments = await _context.Treatments
+                    .Where(t =>
+                        t.AppointmentId.HasValue &&
+                        appointmentIds.Contains(t.AppointmentId.Value))
+                    .ToListAsync();
+
+                var result = baseAppointments.Select(x =>
+                {
+                    var appointmentId = x.Appointment.Id;
+
+                    var hasInvoice = invoices.Any(i => i.AppointmentId == appointmentId);
+                    var hasTreatment = treatments.Any(t => t.AppointmentId == appointmentId);
+
+                    var status =
+                        !hasInvoice && !hasTreatment ? 1 :
+                        hasInvoice && !hasTreatment ? 2 :
+                        hasInvoice && hasTreatment ? 3 :
+                        0;
+
+                    return new GetAppointmentsResponse
+                    {
+                        Id = x.Appointment.Id,
+                        BusinessId = x.Appointment.BusinessId,
+                        PractitionerId = x.Appointment.PractitionerId,
+                        PatientId = x.Appointment.PatientId,
+                        AppointmentTypeId = x.Appointment.AppointmentTypeId,
+                        Start = x.Appointment.Start,
+                        End = x.Appointment.End,
+                        RepeatId = x.Appointment.RepeatId,
+                        RepeatEvery = x.Appointment.RepeatEvery,
+                        EndsAfter = x.Appointment.EndsAfter,
+                        Note = x.Appointment.Note,
+                        Arrived = x.Appointment.Arrived,
+                        WaitListId = x.Appointment.WaitListId,
+                        Cancelled = x.Appointment.Cancelled,
+                        AppointmentCancelTypeId = x.Appointment.AppointmentCancelTypeId,
+                        CancelNotes = x.Appointment.CancelNotes,
+                        IsUnavailbleBlock = x.Appointment.IsUnavailbleBlock,
+                        ModifierId = x.Appointment.ModifierId,
+                        CreatedOn = x.Appointment.CreatedOn,
+                        LastUpdated = x.Appointment.LastUpdated,
+                        IsAllDay = x.Appointment.IsAllDay,
+                        SendReminder = x.Appointment.SendReminder,
+                        AppointmentSMS = x.Appointment.AppointmentSMS,
+                        IgnoreDidNotCome = x.Appointment.IgnoreDidNotCome,
+                        CreatorId = x.Appointment.CreatorId,
+                        ByInvoice = x.Appointment.ByInvoice,
+                        DoctorName = x.DoctorName,
+                        PatientName = x.PatientName,
+                        Color = x.Color,
+                        Status = status
+                    };
+                }).ToList();
 
                 return result;
             }
@@ -520,29 +562,72 @@ namespace Clinic.Api.Infrastructure.Services
             }
         }
 
-        public async Task<List<GetTodayAppointmentsInfoDto>> GetWeekAppointments()
+        public async Task<List<GetTodayAppointmentsInfoDto>> GetWeekAppointments(GetAppointmentsDto model)
         {
             try
             {
                 var iranTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Iran Standard Time");
                 var iranNow = TimeZoneInfo.ConvertTime(DateTime.Now, iranTimeZone);
-                var today = iranNow.Date;
 
-                var weekEnd = today.AddDays(6);
+                var baseDate = model.Date?.Date ?? iranNow.Date;
+
+                var weekStartUtc = TimeZoneInfo.ConvertTimeToUtc(
+                    baseDate,
+                    iranTimeZone
+                );
+
+                var weekEndUtc = weekStartUtc.AddDays(7);
+
+                List<int>? doctorIds = null;
+
+                if (_token.GetUserRole() == "Doctor")
+                {
+                    doctorIds = new List<int> { _token.GetUserId() };
+                }
+                else if (!string.IsNullOrWhiteSpace(model.DoctorId))
+                {
+                    doctorIds = model.DoctorId
+                        .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                        .Select(x => x.Trim())
+                        .Where(x => int.TryParse(x, out _))
+                        .Select(int.Parse)
+                        .ToList();
+                }
+
+
+                var query =
+                    from a in _context.Appointments
+                    where a.Start >= weekStartUtc && a.Start < weekEndUtc
+                    select a;
+
+                if (model.ClinicId.HasValue)
+                {
+                    query = query.Where(a => a.BusinessId == model.ClinicId.Value);
+                }
+
+                if (doctorIds != null)
+                {
+                    query = query.Where(a => doctorIds.Contains(a.PractitionerId.Value));
+                }
 
                 var appointments = await (
-                    from a in _context.Appointments
-                    where a.Start.Date >= today && a.Start.Date <= weekEnd
+                    from a in query
                     join p in _context.Patients on a.PatientId equals p.Id into patientJoin
                     from p in patientJoin.DefaultIfEmpty()
+
                     join at in _context.AppointmentTypes on a.AppointmentTypeId equals at.Id into atJoin
                     from at in atJoin.DefaultIfEmpty()
+
                     join u in _context.Users on a.PractitionerId equals u.Id into userJoin
                     from u in userJoin.DefaultIfEmpty()
+
                     join t in _context.Treatments on a.Id equals t.AppointmentId into treatmentJoin
                     from t in treatmentJoin.DefaultIfEmpty()
-                    join b in _context.BillableItems on t.TreatmentTemplateId equals b.TreatmentTemplateId into billableJoin
+
+                    join b in _context.BillableItems
+                        on t.TreatmentTemplateId equals b.TreatmentTemplateId into billableJoin
                     from b in billableJoin.DefaultIfEmpty()
+
                     select new
                     {
                         Appointment = a,
@@ -550,7 +635,7 @@ namespace Clinic.Api.Infrastructure.Services
                         AppointmentTypeName = at.Name ?? string.Empty,
                         PractitionerName = (u.FirstName + " " + u.LastName) ?? string.Empty,
                         BillableItemName = b.Name ?? string.Empty,
-                        AppointmentColor = at.Color ?? string.Empty,
+                        AppointmentColor = at.Color ?? null,
                     }
                 ).ToListAsync();
 
@@ -558,7 +643,7 @@ namespace Clinic.Api.Infrastructure.Services
 
                 for (int i = 0; i < 7; i++)
                 {
-                    var day = today.AddDays(i);
+                    var day = weekStartUtc.AddDays(i);
 
                     if (day.DayOfWeek == DayOfWeek.Friday)
                         continue;
@@ -567,22 +652,22 @@ namespace Clinic.Api.Infrastructure.Services
                     if (dayNumber == 0) dayNumber = 7;
 
                     var dayAppointments = appointments
-                       .Where(a => a.Appointment.Start.Date == day.Date)
-                       .Select(a => new GetTodayAppointmentsInfoDto
-                       {
-                           Id = a.Appointment.Id,
-                           Time = a.Appointment.Start.ToString("HH:mm"),
-                           PatientName = a.PatientName,
-                           AppointmentTypeName = a.AppointmentTypeName,
-                           BillableItemName = a.BillableItemName,
-                           PractitionerName = a.PractitionerName,
-                           Date = a.Appointment.Start.Date,
-                           DayNumber = dayNumber,
-                           FullDate = a.Appointment.Start,
-                           Color = a.AppointmentColor,
-                           Note = a.Appointment.Note
-                       })
-                       .ToList();
+                        .Where(a => a.Appointment.Start.Date == day.Date)
+                        .Select(a => new GetTodayAppointmentsInfoDto
+                        {
+                            Id = a.Appointment.Id,
+                            Time = a.Appointment.Start.ToString("HH:mm"),
+                            PatientName = a.PatientName,
+                            AppointmentTypeName = a.AppointmentTypeName,
+                            BillableItemName = a.BillableItemName,
+                            PractitionerName = a.PractitionerName,
+                            Date = a.Appointment.Start.Date,
+                            DayNumber = dayNumber,
+                            FullDate = a.Appointment.Start,
+                            Color = a.AppointmentColor,
+                            Note = a.Appointment.Note
+                        })
+                        .ToList();
 
                     result.AddRange(dayAppointments);
                 }

@@ -659,22 +659,25 @@ namespace Clinic.Api.Infrastructure.Services
         {
             try
             {
-                return await _context.Invoices
-                .Where(i =>
-                    i.PatientId == patientId
-                    && i.IsCanceled != true
-                    && !_context.ReceiptInvoices.Any(ri => ri.InvoiceId == i.Id)
-                )
-                .Select(i => new GetInvoicesWithoutReceipt
-                {
-                    Id = i.Id,
-                    InvoiceNo = i.InvoiceNo,
-                    IssueDate = i.IssueDate,
-                    Amount = i.Amount,
-                    PatientId = i.PatientId,
-                    BillStatus = i.BillStatus
-                })
-                .ToListAsync();
+                return await (
+            from i in _context.Invoices
+            join u in _context.Users
+                on i.PractitionerId equals u.Id into userJoin
+            from u in userJoin.DefaultIfEmpty()
+            where i.PatientId == patientId
+                  && i.IsCanceled != true
+                  && !_context.ReceiptInvoices.Any(ri => ri.InvoiceId == i.Id)
+            select new GetInvoicesWithoutReceipt
+            {
+                Id = i.Id,
+                InvoiceNo = i.InvoiceNo,
+                IssueDate = i.IssueDate,
+                Amount = i.Amount,
+                PatientId = i.PatientId,
+                BillStatus = i.BillStatus,
+                DoctorName = (u.FirstName + " " + u.LastName) ?? string.Empty
+            }
+        ).ToListAsync();
             }
             catch (Exception ex)
             {
