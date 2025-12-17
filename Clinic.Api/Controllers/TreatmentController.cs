@@ -209,5 +209,29 @@ namespace Clinic.Api.Controllers
             var result = await _treatmentsService.CancelAppointment(appointmentId);
             return Ok(result);
         }
+
+        [HttpPost("saveTreatmentTemplate")]
+        [Authorize]
+        public async Task<IActionResult> SaveTreatmentTemplate(SaveTreatmentTemplateDto model)
+        {
+            var result = await _treatmentsService.SaveTreatmentTemplate(model);
+            return Ok(result);
+        }
+
+        [HttpGet("getTreatmentTemplates")]
+        [Authorize]
+        public async Task<IActionResult> GetTreatmentTemplates()
+        {
+            var result = await _treatmentsService.GetTreatmentTemplates();
+            return Ok(result);
+        }
+
+        [HttpGet("deleteTreatmentTemplate/{id}")]
+        [Authorize]
+        public async Task<IActionResult> DeleteTreatmentTemplate(int id)
+        {
+            var result = await _treatmentsService.DeleteTreatmentTemplate(id);
+            return Ok(result);
+        }
     }
 }

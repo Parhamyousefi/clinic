@@ -1163,5 +1163,81 @@ namespace Clinic.Api.Infrastructure.Services
                 throw new Exception(ex.Message);
             }
         }
+
+        public async Task<GlobalResponse> SaveTreatmentTemplate(SaveTreatmentTemplateDto model)
+        {
+            var result = new GlobalResponse();
+
+            try
+            {
+                var userId = _token.GetUserId();
+
+                if (model.EditOrNew == -1)
+                {
+                    var treatmentTemplate = _mapper.Map<TreatmentTemplatesContext>(model);
+                    treatmentTemplate.CreatorId = userId;
+                    treatmentTemplate.CreatedOn = DateTime.Now;
+                    _context.TreatmentTemplates.Add(treatmentTemplate);
+                    await _context.SaveChangesAsync();
+                    result.Message = "Treatment Template Saved Successfully";
+                    return result;
+                }
+                else
+                {
+                    var existingTreatmentTemplate = await _context.TreatmentTemplates.FirstOrDefaultAsync(b => b.Id == model.EditOrNew);
+
+                    if (existingTreatmentTemplate == null)
+                    {
+                        throw new Exception("Treatment Template Not Found");
+                    }
+
+                    _mapper.Map(model, existingTreatmentTemplate);
+                    existingTreatmentTemplate.ModifierId = userId;
+                    existingTreatmentTemplate.LastUpdated = DateTime.Now;
+                    _context.TreatmentTemplates.Update(existingTreatmentTemplate);
+                    await _context.SaveChangesAsync();
+                    result.Message = "Treatment Template Updated Successfully";
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<IEnumerable<TreatmentTemplatesContext>> GetTreatmentTemplates()
+        {
+            try
+            {
+                var treatmentTemplate = await _context.TreatmentTemplates.ToListAsync();
+                return treatmentTemplate;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<GlobalResponse> DeleteTreatmentTemplate(int id)
+        {
+            var result = new GlobalResponse();
+
+            try
+            {
+                var treatmentTemplate = await _context.TreatmentTemplates.FindAsync(id);
+                if (treatmentTemplate == null)
+                    throw new Exception("Treatment Template Not Found");
+
+                _context.TreatmentTemplates.Remove(treatmentTemplate);
+                await _context.SaveChangesAsync();
+                result.Message = "Treatment Template Deleted Successfully";
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }
