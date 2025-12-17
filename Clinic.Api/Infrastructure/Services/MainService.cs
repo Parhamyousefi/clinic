@@ -991,5 +991,18 @@ namespace Clinic.Api.Infrastructure.Services
                 throw new Exception(ex.Message);
             }
         }
+
+        public async Task<IEnumerable<SMSSettingsContext>> GetSmsSettings()
+        {
+            try
+            {
+                var settings = await _context.SMSSettings.ToListAsync();
+                return settings;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }

@@ -231,5 +231,13 @@ namespace Clinic.Api.Controllers
             var result = await _mainService.UpdateSmsSettings(model);
             return Ok(result);
         }
+
+        [HttpGet("getSmsSettings")]
+        [Authorize]
+        public async Task<IActionResult> GetSmsSettings()
+        {
+            var result = await _mainService.GetSmsSettings();
+            return Ok(result);
+        }
     }
 }

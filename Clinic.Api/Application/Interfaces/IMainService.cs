@@ -33,5 +33,6 @@ namespace Clinic.Api.Application.Interfaces
         Task<IEnumerable<GetOutOfTurnExceptionResponse>> GetOutOfTurnExceptions();
         Task<GlobalResponse> DeleteOutOfTurnException(int id);
         Task<GlobalResponse> UpdateSmsSettings(UpdateSmsSettingsDto model);
+        Task<IEnumerable<SMSSettingsContext>> GetSmsSettings();
     }
 }
