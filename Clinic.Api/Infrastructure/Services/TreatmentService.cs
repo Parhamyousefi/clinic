@@ -593,7 +593,7 @@ namespace Clinic.Api.Infrastructure.Services
                         AppointmentTypeName = at.Name ?? string.Empty,
                         PractitionerName = (u.FirstName + " " + u.LastName) ?? string.Empty,
                         BillableItemName = b.Name ?? string.Empty,
-                        AppointmentColor = at.Color ?? string.Empty,
+                        AppointmentColor = at.Color ?? null,
                     }
                 ).ToListAsync();
 
