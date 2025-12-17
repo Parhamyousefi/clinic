@@ -31,5 +31,6 @@
         public string? DoctorName { get; set; }
         public string? PatientName { get; set; }
         public string? Color { get; set; }
+        public int Status { get; set; }
     }
 }
