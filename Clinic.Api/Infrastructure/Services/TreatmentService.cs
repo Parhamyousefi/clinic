@@ -529,8 +529,12 @@ namespace Clinic.Api.Infrastructure.Services
 
                 var baseDate = model.Date?.Date ?? iranNow.Date;
 
-                var weekStart = baseDate;
-                var weekEnd = weekStart.AddDays(6);
+                var weekStartUtc = TimeZoneInfo.ConvertTimeToUtc(
+                    baseDate,
+                    iranTimeZone
+                );
+
+                var weekEndUtc = weekStartUtc.AddDays(7);
 
                 List<int>? doctorIds = null;
 
@@ -548,9 +552,10 @@ namespace Clinic.Api.Infrastructure.Services
                         .ToList();
                 }
 
+
                 var query =
                     from a in _context.Appointments
-                    where a.Start >= weekStart && a.Start < weekEnd.AddDays(1)
+                    where a.Start >= weekStartUtc && a.Start < weekEndUtc
                     select a;
 
                 if (model.ClinicId.HasValue)
@@ -596,7 +601,7 @@ namespace Clinic.Api.Infrastructure.Services
 
                 for (int i = 0; i < 7; i++)
                 {
-                    var day = weekStart.AddDays(i);
+                    var day = weekStartUtc.AddDays(i);
 
                     if (day.DayOfWeek == DayOfWeek.Friday)
                         continue;
