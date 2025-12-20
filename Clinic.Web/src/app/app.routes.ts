@@ -243,6 +243,11 @@ export const routes: Routes = [
         loadComponent: () => import('./components/_admin/job-list/job-list.component').then(m => m.JobListComponent),
         canActivate: [AuthGuard]
     },
+    {
+        path: 'sms-setting',
+        loadComponent: () => import('./components/_admin/sms-setting/sms-setting.component').then(m => m.SmsSettingComponent),
+        canActivate: [AuthGuard]
+    },
     // {
     //     path: 'patient-fields',
     //     loadComponent: () => import('./components/_admin/patient-fields/patient-fields.component').then(m => m.PatientFieldsComponent),
