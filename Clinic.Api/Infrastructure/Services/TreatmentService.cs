@@ -5,8 +5,6 @@ using Clinic.Api.Application.Interfaces;
 using Clinic.Api.Domain.Entities;
 using Clinic.Api.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
-using static System.Collections.Specialized.BitVector32;
 
 namespace Clinic.Api.Infrastructure.Services
 {
