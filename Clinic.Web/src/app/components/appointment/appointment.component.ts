@@ -144,24 +144,24 @@ export class AppointmentComponent {
     this.allowedLinks = await this.objectService.getDataAccess();
     if (this.checkAccess(1)) {
       this.userType = this.utilService.checkUserType();
-      if (this.userType == 9) {
-        this.selectedDoctor = this.userType;
-      }
       this.dateNew = new FormControl(moment().format('jYYYY/jMM/jDD'));
       this.firstCalendarDateNew = new FormControl(moment(this.dateNew).format('jYYYY/jMM/jDD'));
       this.secondCalendarDateNew = new FormControl(moment(this.dateNew).add(1, 'month').format('jYYYY/jMM/jDD'));
+      await this.getClinics();
+      if (this.userType != 9) {
+        await this.getUsers();
+      } else {
+        await this.getDoctorSchedules(2);
+      }
+      if (this.userType == 9) {
+        this.selectedDoctor = this.userType;
+      }
       this.firstCalendarDateNew.valueChanges.subscribe(async (date: any) => {
         this.onDateSelect(date);
       });
 
       this.today = moment();
-      if (this.userType != 9) {
-        await this.getUsers();
-      } else {
-        this.getDoctorSchedules(2);
-      }
       // this.selectedDate = this.today;
-      await this.getClinics();
       await this.getPatients();
       await this.getAppointmentTypes();
       await this.getAppointment(this.today);
@@ -350,6 +350,7 @@ export class AppointmentComponent {
     }
     this.isBeforeNow = moment(this.appointmentDate).isBefore(moment().startOf('day'));
     this.getUserAppointmentsSettings();
+    this.getWeeklyAppointments();
   }
 
 
@@ -664,7 +665,7 @@ export class AppointmentComponent {
         this.weeklyTimetable[this.hours[startIndex].time][appointment.dayNumber].dayAppointments.push(appointment);
 
       });
-      console.log(this.weeklyTimetable);
+      // console.log(this.weeklyTimetable);
     }
 
   }
