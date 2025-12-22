@@ -991,5 +991,57 @@ namespace Clinic.Api.Infrastructure.Services
                 throw new Exception(ex.Message);
             }
         }
+
+        public async Task<IEnumerable<SMSSettingsContext>> GetSmsSettings()
+        {
+            try
+            {
+                var settings = await _context.SMSSettings.ToListAsync();
+                return settings;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<GlobalResponse> UpdateGeneralSettings(UpdateGeneralSettingsDto model)
+        {
+            var result = new GlobalResponse();
+
+            try
+            {
+                var existingGeneralSettings = await _context.GeneralSettings.FirstOrDefaultAsync(p => p.Id == model.Id);
+
+                if (existingGeneralSettings == null)
+                {
+                    throw new Exception("General Settings Not Found");
+                }
+
+                _mapper.Map(model, existingGeneralSettings);
+                _context.GeneralSettings.Update(existingGeneralSettings);
+                await _context.SaveChangesAsync();
+                result.Message = "General Settings Updated Successfully";
+                result.Status = 0;
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<IEnumerable<GeneralSettingsContext>> GetGeneralSettings()
+        {
+            try
+            {
+                var settings = await _context.GeneralSettings.ToListAsync();
+                return settings;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }
