@@ -56,12 +56,47 @@ namespace Clinic.Api.Infrastructure.Services
                     if (hasOverlap)
                         throw new Exception("Doctor already has an appointment in this Clinic during this time.");
 
+                    var business = await _context.Businesses
+             .FirstOrDefaultAsync(b => b.Id == model.BusinessId.Value);
+
+                    if (business == null)
+                        throw new Exception("Business not found.");
+
                     model.ByInvoice = true;
                     var appointment = _mapper.Map<AppointmentsContext>(model);
                     appointment.CreatorId = userId;
                     appointment.CreatedOn = DateTime.Now;
                     _context.Appointments.Add(appointment);
                     await _context.SaveChangesAsync();
+
+                    if (business.IsServiceBase == true &&
+              !string.IsNullOrWhiteSpace(model.Services))
+                    {
+                        var serviceIds = model.Services
+                            .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                            .Select(x => x.Trim())
+                            .Where(x => int.TryParse(x, out _))
+                            .Select(int.Parse)
+                            .Distinct()
+                            .ToList();
+
+                        foreach (var serviceId in serviceIds)
+                        {
+                            var businessService = new BusinessServicesContext
+                            {
+                                BusinessId = business.Id,
+                                BillableItemId = serviceId,
+                                CreatorId = userId,
+                                CreatedOn = DateTime.Now,
+                                IsActive = true
+                            };
+
+                            await _context.BusinessServices.AddAsync(businessService);
+                        }
+
+                        await _context.SaveChangesAsync();
+                    }
+
                     result.Data = appointment.Id;
                     result.Status = 0;
                     return result;
@@ -80,6 +115,68 @@ namespace Clinic.Api.Infrastructure.Services
                     existingAppointment.LastUpdated = DateTime.Now;
                     _context.Appointments.Update(existingAppointment);
                     await _context.SaveChangesAsync();
+
+                    if (model.BusinessId.HasValue)
+                    {
+                        var business = await _context.Businesses
+                            .FirstOrDefaultAsync(b => b.Id == model.BusinessId.Value);
+
+                        if (business != null &&
+                            business.IsServiceBase == true &&
+                            !string.IsNullOrWhiteSpace(model.Services))
+                        {
+                            var newServiceIds = model.Services
+                                .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                                .Select(x => x.Trim())
+                                .Where(x => int.TryParse(x, out _))
+                                .Select(int.Parse)
+                                .Distinct()
+                                .ToList();
+
+                            var existingServices = await _context.BusinessServices
+                                .Where(bs => bs.BusinessId == business.Id)
+                                .ToListAsync();
+
+                            foreach (var oldService in existingServices)
+                            {
+                                if (!newServiceIds.Contains(oldService.BillableItemId))
+                                {
+                                    oldService.IsActive = false;
+                                    oldService.ModifierId = userId;
+                                    oldService.LastUpdated = DateTime.Now;
+                                }
+                            }
+
+                            foreach (var serviceId in newServiceIds)
+                            {
+                                var existingService = existingServices
+                                    .FirstOrDefault(x => x.BillableItemId == serviceId);
+
+                                if (existingService == null)
+                                {
+                                    var newService = new BusinessServicesContext
+                                    {
+                                        BusinessId = business.Id,
+                                        BillableItemId = serviceId,
+                                        CreatorId = userId,
+                                        CreatedOn = DateTime.Now,
+                                        IsActive = true
+                                    };
+
+                                    await _context.BusinessServices.AddAsync(newService);
+                                }
+                                else if (existingService.IsActive == false)
+                                {
+                                    existingService.IsActive = true;
+                                    existingService.ModifierId = userId;
+                                    existingService.LastUpdated = DateTime.Now;
+                                }
+                            }
+
+                            await _context.SaveChangesAsync();
+                        }
+                    }
+
                     result.Data = existingAppointment.Id;
                     result.Message = "Appointment Updated Successfully";
                     result.Status = 0;
