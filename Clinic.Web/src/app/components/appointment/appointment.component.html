@@ -107,9 +107,10 @@
                       <div (click)="editAppointment(appointment)">
                         <!-- <div class="mt-2">نوع وقت : {{appointment.typeName}}</div> -->
                         <!-- <div class="mt-2"> {{appointment.doctorName}}</div> -->
-                        <div class="mt-2">
-                          <span class="badge"
-                            [ngClass]="{'text-dark': item.status == 1,'text-primary': item.status == 2,'text-success': item.status == 3}"></span>
+                        <div class="mt-2 d-flex align-items-center">
+                          <div class="badgee ml-2"
+                            [ngClass]="{'bg-dark': appointment.status == 1,'bg-primary': appointment.status == 2,'bg-success': appointment.status == 3}">
+                          </div>
                           {{appointment.patientName}}
                         </div>
                         <div class="mt-2"> {{appointment.note}}</div>
@@ -193,8 +194,15 @@
           <p class="full-width text-right">
             {{ newAppointmentModel.selectedDoctorName }}
           </p>
-          <!-- <p-dropdown [options]="listOfDoctorForCreateAppointment" [(ngModel)]="newAppointmentModel.selectedDoctor"
-            [ngModelOptions]="{standalone: true}" optionLabel="name" class="full-width text-right" /> -->
+        </div>
+      </div>
+      <div *ngIf="isServiceBase" class=" col-12 d-flex justify-content-between mt-3">
+        <div class="col-3 text-right"> سرویس</div>
+        <div class="col-9">
+          <p-multiSelect [options]="serviceBaselist" optionLabel="name" dataKey="code"
+            [(ngModel)]="newAppointmentModel.selectedService" [ngModelOptions]="{standalone: true}"
+            class="full-width text-right">
+          </p-multiSelect>
         </div>
       </div>
       <div *ngIf="!newAppointmentModel?.handelNewPateintStatus" class="col-12 d-flex justify-content-between mt-3">
