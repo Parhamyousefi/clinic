@@ -263,4 +263,27 @@ export class TreatmentsService {
     return this.http.get(uri, httpOptions);
   }
 
+   saveTreatmentTemplate(data) {
+    const token: any = localStorage.getItem("token");
+    const uri = this.url + `api/treatment/saveTreatmentTemplate`;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      }),
+    };
+    return this.http.post(uri,data , httpOptions);
+  }
+
+    deleteTreatmentTemplate(id) {
+    const token: any = localStorage.getItem("token");
+    const uri = this.url + `api/treatment/deleteTreatmentTemplate/${id}`;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      }),
+    };
+    return this.http.get(uri, httpOptions);
+  }
 }

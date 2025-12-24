@@ -659,32 +659,31 @@ export class AppointmentComponent {
   }
 
   async getWeeklyAppointments() {
-    // const shamsiTimePipe = new ShamsiUTCPipe()
-    // let formattedDate = moment(this.appointmentDate).utc().toISOString();
-    // let doctor = this.userType == 9 ? null : this.selectedDoctor;
-    // let data: any = await this.mainService.getDoctorSchedules(this.selectedDoctor).toPromise();
-    // this.hours.forEach(async hour => this.weeklyTimetable[hour.time] = await this.getCurrentWeek(data, hour.time));
-    // let model = {
-    //   clinicId: this.selectedClinic.code,
-    //   date: formattedDate,
-    //   doctorId: doctor
-    // }
-    // let res: any = await this.treatmentService.getWeeklyAppointments(model).toPromise();
-    // this.weeklyAppointments = [];
-    // if (res.length > 0) {
-    //   this.weeklyAppointments = this.transformAppointments(res);
-    //   this.weeklyAppointments.forEach(appointment => {
-    //     // appointment.patientName = this.patientsList.filter((patient: any) => patient.patientCode == appointment.patientId)[0].name;
-    //     // let startIndex = this.hours.indexOf(appointment.time);
-    //     appointment.showStartTime = shamsiTimePipe.transform(appointment.fullDate);
-    //     let startIndex = this.hours.findIndex(h => h.time === appointment.showStartTime);
-    //     // this.weeklyTimetable[this.hours[startIndex].time][appointment.dayOfWeek].dayAppointments.push(appointment);
-    //     this.weeklyTimetable[this.hours[startIndex].time][appointment.dayNumber].dayAppointments.push(appointment);
+    const shamsiTimePipe = new ShamsiUTCPipe()
+    let formattedDate = moment(this.appointmentDate).utc().toISOString();
+    let doctor = this.userType == 9 ? null : this.selectedDoctor;
+    let data: any = await this.mainService.getDoctorSchedules(this.selectedDoctor).toPromise();
+    this.hours.forEach(async hour => this.weeklyTimetable[hour.time] = await this.getCurrentWeek(data, hour.time));
+    let model = {
+      clinicId: this.selectedClinic.code,
+      date: formattedDate,
+      doctorId: doctor
+    }
+    let res: any = await this.treatmentService.getWeeklyAppointments(model).toPromise();
+    this.weeklyAppointments = [];
+    if (res.length > 0) {
+      this.weeklyAppointments = this.transformAppointments(res);
+      this.weeklyAppointments.forEach(appointment => {
+        // appointment.patientName = this.patientsList.filter((patient: any) => patient.patientCode == appointment.patientId)[0].name;
+        // let startIndex = this.hours.indexOf(appointment.time);
+        appointment.showStartTime = shamsiTimePipe.transform(appointment.fullDate);
+        let startIndex = this.hours.findIndex(h => h.time === appointment.showStartTime);
+        // this.weeklyTimetable[this.hours[startIndex].time][appointment.dayOfWeek].dayAppointments.push(appointment);
+        this.weeklyTimetable[this.hours[startIndex].time][appointment.dayNumber].dayAppointments.push(appointment);
 
-    //   });
-    //   // console.log(this.weeklyTimetable);
-    // }
-
+      });
+      // console.log(this.weeklyTimetable);
+    }
   }
 
   onDateSelect(date: string) {
