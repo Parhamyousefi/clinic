@@ -112,5 +112,44 @@ namespace Clinic.Api.Infrastructure.Services
                 throw new Exception(ex.Message);
             }
         }
+
+        public async Task<GlobalResponse> SaveQuestion(SaveQuestionDto model)
+        {
+            var result = new GlobalResponse();
+
+            try
+            {
+                var userId = _token.GetUserId();
+
+                if (model.EditOrNew == -1)
+                {
+                    var question = _mapper.Map<QuestionsContext>(model);
+                    _context.Questions.Add(question);
+                    await _context.SaveChangesAsync();
+                    result.Message = "Question Saved Successfully";
+                    result.Status = 0;
+                    return result;
+                }
+                else
+                {
+                    var existingQuestion = await _context.Questions.FirstOrDefaultAsync(j => j.Id == model.EditOrNew);
+                    if (existingQuestion == null)
+                    {
+                        throw new Exception("Job Not Found");
+                    }
+
+                    _mapper.Map(model, existingQuestion);
+                    _context.Questions.Update(existingQuestion);
+                    await _context.SaveChangesAsync();
+                    result.Message = "Question Updated Successfully";
+                    result.Status = 0;
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }
