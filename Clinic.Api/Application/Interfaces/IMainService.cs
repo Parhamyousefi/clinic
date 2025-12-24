@@ -6,6 +6,7 @@ namespace Clinic.Api.Application.Interfaces
 {
     public interface IMainService
     {
+        Task<GlobalResponse> SaveSection(SaveSectionDto model);
         Task<IEnumerable<SectionsContext>> GetSections();
         Task<IEnumerable<GetClinicsResponse>> GetClinics();
         Task<GlobalResponse> SaveJob(SaveJobDto model);

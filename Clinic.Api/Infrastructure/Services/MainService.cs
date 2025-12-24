@@ -23,6 +23,45 @@ namespace Clinic.Api.Infrastructure.Services
             _token = token;
         }
 
+        public async Task<GlobalResponse> SaveSection(SaveSectionDto model)
+        {
+            var result = new GlobalResponse();
+
+            try
+            {
+                var userId = _token.GetUserId();
+
+                if (model.EditOrNew == -1)
+                {
+                    var section = _mapper.Map<SectionsContext>(model);
+                    _context.Sections.Add(section);
+                    await _context.SaveChangesAsync();
+                    result.Message = "Section Saved Successfully";
+                    result.Status = 0;
+                    return result;
+                }
+                else
+                {
+                    var existingSection = await _context.Sections.FirstOrDefaultAsync(j => j.Id == model.EditOrNew);
+                    if (existingSection == null)
+                    {
+                        throw new Exception("Job Not Found");
+                    }
+
+                    _mapper.Map(model, existingSection);
+                    _context.Sections.Update(existingSection);
+                    await _context.SaveChangesAsync();
+                    result.Message = "Section Updated Successfully";
+                    result.Status = 0;
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
         public async Task<IEnumerable<SectionsContext>> GetSections()
         {
             try
@@ -41,12 +80,31 @@ namespace Clinic.Api.Infrastructure.Services
         {
             try
             {
-                var result = await _context.Businesses.Select(b => new GetClinicsResponse
-                {
-                    Id = b.Id,
-                    Name = b.Name
-                }).ToListAsync();
-                return result;
+                var data =
+              from b in _context.Businesses
+              join bs in _context.BusinessServices
+                  on b.Id equals bs.BusinessId into servicesGroup
+              select new GetClinicsResponse
+              {
+                  Id = b.Id,
+                  Name = b.Name,
+
+                  Services = b.IsServiceBase
+                      ? servicesGroup.Select(s => new ClinicsServiceResponse
+                      {
+                          Id = s.Id,
+                          BusinessId = s.BusinessId,
+                          BillableItemId = s.BillableItemId,
+                          IsActive = s.IsActive,
+                          ModifierId = s.ModifierId,
+                          CreatedOn = s.CreatedOn,
+                          LastUpdated = s.LastUpdated,
+                          CreatorId = s.CreatorId
+                      }).ToList()
+                      : new List<ClinicsServiceResponse>()
+              };
+
+                return await data.ToListAsync();
             }
             catch (Exception ex)
             {
