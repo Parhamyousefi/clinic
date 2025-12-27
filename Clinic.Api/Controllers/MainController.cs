@@ -24,6 +24,14 @@ namespace Clinic.Api.Controllers
             return Ok(result);
         }
 
+        [HttpGet("deleteSection/{id}")]
+        [Authorize]
+        public async Task<IActionResult> DeleteSection(int id)
+        {
+            var result = await _mainService.DeleteSection(id);
+            return Ok(result);
+        }
+
         [HttpGet("getSections")]
         [Authorize]
         public async Task<IActionResult> GetSections()

@@ -62,6 +62,29 @@ namespace Clinic.Api.Infrastructure.Services
             }
         }
 
+        public async Task<GlobalResponse> DeleteSection(int id)
+        {
+            var result = new GlobalResponse();
+
+            try
+            {
+                var section = await _context.Sections.FindAsync(id);
+
+                if (section == null)
+                    throw new Exception("Section Not Found");
+
+                _context.Sections.Remove(section);
+                await _context.SaveChangesAsync();
+                result.Message = "Section Deleted Successfully";
+                result.Status = 0;
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
         public async Task<IEnumerable<SectionsContext>> GetSections()
         {
             try
