@@ -23,6 +23,45 @@ namespace Clinic.Api.Infrastructure.Services
             _token = token;
         }
 
+        public async Task<GlobalResponse> SaveSection(SaveSectionDto model)
+        {
+            var result = new GlobalResponse();
+
+            try
+            {
+                var userId = _token.GetUserId();
+
+                if (model.EditOrNew == -1)
+                {
+                    var section = _mapper.Map<SectionsContext>(model);
+                    _context.Sections.Add(section);
+                    await _context.SaveChangesAsync();
+                    result.Message = "Section Saved Successfully";
+                    result.Status = 0;
+                    return result;
+                }
+                else
+                {
+                    var existingSection = await _context.Sections.FirstOrDefaultAsync(j => j.Id == model.EditOrNew);
+                    if (existingSection == null)
+                    {
+                        throw new Exception("Job Not Found");
+                    }
+
+                    _mapper.Map(model, existingSection);
+                    _context.Sections.Update(existingSection);
+                    await _context.SaveChangesAsync();
+                    result.Message = "Section Updated Successfully";
+                    result.Status = 0;
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
         public async Task<IEnumerable<SectionsContext>> GetSections()
         {
             try

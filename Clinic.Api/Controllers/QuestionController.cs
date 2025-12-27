@@ -39,5 +39,13 @@ namespace Clinic.Api.Controllers
             var result = await _questionsService.DeleteQuestionValue(id);
             return Ok(result);
         }
+
+        [HttpPost("saveQuestion")]
+        [Authorize]
+        public async Task<IActionResult> SaveQuestion(SaveQuestionDto model)
+        {
+            var result = await _questionsService.SaveQuestion(model);
+            return Ok(result);
+        }
     }
 }

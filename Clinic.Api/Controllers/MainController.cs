@@ -16,6 +16,14 @@ namespace Clinic.Api.Controllers
             _mainService = mainService;
         }
 
+        [HttpPost("saveSection")]
+        [Authorize]
+        public async Task<IActionResult> SaveSection(SaveSectionDto model)
+        {
+            var result = await _mainService.SaveSection(model);
+            return Ok(result);
+        }
+
         [HttpGet("getSections")]
         [Authorize]
         public async Task<IActionResult> GetSections()
