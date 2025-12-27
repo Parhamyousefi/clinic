@@ -151,5 +151,27 @@ namespace Clinic.Api.Infrastructure.Services
                 throw new Exception(ex.Message);
             }
         }
+
+        public async Task<GlobalResponse> DeleteQuestion(int id)
+        {
+            var result = new GlobalResponse();
+
+            try
+            {
+                var question = await _context.Questions.FindAsync(id);
+                if (question == null)
+                    throw new Exception("Question Not Found");
+
+                _context.Questions.Remove(question);
+                await _context.SaveChangesAsync();
+                result.Message = "Question Deleted Successfully";
+                result.Status = 0;
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }
