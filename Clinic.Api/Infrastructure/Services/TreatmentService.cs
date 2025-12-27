@@ -1393,19 +1393,6 @@ namespace Clinic.Api.Infrastructure.Services
             }
         }
 
-        public async Task<IEnumerable<TreatmentTemplatesContext>> GetTreatmentTemplates()
-        {
-            try
-            {
-                var treatmentTemplate = await _context.TreatmentTemplates.ToListAsync();
-                return treatmentTemplate;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
-
         public async Task<GlobalResponse> DeleteTreatmentTemplate(int id)
         {
             var result = new GlobalResponse();
