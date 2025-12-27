@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Clinic.Api.Application.DTOs;
 using Clinic.Api.Application.DTOs.Main;
+using Clinic.Api.Application.DTOs.Treatments;
 using Clinic.Api.Application.Interfaces;
 using Clinic.Api.Domain.Entities;
 using Clinic.Api.Infrastructure.Data;
@@ -40,6 +41,7 @@ namespace Clinic.Api.Infrastructure.Services
                     await _context.SaveChangesAsync();
                     result.Message = "Section Saved Successfully";
                     result.Status = 0;
+                    result.Data = section.Id;
                     return result;
                 }
                 else
@@ -87,13 +89,20 @@ namespace Clinic.Api.Infrastructure.Services
             }
         }
 
-        public async Task<IEnumerable<SectionsContext>> GetSections()
+        public async Task<IEnumerable<SectionsContext>> GetSections(GetTreatmentTemplateDto model)
         {
             try
             {
-                var result = await _context.Sections.ToListAsync();
-
-                return result;
+                if (model.Id == null)
+                {
+                    var result = await _context.Sections.ToListAsync();
+                    return result;
+                }
+                else
+                {
+                    var result = await _context.Sections.Where(t => t.Id == model.Id).ToListAsync();
+                    return result;
+                }
             }
             catch (Exception ex)
             {

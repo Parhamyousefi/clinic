@@ -1,4 +1,5 @@
 ﻿using Clinic.Api.Application.DTOs.Main;
+using Clinic.Api.Application.DTOs.Treatments;
 using Clinic.Api.Application.Interfaces;
 using Clinic.Api.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -32,11 +33,11 @@ namespace Clinic.Api.Controllers
             return Ok(result);
         }
 
-        [HttpGet("getSections")]
+        [HttpPost("getSections")]
         [Authorize]
-        public async Task<IActionResult> GetSections()
+        public async Task<IActionResult> GetSections(GetTreatmentTemplateDto model)
         {
-            var result = await _mainService.GetSections();
+            var result = await _mainService.GetSections(model);
             return Ok(result);
         }
 
