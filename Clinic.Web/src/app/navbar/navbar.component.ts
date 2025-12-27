@@ -41,7 +41,7 @@ export const financialMenu: imenu[] = [
 ];
 export const appointmentMenu: imenu[] = [
   { id: 17, text: "انواع وقت دهی", link: '/appointment-types', roleAccess: [], icon: 'fa fa-caret-left' },
-  { id: 18, text: "تعطیلات", link: '', roleAccess: [], icon: 'fa fa-caret-left' },
+  // { id: 18, text: "تعطیلات", link: '', roleAccess: [], icon: 'fa fa-caret-left' },
   { id: 19, text: "استثنائات اوقات پزشکان", link: '/time-exception', roleAccess: [], icon: 'fa fa-caret-left' },
   { id: 20, text: "استثنائات خارج از نوبت", link: '/outOfturnexceptions', roleAccess: [], icon: 'fa fa-caret-left' },
 ];

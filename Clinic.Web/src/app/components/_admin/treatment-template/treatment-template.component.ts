@@ -1,22 +1,30 @@
 import { Component, OnInit } from '@angular/core';
 import { SharedModule } from '../../../share/shared.module';
 import { FormsModule } from '@angular/forms';
+import { firstValueFrom } from 'rxjs';
+import { TreatmentsService } from '../../../_services/treatments.service';
+import { ToastrService } from 'ngx-toastr';
+import { ActivatedRoute } from '@angular/router';
+import { MainService } from './../../../_services/main.service';
 
 @Component({
   selector: 'app-treatment-template',
   standalone: true,
-  imports: [SharedModule,FormsModule],
+  imports: [SharedModule, FormsModule],
   templateUrl: './treatment-template.component.html',
   styleUrl: './treatment-template.component.css'
 })
 export class TreatmentTemplateComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    private treatmentsService: TreatmentsService,
+    private toastR: ToastrService,
+    private activeRoute: ActivatedRoute,
+    private mainService: MainService
+  ) { }
 
   model: any = [];
   showBox = false;
-  defaultClosed = false;
-  horizontalDisplay = false;
   showNewQuestionBox = false;
   questionType = [
     "Check",
@@ -30,10 +38,29 @@ export class TreatmentTemplateComponent implements OnInit {
     "textCombo",
     "Editor",
   ];
-
-
+  editOrNewTemplate: any;
+  editOrNewSection: any = -1;
+  sectionsList: any = [];
   ngOnInit() {
+    this.editOrNewTemplate = +this.activeRoute.snapshot.paramMap.get('id') || -1;
+    if (this.editOrNewTemplate != -1) {
+      this.getTreatmentTemplate();
+      this.getSections();
+    }
 
+  }
+
+  async getTreatmentTemplate() {
+    try {
+      let model = {
+        id: this.editOrNewTemplate
+      }
+      let res: any = await this.treatmentsService.getTreatmentTemplates(model).toPromise();
+      this.model.name = res[0]['name'];
+      this.model.printTemplate = res[0]['printTemplate'];
+      this.model.ordering = res[0]['ordering'];
+    }
+    catch { }
   }
 
 
@@ -48,6 +75,57 @@ export class TreatmentTemplateComponent implements OnInit {
 
   addNewQuestion() {
     this.showNewQuestionBox = true;
+  }
+
+
+  async saveTreatmentTemplate() {
+    let model = {
+      name: this.model.name,
+      templateNotes: null,
+      title: null,
+      showPatientBirthDate: false,
+      showPatientReferenceNumber: false,
+      printTemplate: this.model.printTemplate,
+      ordering: this.model.ordering,
+      editOrNew: this.editOrNewTemplate
+    }
+    try {
+      let res: any = await firstValueFrom(this.treatmentsService.saveTreatmentTemplate(model));
+      if (res.status == 0) {
+        this.toastR.success('با موفقیت ثبت شد!');
+      } else {
+        this.toastR.error('خطایی رخ داده است');
+      }
+    } catch (error) {
+      this.toastR.error('خطایی رخ داده است');
+    }
+  }
+
+  async getSections() {
+    let res: any = await firstValueFrom(this.mainService.getSections());
+    this.sectionsList = res;
+  }
+
+  async saveSection() {
+    let model = {
+      treatmentTemplateId: this.editOrNewTemplate,
+      title: this.model.groupTitle,
+      defaultClose: this.model.defaultClose,
+      order: null,
+      isDeleted: false,
+      horizontalDirection: this.model.horizontalDisplay,
+      editOrNew: this.editOrNewSection
+    }
+    try {
+      let res: any = await firstValueFrom(this.mainService.saveSection(model));
+      if (res.status == 0) {
+        this.toastR.success('با موفقیت ثبت شد!');
+      } else {
+        this.toastR.error('خطایی رخ داده است');
+      }
+    } catch (error) {
+      this.toastR.error('خطایی رخ داده است');
+    }
   }
 
 }
