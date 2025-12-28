@@ -1367,6 +1367,7 @@ namespace Clinic.Api.Infrastructure.Services
                     _context.TreatmentTemplates.Add(treatmentTemplate);
                     await _context.SaveChangesAsync();
                     result.Message = "Treatment Template Saved Successfully";
+                    result.Data = treatmentTemplate.Id;
                     return result;
                 }
                 else

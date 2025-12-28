@@ -128,6 +128,7 @@ namespace Clinic.Api.Infrastructure.Services
                     await _context.SaveChangesAsync();
                     result.Message = "Question Saved Successfully";
                     result.Status = 0;
+                    result.Data = question.Id;
                     return result;
                 }
                 else
