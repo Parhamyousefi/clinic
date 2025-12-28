@@ -179,6 +179,7 @@ export class AppointmentComponent {
     } else {
       this.toastR.error("شما دسترسی به این صفحه ندارید");
     }
+    this.changeSecondDate();
   }
 
 
@@ -313,37 +314,37 @@ export class AppointmentComponent {
 
 
       case 14:
-        formattedDate = moment(this.appointmentDate);
+        formattedDate = moment();
         this.appointmentDate = formattedDate.clone().add(2, 'weeks').toDate();
         this.getAppointment(this.appointmentDate);
         break;
 
       case 28:
-        formattedDate = moment(this.appointmentDate);
+        formattedDate = moment();
         this.appointmentDate = formattedDate.clone().add(4, 'weeks').toDate();
         this.getAppointment(this.appointmentDate);
         break;
 
       case 42:
-        formattedDate = moment(this.appointmentDate);
+        formattedDate = moment();
         this.appointmentDate = formattedDate.clone().add(6, 'weeks').toDate();
         this.getAppointment(this.appointmentDate);
         break;
 
       case 90:
-        formattedDate = moment(this.appointmentDate);
+        formattedDate = moment();
         this.appointmentDate = formattedDate.clone().add(3, 'months').toDate();
         this.getAppointment(this.appointmentDate);
         break;
 
       case 180:
-        formattedDate = moment(this.appointmentDate);
+        formattedDate = moment();
         this.appointmentDate = formattedDate.clone().add(6, 'months').toDate();
         this.getAppointment(this.appointmentDate);
         break;
 
       case 365:
-        formattedDate = moment(this.appointmentDate);
+        formattedDate = moment();
         this.appointmentDate = formattedDate.clone().add(12, 'months').toDate();
         this.getAppointment(this.appointmentDate);
         break;

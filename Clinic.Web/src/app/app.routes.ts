@@ -238,6 +238,21 @@ export const routes: Routes = [
         loadComponent: () => import('./components/_admin/user-roles/user-role-list/user-role-list.component').then(m => m.UserRoleListComponent),
         canActivate: [AuthGuard]
     },
+    {
+        path: 'job-list',
+        loadComponent: () => import('./components/_admin/job-list/job-list.component').then(m => m.JobListComponent),
+        canActivate: [AuthGuard]
+    },
+    {
+        path: 'sms-setting',
+        loadComponent: () => import('./components/_admin/sms-setting/sms-setting.component').then(m => m.SmsSettingComponent),
+        canActivate: [AuthGuard]
+    },
+    {
+        path: 'general-setting',
+        loadComponent: () => import('./components/_admin/general-setting/general-setting.component').then(m => m.GeneralSettingComponent),
+        canActivate: [AuthGuard]
+    },
     // {
     //     path: 'patient-fields',
     //     loadComponent: () => import('./components/_admin/patient-fields/patient-fields.component').then(m => m.PatientFieldsComponent),

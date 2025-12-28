@@ -4,8 +4,8 @@
       <button *ngIf="!isPayment && checkAccess(2)" class="btn main-btn" routerLink="/receipt">دریافتی جدید</button>
       <button *ngIf="isPayment && checkAccess(2)" class="btn main-btn" routerLink="/payment">پرداخت جدید</button>
     </div>
-    <p-table *ngIf="checkAccess(1)" id="dataTable" #dt styleClass="" class="data-table" [value]="tableData" [pageLinks]="20"
-      [autoLayout]="true" [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
+    <p-table *ngIf="checkAccess(1)" id="dataTable" #dt styleClass="" class="data-table" [value]="tableData"
+      [pageLinks]="20" [autoLayout]="true" [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
       currentPageReportTemplate="نمایش {first} تا {last} " [rowsPerPageOptions]="[10,25,50]">
       <ng-template pTemplate="header">
         <tr>
@@ -46,8 +46,10 @@
             {{receipt.createdOn | ShamsiFullDateInOneLineZone}}
           </td>
           <td>
-            <button *ngIf="checkAccess(4)" class="btn main-outline-btn mx-1" (click)="openEditreceipt(receipt)">ویرایش</button>
-            <button *ngIf="checkAccess(3)" class="btn btn-outline-danger" (click)="deleteReceipt(receipt.id)">حذف</button>
+            <button *ngIf="checkAccess(4)" class="btn main-outline-btn mx-1"
+              (click)="openEditreceipt(receipt)">ویرایش</button>
+            <button *ngIf="checkAccess(3)" class="btn btn-outline-danger"
+              (click)="deleteReceipt(receipt.id)">حذف</button>
           </td>
         </tr>
       </ng-template>
