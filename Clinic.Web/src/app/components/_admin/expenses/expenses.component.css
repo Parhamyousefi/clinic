@@ -1,5 +1,5 @@
 ::ng-deep #create-expense-modal .p-dialog {
-    min-width: 40% !important;
+    min-width: 80% !important;
     min-height: 300px;
 }
 
