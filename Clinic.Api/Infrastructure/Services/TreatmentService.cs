@@ -351,7 +351,39 @@ namespace Clinic.Api.Infrastructure.Services
                     };
                 }).ToList();
 
-                return result;
+                var outOfTurnInvoices = await (
+                    from i in _context.Invoices
+                    join p in _context.Patients on i.PatientId equals p.Id
+                    join u in _context.Users on i.PractitionerId equals u.Id
+                    where
+                        i.BusinessId == model.ClinicId &&
+                        (i.IsCanceled == false || i.IsCanceled == null) &&
+                        i.CreatedOn.Date == selectedDate &&
+                        (
+                            !i.AppointmentId.HasValue ||
+                            !appointmentIds.Contains(i.AppointmentId.Value)
+                        )
+                    select new GetAppointmentsResponse
+                    {
+                        Id = -i.Id, 
+                        BusinessId = i.BusinessId,
+                        PractitionerId = i.PractitionerId,
+                        PatientId = i.PatientId,
+                        Start = i.CreatedOn,
+                        End = i.CreatedOn,
+                        Note = "خارج از نوبت",
+                        DoctorName = (u.FirstName + " " + u.LastName).Trim(),
+                        PatientName = (p.FirstName + " " + p.LastName).Trim(),
+                        Status = 3,
+                        ByInvoice = true
+                    }
+                ).ToListAsync();
+
+                result.AddRange(outOfTurnInvoices);
+
+                return result
+                    .OrderBy(x => x.Start)
+                    .ToList();
             }
             catch (Exception ex)
             {
