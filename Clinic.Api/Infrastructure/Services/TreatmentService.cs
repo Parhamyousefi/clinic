@@ -347,11 +347,12 @@ namespace Clinic.Api.Infrastructure.Services
                         DoctorName = x.DoctorName,
                         PatientName = x.PatientName,
                         Color = x.Color,
-                        Status = status
+                        Status = status,
+                        IsOutOfTurn = false
                     };
                 }).ToList();
 
-                var outOfTurnInvoices = await (
+                var outOfTurnAppointments = await (
                     from i in _context.Invoices
                     join p in _context.Patients on i.PatientId equals p.Id
                     join u in _context.Users on i.PractitionerId equals u.Id
@@ -365,21 +366,41 @@ namespace Clinic.Api.Infrastructure.Services
                         )
                     select new GetAppointmentsResponse
                     {
-                        Id = -i.Id, 
+                        Id = i.Id,
                         BusinessId = i.BusinessId,
                         PractitionerId = i.PractitionerId,
                         PatientId = i.PatientId,
+                        AppointmentTypeId = null,
                         Start = i.CreatedOn,
                         End = i.CreatedOn,
-                        Note = "خارج از نوبت",
+                        RepeatId = null,
+                        RepeatEvery = null,
+                        EndsAfter = null,
+                        Note = i.Notes,
+                        Arrived = null,
+                        WaitListId = null,
+                        Cancelled = false,
+                        AppointmentCancelTypeId = null,
+                        CancelNotes = null,
+                        IsUnavailbleBlock = false,
+                        ModifierId = i.ModifierId,
+                        CreatedOn = i.CreatedOn,
+                        LastUpdated = i.LastUpdated,
+                        IsAllDay = false,
+                        SendReminder = false,
+                        AppointmentSMS = null,
+                        IgnoreDidNotCome = false,
+                        CreatorId = i.CreatorId,
+                        ByInvoice = true,
                         DoctorName = (u.FirstName + " " + u.LastName).Trim(),
                         PatientName = (p.FirstName + " " + p.LastName).Trim(),
+                        Color = null,
                         Status = 3,
-                        ByInvoice = true
+                        IsOutOfTurn = true
                     }
                 ).ToListAsync();
 
-                result.AddRange(outOfTurnInvoices);
+                result.AddRange(outOfTurnAppointments);
 
                 return result
                     .OrderBy(x => x.Start)
